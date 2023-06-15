@@ -1,5 +1,5 @@
-import { Color, generateId } from './Backgammon';
-import { Point } from './Point';
+import { Color, generateId } from './Backgammon'
+import { Point } from './Point'
 
 // class Move {
 //   id: string
@@ -14,13 +14,13 @@ import { Point } from './Point';
 //   }
 // }
 export class Checker {
-  id: string;
-  color: Color;
-  position: Point;
+  id: string
+  color: Color
+  point?: Point
 
-  constructor(color: Color, position: Point) {
-    this.id = generateId();
-    this.color = color;
-    this.position = position;
+  constructor(color: Color, point?: Point) {
+    this.id = generateId()
+    this.color = color
+    this.point = point || undefined
   }
 }

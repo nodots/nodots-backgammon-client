@@ -8,16 +8,20 @@ export class Player {
   lastName: string
   color: Color
   nickName?: string
-  checkers?: Checker[]
+  checkers?: Checker[] = []
   dice?: Die[]
 
   constructor(firstName: string, lastName: string, color: Color, nickName?: string | undefined, checkers?: Checker[], dice?: Die[]) {
-    this.id = generateId();
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.color = color;
-    this.nickName = nickName || firstName;
-    this.checkers = checkers || [];
+    this.id = generateId()
+    this.firstName = firstName
+    this.lastName = lastName
+    this.color = color
+    this.nickName = nickName || firstName
+    this.checkers = checkers || []
+  }
+
+  addChecker(checker: Checker): void {
+    this.checkers?.push(checker)
   }
 
 

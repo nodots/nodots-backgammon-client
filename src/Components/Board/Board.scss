@@ -1,11 +1,15 @@
 #NodotsBgBoard {
-  display: flex;
-  flex-direction: row-reverse;
-  width: 1000px;
-  height: 600px;
+  width: 90vw;
+  height: 80vh;
   border-collapse: collapse-all;
 
-  .top {
-    flex-direction: row-reverse;
+  .col {
+    height: 100%;
+    width: 38vw;
+  }
+
+  .rail {
+    background-color: orange;
+    width: 3vw;
   }
 }

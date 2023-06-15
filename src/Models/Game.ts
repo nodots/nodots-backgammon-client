@@ -1,54 +1,139 @@
-import { Checker } from './Checker';
-import { Die } from './Die';
-import { Cube } from './Cube';
-import { Player } from './Player';
+import { Point } from './Point'
+import { Die } from './Die'
+import { Checker } from './Checker'
+import { Cube } from './Cube'
+import { Player } from './Player'
 import { Rail } from './Rail'
-import { generateId, Color } from './Backgammon';
-import { Board } from './Board';
-import { Quadrant } from './Quadrant';
+import { Board } from './Board'
+import { Quadrant } from './Quadrant'
+import { generateId, NUMBER_POINTS, Color, CHECKERS_PER_PLAYER } from './Backgammon'
 
 export class Game {
-  id: string;
-  board: Board;
-  cube: Cube;
-  whitePlayer: Player;
-  blackPlayer: Player;
+  id: string
+  board: Board
+  cube: Cube
+  whitePlayer: Player
+  blackPlayer: Player
 
-  neQuadrant = new Quadrant('ne', [])
-  nwQuadrant = new Quadrant('nw', [])
-  seQuadrant = new Quadrant('se', [])
-  swQuadrant = new Quadrant('sw', [])
   rail = new Rail()
 
   constructor(whitePlayer: Player, blackPlayer: Player) {
-    this.id = generateId();
-    this.cube = new Cube();
-    this.board = new Board([this.neQuadrant, this.nwQuadrant, this.swQuadrant, this.seQuadrant], this.rail);
-    this.whitePlayer = whitePlayer;
-    this.blackPlayer = blackPlayer;
-    this.whitePlayer.dice = [new Die('white'), new Die('white')];
-    this.blackPlayer.dice = [new Die('black'), new Die('black')];
-
-    // TODO: Refactor to be less awful
-    // this.initializePoint('black', 1, 2);
-    // this.initializePoint('white', 24, 2);
-
-    // this.initializePoint('black', 12, 5);
-    // this.initializePoint('white', 13, 5);
-
-    // this.initializePoint('black', 17, 3);
-    // this.initializePoint('white', 18, 3);
-
-    // this.initializePoint('black', 19, 5);
-    // this.initializePoint('white', 6, 5);
-
+    this.id = generateId()
+    this.cube = new Cube()
+    this.whitePlayer = whitePlayer
+    this.blackPlayer = blackPlayer
+    this.whitePlayer.dice = [new Die('white'), new Die('white')]
+    this.blackPlayer.dice = [new Die('black'), new Die('black')]
+    const [seQuadrant, swQuadrant, nwQuadrant, neQuadrant] = this.buildQuadrants()
+    this.board = new Board([neQuadrant, nwQuadrant, swQuadrant, seQuadrant], this.rail)
+    this.initializeCheckers()
   }
 
-  // initializePoint(color: Color, position: number, checkerCount: number) {
-  //   const point = this.board.points[position - 1];
-  //   for (let i = 0; i < checkerCount; i++) {
-  //     point.addChecker(new Checker(color, point));
-  //   }
-  // }
+  initializeCheckers(): void {
+    const allPoints =
+      this.board.quadrants[0].points.concat(
+        this.board.quadrants[1].points,
+        this.board.quadrants[2].points,
+        this.board.quadrants[3].points
+      )
+    for (let i = 0; i < CHECKERS_PER_PLAYER; i++) {
+      this.whitePlayer.addChecker(new Checker('white'))
+      this.blackPlayer.addChecker(new Checker('black'))
+    }
+
+    // TODO: Barf
+    if (this.whitePlayer.checkers && this.whitePlayer.checkers.length === CHECKERS_PER_PLAYER) {
+      const twentyFourPoint = allPoints.filter(p => p.position === 24)[0]
+      const thirteenPoint = allPoints.filter(p => p.position === 13)[0]
+      const eightPoint = allPoints.filter(p => p.position === 8)[0]
+      const sixPoint = allPoints.filter(p => p.position === 6)[0]
+      twentyFourPoint.addCheckers(this.whitePlayer.checkers.slice(0, 2))
+      thirteenPoint.addCheckers(this.whitePlayer.checkers.slice(2, 7))
+      eightPoint.addCheckers(this.whitePlayer.checkers.slice(7, 10))
+      sixPoint.addCheckers(this.whitePlayer.checkers.slice(-5))
+    }
+
+    if (this.blackPlayer.checkers && this.blackPlayer.checkers.length === CHECKERS_PER_PLAYER) {
+      const onePoint = allPoints.filter(p => p.position === 1)[0]
+      const twelvePoint = allPoints.filter(p => p.position === 12)[0]
+      const seventeenPoint = allPoints.filter(p => p.position === 17)[0]
+      const nineteenPoint = allPoints.filter(p => p.position === 19)[0]
+      onePoint.addCheckers(this.blackPlayer.checkers.slice(0, 2))
+      twelvePoint.addCheckers(this.blackPlayer.checkers.slice(2, 7))
+      seventeenPoint.addCheckers(this.blackPlayer.checkers.slice(7, 10))
+      nineteenPoint.addCheckers(this.blackPlayer.checkers.slice(-5))
+    }
+
+
+
+    // this.board.quadrants.forEach(q => {
+    //   q.points.forEach(p => {
+    //     if (p.position === 1) {
+    //       this.createCheckers('black', p, 2)
+    //     }
+    //     if (p.position === 6) {
+    //       this.createCheckers('white', p, 5)
+    //     }
+    //     if (p.position === 8) {
+    //       this.createCheckers('white', p, 3)
+    //     }
+    //     if (p.position === 12) {
+    //       this.createCheckers('black', p, 5)
+    //     }
+    //     if (p.position === 13) {
+    //       this.createCheckers('white', p, 5)
+    //     }
+    //     if (p.position === 17) {
+    //       this.createCheckers('black', p, 3)
+    //     }
+    //     if (p.position === 19) {
+    //       this.createCheckers('black', p, 5)
+    //     }
+    //     if (p.position === 24) {
+    //       this.createCheckers('white', p, 2)
+    //     }
+
+    //   })
+    // })
+  }
+
+  createCheckers(color: Color, point: Point, num: number): void {
+    for (let i = 0; i < num; i++) {
+      const c = new Checker(color, point)
+      console.log(c)
+
+    }
+  }
+
+  buildQuadrants(): Quadrant[] {
+    const points: Point[] = []
+    for (let i = 0; i < NUMBER_POINTS; i++) {
+      points.push(new Point(i + 1))
+    }
+    const sePoints = points.filter(
+      p => p.position <= 6
+    )
+    const nePoints = points.filter(
+      p => p.position >= 19
+    )
+    const nwPoints = points.filter(p =>
+      p.position >= 13 && p.position <= 18
+    )
+    const swPoints = points.filter(p =>
+      p.position >= 7 && p.position <= 12
+    )
+
+    const seQuadrant = new Quadrant('se', sePoints)
+    const swQuadrant = new Quadrant('sw', swPoints)
+    const neQuadrant = new Quadrant('ne', nePoints)
+    const nwQuadrant = new Quadrant('nw', nwPoints)
+
+
+
+    return [seQuadrant, swQuadrant, nwQuadrant, neQuadrant]
+  }
+
+
+
 
 }

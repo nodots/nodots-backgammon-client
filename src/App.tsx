@@ -10,11 +10,11 @@ const initGame = (): void => {
   if (!CurrentGame) {
     CurrentGame = new Game(Player1, Player2)
   }
-  console.log(CurrentGame)
 }
 
 const App = () => {
   initGame()
+  console.log(CurrentGame)
   return (
     <div className="App">
       <Board game={CurrentGame} />
