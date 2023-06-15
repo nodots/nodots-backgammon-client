@@ -1,0 +1,22 @@
+.point {
+  display: flex;
+  border: 1px solid green;
+  width: 25px;
+  height: 80px;
+}
+
+.nw {
+  background-color: red;
+}
+
+.ne {
+  background-color: blue;
+}
+
+.sw {
+  background-color: pink;
+}
+
+.se {
+  background-color: yellow;
+}

@@ -1,0 +1,11 @@
+#NodotsBgBoard {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 1000px;
+  height: 600px;
+  border-collapse: collapse-all;
+
+  .top {
+    flex-direction: row-reverse;
+  }
+}

@@ -1,0 +1,16 @@
+.checker {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+.black {
+  background-color: black;
+}
+
+.white {
+  background-color: white;
+}
