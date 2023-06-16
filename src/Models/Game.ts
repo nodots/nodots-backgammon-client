@@ -6,7 +6,7 @@ import { Player } from './Player'
 import { Rail } from './Rail'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
-import { generateId, NUMBER_POINTS, Color, CHECKERS_PER_PLAYER } from './Backgammon'
+import { generateId, NUMBER_POINTS, Color, CHECKERS_PER_PLAYER, InitBoardSetup } from './Backgammon'
 
 export class Game {
   id: string
@@ -36,12 +36,14 @@ export class Game {
         this.board.quadrants[2].points,
         this.board.quadrants[3].points
       )
+
     for (let i = 0; i < CHECKERS_PER_PLAYER; i++) {
       this.whitePlayer.addChecker(new Checker('white'))
       this.blackPlayer.addChecker(new Checker('black'))
     }
 
-    // TODO: Barf
+    // TODO: Barf switch to use InitBoardSetup
+    console.log(InitBoardSetup)
     if (this.whitePlayer.checkers && this.whitePlayer.checkers.length === CHECKERS_PER_PLAYER) {
       const twentyFourPoint = allPoints.filter(p => p.position === 24)[0]
       const thirteenPoint = allPoints.filter(p => p.position === 13)[0]
@@ -64,37 +66,6 @@ export class Game {
       nineteenPoint.addCheckers(this.blackPlayer.checkers.slice(-5))
     }
 
-
-
-    // this.board.quadrants.forEach(q => {
-    //   q.points.forEach(p => {
-    //     if (p.position === 1) {
-    //       this.createCheckers('black', p, 2)
-    //     }
-    //     if (p.position === 6) {
-    //       this.createCheckers('white', p, 5)
-    //     }
-    //     if (p.position === 8) {
-    //       this.createCheckers('white', p, 3)
-    //     }
-    //     if (p.position === 12) {
-    //       this.createCheckers('black', p, 5)
-    //     }
-    //     if (p.position === 13) {
-    //       this.createCheckers('white', p, 5)
-    //     }
-    //     if (p.position === 17) {
-    //       this.createCheckers('black', p, 3)
-    //     }
-    //     if (p.position === 19) {
-    //       this.createCheckers('black', p, 5)
-    //     }
-    //     if (p.position === 24) {
-    //       this.createCheckers('white', p, 2)
-    //     }
-
-    //   })
-    // })
   }
 
   createCheckers(color: Color, point: Point, num: number): void {

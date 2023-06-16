@@ -15,6 +15,50 @@ export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 'centered' | 2 | 4 | 8 | 16 | 32 | 64
 
+export const InitBoardSetup = [
+  {
+    position: 1,
+    checkerCount: 2,
+    color: 'black'
+  },
+  {
+    position: 6,
+    checkerCount: 5,
+    color: 'white'
+  },
+  {
+    position: 8,
+    checkerCount: 3,
+    color: 'white'
+  },
+  {
+    position: 12,
+    checkerCount: 5,
+    color: 'black'
+  },
+  {
+    position: 13,
+    checkerCount: 5,
+    color: 'white'
+  },
+  {
+    position: 17,
+    checkerCount: 3,
+    color: 'black'
+  },
+  {
+    position: 19,
+    checkerCount: 5,
+    color: 'black'
+  },
+  {
+    postion: 24,
+    checkerCount: 2,
+    color: 'white'
+  }
+]
+
+
 export {
   Board,
   Checker,

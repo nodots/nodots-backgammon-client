@@ -1,5 +1,5 @@
 import Checker, { CheckerProps } from '../Checker/Checker'
-import { QuadrantLocation } from '../../Models/Backgammon'
+import { QuadrantLocation, generateId } from '../../Models/Backgammon'
 import './Point.scss'
 
 interface PointProps {
@@ -17,7 +17,7 @@ const Point = (props: PointProps) => {
   const Checkers: React.JSX.Element[] = []
   if (checkers) {
     checkers.map(c =>
-      Checkers.push(<Checker color={c.color} />)
+      Checkers.push(<Checker color={c.color} key={generateId()} />)
     )
   }
   return <div className={classes} key={Math.random()}>
