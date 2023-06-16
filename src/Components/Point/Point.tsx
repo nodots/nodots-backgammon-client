@@ -1,8 +1,10 @@
 import Checker, { CheckerProps } from '../Checker/Checker'
+import { QuadrantLocation } from '../../Models/Backgammon'
 import './Point.scss'
 
 interface PointProps {
   position: number
+  location: QuadrantLocation
   checkers?: CheckerProps[]
   colorScheme?: string
 }
@@ -10,7 +12,7 @@ interface PointProps {
 const Point = (props: PointProps) => {
   const checkers = props.checkers ? props.checkers : []
 
-  const classes = `point`
+  const classes = `point ${props.location}`
 
   const Checkers: React.JSX.Element[] = []
   if (checkers) {

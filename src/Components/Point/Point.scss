@@ -1,22 +1,20 @@
-.point {
-  display: flex;
-  border: 1px solid green;
-  width: 25px;
-  height: 80px;
-}
-
-.nw {
+.sw {
   background-color: red;
 }
-
-.ne {
-  background-color: blue;
-}
-
-.sw {
-  background-color: pink;
-}
-
 .se {
   background-color: yellow;
 }
+
+// .point {
+//   display: flex;
+//   flex-direction: column;
+//   width: 25px;
+//   height: 80px;
+//   // justify-content: flex-start;
+// }
+
+// // .sw,
+// // .se {
+// //   flex-direction: column;
+// //   justify-content: flex-end !important;
+// // }
