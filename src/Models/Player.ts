@@ -22,8 +22,9 @@ export class Player {
     this.checkers = checkers || []
   }
 
-  move (from?: Point, to?: Point) {
+  move (checker: Checker, destination: Point) {
     this.findCheckers()
+
   }
 
   private findCheckers (): void {

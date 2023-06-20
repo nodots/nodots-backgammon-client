@@ -6,7 +6,7 @@ export type PointPosition = number | 'rail' | 'off'
 export class Point {
   id: string
   position: PointPosition
-  checkers?: Checker[]
+  checkers?: Checker[] = []
 
   constructor (position: PointPosition, checkers?: Checker[]) {
     this.id = generateId()
@@ -22,17 +22,19 @@ export class Point {
 
   static initialize (): Point[] {
     const points: Point[] = []
-
     for (let i = 0; i < POINT_COUNT; i++) {
       const position = i + 1
+      const point = new Point(position)
       const checkers: Checker[] = []
       const config = INIT_BOARD_SETUP.find(p => p.position === position)
       if (config) {
         for (let c = 0; c < config.checkerCount; c++) {
-          checkers.push(new Checker(config.color))
+          const checker = new Checker(config.color)
+          checkers.push(checker)
         }
       }
-      points.push(new Point(position, checkers))
+      point.addCheckers(checkers)
+      points.push(point)
     }
     return points
   }

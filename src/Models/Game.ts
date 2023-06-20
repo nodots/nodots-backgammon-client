@@ -39,25 +39,18 @@ export class Game {
     }
     this.board = board
     this.setCheckers()
-    this.rollForStart()
-    this.players.black.move()
+      .then(() => {
+        this.rollForStart()
+      })
+
   }
 
-  // FIXME: Or at least watch me. It may be really stupid
-  private setCheckers (): void {
+  private async setCheckers (): Promise<void> {
     const checkers: { black: Checker[], white: Checker[] } = this.getCheckers()
     this.checkers.black = checkers.black
     this.checkers.white = checkers.white
     this.players.black.checkers = checkers.black
-    this.players.white.checkers = checkers.black
-
-    this.setCheckerPoints()
-
-  }
-
-  private setCheckerPoints (): void {
-    const checkers = [...this.checkers.black, this.checkers.white]
-    console.log(checkers)
+    this.players.white.checkers = checkers.white
   }
 
   getCheckers (): { black: Checker[], white: Checker[] } {

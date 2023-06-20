@@ -72,7 +72,6 @@ export {
   Point
 }
 
-// static
 export const generateId = (): string => {
   return uuid()
 }

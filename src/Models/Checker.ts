@@ -1,4 +1,5 @@
-import { Color, CHECKERS_PER_PLAYER, generateId } from './Backgammon'
+import { Color, generateId } from './Backgammon'
+import { Point } from './Point'
 
 export class Checker {
   id: string
