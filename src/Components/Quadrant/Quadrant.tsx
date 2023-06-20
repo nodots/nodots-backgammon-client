@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material'
 import { Quadrant as QuadrantModel, generateId } from '../../Models/Backgammon'
 import Point from '../Point/Point'
-import { Board, QuadrantLocation } from '../../Models/Backgammon'
+import { QuadrantLocation } from '../../Models/Backgammon'
 
 import './Quadrant.scss'
 
@@ -14,7 +14,8 @@ const Quadrant = (props: QuadrantProps) => {
   const classes = `quadrant ${props.location}`
   const points: React.JSX.Element[] = []
   props.quadrant.points.forEach(p => {
-    points.push(<Point position={p.position} location={props.quadrant.location} checkers={p.currentCheckers} key={generateId()} />)
+    if (p.position !== 'rail' && p.position !== 'off')
+      points.push(<Point position={p.position} location={props.quadrant.location} checkers={p.checkers} key={generateId()} />)
   })
   return <Grid item className={classes}>
     {points}

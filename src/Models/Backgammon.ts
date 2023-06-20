@@ -6,16 +6,21 @@ import { Board } from './Board'
 import { Quadrant } from './Quadrant'
 import { Point } from './Point'
 
-export const NUMBER_POINTS = 24
-export const CHECKERS_PER_PLAYER = 15
-export const INIT_PIP_COUNT = 167
-
 export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
 export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 'centered' | 2 | 4 | 8 | 16 | 32 | 64
 
-export const InitBoardSetup = [
+export interface PointProp {
+  position: number,
+  checkerCount: number,
+  color: Color
+}
+
+export const POINT_COUNT = 24
+export const CHECKERS_PER_PLAYER = 15
+export const INIT_PIP_COUNT = 167
+export const INIT_BOARD_SETUP: PointProp[] = [
   {
     position: 1,
     checkerCount: 2,
@@ -52,12 +57,11 @@ export const InitBoardSetup = [
     color: 'black'
   },
   {
-    postion: 24,
+    position: 24,
     checkerCount: 2,
     color: 'white'
   }
 ]
-
 
 export {
   Board,
@@ -68,7 +72,7 @@ export {
   Point
 }
 
-// private
+// static
 export const generateId = (): string => {
   return uuid()
 }

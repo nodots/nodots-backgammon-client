@@ -1,9 +1,9 @@
-import { CubeValue } from './Backgammon';
+import { CubeValue } from './Backgammon'
 
 export class Cube {
-  value: CubeValue;
+  value: CubeValue
 
-  constructor() {
-    this.value = 'centered';
+  constructor () {
+    this.value = 'centered'
   }
 }

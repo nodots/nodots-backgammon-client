@@ -1,9 +1,10 @@
-import { Checker } from './Checker';
 
-export class Rail {
-  checkers?: Checker[];
+import { PointPosition, Point } from './Point'
 
-  constructor(checkers?: Checker[]) {
-    this.checkers = checkers || [];
+export class Rail extends Point {
+  constructor () {
+    const position: PointPosition = 'rail'
+    super(position)
   }
+
 }

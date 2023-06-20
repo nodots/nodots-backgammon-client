@@ -10,18 +10,22 @@ interface BoardProps {
 }
 
 const Board = (props: BoardProps) => {
-  if (props.game) {
+  if (props.game?.board) {
+    const neQuadrant = props.game.board.quadrants.find(q => q.location === 'ne')
+    const nwQuadrant = props.game.board.quadrants.find(q => q.location === 'nw')
+    const swQuadrant = props.game.board.quadrants.find(q => q.location === 'sw')
+    const seQuadrant = props.game.board.quadrants.find(q => q.location === 'se')
 
     return <Grid container id='NodotsBgBoard'>
       <Grid item className='col left'>
-        <Quadrant location='nw' quadrant={props.game.board.quadrants.filter(q => q.location === 'nw')[0]} />
-        <Quadrant location='sw' quadrant={props.game.board.quadrants.filter(q => q.location === 'sw')[0]} />
+        {nwQuadrant && <Quadrant location='nw' quadrant={nwQuadrant} />}
+        {swQuadrant && <Quadrant location='sw' quadrant={swQuadrant} />}
       </Grid>
       <Grid item className='rail'>
       </Grid>
       <Grid item className='col right'>
-        <Quadrant location='ne' quadrant={props.game.board.quadrants.filter(q => q.location === 'ne')[0]} />
-        <Quadrant location='se' quadrant={props.game.board.quadrants.filter(q => q.location === 'se')[0]} />
+        {neQuadrant && <Quadrant location='ne' quadrant={neQuadrant} />}
+        {seQuadrant && <Quadrant location='se' quadrant={seQuadrant} />}
       </Grid>
     </Grid>
   } else {
