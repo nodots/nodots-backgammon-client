@@ -8,7 +8,7 @@ export class Board {
   rail: Rail
   quadrants: Quadrant[]
   points: Point[]
-  initialize?: () => {}
+  initialize?: () => Board
 
   constructor (quadrants: Quadrant[]) {
     this.quadrants = quadrants

@@ -25,6 +25,7 @@ export class Quadrant {
     return checkers
   }
 
+  // FIXME: currently returns a tuple. Should be an object to prevent ordering errors
   static initialize (): Quadrant[] {
     const points = Point.initialize()
     // Need the typeof filter since we are treating the rail (position = 'rail') and bear off trays (p.position = 'off') types of points

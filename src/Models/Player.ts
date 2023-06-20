@@ -22,9 +22,9 @@ export class Player {
     this.checkers = checkers || []
   }
 
+  // TODO: Implement. Investigate making 'move' a method in Game that's pushed down to Player as a prop.
   move (checker: Checker, destination: Point) {
     this.findCheckers()
-
   }
 
   private findCheckers (): void {
