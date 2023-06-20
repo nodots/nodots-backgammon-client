@@ -21,15 +21,6 @@ export class Board {
     ]
   }
 
-  private getPoints (): Point[] {
-    const points: Point[] = []
-    this.quadrants.forEach(q => {
-      const ps = q.points
-      points.push(...ps)
-    })
-    return points
-  }
-
   getCheckersByColor (color: Color): Checker[] {
     // console.log(`getCheckersByColor ${color.toString()}`)
     const checkers: Checker[] = []
@@ -43,6 +34,4 @@ export class Board {
     const quadrants = Quadrant.initialize()
     return new Board(quadrants)
   }
-
-
 }

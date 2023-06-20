@@ -42,7 +42,6 @@ export class Game {
       .then(() => {
         this.rollForStart()
       })
-
   }
 
   private async setCheckers (): Promise<void> {

@@ -1,6 +1,5 @@
 import { Checker } from './Checker'
 import { Point } from './Point'
-
 import { Color, QuadrantLocation, generateId } from './Backgammon'
 
 export class Quadrant {
@@ -28,11 +27,11 @@ export class Quadrant {
 
   static initialize (): Quadrant[] {
     const points = Point.initialize()
-    const SEQuadrant = new Quadrant('se', points.filter(p => p.position <= 6))
-    const SWQuadrant = new Quadrant('sw', points.filter(p => p.position >= 7 && p.position <= 12))
-    const NWQuadrant = new Quadrant('nw', points.filter(p => p.position >= 13 && p.position <= 18))
-    const NEQuadrant = new Quadrant('ne', points.filter(p => p.position >= 19))
+    // Need the typeof filter since we are treating the rail (position = 'rail') and bear off trays (p.position = 'off') types of points
+    const SEQuadrant = new Quadrant('se', points.filter(p => typeof p.position === 'number' && p.position <= 6))
+    const SWQuadrant = new Quadrant('sw', points.filter(p => typeof p.position === 'number' && p.position >= 7 && p.position <= 12))
+    const NWQuadrant = new Quadrant('nw', points.filter(p => typeof p.position === 'number' && p.position >= 13 && p.position <= 18))
+    const NEQuadrant = new Quadrant('ne', points.filter(p => typeof p.position === 'number' && p.position >= 19))
     return [SEQuadrant, SWQuadrant, NEQuadrant, NWQuadrant]
   }
-
 }

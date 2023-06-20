@@ -63,15 +63,17 @@ export const INIT_BOARD_SETUP: PointProp[] = [
   }
 ]
 
+const generateId = (): string => {
+  return uuid()
+}
+
 export {
   Board,
   Checker,
   Game,
   Player,
   Quadrant,
-  Point
+  Point,
+  generateId
 }
 
-export const generateId = (): string => {
-  return uuid()
-}

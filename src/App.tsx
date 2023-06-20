@@ -24,9 +24,7 @@ const initGame = (): Game => {
 
     }
   }
-
   return CurrentGame
-
 }
 
 const App = () => {
@@ -40,7 +38,6 @@ const App = () => {
       <Board game={CurrentGame} />
     </div>
   )
-
 }
 
 export default App

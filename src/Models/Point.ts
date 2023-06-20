@@ -6,7 +6,7 @@ export type PointPosition = number | 'rail' | 'off'
 export class Point {
   id: string
   position: PointPosition
-  checkers?: Checker[] = []
+  checkers: Checker[] = []
 
   constructor (position: PointPosition, checkers?: Checker[]) {
     this.id = generateId()
@@ -38,5 +38,4 @@ export class Point {
     }
     return points
   }
-
 }

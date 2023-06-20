@@ -31,7 +31,6 @@ const Board = (props: BoardProps) => {
   } else {
     return <h1>No Game Set</h1>
   }
-
 }
 
 export default Board
