@@ -47,6 +47,7 @@ const App = () => {
       </Paper>
       <Paper className='board-frame'>
         <Board game={CurrentGame} />
+        <span>Game: {CurrentGame.id}</span>
       </Paper>
     </div>
   )
