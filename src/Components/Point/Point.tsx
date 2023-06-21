@@ -23,7 +23,7 @@ const Point = (props: PointProps) => {
     )
   }
   return <div className={classes} key={Math.random()}>
-    <span>{props.position}</span>
+    <span className='point-position'>{props.position}</span>
     {Checkers}
   </div>
 }
