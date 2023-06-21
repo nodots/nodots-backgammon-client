@@ -1,17 +1,9 @@
 .point {
   border: 1px solid blue;
   text-align: center;
+  height: 100%;
 }
-// .point {
-//   display: flex;
-//   flex-direction: column;
-//   width: 25px;
-//   height: 80px;
-//   // justify-content: flex-start;
-// }
 
-// // .sw,
-// // .se {
-// //   flex-direction: column;
-// //   justify-content: flex-end !important;
-// // }
+.point.odd {
+  background-color: rgba(0, 0, 120, 0.2);
+}

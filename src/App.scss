@@ -9,3 +9,18 @@
   padding: 50px;
   margin: auto auto;
 }
+
+.player-info-container {
+  padding: 5vh 5vw;
+  h2 {
+    text-align: center;
+  }
+  .active {
+    background-color: blue;
+    color: white;
+  }
+}
+
+.player-info-card {
+  padding: 2vh 2vw;
+}

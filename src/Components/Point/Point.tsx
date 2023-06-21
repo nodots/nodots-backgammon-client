@@ -11,8 +11,10 @@ interface PointProps {
 
 const Point = (props: PointProps) => {
   const checkers = props.checkers ? props.checkers : []
+  let oddOrEven: string = props.position % 2 === 0 ? 'even' : 'odd'
 
-  const classes = `point ${props.location}`
+
+  const classes = `point ${props.location} ${oddOrEven}`
 
   const Checkers: React.JSX.Element[] = []
   if (checkers) {
