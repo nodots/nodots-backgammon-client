@@ -1,17 +1,23 @@
 .App {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: flex;
 }
 
 .board-frame {
   margin-top: 10px !important;
-  padding: 50px;
-  margin: auto auto;
+
+  .game-id {
+    font-size: 0.75rem;
+    display: inline-block;
+    width: 100%;
+    margin: auto auto;
+    text-align: center;
+  }
 }
 
 .player-info-container {
-  padding: 5vh 5vw;
+  padding: 4px;
   h2 {
     text-align: center;
   }
@@ -22,5 +28,6 @@
 }
 
 .player-info-card {
-  padding: 2vh 2vw;
+  margin-top: 4px;
+  padding: 4px;
 }

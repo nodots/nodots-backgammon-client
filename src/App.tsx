@@ -1,11 +1,13 @@
-import { Game, Player, Board as BoardModel } from './Models/Backgammon'
-import { Card, Paper } from '@mui/material'
+import { Game, Player as PlayerModel, Board as BoardModel } from './Models/Backgammon'
+import Player from './Components/Player/Player'
+import { Grid, Paper } from '@mui/material'
 import Board from './Components/Board/Board'
+
 import './App.scss'
 
 const LOCAL_STORAGE_KEY = 'nodots-backgammon-game'
-const Player1 = new Player('Ken', 'Riley', 'white')
-const Player2 = new Player('A', 'Robot', 'black', 'Robot')
+const Player1 = new PlayerModel('Ken', 'Riley', 'white')
+const Player2 = new PlayerModel('A', 'Robot', 'black', 'Robot')
 let CurrentGame: Game | undefined = undefined
 let CurrentBoard: BoardModel | undefined = undefined
 
@@ -21,7 +23,7 @@ const initGame = (): Game => {
       CurrentGame = storedGameObj
     } else {
       CurrentGame = new Game(Player1, Player2, CurrentBoard)
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(CurrentGame))
+      // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(CurrentGame))
 
     }
   }
@@ -36,19 +38,21 @@ const App = () => {
   console.log(CurrentGame)
   return (
     <div className="App">
-      <Paper className="player-info-container">
-        <h2>Players</h2>
-        <Card className="player-info-card">
-          Player 1 ({CurrentGame.players.black.color.toString()}): {CurrentGame.players.black.nickName} (167 pips)
-        </Card>
-        <Card className="player-info-card active">
-          Player 2 ({CurrentGame.players.white.color.toString()}): {CurrentGame.players.white.nickName} (167 pips)
-        </Card>
-      </Paper>
-      <Paper className='board-frame'>
-        <Board game={CurrentGame} />
-        <span>Game: {CurrentGame.id}</span>
-      </Paper>
+      <Grid container>
+        <Grid item xs={12} md={9}>
+          <Paper className='board-frame'>
+            <Board game={CurrentGame} />
+            <span className='game-id'>Game: {CurrentGame.id}</span>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Paper className="player-info-container">
+            <h2>Players</h2>
+            <Player player={CurrentGame.players.black} />
+            <Player player={CurrentGame.players.white} />
+          </Paper>
+        </Grid>
+      </Grid>
     </div>
   )
 }

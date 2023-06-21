@@ -1,11 +1,16 @@
 .point {
-  border: 1px solid blue;
+  // background-image: url('./point.svg');
+  background-position: center;
   text-align: center;
-  height: 100%;
+  .point-position {
+    font-size: 0.75rem;
+  }
 }
 
-.point-position {
-  font-size: 0rem;
+.point.se,
+.point.sw {
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .point.odd {

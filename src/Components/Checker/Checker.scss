@@ -1,11 +1,12 @@
 .checker {
-  display: flex;
-  flex-direction: column;
   border: 1px solid black;
   border-radius: 50%;
   width: 3.25vw;
   height: 3.25vw;
-  margin: auto auto;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 10;
+  // margin: auto auto;
   cursor: pointer;
 }
 

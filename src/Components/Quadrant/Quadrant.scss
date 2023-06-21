@@ -3,13 +3,13 @@
   height: 40vh;
 }
 
+.quadrant.sw,
+.quadrant.se {
+  flex-direction: row-reverse !important;
+  justify-content: left;
+}
+
 .point {
   width: 17%;
   height: 100%;
-}
-
-.sw,
-.se {
-  flex-direction: row-reverse !important;
-  justify-content: left;
 }

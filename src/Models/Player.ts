@@ -1,7 +1,6 @@
-import { Color, INIT_PIP_COUNT, generateId } from './Backgammon'
+import { Color, generateId } from './Backgammon'
 import { Checker } from './Checker'
 import { Die } from './Die'
-import { Point } from './Point'
 
 export class Player {
   id: string
@@ -11,6 +10,7 @@ export class Player {
   nickName?: string
   checkers?: Checker[] = []
   dice?: Die[]
+  active: boolean = false
 
   constructor (firstName: string, lastName: string, color: Color, nickName?: string | undefined, checkers?: Checker[], dice?: Die[]) {
     this.id = generateId()
@@ -44,6 +44,5 @@ export class Player {
   private findCheckers (): void {
     console.log(this.checkers)
   }
-
-
 }
+

@@ -11,6 +11,7 @@ export interface GameParams {
   cube: Cube
   board: Board
   checkers: Checker[]
+  activePlayer: Player
 }
 
 export class Game {
@@ -41,6 +42,9 @@ export class Game {
     this.setCheckers()
       .then(() => {
         console.log('Let the game begin!')
+        const firstMover = this.rollForStart()
+        console.log(`${firstMover} wins roll`)
+        this.players[firstMover].active = true
       })
   }
 
@@ -81,9 +85,18 @@ export class Game {
     return points
   }
 
-  rollForStart = () => {
-    if (this.players.white.dice && this.players.black.dice) {
-      return [this.players.white.dice[0].roll(), this.players.black.dice[0].roll()]
+  rollForStart = (): Color => {
+    if (!this.players.white.dice || !this.players.black.dice) {
+      throw Error('Player with no dice')
     }
+    const whiteRoll = this.players.white.dice[0].roll()
+    const blackRoll = this.players.black.dice[0].roll()
+
+    if (whiteRoll === blackRoll) {
+      console.log('Rolled doubles to start. Re-rolling')
+      this.rollForStart()
+    }
+
+    return whiteRoll > blackRoll ? 'white' : 'black'
   }
 }

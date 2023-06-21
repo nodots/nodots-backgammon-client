@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import { Checker } from './Checker'
 import { Game } from './Game'
+import { Die } from './Die'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
@@ -15,6 +16,16 @@ export interface PointProp {
   position: number,
   checkerCount: number,
   color: Color
+}
+
+export interface PlayerProp {
+  id: string,
+  color: Color,
+  firstName: string,
+  lastName: string,
+  nickName: string,
+  checkers: Checker[],
+  dice: Die[]
 }
 
 export const POINT_COUNT = 24
