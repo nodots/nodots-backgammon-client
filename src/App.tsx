@@ -39,10 +39,10 @@ const App = () => {
       <Paper className="player-info-container">
         <h2>Players</h2>
         <Card className="player-info-card">
-          Player 1: {CurrentGame.players.black.nickName} ({CurrentGame.players.black.color.toString()}) (167 pips)
+          Player 1 ({CurrentGame.players.black.color.toString()}): {CurrentGame.players.black.nickName} (167 pips)
         </Card>
         <Card className="player-info-card active">
-          Player 2: {CurrentGame.players.white.nickName} ({CurrentGame.players.white.color.toString()}) (167 pips)
+          Player 2 ({CurrentGame.players.white.color.toString()}): {CurrentGame.players.white.nickName} (167 pips)
         </Card>
       </Paper>
       <Paper className='board-frame'>
