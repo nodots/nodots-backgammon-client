@@ -11,9 +11,9 @@ export class Die {
     this.value = currentValue || 1
   }
 
-  roll (): DieValue {
+  roll (): number {
     const result = Math.floor(Math.random() * 6) + 1
     console.log(`rolling ${this.id}--results is ${result}`)
-    return result as DieValue
+    return result as DieValue as number
   }
 }

@@ -40,8 +40,12 @@ export class Game {
     this.board = board
     this.setCheckers()
       .then(() => {
-        this.rollForStart()
+        console.log('Let the game begin!')
       })
+  }
+
+  move (start: number, end: number, color: Color) {
+    console.log(`${color} moves`)
   }
 
   private async setCheckers (): Promise<void> {

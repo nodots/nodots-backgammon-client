@@ -1,4 +1,5 @@
 import { Game, Player, Board as BoardModel } from './Models/Backgammon'
+import { Paper } from '@mui/material'
 import Board from './Components/Board/Board'
 import './App.scss'
 
@@ -30,12 +31,14 @@ const initGame = (): Game => {
 const App = () => {
   initGame()
   if (!CurrentGame) {
-    throw Error('No point in this')
+    throw Error('No CurrentGame')
   }
   console.log(CurrentGame)
   return (
     <div className="App">
-      <Board game={CurrentGame} />
+      <Paper className='board-frame'>
+        <Board game={CurrentGame} />
+      </Paper>
     </div>
   )
 }
