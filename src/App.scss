@@ -1,12 +1,15 @@
 .App {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: flex;
+  height: 100vh;
+  width: 100vw;
 }
 
 .board-frame {
-  margin-top: 10px !important;
-
+  display: flex;
+  padding: 20px;
+  background-color: wheat !important;
   .game-id {
     font-size: 0.75rem;
     display: inline-block;
@@ -17,7 +20,8 @@
 }
 
 .player-info-container {
-  padding: 4px;
+  margin: 12px;
+  padding: 12px;
   h2 {
     text-align: center;
   }

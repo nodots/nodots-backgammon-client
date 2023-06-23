@@ -1,15 +1,11 @@
 .quadrant {
   display: flex;
-  height: 40vh;
+  flex-direction: row;
+  background-color: rgba(235, 162, 96, 0.8);
 }
 
 .quadrant.sw,
 .quadrant.se {
   flex-direction: row-reverse !important;
   justify-content: left;
-}
-
-.point {
-  width: 17%;
-  height: 100%;
 }

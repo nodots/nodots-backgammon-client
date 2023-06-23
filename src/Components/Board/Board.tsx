@@ -27,9 +27,11 @@ const Board = (props: BoardProps) => {
         {neQuadrant && <Quadrant location='ne' quadrant={neQuadrant} />}
         {seQuadrant && <Quadrant location='se' quadrant={seQuadrant} />}
       </Grid>
-      <Grid item className='off-container'>
-      </Grid>
+
+      {/* <Grid item className='off-container'>
+      </Grid> */}
     </Grid>
+
   } else {
     return <h1>No Game Set</h1>
   }

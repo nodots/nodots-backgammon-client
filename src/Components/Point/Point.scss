@@ -1,18 +1,47 @@
 .point {
-  // background-image: url('./point.svg');
+  background-image: url('./point-north.svg');
+  background-repeat: no-repeat;
+  background-size: 90% 100%;
   background-position: center;
-  text-align: center;
-  .point-position {
-    font-size: 0.75rem;
+  font-size: 0.75rem;
+  margin: 0 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 300px;
+  min-width: 60px;
+  .checker-container {
+    position: relative;
+    top: -18px;
   }
 }
 
 .point.se,
 .point.sw {
+  background-image: url('./point-south.svg');
   display: flex;
   flex-direction: column-reverse;
+  margin-top: 25px;
+  .point-position {
+    position: relative;
+    top: 20px;
+  }
+  .checker-container {
+    position: relative;
+    top: 18px;
+  }
 }
 
-.point.odd {
-  background-color: rgba(0, 0, 120, 0.2);
+.point.nw,
+.point.ne {
+  margin-bottom: 25px;
+  .point-position {
+    position: relative;
+    top: -20px;
+  }
 }
+
+// .point.odd {
+//   // background-color: rgba(0, 0, 120, 0.2);
+// }

@@ -38,21 +38,9 @@ const App = () => {
   console.log(CurrentGame)
   return (
     <div className="App">
-      <Grid container>
-        <Grid item xs={12} md={9}>
-          <Paper className='board-frame'>
-            <Board game={CurrentGame} />
-            <span className='game-id'>Game: {CurrentGame.id}</span>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Paper className="player-info-container">
-            <h2>Players</h2>
-            <Player player={CurrentGame.players.black} />
-            <Player player={CurrentGame.players.white} />
-          </Paper>
-        </Grid>
-      </Grid>
+      <Paper className='board-frame'>
+        <Board game={CurrentGame} />
+      </Paper>
     </div>
   )
 }
