@@ -1,6 +1,5 @@
 import { Game, Player as PlayerModel, Board as BoardModel } from './Models/Backgammon'
-import Player from './Components/Player/Player'
-import { Grid, Paper } from '@mui/material'
+import { Paper } from '@mui/material'
 import Board from './Components/Board/Board'
 
 import './App.scss'
@@ -23,7 +22,7 @@ const initGame = (): Game => {
       CurrentGame = storedGameObj
     } else {
       CurrentGame = new Game(Player1, Player2, CurrentBoard)
-      // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(CurrentGame))
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(CurrentGame))
 
     }
   }
