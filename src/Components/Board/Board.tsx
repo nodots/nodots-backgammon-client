@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material'
 import { Game } from '../../Models/Game'
+import Die from '../Die/Die'
 import Quadrant from '../Quadrant/Quadrant'
 
 import './Board.scss'
@@ -19,12 +20,21 @@ const Board = (props: BoardProps) => {
     return <Grid container id='NodotsBgBoard'>
       <Grid item className='col left'>
         {nwQuadrant && <Quadrant location='nw' quadrant={nwQuadrant} />}
+        <Grid item className='roll-surface'>
+          <Die color='black' />
+          <Die color='black' />
+
+        </Grid>
         {swQuadrant && <Quadrant location='sw' quadrant={swQuadrant} />}
       </Grid>
       <Grid item className='rail'>
       </Grid>
       <Grid item className='col right'>
         {neQuadrant && <Quadrant location='ne' quadrant={neQuadrant} />}
+        <Grid item className='roll-surface'>
+          <Die color='white' />
+          <Die color='white' />
+        </Grid>
         {seQuadrant && <Quadrant location='se' quadrant={seQuadrant} />}
       </Grid>
 

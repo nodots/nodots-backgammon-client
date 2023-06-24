@@ -10,7 +10,7 @@
   justify-content: flex-start;
   align-items: center;
   height: 19vw;
-  width: 3.25vw;
+  width: 3vw;
   .checker-container {
     position: relative;
     top: -18px;
@@ -22,7 +22,6 @@
   background-image: url('./point-south.svg');
   display: flex;
   flex-direction: column-reverse;
-  margin-top: 40px;
   .point-position {
     position: relative;
     top: 20px;
@@ -35,7 +34,6 @@
 
 .point.nw,
 .point.ne {
-  margin-bottom: 40px;
   .point-position {
     position: relative;
     top: -20px;

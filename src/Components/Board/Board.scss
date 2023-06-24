@@ -15,4 +15,14 @@
     background-color: gray;
     width: 5vw;
   }
+
+  .roll-surface {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
+    background-color: rgba(235, 162, 96, 0.8);
+    cursor: pointer;
+  }
 }

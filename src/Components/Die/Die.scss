@@ -1,0 +1,22 @@
+.die {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  margin: 0 2px;
+  border-radius: 2px;
+  border: 1px solid black;
+}
+
+.die.white {
+  background-color: white;
+  color: black;
+}
+
+.die.black {
+  display: none;
+  background-color: black;
+  color: white;
+}
