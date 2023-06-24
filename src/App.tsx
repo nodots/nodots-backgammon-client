@@ -37,7 +37,7 @@ const App = () => {
   console.log(CurrentGame)
   return (
     <div className="App">
-      <Paper className='board-frame'>
+      <Paper className='board-frame' elevation={8}>
         <Board game={CurrentGame} />
       </Paper>
     </div>

@@ -5,7 +5,11 @@ interface CubeProps {
 }
 
 const Cube = (props: CubeProps) => {
-  return <div>Cube</div>
+  const clickHandler = () => {
+    alert('Double')
+  }
+
+  return <div className='cube' onClick={clickHandler}>2</div>
 }
 
 export default Cube

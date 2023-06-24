@@ -17,6 +17,10 @@
   }
 }
 
+.point-position {
+  font-size: 0.75rem;
+}
+
 .point.se,
 .point.sw {
   background-image: url('./point-south.svg');
@@ -40,6 +44,12 @@
   }
 }
 
-// .point.odd {
-//   // background-color: rgba(0, 0, 120, 0.2);
-// }
+.point.se.even,
+.point.sw.even {
+  background-image: url('./point-south-even.svg');
+}
+
+.point.ne.even,
+.point.nw.even {
+  background-image: url('./point-north-even.svg');
+}
