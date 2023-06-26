@@ -33,11 +33,15 @@ const Die = (props: DieProps) => {
       break
     default:
       throw Error('Invalid pips for die')
-
-
   }
 
-  return <div className={`die ${props.color.toString()}`}>{pips}</div>
+  const clickHandler = (e: React.MouseEvent) => {
+    e.preventDefault()
+    alert(`switch dice for ${props.color}`)
+    e.stopPropagation()
+  }
+
+  return <div className={`die ${props.color.toString()}`} onClick={clickHandler}>{pips}</div>
 }
 
 export default Die

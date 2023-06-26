@@ -1,6 +1,5 @@
 import { Grid, Paper } from '@mui/material'
 import { Game } from '../../Models/Game'
-import Die from '../Die/Die'
 import Quadrant from '../Quadrant/Quadrant'
 import RollSurface from '../RollSurface/RollSurface'
 
@@ -26,10 +25,10 @@ const Board = (props: BoardProps) => {
         {swQuadrant && <Quadrant location='sw' quadrant={swQuadrant} />}
       </Grid>
       <Grid item className='rail'>
-        <Paper className='checker-container white'>
-        </Paper>
-        <Paper className='checker-container black'>
-        </Paper>
+        <div className='checker-container white'>
+        </div>
+        <div className='checker-container black'>
+        </div>
       </Grid>
       <Grid item className='col right'>
         {neQuadrant && <Quadrant location='ne' quadrant={neQuadrant} />}
@@ -39,10 +38,9 @@ const Board = (props: BoardProps) => {
       <Grid item className='off-container'>
         <Paper className='checker-container white'>
         </Paper>
-        <Cube />
+        <Cube controllingColor={undefined} />
         <Paper className='checker-container black'>
         </Paper>
-
       </Grid>
     </Grid>
 
