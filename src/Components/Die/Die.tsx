@@ -11,25 +11,25 @@ const Die = (props: DieProps) => {
   if (props.value) {
     value = props.value
   }
-  let pips = ''
+  let valueClass = ''
   switch (value) {
     case 1:
-      pips = '*'
+      valueClass = 'one'
       break
     case 2:
-      pips = '**'
+      valueClass = 'two'
       break
     case 3:
-      pips = '***'
+      valueClass = 'three'
       break
     case 4:
-      pips = '**\n**'
+      valueClass = 'four'
       break
     case 5:
-      pips = '**\n*\n**'
+      valueClass = 'five'
       break
     case 6:
-      pips = '***\n***'
+      valueClass = 'six'
       break
     default:
       throw Error('Invalid pips for die')
@@ -41,7 +41,7 @@ const Die = (props: DieProps) => {
     e.stopPropagation()
   }
 
-  return <div className={`die ${props.color.toString()}`} onClick={clickHandler}>{pips}</div>
+  return <div className={`die ${props.color.toString()} ${valueClass}`} onClick={clickHandler}>{props.value?.toString()}</div>
 }
 
 export default Die

@@ -20,3 +20,27 @@
   background-color: black;
   color: white;
 }
+
+.die.one {
+  background-image: url('./dice-six-faces-one.svg');
+}
+
+.die.two {
+  background-image: url('./dice-six-faces-two.svg');
+}
+
+.die.two {
+  background-image: url('./dice-six-faces-three.svg');
+}
+
+.die.four {
+  background-image: url('./dice-six-faces-four.svg');
+}
+
+.die.five {
+  background-image: url('./dice-six-faces-five.svg');
+}
+
+.die.six {
+  background-image: url('./dice-six-faces-six.svg');
+}
