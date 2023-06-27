@@ -1,5 +1,5 @@
 import CheckerContainer from '../CheckerContainer/CheckerContainer'
-import { Point as PointModel, QuadrantLocation, generateId } from '../../Models/Backgammon'
+import { Point as PointModel, QuadrantLocation } from '../../Models/Backgammon'
 
 import './Point.scss'
 

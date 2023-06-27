@@ -1,16 +1,15 @@
-import { Color } from '../../Models/Backgammon'
+import { Cube as CubeModel } from '../../Models/Backgammon'
 import './Cube.scss'
 
 // at the start of the game
 interface CubeProps {
-  controllingColor: Color | undefined
-  colorScheme?: string
+  cube: CubeModel
 }
 
 const Cube = (props: CubeProps) => {
   const clickHandler = () => {
-    if (props.controllingColor) {
-      alert(`Double for ${props.controllingColor}`)
+    if (props.cube.controllingColor) {
+      alert(`Double for ${props.cube.controllingColor}`)
     } else {
       alert('initial Double for player that clicked')
     }

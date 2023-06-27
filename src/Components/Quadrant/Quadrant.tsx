@@ -1,7 +1,6 @@
 import { Grid } from '@mui/material'
-import { Quadrant as QuadrantModel, generateId } from '../../Models/Backgammon'
+import { QuadrantLocation, Quadrant as QuadrantModel, generateId } from '../../Models/Backgammon'
 import Point from '../Point/Point'
-import { QuadrantLocation } from '../../Models/Backgammon'
 
 import './Quadrant.scss'
 

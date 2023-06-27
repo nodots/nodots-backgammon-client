@@ -21,10 +21,6 @@ export class Game {
     black: Player
     white: Player,
   }
-  checkers: {
-    black: Checker[],
-    white: Checker[]
-  }
   board: Board
 
   constructor (whitePlayer: Player, blackPlayer: Player) {
@@ -34,13 +30,7 @@ export class Game {
       black: blackPlayer,
       white: whitePlayer
     }
-    this.checkers = {
-      black: [],
-      white: []
-    }
     this.board = Board.initialize()
-
-
 
     this.setCheckers()
       .then(() => {
@@ -57,8 +47,6 @@ export class Game {
 
   private async setCheckers (): Promise<void> {
     const checkers: { black: Checker[], white: Checker[] } = this.getCheckers()
-    this.checkers.black = checkers.black
-    this.checkers.white = checkers.white
     this.players.black.checkers = checkers.black
     this.players.white.checkers = checkers.white
   }

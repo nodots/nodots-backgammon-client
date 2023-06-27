@@ -3,6 +3,7 @@ import { Checker } from './Checker'
 import { CheckerContainer } from './CheckerContainer'
 import { Game } from './Game'
 import { Die } from './Die'
+import { Cube } from './Cube'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
@@ -14,7 +15,6 @@ export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
 export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 'centered' | 2 | 4 | 8 | 16 | 32 | 64
-
 
 export interface PointProp {
   position: number | 'rail' | 'off'
@@ -86,6 +86,7 @@ export {
   Board,
   Checker,
   CheckerContainer,
+  Cube,
   Game,
   Player,
   Quadrant,

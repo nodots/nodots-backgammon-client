@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   CheckerContainer as CheckerContainerModel,
-  Checker as CheckerModel
 } from '../../Models/Backgammon'
 import Checker from '../Checker/Checker'
 

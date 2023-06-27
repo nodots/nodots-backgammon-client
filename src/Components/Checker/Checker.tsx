@@ -5,7 +5,6 @@ export interface CheckerProps {
   checker: CheckerModel
 }
 
-
 const Checker = (props: CheckerProps) => {
   const classes = `checker ${props.checker.color}`
 

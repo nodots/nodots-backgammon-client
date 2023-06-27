@@ -1,13 +1,15 @@
-import { Checker, PointProp } from './Backgammon'
+import { Checker, PointProp, generateId } from './Backgammon'
 import { CheckerContainer } from './CheckerContainer'
 
 export class Off {
+  id: string
   checkerContainers: {
     black: CheckerContainer,
     white: CheckerContainer
   }
 
-  constructor () {
+  private constructor () {
+    this.id = generateId()
     this.checkerContainers = {
       black: new CheckerContainer('off', 'black'),
       white: new CheckerContainer('off', 'white')
@@ -15,8 +17,8 @@ export class Off {
   }
 
   static initialize (setup: PointProp[]) {
-    console.log('intialize')
     const off = new Off()
+
     const blackOffCheckerSetup: PointProp[] = setup.filter(c => c.position === 'off' && c.color === 'black')
     if (blackOffCheckerSetup) {
       blackOffCheckerSetup.forEach(c => {

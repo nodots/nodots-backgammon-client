@@ -1,4 +1,4 @@
-import { Color, INIT_BOARD_SETUP, PointProp } from './Backgammon'
+import { Color, INIT_BOARD_SETUP, PointProp, generateId } from './Backgammon'
 import { Point } from './Point'
 import { Quadrant } from './Quadrant'
 import { Checker } from './Checker'
@@ -6,6 +6,7 @@ import { Rail } from './Rail'
 import { Off } from './Off'
 
 export class Board {
+  id: string
   quadrants: Quadrant[]
   points: Point[]
   rail: Rail
@@ -13,7 +14,8 @@ export class Board {
 
   initialize?: () => Board
 
-  constructor (quadrants: Quadrant[], rail: Rail, off: Off) {
+  private constructor (quadrants: Quadrant[], rail: Rail, off: Off) {
+    this.id = generateId()
     this.quadrants = quadrants
     this.rail = rail
     this.off = off

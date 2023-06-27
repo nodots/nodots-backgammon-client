@@ -9,7 +9,6 @@ import './Board.scss'
 
 interface BoardProps {
   game: Game | undefined
-  colorScheme?: string
 }
 
 const Board = (props: BoardProps) => {
@@ -22,7 +21,9 @@ const Board = (props: BoardProps) => {
     return <Grid container id='NodotsBgBoard'>
       <Grid item className='col left'>
         {nwQuadrant && <Quadrant location='nw' quadrant={nwQuadrant} />}
-        <RollSurface player={props.game.players.black} />
+        <Grid item className='roll-surface'>
+          <RollSurface player={props.game.players.black} />
+        </Grid>
         {swQuadrant && <Quadrant location='sw' quadrant={swQuadrant} />}
       </Grid>
       <Grid item className='rail'>
@@ -30,11 +31,14 @@ const Board = (props: BoardProps) => {
       </Grid>
       <Grid item className='col right'>
         {neQuadrant && <Quadrant location='ne' quadrant={neQuadrant} />}
-        <RollSurface player={props.game.players.white} />
+        <Grid item className='roll-surface'>
+          <RollSurface player={props.game.players.white} />
+
+        </Grid>
         {seQuadrant && <Quadrant location='se' quadrant={seQuadrant} />}
       </Grid>
       <Grid item className='off-container'>
-        <Off off={props.game.board.off} />
+        <Off off={props.game.board.off} cube={props.game.cube} />
       </Grid>
     </Grid>
 

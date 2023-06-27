@@ -1,6 +1,5 @@
 import { Player } from '../../Models/Backgammon'
 import Die from '../Die/Die'
-import { Grid } from '@mui/material'
 
 interface RollSurfaceProps {
   player: Player
@@ -8,15 +7,16 @@ interface RollSurfaceProps {
 
 const RollSurface = (props: RollSurfaceProps) => {
 
+  // FIXME: Click handler not working
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
-    alert(`Roll dice for ${props.player.color.toString()}`)
+    console.log(`Roll dice for ${props.player.color.toString()}`)
   }
 
-  return <Grid item className='roll-surface' onClick={clickHandler}>
-    <Die color={props.player.color} value={5} />
+  return <div className='roll-surface' onClick={clickHandler}>
+    <Die color={props.player.color} value={1} />
     <Die color={props.player.color} value={6} />
-  </Grid>
+  </div>
 }
 
 export default RollSurface

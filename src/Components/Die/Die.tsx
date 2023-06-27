@@ -1,9 +1,9 @@
-import { Color } from '../../Models/Backgammon'
+import { Color, DieValue } from '../../Models/Backgammon'
 import './Die.scss'
 
 interface DieProps {
   color: Color
-  value?: number
+  value?: DieValue
 }
 
 const Die = (props: DieProps) => {

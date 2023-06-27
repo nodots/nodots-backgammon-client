@@ -1,18 +1,19 @@
-import { PointProp } from './Backgammon'
+import { PointProp, generateId } from './Backgammon'
 import { Checker } from './Checker'
 import { CheckerContainer } from './CheckerContainer'
 
 export class Rail {
+  id: string
   checkerContainers: {
     black: CheckerContainer,
     white: CheckerContainer
   }
 
   constructor () {
+    this.id = generateId()
     this.checkerContainers = {
       black: new CheckerContainer('off', 'black'),
       white: new CheckerContainer('off', 'white')
-
     }
   }
 
@@ -38,5 +39,4 @@ export class Rail {
     }
     return rail
   }
-
 }
