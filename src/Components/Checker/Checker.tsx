@@ -1,4 +1,5 @@
 import { Checker as CheckerModel, generateId } from '../../Models/Backgammon'
+import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 import './Checker.scss'
 
 export interface CheckerProps {
@@ -11,7 +12,7 @@ const Checker = (props: CheckerProps) => {
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     alert(`move checker ${props.checker.id}`)
   }
-  return <div className={classes} key={generateId()} onClick={clickHandler}></div>
+  return <div className={classes} key={generateId()} onClick={clickHandler}><RadioButtonCheckedTwoToneIcon color={props.checker.color === 'black' ? 'primary' : 'secondary'} /></div>
 }
 
 export default Checker
