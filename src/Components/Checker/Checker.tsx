@@ -1,17 +1,16 @@
-import { Color, generateId } from '../../Models/Backgammon'
+import { Checker as CheckerModel, generateId } from '../../Models/Backgammon'
 import './Checker.scss'
 
 export interface CheckerProps {
-  color: Color
-  colorScheme?: string
+  checker: CheckerModel
 }
 
 
 const Checker = (props: CheckerProps) => {
-  const classes = `checker ${props.color}`
+  const classes = `checker ${props.checker.color}`
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    alert(`move checker ${props.color}`)
+    alert(`move checker ${props.checker.color}`)
   }
   return <div className={classes} key={generateId()} onClick={clickHandler}></div>
 }

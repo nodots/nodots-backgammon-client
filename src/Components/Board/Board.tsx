@@ -1,10 +1,11 @@
-import { Grid, Paper } from '@mui/material'
+import { Grid } from '@mui/material'
 import { Game } from '../../Models/Game'
 import Quadrant from '../Quadrant/Quadrant'
+import Rail from '../Rail/Rail'
+import Off from '../Off/Off'
 import RollSurface from '../RollSurface/RollSurface'
 
 import './Board.scss'
-import Cube from '../Cube/Cube'
 
 interface BoardProps {
   game: Game | undefined
@@ -25,10 +26,7 @@ const Board = (props: BoardProps) => {
         {swQuadrant && <Quadrant location='sw' quadrant={swQuadrant} />}
       </Grid>
       <Grid item className='rail'>
-        <div className='checker-container white'>
-        </div>
-        <div className='checker-container black'>
-        </div>
+        <Rail rail={props.game.board.rail} />
       </Grid>
       <Grid item className='col right'>
         {neQuadrant && <Quadrant location='ne' quadrant={neQuadrant} />}
@@ -36,11 +34,7 @@ const Board = (props: BoardProps) => {
         {seQuadrant && <Quadrant location='se' quadrant={seQuadrant} />}
       </Grid>
       <Grid item className='off-container'>
-        <Paper className='checker-container white'>
-        </Paper>
-        <Cube controllingColor={undefined} />
-        <Paper className='checker-container black'>
-        </Paper>
+        <Off off={props.game.board.off} />
       </Grid>
     </Grid>
 

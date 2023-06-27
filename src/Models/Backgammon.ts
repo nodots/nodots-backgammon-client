@@ -1,11 +1,14 @@
 import { v4 as uuid } from 'uuid'
 import { Checker } from './Checker'
+import { CheckerContainer } from './CheckerContainer'
 import { Game } from './Game'
 import { Die } from './Die'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
 import { Point } from './Point'
+import { Rail } from './Rail'
+import { Off } from './Off'
 
 export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
 export type Color = 'black' | 'white'
@@ -81,10 +84,13 @@ const generateId = (): string => {
 export {
   Board,
   Checker,
+  CheckerContainer,
   Game,
   Player,
   Quadrant,
   Point,
+  Rail,
+  Off,
   generateId
 }
 
