@@ -1,4 +1,5 @@
-import { Color } from './Backgammon'
+import { PointProp } from './Backgammon'
+import { Checker } from './Checker'
 import { CheckerContainer } from './CheckerContainer'
 
 export class Rail {
@@ -15,5 +16,27 @@ export class Rail {
     }
   }
 
+  static initialize (setup: PointProp[]) {
+    const rail = new Rail()
+    const blackRailCheckerSetup: PointProp[] = setup.filter(c => c.position === 'rail' && c.color === 'black')
+    if (blackRailCheckerSetup) {
+      blackRailCheckerSetup.forEach(c => {
+        for (let i = 0; i < c.checkerCount; i++) {
+          rail.checkerContainers.black.checkers.push(new Checker('black'))
+        }
+      })
+    }
+
+    const whiteRailCheckerSetup: PointProp[] = setup.filter(c => c.position === 'rail' && c.color === 'white')
+
+    if (whiteRailCheckerSetup) {
+      whiteRailCheckerSetup.forEach(c => {
+        for (let i = 0; i < c.checkerCount; i++) {
+          rail.checkerContainers.white.checkers.push(new Checker('white'))
+        }
+      })
+    }
+    return rail
+  }
 
 }

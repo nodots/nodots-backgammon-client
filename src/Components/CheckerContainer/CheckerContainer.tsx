@@ -12,7 +12,7 @@ interface CheckerContainerProps {
 const CheckerContainer = (props: CheckerContainerProps) => {
   const checkers: React.JSX.Element[] = []
   props.checkerContainer.checkers.forEach(c => {
-    checkers.push(<Checker checker={c} />)
+    checkers.push(<Checker checker={c} key={c.id} />)
   })
   return <div className='checker-container' >
     {checkers}

@@ -15,3 +15,14 @@
 .white {
   background-color: white;
 }
+
+.off-container {
+  .checker-container {
+    .checker {
+      width: 3vw;
+      height: 1vh;
+      border: none;
+      border-radius: none;
+    }
+  }
+}

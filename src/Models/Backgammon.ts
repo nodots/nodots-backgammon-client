@@ -15,9 +15,10 @@ export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 'centered' | 2 | 4 | 8 | 16 | 32 | 64
 
+
 export interface PointProp {
-  position: number,
-  checkerCount: number,
+  position: number | 'rail' | 'off'
+  checkerCount: number
   color: Color
 }
 

@@ -1,6 +1,6 @@
 import { Checker } from './Checker'
 import { Point } from './Point'
-import { Color, QuadrantLocation, generateId } from './Backgammon'
+import { Color, PointProp, QuadrantLocation, generateId } from './Backgammon'
 
 export class Quadrant {
   id: string
@@ -26,8 +26,8 @@ export class Quadrant {
   }
 
   // FIXME: currently returns a tuple. Should be an object to prevent ordering errors
-  static initialize (): Quadrant[] {
-    const points = Point.initialize()
+  static initialize (setup: PointProp[]): Quadrant[] {
+    const points = Point.initialize(setup)
     // Need the typeof filter since we are treating the rail (position = 'rail') and bear off trays (p.position = 'off') types of points
     const SEQuadrant = new Quadrant('se', points.filter(p => typeof p.position === 'number' && p.position <= 6))
     const SWQuadrant = new Quadrant('sw', points.filter(p => typeof p.position === 'number' && p.position >= 7 && p.position <= 12))

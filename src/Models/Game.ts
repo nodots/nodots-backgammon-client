@@ -27,7 +27,7 @@ export class Game {
   }
   board: Board
 
-  constructor (whitePlayer: Player, blackPlayer: Player, board: Board) {
+  constructor (whitePlayer: Player, blackPlayer: Player) {
     this.id = generateId()
     this.cube = new Cube()
     this.players = {
@@ -38,7 +38,10 @@ export class Game {
       black: [],
       white: []
     }
-    this.board = board
+    this.board = Board.initialize()
+
+
+
     this.setCheckers()
       .then(() => {
         console.log('Let the game begin!')

@@ -1,4 +1,4 @@
-import { Color } from './Backgammon'
+import { Color, INIT_BOARD_SETUP, PointProp } from './Backgammon'
 import { Point } from './Point'
 import { Quadrant } from './Quadrant'
 import { Checker } from './Checker'
@@ -8,13 +8,15 @@ import { Off } from './Off'
 export class Board {
   quadrants: Quadrant[]
   points: Point[]
-  rail: Rail = new Rail()
-  off: Off = new Off()
+  rail: Rail
+  off: Off
 
   initialize?: () => Board
 
-  constructor (quadrants: Quadrant[]) {
+  constructor (quadrants: Quadrant[], rail: Rail, off: Off) {
     this.quadrants = quadrants
+    this.rail = rail
+    this.off = off
 
     this.points = [
       ...this.quadrants[0].points,
@@ -22,12 +24,9 @@ export class Board {
       ...this.quadrants[2].points,
       ...this.quadrants[3].points,
     ]
-
-
   }
 
   getCheckersByColor (color: Color): Checker[] {
-    // console.log(`getCheckersByColor ${color.toString()}`)
     const checkers: Checker[] = []
     this.quadrants.forEach(q => {
       checkers.push(...q.getCheckersByColor(color))
@@ -35,8 +34,13 @@ export class Board {
     return checkers
   }
 
-  static initialize (): Board {
-    const quadrants = Quadrant.initialize()
-    return new Board(quadrants)
+  static initialize (setup?: PointProp[]): Board {
+    if (!setup) {
+      setup = INIT_BOARD_SETUP
+    }
+    const quadrants = Quadrant.initialize(setup)
+    const rail = Rail.initialize(setup)
+    const off = Off.initialize(setup)
+    return new Board(quadrants, rail, off)
   }
 }

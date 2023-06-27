@@ -10,7 +10,7 @@ const Checker = (props: CheckerProps) => {
   const classes = `checker ${props.checker.color}`
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    alert(`move checker ${props.checker.color}`)
+    alert(`move checker ${props.checker.id}`)
   }
   return <div className={classes} key={generateId()} onClick={clickHandler}></div>
 }
