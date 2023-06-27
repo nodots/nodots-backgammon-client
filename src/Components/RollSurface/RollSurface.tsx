@@ -6,7 +6,6 @@ interface RollSurfaceProps {
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
-
   // FIXME: Click handler not working
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()

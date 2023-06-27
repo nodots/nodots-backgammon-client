@@ -20,7 +20,7 @@
     border-right: 1px solid brown;
     padding: 4px;
     .checker-container {
-      height: 21vh;
+      height: 18vw;
     }
   }
 
@@ -29,7 +29,6 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    min-height: 30px;
     background-color: rgba(235, 162, 96, 0.8);
     cursor: pointer;
   }
@@ -45,7 +44,7 @@
     .checker-container {
       border: 0.25px solid #2c486b;
       border-radius: 5px;
-      height: 30vh;
+      height: 15vw;
     }
   }
 
