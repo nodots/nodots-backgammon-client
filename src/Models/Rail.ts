@@ -1,10 +1,19 @@
+import { Color } from './Backgammon'
+import { CheckerContainer } from './CheckerContainer'
 
-import { PointPosition, Point } from './Point'
-
-export class Rail extends Point {
-  constructor () {
-    const position: PointPosition = 'rail'
-    super(position)
+export class Rail {
+  checkerContainers: {
+    black: CheckerContainer,
+    white: CheckerContainer
   }
+
+  constructor () {
+    this.checkerContainers = {
+      black: new CheckerContainer('off', 'black'),
+      white: new CheckerContainer('off', 'white')
+
+    }
+  }
+
 
 }

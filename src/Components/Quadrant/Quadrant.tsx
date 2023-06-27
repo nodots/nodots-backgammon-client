@@ -14,8 +14,7 @@ const Quadrant = (props: QuadrantProps) => {
   const classes = `quadrant ${props.location}`
   const points: React.JSX.Element[] = []
   props.quadrant.points.forEach(p => {
-    if (p.position !== 'rail' && p.position !== 'off')
-      points.push(<Point position={p.position} location={props.quadrant.location} checkers={p.checkers} key={generateId()} />)
+    points.push(<Point position={p.position} location={props.quadrant.location} checkers={p.checkers} key={generateId()} />)
   })
   return <Grid item className={classes}>
     {points}

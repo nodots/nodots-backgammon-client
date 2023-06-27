@@ -1,14 +1,17 @@
 
-import { Color } from './Backgammon'
-import { PointPosition, Point } from './Point'
+import { CheckerContainer } from './CheckerContainer'
 
-export class Off extends Point {
-  color: Color
+export class Off {
+  checkerContainers: {
+    black: CheckerContainer,
+    white: CheckerContainer
+  }
 
-  constructor (color: Color) {
-    const position: PointPosition = 'off'
-    super(position)
-    this.color = color
+  constructor () {
+    this.checkerContainers = {
+      black: new CheckerContainer('off', 'black'),
+      white: new CheckerContainer('off', 'white')
+    }
   }
 
 }

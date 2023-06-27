@@ -6,18 +6,15 @@ import { Rail } from './Rail'
 import { Off } from './Off'
 
 export class Board {
-  rail: Rail
-  off: {
-    black: Off,
-    white: Off,
-  }
   quadrants: Quadrant[]
   points: Point[]
+  rail: Rail = new Rail()
+  off: Off = new Off()
+
   initialize?: () => Board
 
   constructor (quadrants: Quadrant[]) {
     this.quadrants = quadrants
-    this.rail = new Rail()
 
     this.points = [
       ...this.quadrants[0].points,
@@ -26,10 +23,7 @@ export class Board {
       ...this.quadrants[3].points,
     ]
 
-    this.off = {
-      black: new Off('black'),
-      white: new Off('white')
-    }
+
   }
 
   getCheckersByColor (color: Color): Checker[] {

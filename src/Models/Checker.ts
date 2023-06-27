@@ -1,5 +1,4 @@
 import { Color, generateId } from './Backgammon'
-import { Point } from './Point'
 
 export class Checker {
   id: string
@@ -11,5 +10,4 @@ export class Checker {
   }
 
 }
-
 

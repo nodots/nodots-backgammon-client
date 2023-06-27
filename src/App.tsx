@@ -22,7 +22,7 @@ const initGame = (): Game => {
       CurrentGame = storedGameObj
     } else {
       CurrentGame = new Game(Player1, Player2, CurrentBoard)
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(CurrentGame))
+      // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(CurrentGame))
 
     }
   }
