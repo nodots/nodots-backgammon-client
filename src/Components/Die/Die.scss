@@ -16,31 +16,54 @@
 }
 
 .die.black {
-  display: none;
   background-color: black;
   color: white;
 }
 
-.die.one {
-  background-image: url('./dice-six-faces-one.svg');
+.die.white.one {
+  background-image: url('./images/white/dice-six-faces-one.svg');
 }
 
-.die.two {
-  background-image: url('./dice-six-faces-two.svg');
+.die.white.two {
+  background-image: url('./images/white/dice-six-faces-two.svg');
 }
 
-.die.two {
-  background-image: url('./dice-six-faces-three.svg');
+.die.white.three {
+  background-image: url('./images/white/dice-six-faces-three.svg');
 }
 
-.die.four {
-  background-image: url('./dice-six-faces-four.svg');
+.die.white.four {
+  background-image: url('./images/white/dice-six-faces-four.svg');
 }
 
-.die.five {
-  background-image: url('./dice-six-faces-five.svg');
+.die.white.five {
+  background-image: url('./images/white/dice-six-faces-five.svg');
 }
 
-.die.six {
-  background-image: url('./dice-six-faces-six.svg');
+.die.white.six {
+  background-image: url('./images/white/dice-six-faces-six.svg');
+}
+
+.die.black.one {
+  background-image: url('./images/black/dice-six-faces-one.svg');
+}
+
+.die.black.two {
+  background-image: url('./images/black/dice-six-faces-two.svg');
+}
+
+.die.black.three {
+  background-image: url('./images/black/dice-six-faces-three.svg');
+}
+
+.die.black.four {
+  background-image: url('./images/black/dice-six-faces-four.svg');
+}
+
+.die.black.five {
+  background-image: url('./images/black/dice-six-faces-five.svg');
+}
+
+.die.black.six {
+  background-image: url('./images/black/dice-six-faces-six.svg');
 }

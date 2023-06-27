@@ -14,8 +14,8 @@ const RollSurface = (props: RollSurfaceProps) => {
   }
 
   return <Grid item className='roll-surface' onClick={clickHandler}>
-    <Die color={props.player.color} />
-    <Die color={props.player.color} />
+    <Die color={props.player.color} value={5} />
+    <Die color={props.player.color} value={6} />
   </Grid>
 }
 

@@ -41,7 +41,7 @@ const Die = (props: DieProps) => {
     e.stopPropagation()
   }
 
-  return <div className={`die ${props.color.toString()} ${valueClass}`} onClick={clickHandler}>{props.value?.toString()}</div>
+  return <div className={`die ${props.color.toString()} ${valueClass}`} onClick={clickHandler}></div>
 }
 
 export default Die
