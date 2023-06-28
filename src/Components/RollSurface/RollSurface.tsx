@@ -1,4 +1,5 @@
-import { Player } from '../../Models/Backgammon'
+import { useState } from 'react'
+import { Player, DieValue } from '../../Models/Backgammon'
 import Die from '../Die/Die'
 
 interface RollSurfaceProps {
@@ -6,15 +7,19 @@ interface RollSurfaceProps {
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
-  // FIXME: Click handler not working
+  const [dieOne, setDieOne] = useState<DieValue>(1)
+  const [dieTwo, setDieTwo] = useState<DieValue>(1)
+
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
-    console.log(`Roll dice for ${props.player.color.toString()}`)
+    const rollResults: [DieValue, DieValue] = props.player.roll()
+    setDieOne(rollResults[0])
+    setDieTwo(rollResults[1])
   }
 
-  return <div className='roll-surface' onClick={clickHandler}>
-    <Die color={props.player.color} value={1} />
-    <Die color={props.player.color} value={6} />
+  return <div className='roll-surface' onClick={clickHandler} >
+    <Die color={props.player.color} value={dieOne} />
+    <Die color={props.player.color} value={dieTwo} />
   </div>
 }
 

@@ -1,4 +1,4 @@
-import { Color, generateId } from './Backgammon'
+import { Color, DieValue, generateId } from './Backgammon'
 import { Checker } from './Checker'
 import { Die } from './Die'
 
@@ -22,11 +22,11 @@ export class Player {
     this.checkers = checkers || []
   }
 
-  roll (): [number, number] {
+  roll (): [DieValue, DieValue] {
     if (!this.dice || this.dice.length !== 2) {
       throw Error('No dice to roll')
     }
-    return [this.dice[0].roll(), this.dice[1].roll()]
+    return [this.dice[0].roll() as DieValue, this.dice[1].roll() as DieValue]
   }
 }
 

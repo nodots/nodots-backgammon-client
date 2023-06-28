@@ -6,12 +6,14 @@ interface DieProps {
   value?: DieValue
 }
 
+
 const Die = (props: DieProps) => {
   let value = 1
   if (props.value) {
     value = props.value
   }
   let valueClass = ''
+
   switch (value) {
     case 1:
       valueClass = 'one'
@@ -35,9 +37,8 @@ const Die = (props: DieProps) => {
       throw Error('Invalid pips for die')
   }
 
-  const clickHandler = (e: React.MouseEvent) => {
-    e.preventDefault()
-    alert(`switch dice for ${props.color}`)
+  const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    alert('Switch dice not implemented')
     e.stopPropagation()
   }
 
