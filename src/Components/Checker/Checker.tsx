@@ -12,7 +12,7 @@ const Checker = (props: CheckerProps) => {
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     alert(`move checker ${props.checker.id}`)
   }
-  return <div className={classes} key={generateId()} onClick={clickHandler}><RadioButtonCheckedTwoToneIcon color={props.checker.color === 'black' ? 'primary' : 'secondary'} /></div>
+  return <div className={classes} key={generateId()} onClick={clickHandler}><RadioButtonCheckedTwoToneIcon sx={{ fill: 'rgba(69, 109, 157, .4)' }} /></div>
 }
 
 export default Checker

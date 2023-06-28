@@ -1,4 +1,5 @@
-import { Cube as CubeModel } from '../../Models/Backgammon'
+
+import { Cube as CubeModel, CubeValue } from '../../Models/Backgammon'
 import './Cube.scss'
 
 // at the start of the game
@@ -7,15 +8,14 @@ interface CubeProps {
 }
 
 const Cube = (props: CubeProps) => {
-  const clickHandler = () => {
-    if (props.cube.controllingColor) {
-      alert(`Double for ${props.cube.controllingColor}`)
-    } else {
-      alert('initial Double for player that clicked')
-    }
+  if (props.cube.controllingColor) {
+    console.log(`Double for ${props.cube.controllingColor}`)
+  } else {
+    console.log('initial Double for player that clicked')
   }
+  return <div className='cube'>2</div>
 
-  return <div className='cube' onClick={clickHandler}>2</div>
 }
+
 
 export default Cube

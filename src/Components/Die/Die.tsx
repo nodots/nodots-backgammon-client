@@ -6,7 +6,6 @@ interface DieProps {
   value?: DieValue
 }
 
-
 const Die = (props: DieProps) => {
   let value = 1
   if (props.value) {
@@ -38,8 +37,7 @@ const Die = (props: DieProps) => {
   }
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    alert('Switch dice not implemented')
-    e.stopPropagation()
+    console.log('Switching dice not yet implemented')
   }
 
   return <div className={`die ${props.color.toString()} ${valueClass}`} onClick={clickHandler}></div>
