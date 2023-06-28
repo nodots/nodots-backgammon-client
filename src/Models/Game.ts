@@ -37,7 +37,9 @@ export class Game {
         console.log('Let the game begin!')
         const firstMover = this.rollForStart()
         console.log(`${firstMover} wins roll`)
+        console.log(this.players)
         this.players[firstMover].active = true
+        console.log(this.players)
       })
   }
 

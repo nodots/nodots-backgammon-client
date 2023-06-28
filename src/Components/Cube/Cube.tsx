@@ -13,7 +13,7 @@ const Cube = (props: CubeProps) => {
   } else {
     console.log('initial Double for player that clicked')
   }
-  return <div className='cube'>2</div>
+  return <div className='cube'>{props.cube.value.toString()}</div>
 
 }
 

@@ -5,8 +5,8 @@ export class Cube {
   value: CubeValue
   controllingColor: Color | undefined
 
-  constructor () {
+  constructor (value?: CubeValue) {
     this.id = generateId()
-    this.value = 'centered'
+    this.value = value ? value : 2
   }
 }
