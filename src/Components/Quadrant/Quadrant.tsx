@@ -2,8 +2,6 @@ import { Grid } from '@mui/material'
 import { QuadrantLocation, Quadrant as QuadrantModel, generateId } from '../../Models/Backgammon'
 import Point from '../Point/Point'
 
-import './Quadrant.scss'
-
 interface QuadrantProps {
   location: QuadrantLocation
   quadrant: QuadrantModel

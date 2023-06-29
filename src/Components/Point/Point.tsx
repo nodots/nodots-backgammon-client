@@ -1,8 +1,6 @@
 import CheckerContainer from '../CheckerContainer/CheckerContainer'
 import { Point as PointModel, QuadrantLocation } from '../../Models/Backgammon'
 
-import './Point.scss'
-
 interface PointProps {
   point: PointModel
   location: QuadrantLocation

@@ -5,8 +5,6 @@ import Rail from '../Rail/Rail'
 import Off from '../Off/Off'
 import RollSurface from '../RollSurface/RollSurface'
 
-import './Board.scss'
-
 interface BoardProps {
   game: Game | undefined
 }

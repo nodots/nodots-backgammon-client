@@ -1,6 +1,5 @@
 import { Card, CardHeader, CardContent } from '@mui/material'
 import { Player as PlayerModel, Color } from '../../Models/Backgammon'
-import './Player.scss'
 
 interface PlayerProps {
   player: PlayerModel

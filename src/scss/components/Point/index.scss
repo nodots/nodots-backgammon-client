@@ -1,5 +1,5 @@
 .point {
-  background-image: url('./point-north.svg');
+  background-image: url('./images/point-north.svg');
   background-repeat: no-repeat;
   background-size: 90% 100%;
   background-position: center;
@@ -23,7 +23,7 @@
 
 .point.se,
 .point.sw {
-  background-image: url('./point-south.svg');
+  background-image: url('./images/point-south.svg');
   display: flex;
   flex-direction: column-reverse;
   .point-position {
@@ -46,10 +46,10 @@
 
 .point.se.even,
 .point.sw.even {
-  background-image: url('./point-south-even.svg');
+  background-image: url('./images/point-south-even.svg');
 }
 
 .point.ne.even,
 .point.nw.even {
-  background-image: url('./point-north-even.svg');
+  background-image: url('./images/point-north-even.svg');
 }

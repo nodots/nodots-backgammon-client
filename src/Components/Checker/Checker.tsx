@@ -1,6 +1,5 @@
 import { Checker as CheckerModel, generateId } from '../../Models/Backgammon'
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
-import './Checker.scss'
 
 export interface CheckerProps {
   checker: CheckerModel

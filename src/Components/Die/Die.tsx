@@ -1,5 +1,4 @@
 import { Color, DieValue } from '../../Models/Backgammon'
-import './Die.scss'
 
 interface DieProps {
   color: Color
