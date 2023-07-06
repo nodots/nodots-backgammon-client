@@ -1,6 +1,6 @@
 import { Checker } from './Checker'
 import { Point } from './Point'
-import { Color, PointProp, QuadrantLocation, generateId } from './Backgammon'
+import { Color, PointProp, QuadrantLocation, generateId } from '.'
 
 export class Quadrant {
   id: string

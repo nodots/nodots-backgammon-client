@@ -1,5 +1,5 @@
 
-import { Cube as CubeModel, CubeValue } from '../../Models/Backgammon'
+import { Cube as CubeModel, CubeValue } from '../../Models'
 
 // at the start of the game
 interface CubeProps {

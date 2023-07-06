@@ -1,6 +1,6 @@
 import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
-import { POINT_COUNT, PointProp, generateId } from './Backgammon'
+import { POINT_COUNT, PointProp, generateId } from '.'
 
 export class Point {
   id: string

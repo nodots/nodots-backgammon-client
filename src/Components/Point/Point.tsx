@@ -1,5 +1,5 @@
 import CheckerBox from '../CheckerBox/CheckerBox'
-import { Point as PointModel, QuadrantLocation } from '../../Models/Backgammon'
+import { Point as PointModel, QuadrantLocation } from '../../Models'
 
 interface PointProps {
   point: PointModel

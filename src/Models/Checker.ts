@@ -1,4 +1,4 @@
-import { Color, generateId } from './Backgammon'
+import { Color, generateId } from '.'
 
 export class Checker {
   id: string

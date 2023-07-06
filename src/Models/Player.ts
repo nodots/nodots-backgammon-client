@@ -1,4 +1,4 @@
-import { Color, DieValue, generateId } from './Backgammon'
+import { Color, DieValue, generateId } from '.'
 import { Checker } from './Checker'
 import { Die } from './Die'
 

@@ -1,4 +1,4 @@
-import { Off as OffModel, Cube as CubeModel } from '../../Models/Backgammon'
+import { Off as OffModel, Cube as CubeModel } from '../../Models'
 import Cube from '../Cube/Cube'
 import CheckerBox from '../CheckerBox/CheckerBox'
 

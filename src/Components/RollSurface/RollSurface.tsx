@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Player, DieValue } from '../../Models/Backgammon'
+import { Player, DieValue } from '../../Models'
 import Die from '../Die/Die'
 
 interface RollSurfaceProps {

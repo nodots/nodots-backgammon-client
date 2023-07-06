@@ -1,4 +1,4 @@
-import { Color, INIT_BOARD_SETUP, PointProp, generateId } from './Backgammon'
+import { Color, INIT_BOARD_SETUP, PointProp, generateId } from '.'
 import { Point } from './Point'
 import { Quadrant } from './Quadrant'
 import { Checker } from './Checker'

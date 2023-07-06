@@ -1,4 +1,4 @@
-import { Color, CubeValue, generateId } from './Backgammon'
+import { Color, CubeValue, generateId } from '.'
 
 export class Cube {
   id: string

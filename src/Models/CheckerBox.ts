@@ -1,4 +1,4 @@
-import { Color, generateId } from './Backgammon'
+import { Color, generateId } from '.'
 import { Checker } from './Checker'
 
 export type CheckerBoxType = 'point' | 'rail' | 'off'

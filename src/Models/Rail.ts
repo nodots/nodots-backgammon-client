@@ -1,4 +1,4 @@
-import { PointProp, generateId } from './Backgammon'
+import { PointProp, generateId } from '.'
 import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
 

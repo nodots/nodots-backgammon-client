@@ -1,4 +1,4 @@
-import { Color, DieValue, generateId } from './Backgammon'
+import { Color, DieValue, generateId } from '.'
 
 export class Die {
   id: string

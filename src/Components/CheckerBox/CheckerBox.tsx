@@ -2,7 +2,7 @@ import React from 'react'
 import type {
   CheckerBox as CheckerBoxModel,
   Checker as CheckerModel
-} from '../../Models/Backgammon'
+} from '../../Models'
 import Checker from '../Checker/Checker'
 
 interface CheckerBoxProps {

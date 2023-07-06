@@ -1,4 +1,4 @@
-import { Rail as RailModel } from '../../Models/Backgammon'
+import { Rail as RailModel } from '../../Models'
 import CheckerBox from '../CheckerBox/CheckerBox'
 
 interface RailProps {

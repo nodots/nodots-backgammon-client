@@ -4,7 +4,7 @@ import { Cube } from './Cube'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
-import { generateId, Color } from './Backgammon'
+import { generateId, Color } from '.'
 
 export interface GameParams {
   id: string

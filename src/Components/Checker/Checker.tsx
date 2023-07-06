@@ -1,4 +1,4 @@
-import { Checker as CheckerModel, generateId } from '../../Models/Backgammon'
+import { Checker as CheckerModel, generateId } from '../../Models'
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 
 export interface CheckerProps {

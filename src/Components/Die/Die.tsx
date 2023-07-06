@@ -1,4 +1,4 @@
-import { Color, DieValue } from '../../Models/Backgammon'
+import { Color, DieValue } from '../../Models'
 
 interface DieProps {
   color: Color

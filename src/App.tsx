@@ -1,4 +1,4 @@
-import { Game, Player as PlayerModel } from './Models/Backgammon'
+import { Game, Player as PlayerModel } from './Models'
 import { Paper } from '@mui/material'
 import Board from './Components/Board/Board'
 

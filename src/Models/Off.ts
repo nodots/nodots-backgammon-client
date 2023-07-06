@@ -1,4 +1,4 @@
-import { Checker, PointProp, generateId } from './Backgammon'
+import { Checker, PointProp, generateId } from '.'
 import { CheckerBox } from './CheckerBox'
 
 export class Off {
