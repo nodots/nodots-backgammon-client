@@ -1,19 +1,19 @@
 import { PointProp, generateId } from './Backgammon'
 import { Checker } from './Checker'
-import { CheckerContainer } from './CheckerContainer'
+import { CheckerBox } from './CheckerBox'
 
 export class Rail {
   id: string
-  checkerContainers: {
-    black: CheckerContainer,
-    white: CheckerContainer
+  checkerBoxs: {
+    black: CheckerBox,
+    white: CheckerBox
   }
 
   constructor () {
     this.id = generateId()
-    this.checkerContainers = {
-      black: new CheckerContainer('off', 'black'),
-      white: new CheckerContainer('off', 'white')
+    this.checkerBoxs = {
+      black: new CheckerBox('off', 'black'),
+      white: new CheckerBox('off', 'white')
     }
   }
 
@@ -23,7 +23,7 @@ export class Rail {
     if (blackRailCheckerSetup) {
       blackRailCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          rail.checkerContainers.black.checkers.push(new Checker('black'))
+          rail.checkerBoxs.black.checkers.push(new Checker('black'))
         }
       })
     }
@@ -33,7 +33,7 @@ export class Rail {
     if (whiteRailCheckerSetup) {
       whiteRailCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          rail.checkerContainers.white.checkers.push(new Checker('white'))
+          rail.checkerBoxs.white.checkers.push(new Checker('white'))
         }
       })
     }

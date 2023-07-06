@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import CheckerContainer from './CheckerContainer'
+import CheckerBox from './CheckerBox'
 
 test('renders Checker', () => {
 

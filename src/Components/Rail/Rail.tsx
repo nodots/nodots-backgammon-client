@@ -1,5 +1,5 @@
 import { Rail as RailModel } from '../../Models/Backgammon'
-import CheckerContainer from '../CheckerContainer/CheckerContainer'
+import CheckerBox from '../CheckerBox/CheckerBox'
 
 interface RailProps {
   rail: RailModel
@@ -7,8 +7,8 @@ interface RailProps {
 
 const Rail = (props: RailProps) => {
   return <>
-    <CheckerContainer checkerContainer={props.rail.checkerContainers.black} />
-    <CheckerContainer checkerContainer={props.rail.checkerContainers.white} />
+    <CheckerBox checkerBox={props.rail.checkerBoxs.black} />
+    <CheckerBox checkerBox={props.rail.checkerBoxs.white} />
   </>
 }
 

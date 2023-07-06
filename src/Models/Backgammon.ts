@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { Checker } from './Checker'
-import { CheckerContainer } from './CheckerContainer'
+import { CheckerBox } from './CheckerBox'
 import { Game } from './Game'
 import { Die } from './Die'
 import { Cube } from './Cube'
@@ -85,7 +85,7 @@ const generateId = (): string => {
 export {
   Board,
   Checker,
-  CheckerContainer,
+  CheckerBox,
   Cube,
   Game,
   Player,

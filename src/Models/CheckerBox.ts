@@ -1,15 +1,15 @@
 import { Color, generateId } from './Backgammon'
 import { Checker } from './Checker'
 
-export type CheckerContainerType = 'point' | 'rail' | 'off'
+export type CheckerBoxType = 'point' | 'rail' | 'off'
 
-export class CheckerContainer {
+export class CheckerBox {
   id: string
-  type: CheckerContainerType
+  type: CheckerBoxType
   color: Color | undefined
   checkers: Checker[]
 
-  constructor (type: CheckerContainerType, color?: Color, checkers?: Checker[]) {
+  constructor (type: CheckerBoxType, color?: Color, checkers?: Checker[]) {
     this.id = generateId()
     this.type = type
     color ? this.color = color : this.color = undefined

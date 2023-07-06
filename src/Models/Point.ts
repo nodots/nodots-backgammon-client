@@ -1,18 +1,18 @@
 import { Checker } from './Checker'
-import { CheckerContainer } from './CheckerContainer'
+import { CheckerBox } from './CheckerBox'
 import { POINT_COUNT, PointProp, generateId } from './Backgammon'
 
 export class Point {
   id: string
   position: number
-  checkerContainer: CheckerContainer
+  checkerBox: CheckerBox
   checkers: Checker[] = []
 
   constructor (position: number, checkers?: Checker[]) {
     this.id = generateId()
     this.position = position
-    this.checkerContainer = new CheckerContainer('point')
-    this.checkers = this.checkerContainer.checkers
+    this.checkerBox = new CheckerBox('point')
+    this.checkers = this.checkerBox.checkers
   }
 
   static initialize (setup: PointProp[]): Point[] {

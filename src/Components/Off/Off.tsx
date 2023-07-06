@@ -1,6 +1,6 @@
 import { Off as OffModel, Cube as CubeModel } from '../../Models/Backgammon'
 import Cube from '../Cube/Cube'
-import CheckerContainer from '../CheckerContainer/CheckerContainer'
+import CheckerBox from '../CheckerBox/CheckerBox'
 
 interface OffProps {
   off: OffModel
@@ -10,9 +10,9 @@ interface OffProps {
 
 const Off = (props: OffProps) => {
   return <>
-    <CheckerContainer checkerContainer={props.off.checkerContainers.black} />
+    <CheckerBox checkerBox={props.off.checkerBoxs.black} />
     <Cube cube={props.cube} />
-    <CheckerContainer checkerContainer={props.off.checkerContainers.white} />
+    <CheckerBox checkerBox={props.off.checkerBoxs.white} />
   </>
 }
 

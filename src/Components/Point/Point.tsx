@@ -1,4 +1,4 @@
-import CheckerContainer from '../CheckerContainer/CheckerContainer'
+import CheckerBox from '../CheckerBox/CheckerBox'
 import { Point as PointModel, QuadrantLocation } from '../../Models/Backgammon'
 
 interface PointProps {
@@ -12,7 +12,7 @@ const Point = (props: PointProps) => {
 
   return <div className={classes}>
     <span className='point-position'>{props.point.position}</span>
-    <CheckerContainer checkerContainer={props.point.checkerContainer} />
+    <CheckerBox checkerBox={props.point.checkerBox} />
   </div>
 }
 

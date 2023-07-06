@@ -1,18 +1,18 @@
 import { Checker, PointProp, generateId } from './Backgammon'
-import { CheckerContainer } from './CheckerContainer'
+import { CheckerBox } from './CheckerBox'
 
 export class Off {
   id: string
-  checkerContainers: {
-    black: CheckerContainer,
-    white: CheckerContainer
+  checkerBoxs: {
+    black: CheckerBox,
+    white: CheckerBox
   }
 
   private constructor () {
     this.id = generateId()
-    this.checkerContainers = {
-      black: new CheckerContainer('off', 'black'),
-      white: new CheckerContainer('off', 'white')
+    this.checkerBoxs = {
+      black: new CheckerBox('off', 'black'),
+      white: new CheckerBox('off', 'white')
     }
   }
 
@@ -23,7 +23,7 @@ export class Off {
     if (blackOffCheckerSetup) {
       blackOffCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          off.checkerContainers.black.checkers.push(new Checker('black'))
+          off.checkerBoxs.black.checkers.push(new Checker('black'))
         }
       })
     }
@@ -33,7 +33,7 @@ export class Off {
     if (whiteOffCheckerSetup) {
       whiteOffCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          off.checkerContainers.white.checkers.push(new Checker('white'))
+          off.checkerBoxs.white.checkers.push(new Checker('white'))
         }
       })
     }

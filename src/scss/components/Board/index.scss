@@ -19,7 +19,7 @@
     border-left: 1px solid brown;
     border-right: 1px solid brown;
     padding: 4px;
-    .checker-container {
+    .checker-box {
       height: 18vw;
     }
   }
@@ -43,14 +43,14 @@
     align-items: center;
     padding: 2px;
 
-    .checker-container {
+    .checker-box {
       border: 0.25px solid #2c486b;
       border-radius: 5px;
       height: 15vw;
     }
   }
 
-  .checker-container {
+  .checker-box {
     background-color: transparent;
     width: 3vw;
   }
