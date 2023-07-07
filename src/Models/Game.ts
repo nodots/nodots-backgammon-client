@@ -35,13 +35,27 @@ export class Game {
     }
     this.board = Board.initialize()
     this.onMove = (move: GameMove) => {
-      const checker = move.startPoint.checkerBox.checkers.pop()
-
+      const checker = this.getCheckers().all.find(c => c.id === move.checkerId)
       if (!checker) {
-        throw Error('No checker to move')
+        throw Error(`checker with ${move.checkerId.toString()} does not exist`)
       }
-      console.log(`Moving ${checker.color.toString()} checker id ${checker.id}`)
-      move.startPoint.checkerBox.checkers.push(checker)
+      let startPoint: Point | undefined = undefined
+      startPoint = this.board.points.find(p => p.checkers.find(c => c.id === move.checkerId))
+      const endPoint = this.board.points.find(p => p.position - move.roll[0])
+      if (!startPoint || !endPoint) {
+        throw Error(`Cannot find one of the points ${JSON.stringify(move)}`)
+      }
+      this.board.points.map(p => console.log(p.checkerBox.checkers))
+      const startCheckerBoxCheckers = startPoint.checkerBox.checkers
+      const endCheckerBoxCheckers = endPoint.checkerBox.checkers
+
+      const processedStartCheckerBoxCheckers = startCheckerBoxCheckers.filter(c => c.id !== move.checkerId)
+      endCheckerBoxCheckers.push(checker)
+
+      startPoint.checkerBox.checkers = processedStartCheckerBoxCheckers
+      endPoint.checkerBox.checkers = endCheckerBoxCheckers
+      this.board.points.map(p => console.log(p.checkerBox.checkers))
+
       return move
     }
 
@@ -62,11 +76,6 @@ export class Game {
       }
     }
 
-    // move(params: GameMove): void {
-    //   console.log(params)
-    // }
-
-
     this.setCheckers()
       .then(() => {
         console.log('Let the game begin!')
@@ -82,10 +91,14 @@ export class Game {
     this.players.white.checkers = checkers.white
   }
 
-  getCheckers (): { black: Checker[], white: Checker[] } {
+  getCheckers (): { black: Checker[], white: Checker[], all: Checker[] } {
+    const black = this.getCheckersByColor('black')
+    const white = this.getCheckersByColor('white')
+    const all = black.concat(white)
     return {
-      black: this.getCheckersByColor('black'),
-      white: this.getCheckersByColor('white')
+      black,
+      white,
+      all
     }
   }
 

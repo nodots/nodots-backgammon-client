@@ -39,19 +39,21 @@ const Checker = (props: CheckerProps) => {
               throw Error('Cannot find player for checker ')
             }
             const move: GameMove = {
-              player,
+              checkerId: props.checker.id,
+              playerId: player.id,
               roll,
-              startPoint: p,
-              endPoint: destinationPoint
+              startCheckerBoxId: p.checkerBox.id,
+              endCheckerBoxId: destinationPoint.checkerBox.id
             }
+            console.log('preparing to move checker')
             ctx.onMove(move)
-            console.log(ctx.board?.points)
+            console.log('checker moved')
+            console.log(ctx.board?.quadrants)
           }
         }
       })
     })
 
-    // ctx?.onMove()
   }
   return <div className={classes} key={generateId()} onClick={clickHandler}><RadioButtonCheckedTwoToneIcon sx={{ fill: 'rgba(69, 109, 157, .4)' }} /></div>
 }

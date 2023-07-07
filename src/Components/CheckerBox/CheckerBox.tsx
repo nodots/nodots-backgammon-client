@@ -4,14 +4,15 @@ import type {
   Checker as CheckerModel
 } from '../../Models'
 import Checker from '../Checker/Checker'
+import GameContext from '../../Contexts/game.context'
 
 interface CheckerBoxProps {
   checkerBox: CheckerBoxModel
 }
 
 const CheckerBox = (props: CheckerBoxProps) => {
-
   const checkers: React.JSX.Element[] = []
+
   props.checkerBox.checkers.forEach((c: CheckerModel) => {
     checkers.push(<Checker checker={c} key={c.id} />)
   })

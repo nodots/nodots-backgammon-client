@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { Board, Player, Cube, Color } from '../Models'
+import type { Board, Player, Cube, Color, Checker } from '../Models'
 import { GameMove } from '../Models'
 
 export interface GameContextProps {
