@@ -13,7 +13,7 @@ export class Die {
 
   roll (): number {
     const result = Math.floor(Math.random() * 6) + 1
-    console.log(`rolling ${this.id}--results is ${result}`)
+    // console.log(`rolling ${this.id}--results is ${result}`)
     return result as DieValue as number
   }
 }

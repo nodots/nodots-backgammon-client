@@ -16,6 +16,13 @@ export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 
+export interface GameMove {
+  player: Player,
+  roll: [number, number],
+  startPoint: Point,
+  endPoint: Point,
+}
+
 export interface PointProp {
   position: number | 'rail' | 'off'
   checkerCount: number

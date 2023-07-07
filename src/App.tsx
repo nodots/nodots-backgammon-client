@@ -1,15 +1,16 @@
-import { Game, Player as PlayerModel } from './Models'
+import { Game, Player } from './Models'
 import { Paper } from '@mui/material'
 import Board from './Components/Board/Board'
 
 import './App.scss'
+import GameContext, { GameContextProps } from './Contexts/game.context'
 
 const LOCAL_STORAGE_KEY = 'nodots-backgammon-game'
-const Player1 = new PlayerModel('Ken', 'Riley', 'white')
-const Player2 = new PlayerModel('A', 'Robot', 'black', 'Robot')
+const Player1 = new Player('Ken', 'Riley', 'white')
+const Player2 = new Player('A', 'Robot', 'black', 'Robot')
 let CurrentGame: Game | undefined = undefined
 
-const initGame = (): Game => {
+const initGame = (): GameContextProps => {
   if (!CurrentGame) {
     const storedGameString = localStorage.getItem(LOCAL_STORAGE_KEY)
 
@@ -19,24 +20,22 @@ const initGame = (): Game => {
     } else {
       CurrentGame = new Game(Player1, Player2)
       // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(CurrentGame))
-
     }
   }
   return CurrentGame
 }
 
+
 const App = () => {
-  initGame()
-  if (!CurrentGame) {
-    throw Error('No CurrentGame')
-  }
-  console.log(CurrentGame)
   return (
-    <div className="App">
-      <Paper className='board-frame' elevation={8}>
-        <Board game={CurrentGame} />
-      </Paper>
-    </div>
+    <GameContext.Provider value={initGame()}>
+      <div className="App">
+        <Paper className='board-frame' elevation={8}>
+          <Board />
+        </Paper>
+      </div>
+    </GameContext.Provider>
+
   )
 }
 

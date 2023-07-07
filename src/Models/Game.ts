@@ -4,7 +4,7 @@ import { Cube } from './Cube'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
-import { generateId, Color } from '.'
+import { generateId, Color, GameMove } from '.'
 
 export interface GameParams {
   id: string
@@ -22,6 +22,9 @@ export class Game {
     white: Player,
   }
   board: Board
+  onMove: (move: GameMove) => GameMove
+  onRollForStart: () => Color
+  onSetActivePlayer: (color?: Color) => void
 
   constructor (whitePlayer: Player, blackPlayer: Player) {
     this.id = generateId()
@@ -31,20 +34,46 @@ export class Game {
       white: whitePlayer
     }
     this.board = Board.initialize()
+    this.onMove = (move: GameMove) => {
+      const checker = move.startPoint.checkerBox.checkers.pop()
+
+      if (!checker) {
+        throw Error('No checker to move')
+      }
+      console.log(`Moving ${checker.color.toString()} checker id ${checker.id}`)
+      move.startPoint.checkerBox.checkers.push(checker)
+      return move
+    }
+
+    this.onRollForStart = (): Color => {
+      if (!this.players.white.dice || !this.players.black.dice) {
+        throw Error('No dice assigned to one or both players')
+      }
+      const whiteResult = this.players.white.dice[0].roll()
+      const blackResult = this.players.white.dice[0].roll()
+      return whiteResult > blackResult ? 'white' : 'black'
+    }
+
+    this.onSetActivePlayer = (color?: Color) => {
+      if (color) {
+        this.players.white.active = false
+        this.players.black.active = false
+        this.players[color].active = true
+      }
+    }
+
+    // move(params: GameMove): void {
+    //   console.log(params)
+    // }
+
 
     this.setCheckers()
       .then(() => {
         console.log('Let the game begin!')
         const firstMover = this.rollForStart()
         console.log(`${firstMover} wins roll`)
-        console.log(this.players)
         this.players[firstMover].active = true
-        console.log(this.players)
       })
-  }
-
-  move (start: number, end: number, color: Color) {
-    console.log(`${color} moves`)
   }
 
   private async setCheckers (): Promise<void> {

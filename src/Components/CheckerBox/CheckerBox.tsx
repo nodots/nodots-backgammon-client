@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import type {
   CheckerBox as CheckerBoxModel,
   Checker as CheckerModel
@@ -10,11 +10,12 @@ interface CheckerBoxProps {
 }
 
 const CheckerBox = (props: CheckerBoxProps) => {
+
   const checkers: React.JSX.Element[] = []
   props.checkerBox.checkers.forEach((c: CheckerModel) => {
     checkers.push(<Checker checker={c} key={c.id} />)
   })
-  return <div className='checker-box' >
+  return <div className='checker-box'>
     {checkers}
   </ div>
 }
