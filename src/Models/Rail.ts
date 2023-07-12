@@ -2,16 +2,21 @@ import { PointProp, generateId } from '.'
 import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
 
+/**
+ * Where Checkers go after being "hit" by opposing Player. Checker
+ * can reenter the Board in the opposing Player's Home Board (Quadrant
+ * closest to opposing Player's Off checkers.)
+ */
 export class Rail {
   id: string
-  checkerBoxs: {
+  checkerBoxes: {
     black: CheckerBox,
     white: CheckerBox
   }
 
   constructor () {
     this.id = generateId()
-    this.checkerBoxs = {
+    this.checkerBoxes = {
       black: new CheckerBox('off', 'black'),
       white: new CheckerBox('off', 'white')
     }
@@ -23,7 +28,7 @@ export class Rail {
     if (blackRailCheckerSetup) {
       blackRailCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          rail.checkerBoxs.black.checkers.push(new Checker('black'))
+          rail.checkerBoxes.black.checkers.push(new Checker('black'))
         }
       })
     }
@@ -33,7 +38,7 @@ export class Rail {
     if (whiteRailCheckerSetup) {
       whiteRailCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          rail.checkerBoxs.white.checkers.push(new Checker('white'))
+          rail.checkerBoxes.white.checkers.push(new Checker('white'))
         }
       })
     }

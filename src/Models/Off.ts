@@ -1,16 +1,20 @@
 import { Checker, PointProp, generateId } from '.'
 import { CheckerBox } from './CheckerBox'
 
+/**
+ * Destination for Checkers. When all of a Player's Checkers are in an Off 
+ * CheckerBox the Player wins.
+ */
 export class Off {
   id: string
-  checkerBoxs: {
+  checkerBoxes: {
     black: CheckerBox,
     white: CheckerBox
   }
 
   private constructor () {
     this.id = generateId()
-    this.checkerBoxs = {
+    this.checkerBoxes = {
       black: new CheckerBox('off', 'black'),
       white: new CheckerBox('off', 'white')
     }
@@ -23,7 +27,7 @@ export class Off {
     if (blackOffCheckerSetup) {
       blackOffCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          off.checkerBoxs.black.checkers.push(new Checker('black'))
+          off.checkerBoxes.black.checkers.push(new Checker('black'))
         }
       })
     }
@@ -33,7 +37,7 @@ export class Off {
     if (whiteOffCheckerSetup) {
       whiteOffCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          off.checkerBoxs.white.checkers.push(new Checker('white'))
+          off.checkerBoxes.white.checkers.push(new Checker('white'))
         }
       })
     }

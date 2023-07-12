@@ -1,8 +1,15 @@
-import { Color, generateId } from '.'
+import { Color, CheckerBoxType, generateId } from '.'
 import { Checker } from './Checker'
 
-export type CheckerBoxType = 'point' | 'rail' | 'off'
+// TODO: Make CheckerBox an abstract class. Point, Rail, and Off inherit from 
+// CheckerBox.
 
+/**
+* Checkers can be in three different places:
+*  1. Point: One of the triangle things on the board. Default.
+*  2. Rail: On the bar between the points after being "hit" by opponent.
+*  3. Off: Successfully moved off the board.
+*/
 export class CheckerBox {
   id: string
   type: CheckerBoxType

@@ -1,5 +1,12 @@
 import { Color, CubeValue, generateId } from '.'
 
+/**
+ * The Cube is the large die and used to double the current point-value of the game 
+ * in the match. At the start of play it is not controlled by any player. After play 
+ * begins, the active player (game.players[Color].active = true) controls the Cube
+ * until it's first use "double" at which point control of the cube passes back and 
+ * forth after each "double"
+ */
 export class Cube {
   id: string
   value: CubeValue
