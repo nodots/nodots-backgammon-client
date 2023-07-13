@@ -1,5 +1,4 @@
 import { Game, Player as PlayerModel } from './Models'
-import { Paper } from '@mui/material'
 import Board from './Components/Board/Board'
 
 import './App.scss'
@@ -33,9 +32,7 @@ const App = () => {
   console.log(CurrentGame)
   return (
     <div className="App">
-      <Paper className='board-frame' elevation={8}>
-        <Board game={CurrentGame} />
-      </Paper>
+      <Board game={CurrentGame} />
     </div>
   )
 }
