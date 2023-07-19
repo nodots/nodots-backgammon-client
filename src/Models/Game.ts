@@ -4,7 +4,7 @@ import { Cube } from './Cube'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
-import { generateId, Color, GameMove } from '.'
+import { generateId, Color } from '.'
 
 export interface GameParams {
   id: string
@@ -22,9 +22,7 @@ export class Game {
     white: Player,
   }
   board: Board
-  onMove: (move: GameMove) => GameMove
-  onRollForStart: () => Color
-  onSetActivePlayer: (color?: Color) => void
+  rollForStart?: () => Color
 
   constructor (whitePlayer: Player, blackPlayer: Player) {
     this.id = generateId()
@@ -34,55 +32,24 @@ export class Game {
       white: whitePlayer
     }
     this.board = Board.initialize()
-    this.onMove = (move: GameMove) => {
-      const checker = this.getCheckers().all.find(c => c.id === move.checkerId)
-      if (!checker) {
-        throw Error(`checker with ${move.checkerId.toString()} does not exist`)
-      }
-      let startPoint: Point | undefined = undefined
-      startPoint = this.board.points.find(p => p.checkers.find(c => c.id === move.checkerId))
-      const endPoint = this.board.points.find(p => p.position - move.roll[0])
-      if (!startPoint || !endPoint) {
-        throw Error(`Cannot find one of the points ${JSON.stringify(move)}`)
-      }
-      this.board.points.map(p => console.log(p.checkerBox.checkers))
-      const startCheckerBoxCheckers = startPoint.checkerBox.checkers
-      const endCheckerBoxCheckers = endPoint.checkerBox.checkers
-
-      const processedStartCheckerBoxCheckers = startCheckerBoxCheckers.filter(c => c.id !== move.checkerId)
-      endCheckerBoxCheckers.push(checker)
-
-      startPoint.checkerBox.checkers = processedStartCheckerBoxCheckers
-      endPoint.checkerBox.checkers = endCheckerBoxCheckers
-      this.board.points.map(p => console.log(p.checkerBox.checkers))
-
-      return move
-    }
-
-    this.onRollForStart = (): Color => {
-      if (!this.players.white.dice || !this.players.black.dice) {
-        throw Error('No dice assigned to one or both players')
-      }
-      const whiteResult = this.players.white.dice[0].roll()
-      const blackResult = this.players.white.dice[0].roll()
-      return whiteResult > blackResult ? 'white' : 'black'
-    }
-
-    this.onSetActivePlayer = (color?: Color) => {
-      if (color) {
-        this.players.white.active = false
-        this.players.black.active = false
-        this.players[color].active = true
-      }
-    }
 
     this.setCheckers()
       .then(() => {
         console.log('Let the game begin!')
-        const firstMover = this.rollForStart()
-        console.log(`${firstMover} wins roll`)
-        this.players[firstMover].active = true
+        // const firstMover = this.rollForStart() as Color
+        // if (!firstMover) {
+        //   throw Error('Nobody won the roll')
+        // }
+        // console.log(`${firstMover} wins roll`)
+        // const player: Player = this.players[firstMover]
+        // player.active = true
       })
+  }
+
+  setActivePlayer (color: Color) {
+    this.players.white.active = false
+    this.players.black.active = false
+    this.players[color].active = true
   }
 
   private async setCheckers (): Promise<void> {
@@ -112,6 +79,17 @@ export class Game {
     return checkers
   }
 
+  static rollForStart (black: Player, white: Player): Color {
+    const blackRollResult = black.roll()
+    const whiteRollResult = white.roll()
+    // can't tie when you roll for start
+    if (blackRollResult === whiteRollResult) {
+      this.rollForStart(black, white)
+    }
+    return blackRollResult > whiteRollResult ? 'black' : 'white'
+
+  }
+
   private getPoints (): Point[] {
     const points: Point[] = []
     this.board?.quadrants.forEach((q: Quadrant) => {
@@ -120,18 +98,6 @@ export class Game {
     return points
   }
 
-  rollForStart = (): Color => {
-    if (!this.players.white.dice || !this.players.black.dice) {
-      throw Error('Player with no dice')
-    }
-    const whiteRoll = this.players.white.dice[0].roll()
-    const blackRoll = this.players.black.dice[0].roll()
 
-    if (whiteRoll === blackRoll) {
-      console.log('Rolled doubles to start. Re-rolling')
-      this.rollForStart()
-    }
-
-    return whiteRoll > blackRoll ? 'white' : 'black'
-  }
 }
+

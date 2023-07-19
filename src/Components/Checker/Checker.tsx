@@ -1,14 +1,13 @@
+import { useGame } from '../../State'
 import { Checker as CheckerModel, GameMove, generateId } from '../../Models'
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
-import GameContext from '../../Contexts/game.context'
-import { useContext } from 'react'
 
 export interface CheckerProps {
   checker: CheckerModel
 }
 
 const Checker = (props: CheckerProps) => {
-  const ctx = useContext(GameContext)
+  const ctx = useGame()
   const classes = `checker ${props.checker.color}`
 
   // FIXME: move all of this logic into the model
@@ -38,15 +37,6 @@ const Checker = (props: CheckerProps) => {
             if (!player) {
               throw Error('Cannot find player for checker ')
             }
-            const move: GameMove = {
-              checkerId: props.checker.id,
-              playerId: player.id,
-              roll,
-              startCheckerBoxId: p.checkerBox.id,
-              endCheckerBoxId: destinationPoint.checkerBox.id
-            }
-            console.log('preparing to move checker')
-            ctx.onMove(move)
             console.log('checker moved')
             console.log(ctx.board?.quadrants)
           }

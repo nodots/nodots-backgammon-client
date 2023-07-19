@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { useGame } from '../../State'
 import type {
   CheckerBox as CheckerBoxModel,
   Checker as CheckerModel
 } from '../../Models'
 import Checker from '../Checker/Checker'
-import GameContext from '../../Contexts/game.context'
 
 interface CheckerBoxProps {
   checkerBox: CheckerBoxModel

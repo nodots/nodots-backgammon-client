@@ -1,13 +1,13 @@
-import { useContext } from 'react'
+import { useGame } from '../../State'
 import { Grid } from '@mui/material'
 import Quadrant from '../Quadrant/Quadrant'
 import Rail from '../Rail/Rail'
 import Off from '../Off/Off'
 import RollSurface from '../RollSurface/RollSurface'
-import GameContext from '../../Contexts/game.context'
 
 const Board = () => {
-  const ctx = useContext(GameContext)
+  const ctx = useGame()
+
   if (ctx?.board && ctx?.players?.white && ctx?.players?.black) {
     const neQuadrant = ctx.board.quadrants.find(q => q.location === 'ne')
     const nwQuadrant = ctx.board.quadrants.find(q => q.location === 'nw')
