@@ -12,8 +12,11 @@
   height: 18vw;
   width: 3vw;
   .checker-box {
+    border: 1px dotted aquamarine;
+    height: 100%;
     position: relative;
     top: -18px;
+    cursor: pointer;
   }
 }
 
@@ -32,6 +35,10 @@
   }
   .checker-box {
     position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    // justify-content: flex-start;
+    // align-items: flex-start;
     top: 18px;
   }
 }

@@ -1,4 +1,5 @@
 import { Color, INIT_BOARD_SETUP, PointProp, generateId } from '.'
+import { CheckerBox } from './CheckerBox'
 import { Point } from './Point'
 import { Quadrant } from './Quadrant'
 import { Checker } from './Checker'
@@ -34,6 +35,39 @@ export class Board {
       checkers.push(...q.getCheckersByColor(color))
     })
     return checkers
+  }
+
+  getCheckerBoxes (): CheckerBox[] {
+    const checkerBoxes: CheckerBox[] = []
+    this.points.forEach(p => checkerBoxes.push(p.checkerBox))
+    checkerBoxes.push(this.rail.checkerBoxes.white)
+    checkerBoxes.push(this.rail.checkerBoxes.black)
+    checkerBoxes.push(this.off.checkerBoxes.white)
+    checkerBoxes.push(this.off.checkerBoxes.black)
+    return checkerBoxes
+  }
+
+
+  getCheckerBoxContainer (checkerBoxId: string): Point | undefined {
+    const point: Point | undefined = this.points.find(p => checkerBoxId === p.checkerBox.id)
+    return point
+  }
+
+  // FIXME: Hard-coded to return NE quadrant
+  getPointContainer (pointId: string): Quadrant | undefined {
+    console.log(`getting quadrant for ${pointId}`)
+    const point = this.points.find(p => p.id === pointId)
+    console.log(point)
+    const quadrant = this.quadrants.find(q => q.location === 'ne')
+
+    // const quadrant: Quadrant | undefined = this.quadrants.find(q => {
+    //   console.log(q.points)
+    //   return q.points.find(p => p.id = pointId)
+
+    // }
+    // )
+    // console.log(quadrant)
+    return quadrant
   }
 
   static initialize (setup?: PointProp[]): Board {

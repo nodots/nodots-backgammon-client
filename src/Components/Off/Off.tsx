@@ -10,9 +10,9 @@ interface OffProps {
 
 const Off = (props: OffProps) => {
   return <>
-    <CheckerBox checkerBox={props.off.checkerBoxs.black} />
+    <CheckerBox checkerBox={props.off.checkerBoxes.black} />
     <Cube cube={props.cube} />
-    <CheckerBox checkerBox={props.off.checkerBoxs.white} />
+    <CheckerBox checkerBox={props.off.checkerBoxes.white} />
   </>
 }
 

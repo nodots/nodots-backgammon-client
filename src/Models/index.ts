@@ -94,6 +94,7 @@ export {
   Board,
   Checker,
   CheckerBox,
+  Die,
   Cube,
   Game,
   Player,

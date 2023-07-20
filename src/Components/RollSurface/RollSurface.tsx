@@ -8,19 +8,25 @@ interface RollSurfaceProps {
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
-  const { players } = useGame()
+  const { players, activeMove } = useGame()
   const [dieOne, setDieOne] = useState<DieValue>(1)
   const [dieTwo, setDieTwo] = useState<DieValue>(1)
   const [isRollForStart, setIsRollForStart] = useState<boolean>(false)
+
+  // useEffect(() => {
+  //   console.log(activeMove)
+
+  // }, [activeMove])
 
   useEffect(() => {
     if (!players.white.active && !players.black.active) {
       setIsRollForStart(true)
     }
-  }, [])
+  }, [players])
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
+    // TODO: Refactor to use dispatch
     const rollResults: [DieValue, DieValue] = props.player.roll()
     setDieOne(rollResults[0])
     setDieTwo(rollResults[1])

@@ -45,7 +45,7 @@ const Checker = (props: CheckerProps) => {
     })
 
   }
-  return <div className={classes} key={generateId()} onClick={clickHandler}><RadioButtonCheckedTwoToneIcon sx={{ fill: 'rgba(69, 109, 157, .4)' }} /></div>
+  return <div className={classes} key={generateId()} ><RadioButtonCheckedTwoToneIcon sx={{ fill: 'rgba(69, 109, 157, .4)' }} /></div>
 }
 
 export default Checker

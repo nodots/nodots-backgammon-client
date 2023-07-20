@@ -15,4 +15,5 @@ export class CheckerBox {
     color ? this.color = color : this.color = undefined
     checkers ? this.checkers = checkers : this.checkers = []
   }
+
 }
