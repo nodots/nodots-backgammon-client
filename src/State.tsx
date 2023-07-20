@@ -14,6 +14,7 @@ type GameState = {
     destination: CheckerBox | undefined
   }
   move: (action: GameAction) => void,
+  debug: boolean
 }
 
 const blackPlayer = new Player('A', 'Robot', 'black')
@@ -41,6 +42,7 @@ const initGameState: GameState = {
     destination: undefined
   },
   move () { },
+  debug: true
 }
 
 export const enum GAME_ACTION_TYPE {
@@ -59,6 +61,14 @@ export type GameAction = {
 const reducer = (state: GameState, action: GameAction): GameState => {
   const { type, payload } = action
   let newState: GameState
+
+  if (state.debug) {
+    console.log(`[STATE] reducer: quadrant[ne].points:`)
+    state.board.quadrants[2].points.forEach(p => {
+      console.log(`[STATE] reducer quadrant[ne].points.checkers[]:`)
+      console.log(p.checkers)
+    })
+  }
 
   switch (type) {
     case GAME_ACTION_TYPE.MOVE:
@@ -93,7 +103,10 @@ const reducer = (state: GameState, action: GameAction): GameState => {
             throw Error(`Moves to/from Rail and Off not yet supported`)
           }
           const moveResults = state.players[activePlayerColor].move(draft.activeMove.origin, draft.activeMove.destination, [1, 1])
-          console.log(moveResults)
+          if (state.debug) {
+            console.log(`[STATE] moveResults: `)
+            console.log(moveResults)
+          }
 
           const originPoint = state.board.getCheckerBoxContainer(moveResults.origin.id)
           if (!originPoint) {
@@ -117,14 +130,17 @@ const reducer = (state: GameState, action: GameAction): GameState => {
           const destinationQuadrantIndex = state.board.quadrants.findIndex(q => q.id === destinationQuadrant.id)
           const destinationPointIndex = destinationQuadrant.points.findIndex(p => p.id === destinationPoint.id)
 
-          console.log(`originQuadrantIndex = ${originQuadrantIndex}`)
-          console.log(`originPointIndex = ${originPointIndex}`)
+          if (state.debug) {
+            console.log(`originQuadrantIndex = ${originQuadrantIndex}`)
+            console.log(`originPointIndex = ${originPointIndex}`)
+            console.log(`destinationQuadrantIndex = ${destinationQuadrantIndex}`)
+            console.log(`destinationPointIndex = ${destinationPointIndex}`)
+          }
 
-          console.log(`destinationQuadrantIndex = ${destinationQuadrantIndex}`)
-          console.log(`destinationPointIndex = ${destinationPointIndex}`)
-
-          draft.board.quadrants[originQuadrantIndex].points[originPointIndex].checkerBox = moveResults.origin
-          draft.board.quadrants[destinationQuadrantIndex].points[destinationPointIndex].checkerBox = moveResults.destination
+          draft.board.quadrants[originQuadrantIndex].points[originPointIndex].checkerBox
+            = moveResults.origin
+          draft.board.quadrants[destinationQuadrantIndex].points[destinationPointIndex].checkerBox
+            = moveResults.destination
           draft.activeMove.origin = undefined
           draft.activeMove.destination = undefined
         })
@@ -177,9 +193,10 @@ type UseGameHookType = {
     destination: CheckerBox | undefined
   }
   move: (checkerBox: CheckerBox, container: Point | Rail | Off) => void
+  debug: boolean
 }
 
 export const useGame = (): UseGameHookType => {
-  const { state: { board, players, cube, activeMove }, move } = useContext(GameContext)
-  return { board, players, cube, activeMove, move }
+  const { state: { board, players, cube, activeMove, debug }, move } = useContext(GameContext)
+  return { board, players, cube, activeMove, move, debug }
 }

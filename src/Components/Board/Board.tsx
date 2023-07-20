@@ -6,9 +6,16 @@ import Off from '../Off/Off'
 import RollSurface from '../RollSurface/RollSurface'
 
 const Board = () => {
-  const { board, players, cube } = useGame()
+  const { board, players, cube, debug } = useGame()
 
   if (board && players?.white && players?.black) {
+    if (debug) {
+      console.log(`[BOARD COMPONENT] quadrant[ne].points:`)
+      board.quadrants[2].points.forEach(p => {
+        console.log(`[BOARD COMPONENT] quadrant[ne].points.checkers[]:`)
+        console.log(p.checkers)
+      })
+    }
     const neQuadrant = board.quadrants.find(q => q.location === 'ne')
     const nwQuadrant = board.quadrants.find(q => q.location === 'nw')
     const swQuadrant = board.quadrants.find(q => q.location === 'sw')

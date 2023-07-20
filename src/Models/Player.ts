@@ -1,5 +1,4 @@
-import { Color, CheckerBox, Checker, DieValue, Die, generateId } from '.'
-import { GAME_ACTION_TYPE } from '../State'
+import { Color, CheckerBox, Checker, DieValue, Die, modelDebug, generateId } from '.'
 
 export class Player {
   id: string
@@ -29,15 +28,17 @@ export class Player {
   }
 
   move (origin: CheckerBox, destination: CheckerBox, roll: [DieValue, DieValue]): { origin: CheckerBox, destination: CheckerBox } {
-    console.log(`[PLAYER MODEL] move:`)
-    if (origin.checkers.length === 0) {
-      throw Error(`There are no checkers to move in ${origin.id}`)
+    if (!modelDebug) {
+      console.log(`[PLAYER MODEL] move:`)
+      if (origin.checkers.length === 0) {
+        throw Error(`There are no checkers to move in ${origin.id}`)
+      }
     }
     const checkerToMove = origin.checkers[origin.checkers.length - 1]
     if (!checkerToMove) {
       throw Error(`Failed to find checker to move`)
     }
-    const newOriginCheckers = origin.checkers.slice(-1)
+    const newOriginCheckers = origin.checkers.slice(0, origin.checkers.length - 1)
     const newDestinationCheckers = destination.checkers.concat(checkerToMove)
 
     const newOrigin: CheckerBox = {

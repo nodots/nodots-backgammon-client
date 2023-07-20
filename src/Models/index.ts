@@ -11,6 +11,8 @@ import { Point } from './Point'
 import { Rail } from './Rail'
 import { Off } from './Off'
 
+export const modelDebug = false
+
 export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
 export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6

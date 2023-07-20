@@ -1,4 +1,4 @@
-import { Color, INIT_BOARD_SETUP, PointProp, generateId } from '.'
+import { Color, INIT_BOARD_SETUP, PointProp, modelDebug, generateId } from '.'
 import { CheckerBox } from './CheckerBox'
 import { Point } from './Point'
 import { Quadrant } from './Quadrant'
@@ -55,10 +55,24 @@ export class Board {
 
   // FIXME: Hard-coded to return NE quadrant
   getPointContainer (pointId: string): Quadrant | undefined {
-    console.log(`getting quadrant for ${pointId}`)
-    const point = this.points.find(p => p.id === pointId)
-    console.log(point)
-    const quadrant = this.quadrants.find(q => q.location === 'ne')
+    if (!modelDebug) {
+      console.log(`[BOARD MODEL] getting quadrant for ${pointId}`)
+      const point = this.points.find(p => p.id === pointId)
+      console.log(point)
+    }
+    const reducer = (quadrants: Quadrant[], pointId: string): Quadrant | undefined => {
+      let quadrant: Quadrant | undefined = undefined
+      quadrants.forEach(q => {
+        q.points.forEach(p => {
+          if (p.id === pointId) {
+            quadrant = q
+          }
+        })
+      })
+      return quadrant
+    }
+
+    const quadrant = reducer(this.quadrants, pointId)
 
     // const quadrant: Quadrant | undefined = this.quadrants.find(q => {
     //   console.log(q.points)
