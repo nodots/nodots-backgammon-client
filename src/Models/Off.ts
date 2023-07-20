@@ -11,8 +11,8 @@ export class Off {
   private constructor () {
     this.id = generateId()
     this.checkerBoxes = {
-      black: new CheckerBox('off', 'black'),
-      white: new CheckerBox('off', 'white')
+      black: new CheckerBox({ type: 'off', color: 'black', parent: this }),
+      white: new CheckerBox({ type: 'off', color: 'white', parent: this })
     }
   }
 

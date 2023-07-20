@@ -12,14 +12,15 @@ export class Rail {
   constructor () {
     this.id = generateId()
     this.checkerBoxes = {
-      black: new CheckerBox('off', 'black'),
-      white: new CheckerBox('off', 'white')
+      black: new CheckerBox({ type: 'off', color: 'black', parent: this }),
+      white: new CheckerBox({ type: 'off', color: 'white', parent: this })
     }
   }
 
   static initialize (setup: PointProp[]) {
     const rail = new Rail()
     const blackRailCheckerSetup: PointProp[] = setup.filter(c => c.position === 'rail' && c.color === 'black')
+
     if (blackRailCheckerSetup) {
       blackRailCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {

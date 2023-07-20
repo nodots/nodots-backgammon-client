@@ -1,6 +1,6 @@
 import { produce } from 'immer'
 import { ReactElement, createContext, useCallback, useContext, useReducer } from 'react'
-import { Game, Board, Player, Point, Rail, Off, Cube, CheckerBox, Color } from './Models'
+import { Game, Board, Player, Point, Rail, Off, Cube, CheckerBox } from './Models'
 
 type GameState = {
   board: Board,
@@ -13,7 +13,8 @@ type GameState = {
     origin: CheckerBox | undefined,
     destination: CheckerBox | undefined
   }
-  move: (action: GameAction) => void,
+  move: (action: GameAction) => any,
+  toggleActivePlayer: () => any,
   debug: boolean
 }
 
@@ -23,8 +24,8 @@ const whitePlayer = new Player('Ken', 'Riley', 'white')
 const game = new Game(blackPlayer, whitePlayer)
 const winner = Game.rollForStart(blackPlayer, blackPlayer)
 
-const blackPlayerCopy = blackPlayer
-const whitePlayerCopy = whitePlayer
+let blackPlayerCopy = blackPlayer
+let whitePlayerCopy = whitePlayer
 
 winner === 'black' ? blackPlayerCopy.active = true : whitePlayerCopy.active = true
 
@@ -41,8 +42,9 @@ const initGameState: GameState = {
     origin: undefined,
     destination: undefined
   },
-  move () { },
-  debug: true
+  move: (action: GameAction) => { },
+  toggleActivePlayer: () => { },
+  debug: false
 }
 
 export const enum GAME_ACTION_TYPE {
@@ -50,7 +52,8 @@ export const enum GAME_ACTION_TYPE {
   ROLL,
   ROLL_FOR_START,
   DOUBLE,
-  RESIGN
+  RESIGN,
+  TOGGLE
 }
 
 export type GameAction = {
@@ -62,15 +65,22 @@ const reducer = (state: GameState, action: GameAction): GameState => {
   const { type, payload } = action
   let newState: GameState
 
-  if (state.debug) {
-    console.log(`[STATE] reducer: quadrant[ne].points:`)
-    state.board.quadrants[2].points.forEach(p => {
-      console.log(`[STATE] reducer quadrant[ne].points.checkers[]:`)
-      console.log(p.checkers)
-    })
-  }
-
   switch (type) {
+    case GAME_ACTION_TYPE.TOGGLE:
+      console.log(`[STATE] TOGGLE ${new Date().toTimeString()}:`)
+      throw Error('TOGGLE is FUBAR')
+    // if (!state.players.white.active && !state.players.black.active) {
+    //   throw Error(`No active players`)
+    // }
+
+    // console.log(`[STATE] TOGGLE: white active = ${state.players.white.active.toString()}`)
+    // console.log(`[STATE] TOGGLE: black active = ${state.players.black.active.toString()}`)
+    // newState = produce(state, draft => {
+    //   draft.players.white.active = true
+    //   draft.players.black.active = false
+    // })
+    // console.log('[STATE] newState:', newState)
+    // return newState
     case GAME_ACTION_TYPE.MOVE:
       if (!state.activeMove.origin) {
         newState = produce(state, draft => {
@@ -81,15 +91,6 @@ const reducer = (state: GameState, action: GameAction): GameState => {
           if (payload.id === state.activeMove.origin?.id) {
             console.error(`Origin and destination are the same`)
             return state
-          }
-          let activePlayerColor: Color | undefined = undefined
-          if (state.players.white.active) {
-            activePlayerColor = 'white'
-          } else if (state.players.black.active) {
-            activePlayerColor = 'black'
-          }
-          if (!activePlayerColor) {
-            throw Error('There is no active player')
           }
           if (!state.activeMove) {
             throw Error('There is no activeMove')
@@ -102,7 +103,22 @@ const reducer = (state: GameState, action: GameAction): GameState => {
             draft.activeMove.destination.type !== 'point') {
             throw Error(`Moves to/from Rail and Off not yet supported`)
           }
-          const moveResults = state.players[activePlayerColor].move(draft.activeMove.origin, draft.activeMove.destination, [1, 1])
+          let player: Player | undefined = undefined
+
+          if (!state.players.white.active && !state.players.black.active) {
+            throw Error(`No active players`)
+          }
+
+          player = state.players.white.active ? state.players.white : state.players.black
+          let moveResults: { origin: CheckerBox, destination: CheckerBox } | undefined = undefined
+          try {
+            moveResults = player.move(draft.activeMove.origin, draft.activeMove.destination, [1, 1])
+          } catch (e: any) {
+            return alert(e.message)
+          }
+          if (!moveResults) {
+            throw Error('No moveResults')
+          }
           if (state.debug) {
             console.log(`[STATE] moveResults: `)
             console.log(moveResults)
@@ -136,16 +152,15 @@ const reducer = (state: GameState, action: GameAction): GameState => {
             console.log(`destinationQuadrantIndex = ${destinationQuadrantIndex}`)
             console.log(`destinationPointIndex = ${destinationPointIndex}`)
           }
-
           draft.board.quadrants[originQuadrantIndex].points[originPointIndex].checkerBox
             = moveResults.origin
           draft.board.quadrants[destinationQuadrantIndex].points[destinationPointIndex].checkerBox
             = moveResults.destination
           draft.activeMove.origin = undefined
           draft.activeMove.destination = undefined
+
         })
       }
-
       return newState
     default:
       throw Error(`Unkown action type ${type}`)
@@ -156,15 +171,17 @@ const useGameContext = (initialState: GameState) => {
   const [state, dispatch] = useReducer(reducer, initGameState)
 
   const move = useCallback((checkerBox: CheckerBox) => dispatch({ type: GAME_ACTION_TYPE.MOVE, payload: checkerBox }), [])
+  const toggleActivePlayer = useCallback(() => dispatch({ type: GAME_ACTION_TYPE.TOGGLE }), [])
   // const roll = useCallback(() => dispatch({ type: GAME_ACTION_TYPE.ROLL }), [])
-  return { state, move }
+  return { state, move, toggleActivePlayer }
 }
 
 type UseGameContextType = ReturnType<typeof useGameContext>
 
 const initContextState: UseGameContextType = {
   state: initGameState,
-  move () { },
+  toggleActivePlayer () { },
+  move () { }
 }
 
 export const GameContext = createContext<UseGameContextType>(initContextState)
@@ -193,10 +210,11 @@ type UseGameHookType = {
     destination: CheckerBox | undefined
   }
   move: (checkerBox: CheckerBox, container: Point | Rail | Off) => void
+  toggleActivePlayer: () => void
   debug: boolean
 }
 
 export const useGame = (): UseGameHookType => {
-  const { state: { board, players, cube, activeMove, debug }, move } = useContext(GameContext)
-  return { board, players, cube, activeMove, move, debug }
+  const { state: { board, players, cube, activeMove, debug }, move, toggleActivePlayer } = useContext(GameContext)
+  return { board, players, cube, activeMove, move, toggleActivePlayer, debug }
 }

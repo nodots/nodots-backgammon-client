@@ -10,11 +10,14 @@ interface CheckerBoxProps {
 }
 
 const CheckerBox = (props: CheckerBoxProps) => {
-  const { move, board, debug } = useGame()
+  const { board, players, debug, move, toggleActivePlayer } = useGame()
   const checkerBoxState = board.getCheckerBoxes().find(cb => cb.id === props.checkerBox.id)
   if (debug) {
-    console.log(`[CHECKER COMPONENT] checkerBoxState:`)
+    console.log(`[CHECKERBOX COMPONENT] checkerBoxState:`)
     console.log(checkerBoxState)
+    console.log(`[CHECKERBOX COMPONENT] players:`)
+    console.log(`white active?: ${players.white.active.toString()}`)
+    console.log(`black active?: ${players.black.active.toString()}`)
   }
   if (!checkerBoxState) {
     throw Error('No checkerBoxState')
@@ -27,7 +30,12 @@ const CheckerBox = (props: CheckerBoxProps) => {
     if (!container) {
       throw Error('No container')
     }
-    move(props.checkerBox, container)
+    try {
+      move(props.checkerBox, container)
+    } catch (e) {
+      console.error(e)
+    }
+
   }
 
   checkerBoxState.checkers.forEach((c: CheckerModel) => {

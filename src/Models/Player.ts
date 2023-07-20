@@ -1,10 +1,13 @@
-import { Color, CheckerBox, Checker, DieValue, Die, modelDebug, generateId } from '.'
+import { Point, Color, CheckerBox, Checker, DieValue, Die, modelDebug, generateId } from '.'
+
+export type MoveDirection = 'clockwise' | 'counterclockwise'
 
 export class Player {
   id: string
   firstName: string
   lastName: string
   color: Color
+  moveDirection: MoveDirection
   nickName?: string
   checkers?: Checker[] = []
   dice?: Die[]
@@ -18,6 +21,7 @@ export class Player {
     this.dice = [new Die(color), new Die(color)]
     this.nickName = nickName || firstName
     this.checkers = checkers || []
+    this.moveDirection = color === 'white' ? 'clockwise' : 'counterclockwise'
   }
 
   roll (): [DieValue, DieValue] {
@@ -28,16 +32,69 @@ export class Player {
   }
 
   move (origin: CheckerBox, destination: CheckerBox, roll: [DieValue, DieValue]): { origin: CheckerBox, destination: CheckerBox } {
-    if (!modelDebug) {
-      console.log(`[PLAYER MODEL] move:`)
-      if (origin.checkers.length === 0) {
-        throw Error(`There are no checkers to move in ${origin.id}`)
+    if (modelDebug) {
+      console.log(`[PLAYER MODEL] move ${this.color}:`)
+      console.log(`[PLAYER MODEL] active?: ${this.active.toString()}`)
+    }
+    if (origin.checkers.length === 0) {
+      throw Error(`There are no checkers to move in ${origin.id}`)
+    }
+
+    if (!this.active) {
+      throw Error(`${this.color} is not active and cannot move`)
+    }
+    if (origin.type !== 'point' || destination.type !== 'point') {
+      throw Error(`Only moves between Points are supported currently`)
+    }
+
+    const originPoint = origin.parent as Point
+    const destinationPoint = destination.parent as Point
+
+    if (!originPoint || !destinationPoint || !originPoint.checkerBox.parent) {
+      throw Error(`Missing parent Point for checkerBox`)
+    }
+
+    console.log(`this.moveDirection = ${this.moveDirection.toString()}`)
+    console.log(`originPoint.position = ${originPoint.position}`)
+    console.log(`destinationPoint.position = ${destinationPoint.position}`)
+
+    const moveDelta = Math.abs(originPoint.position - destinationPoint.position)
+
+    if (moveDelta !== roll[0] && moveDelta !== roll[1] && moveDelta !== roll[0] + roll[1]) {
+      throw Error(`Illegal move for roll: ${roll[0]} ${roll[1]}`)
+    }
+
+    if (this.moveDirection === 'clockwise') {
+      if (originPoint.position < destinationPoint.position) {
+        throw Error(`${this.color} can only move ${this.moveDirection.toString()}`)
+      }
+    } else {
+      if (originPoint.position > destinationPoint.position) {
+        throw Error(`${this.color} can only move ${this.moveDirection}`)
       }
     }
+
     const checkerToMove = origin.checkers[origin.checkers.length - 1]
     if (!checkerToMove) {
       throw Error(`Failed to find checker to move`)
     }
+    if (checkerToMove.color !== this.color) {
+      throw Error(`${this.color} cannot move ${checkerToMove.color} checkers`)
+    }
+
+
+
+    if (this.moveDirection === 'clockwise') {
+
+    }
+
+    if (modelDebug) {
+      console.log(`[PLAYER MODEL] origin:`)
+      console.log(origin)
+      console.log(`[PLAYER MODEL] destination:`)
+      console.log(destination)
+    }
+
     const newOriginCheckers = origin.checkers.slice(0, origin.checkers.length - 1)
     const newDestinationCheckers = destination.checkers.concat(checkerToMove)
 

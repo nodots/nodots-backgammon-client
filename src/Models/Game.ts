@@ -4,7 +4,7 @@ import { Cube } from './Cube'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
-import { generateId, Color } from '.'
+import { generateId, modelDebug, Color } from '.'
 
 export interface GameParams {
   id: string
@@ -36,20 +36,7 @@ export class Game {
     this.setCheckers()
       .then(() => {
         console.log('Let the game begin!')
-        // const firstMover = this.rollForStart() as Color
-        // if (!firstMover) {
-        //   throw Error('Nobody won the roll')
-        // }
-        // console.log(`${firstMover} wins roll`)
-        // const player: Player = this.players[firstMover]
-        // player.active = true
       })
-  }
-
-  setActivePlayer (color: Color) {
-    this.players.white.active = false
-    this.players.black.active = false
-    this.players[color].active = true
   }
 
   private async setCheckers (): Promise<void> {
