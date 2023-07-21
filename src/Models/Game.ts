@@ -24,7 +24,7 @@ export class Game {
   board: Board
   rollForStart?: () => Color
 
-  constructor (whitePlayer: Player, blackPlayer: Player) {
+  constructor ({ whitePlayer, blackPlayer }: { whitePlayer: Player; blackPlayer: Player }) {
     this.id = generateId()
     this.cube = new Cube()
     this.players = {

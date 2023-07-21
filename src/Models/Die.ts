@@ -5,7 +5,7 @@ export class Die {
   color: Color
   value: DieValue
 
-  constructor (color: Color, currentValue?: DieValue) {
+  constructor ({ color, currentValue }: { color: Color; currentValue?: DieValue }) {
     this.id = generateId()
     this.color = color
     this.value = currentValue || 1

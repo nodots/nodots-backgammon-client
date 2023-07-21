@@ -12,6 +12,7 @@ import { Rail } from './Rail'
 import { Off } from './Off'
 
 export const modelDebug = false
+export const MAX_CUBE_VALUE = 64
 
 export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
 export type Color = 'black' | 'white'

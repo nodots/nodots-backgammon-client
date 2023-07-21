@@ -15,7 +15,7 @@ export class Board {
 
   initialize?: () => Board
 
-  private constructor (quadrants: Quadrant[], rail: Rail, off: Off) {
+  private constructor ({ quadrants, rail, off }: { quadrants: Quadrant[]; rail: Rail; off: Off }) {
     this.id = generateId()
     this.quadrants = quadrants
     this.rail = rail
@@ -91,6 +91,6 @@ export class Board {
     const quadrants = Quadrant.initialize(setup)
     const rail = Rail.initialize(setup)
     const off = Off.initialize(setup)
-    return new Board(quadrants, rail, off)
+    return new Board({ quadrants, rail, off })
   }
 }

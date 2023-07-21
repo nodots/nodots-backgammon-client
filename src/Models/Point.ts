@@ -8,7 +8,7 @@ export class Point {
   checkerBox: CheckerBox
   checkers: Checker[] = []
 
-  constructor (position: number, checkers?: Checker[]) {
+  constructor ({ position, checkers }: { position: number; checkers?: Checker[] }) {
     this.id = generateId()
     this.position = position
     this.checkerBox = new CheckerBox({ type: 'point', parent: this })
@@ -19,7 +19,7 @@ export class Point {
     const points: Point[] = []
     for (let i = 0; i < POINT_COUNT; i++) {
       const position = i + 1
-      const point = new Point(position)
+      const point = new Point({ position })
       point.checkerBox.parent = point
       const config = setup.find(p => p.position === position)
       if (config) {

@@ -13,12 +13,12 @@ export class Player {
   dice?: Die[]
   active: boolean = false
 
-  constructor (firstName: string, lastName: string, color: Color, nickName?: string | undefined, checkers?: Checker[], dice?: Die[]) {
+  constructor ({ firstName, lastName, color, nickName, checkers, dice }: { firstName: string; lastName: string; color: Color; nickName?: string | undefined; checkers?: Checker[]; dice?: Die[] }) {
     this.id = generateId()
     this.firstName = firstName
     this.lastName = lastName
     this.color = color
-    this.dice = [new Die(color), new Die(color)]
+    this.dice = [new Die({ color }), new Die({ color })]
     this.nickName = nickName || firstName
     this.checkers = checkers || []
     this.moveDirection = color === 'white' ? 'clockwise' : 'counterclockwise'
