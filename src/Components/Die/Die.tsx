@@ -1,15 +1,15 @@
+import { GameError } from '../../Models'
 import { Color, DieValue } from '../../Models'
 
 interface DieProps {
+  order: number,
   color: Color
   value?: DieValue
 }
 
 const Die = (props: DieProps) => {
-  let value = 1
-  if (props.value) {
-    value = props.value
-  }
+  const value = props.value || 1 as DieValue
+
   let valueClass = ''
 
   switch (value) {
@@ -32,11 +32,11 @@ const Die = (props: DieProps) => {
       valueClass = 'six'
       break
     default:
-      throw Error('Invalid pips for die')
+      throw new GameError({ model: 'Die', errorMessage: 'Invalid pips for die' })
   }
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log('Switching dice not yet implemented')
+
   }
 
   return <div className={`die ${props.color.toString()} ${valueClass}`} onClick={clickHandler}></div>

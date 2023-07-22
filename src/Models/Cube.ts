@@ -1,4 +1,4 @@
-import { Color, CubeValue, generateId } from '.'
+import { Color, CubeValue, generateId, MAX_CUBE_VALUE } from '.'
 
 /**
  * The Cube is the large die and used to double the current point-value of the game 
@@ -12,8 +12,16 @@ export class Cube {
   value: CubeValue
   controllingColor: Color | undefined
 
-  constructor (value?: CubeValue) {
+  constructor ({ value, controllingColor }: { value?: CubeValue; controllingColor?: Color } = {}) {
     this.id = generateId()
     this.value = value ? value : 2
+    this.controllingColor = controllingColor ? controllingColor : undefined
+  }
+
+  double (): CubeValue {
+    if (this.value === MAX_CUBE_VALUE) {
+      return this.value
+    }
+    return this.value * 2 as CubeValue
   }
 }

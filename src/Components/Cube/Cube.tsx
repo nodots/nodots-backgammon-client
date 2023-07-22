@@ -1,5 +1,5 @@
-
-import { Cube as CubeModel, CubeValue } from '../../Models'
+import { useGame } from '../../State/Game.State'
+import { Cube as CubeModel } from '../../Models'
 
 // at the start of the game
 interface CubeProps {
@@ -7,14 +7,15 @@ interface CubeProps {
 }
 
 const Cube = (props: CubeProps) => {
-  if (props.cube.controllingColor) {
-    console.log(`Double for ${props.cube.controllingColor}`)
-  } else {
-    console.log('initial Double for player that clicked')
+  const { cube, double } = useGame()
+
+  const clickHandler = (e: React.MouseEvent) => {
+    return double()
   }
-  return <div className='cube'>{props.cube.value.toString()}</div>
+
+
+  return <div className='cube' onClick={clickHandler}>{cube.value}</div>
 
 }
-
 
 export default Cube

@@ -1,47 +1,49 @@
-import { Grid, Paper } from '@mui/material'
-import { Game } from '../../Models/Game'
+import { useGame } from '../../State/Game.State'
+import { Grid } from '@mui/material'
 import Quadrant from '../Quadrant/Quadrant'
 import Rail from '../Rail/Rail'
 import Off from '../Off/Off'
 import RollSurface from '../RollSurface/RollSurface'
 
-interface BoardProps {
-  game: Game | undefined
-}
+const Board = () => {
+  const { board, players, cube, debug } = useGame()
 
-const Board = (props: BoardProps) => {
-  if (props.game?.board) {
-    const neQuadrant = props.game.board.quadrants.find(q => q.location === 'ne')
-    const nwQuadrant = props.game.board.quadrants.find(q => q.location === 'nw')
-    const swQuadrant = props.game.board.quadrants.find(q => q.location === 'sw')
-    const seQuadrant = props.game.board.quadrants.find(q => q.location === 'se')
+  if (board && players?.white && players?.black) {
+    if (debug) {
+      console.log(`[BOARD COMPONENT] quadrant[ne].points:`)
+      board.quadrants[2].points.forEach(p => {
+        console.log(`[BOARD COMPONENT] quadrant[ne].points.checkers[]:`)
+        console.log(p.checkers)
+      })
+    }
+    const neQuadrant = board.quadrants.find(q => q.location === 'ne')
+    const nwQuadrant = board.quadrants.find(q => q.location === 'nw')
+    const swQuadrant = board.quadrants.find(q => q.location === 'sw')
+    const seQuadrant = board.quadrants.find(q => q.location === 'se')
 
-    return <Paper className='board-frame' elevation={8}>
-      <Grid container id='NodotsBgBoard'>
-        <Grid item className='col left'>
-          {nwQuadrant && <Quadrant location='nw' quadrant={nwQuadrant} />}
-          <Grid item className='roll-surface'>
-            <RollSurface player={props.game.players.black} />
-          </Grid>
-          {swQuadrant && <Quadrant location='sw' quadrant={swQuadrant} />}
+    return <Grid container id='NodotsBgBoard'>
+      <Grid item className='col left'>
+        {nwQuadrant && <Quadrant location='nw' quadrant={nwQuadrant} />}
+        <Grid item className='roll-surface'>
+          {players.black && <RollSurface player={players.black} />}
         </Grid>
-        <Grid item className='rail'>
-          <Rail rail={props.game.board.rail} />
-        </Grid>
-        <Grid item className='col right'>
-          {neQuadrant && <Quadrant location='ne' quadrant={neQuadrant} />}
-          <Grid item className='roll-surface'>
-            <RollSurface player={props.game.players.white} />
-
-          </Grid>
-          {seQuadrant && <Quadrant location='se' quadrant={seQuadrant} />}
-        </Grid>
-        <Grid item className='off-container'>
-          <Off off={props.game.board.off} cube={props.game.cube} />
-        </Grid>
+        {swQuadrant && <Quadrant location='sw' quadrant={swQuadrant} />}
       </Grid>
-    </Paper>
+      <Grid item className='rail'>
+        <Rail rail={board.rail} />
+      </Grid>
+      <Grid item className='col right'>
+        {neQuadrant && <Quadrant location='ne' quadrant={neQuadrant} />}
+        <Grid item className='roll-surface'>
+          {players.white && <RollSurface player={players.white} />}
 
+        </Grid>
+        {seQuadrant && <Quadrant location='se' quadrant={seQuadrant} />}
+      </Grid>
+      <Grid item className='off-container'>
+        {board.off && cube && <Off off={board.off} cube={cube} />}
+      </Grid>
+    </Grid>
   } else {
     return <h1>No Game Set</h1>
   }

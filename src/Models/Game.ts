@@ -1,10 +1,11 @@
+import { GameError } from '.'
 import { Point } from './Point'
 import { Checker } from './Checker'
 import { Cube } from './Cube'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
-import { generateId, Color } from '.'
+import { generateId, modelDebug, Color } from '.'
 
 export interface GameParams {
   id: string
@@ -22,8 +23,9 @@ export class Game {
     white: Player,
   }
   board: Board
+  rollForStart?: () => Color
 
-  constructor (whitePlayer: Player, blackPlayer: Player) {
+  constructor ({ whitePlayer, blackPlayer }: { whitePlayer: Player; blackPlayer: Player }) {
     this.id = generateId()
     this.cube = new Cube()
     this.players = {
@@ -34,17 +36,10 @@ export class Game {
 
     this.setCheckers()
       .then(() => {
-        console.log('Let the game begin!')
-        const firstMover = this.rollForStart()
-        console.log(`${firstMover} wins roll`)
-        console.log(this.players)
-        this.players[firstMover].active = true
-        console.log(this.players)
+        if (modelDebug) {
+          console.log('Let the game begin!')
+        }
       })
-  }
-
-  move (start: number, end: number, color: Color) {
-    console.log(`${color} moves`)
   }
 
   private async setCheckers (): Promise<void> {
@@ -53,10 +48,14 @@ export class Game {
     this.players.white.checkers = checkers.white
   }
 
-  getCheckers (): { black: Checker[], white: Checker[] } {
+  getCheckers (): { black: Checker[], white: Checker[], all: Checker[] } {
+    const black = this.getCheckersByColor('black')
+    const white = this.getCheckersByColor('white')
+    const all = black.concat(white)
     return {
-      black: this.getCheckersByColor('black'),
-      white: this.getCheckersByColor('white')
+      black,
+      white,
+      all
     }
   }
 
@@ -64,10 +63,33 @@ export class Game {
     // console.log(`getCheckersByColor ${color.toString()}`)
     let checkers: Checker[] = []
     if (!this.board) {
-      throw Error('We have no board')
+      throw new GameError({ model: 'Game', errorMessage: 'We have no board' })
     }
     checkers = this.board.getCheckersByColor(color)
     return checkers
+  }
+
+  static rollForStart ({ black, white }: { black: Player; white: Player }): Color {
+    const blackRollResult = black.roll()
+    const whiteRollResult = white.roll()
+    // can't tie when you roll for start
+    if (blackRollResult === whiteRollResult) {
+      this.rollForStart({ black, white })
+    }
+    return blackRollResult > whiteRollResult ? 'black' : 'white'
+  }
+
+  static getActivePlayer (players: { white: Player, black: Player }): Player | undefined {
+    let player: Player | undefined = undefined
+    if (!players.white.active && !players.black.active) {
+      throw new GameError({ model: 'Game', errorMessage: 'There is no active player' })
+    }
+    if (players.white.active && players.black.active) {
+      throw new GameError({ model: 'Game', errorMessage: 'There are two active players' })
+    }
+
+    player = players.black.active ? players.black : players.white
+    return player
   }
 
   private getPoints (): Point[] {
@@ -77,19 +99,5 @@ export class Game {
     })
     return points
   }
-
-  rollForStart = (): Color => {
-    if (!this.players.white.dice || !this.players.black.dice) {
-      throw Error('Player with no dice')
-    }
-    const whiteRoll = this.players.white.dice[0].roll()
-    const blackRoll = this.players.black.dice[0].roll()
-
-    if (whiteRoll === blackRoll) {
-      console.log('Rolled doubles to start. Re-rolling')
-      this.rollForStart()
-    }
-
-    return whiteRoll > blackRoll ? 'white' : 'black'
-  }
 }
+
