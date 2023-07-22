@@ -10,7 +10,7 @@ interface CheckerBoxProps {
 }
 
 const CheckerBox = (props: CheckerBoxProps) => {
-  const { board, players, debug, move, toggleActivePlayer } = useGame()
+  const { name, board, players, debug, move } = useGame()
   const checkerBoxState = board.getCheckerBoxes().find(cb => cb.id === props.checkerBox.id)
   if (debug) {
     console.log(`[CHECKERBOX COMPONENT] checkerBoxState:`)
@@ -41,6 +41,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
   checkerBoxState.checkers.forEach((c: CheckerModel) => {
     checkers.push(<Checker checker={c} key={c.id} />)
   })
+
   return <div className='checker-box' onClick={handleClick}>
     {checkers}
   </ div>

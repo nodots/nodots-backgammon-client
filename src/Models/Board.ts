@@ -47,13 +47,11 @@ export class Board {
     return checkerBoxes
   }
 
-
   getCheckerBoxContainer (checkerBoxId: string): Point | undefined {
     const point: Point | undefined = this.points.find(p => checkerBoxId === p.checkerBox.id)
     return point
   }
 
-  // FIXME: Hard-coded to return NE quadrant
   getPointContainer (pointId: string): Quadrant | undefined {
     if (!modelDebug) {
       console.log(`[BOARD MODEL] getting quadrant for ${pointId}`)
@@ -73,14 +71,6 @@ export class Board {
     }
 
     const quadrant = reducer(this.quadrants, pointId)
-
-    // const quadrant: Quadrant | undefined = this.quadrants.find(q => {
-    //   console.log(q.points)
-    //   return q.points.find(p => p.id = pointId)
-
-    // }
-    // )
-    // console.log(quadrant)
     return quadrant
   }
 

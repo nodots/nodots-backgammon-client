@@ -10,7 +10,7 @@ export class Player {
   moveDirection: MoveDirection
   nickName?: string
   checkers?: Checker[] = []
-  dice?: Die[]
+  dice: Die[]
   active: boolean = false
 
   constructor ({ firstName, lastName, color, nickName, checkers, dice }: { firstName: string; lastName: string; color: Color; nickName?: string | undefined; checkers?: Checker[]; dice?: Die[] }) {
@@ -18,7 +18,7 @@ export class Player {
     this.firstName = firstName
     this.lastName = lastName
     this.color = color
-    this.dice = [new Die({ color }), new Die({ color })]
+    this.dice = [new Die({ color, order: 1 }), new Die({ color, order: 2 })]
     this.nickName = nickName || firstName
     this.checkers = checkers || []
     this.moveDirection = color === 'white' ? 'clockwise' : 'counterclockwise'
@@ -31,10 +31,13 @@ export class Player {
     return [this.dice[0].roll() as DieValue, this.dice[1].roll() as DieValue]
   }
 
-  move (origin: CheckerBox, destination: CheckerBox, roll: [DieValue, DieValue]): { origin: CheckerBox, destination: CheckerBox } {
+  move ({ origin, destination, roll }: { origin: CheckerBox; destination: CheckerBox; roll: [DieValue, DieValue] }): { origin: CheckerBox, destination: CheckerBox } {
     if (modelDebug) {
       console.log(`[PLAYER MODEL] move ${this.color}:`)
       console.log(`[PLAYER MODEL] active?: ${this.active.toString()}`)
+      console.log(`[PLAYER MODEL] move origin:`, origin)
+      console.log(`[PLAYER MODEL] move destination:`, destination)
+      console.log(`[PLAYER MODEL] move roll:`, roll)
     }
     if (origin.checkers.length === 0) {
       throw Error(`There are no checkers to move in ${origin.id}`)
@@ -84,9 +87,9 @@ export class Player {
 
 
 
-    if (this.moveDirection === 'clockwise') {
+    // if (this.moveDirection === 'clockwise') {
 
-    }
+    // }
 
     if (modelDebug) {
       console.log(`[PLAYER MODEL] origin:`)

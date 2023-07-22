@@ -10,7 +10,7 @@ const Point = (props: PointProps) => {
   let oddOrEven: string = props.point.position % 2 === 0 ? 'even' : 'odd'
   const classes = `point ${props.location.toString()} ${oddOrEven}`
 
-  return <div className={classes} onDoubleClick={() => alert(props.point.id)}>
+  return <div className={classes} onDoubleClick={() => console.log(props.point)}>
     <span className='point-position'>{props.point.position}</span>
     <CheckerBox checkerBox={props.point.checkerBox} />
   </div>

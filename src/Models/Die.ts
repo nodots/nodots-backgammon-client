@@ -1,14 +1,18 @@
 import { Color, DieValue, generateId } from '.'
 
+export type DieOrder = 1 | 2
+
 export class Die {
   id: string
+  order: DieOrder
   color: Color
-  value: DieValue
+  value: DieValue | undefined
 
-  constructor ({ color, currentValue }: { color: Color; currentValue?: DieValue }) {
+  constructor ({ order, color, currentValue }: { order: DieOrder, color: Color; currentValue?: DieValue }) {
     this.id = generateId()
+    this.order = order
     this.color = color
-    this.value = currentValue || 1
+    this.value = currentValue || undefined
   }
 
   roll (): DieValue {

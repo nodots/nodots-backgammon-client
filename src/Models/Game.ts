@@ -66,15 +66,27 @@ export class Game {
     return checkers
   }
 
-  static rollForStart (black: Player, white: Player): Color {
+  static rollForStart ({ black, white }: { black: Player; white: Player }): Color {
     const blackRollResult = black.roll()
     const whiteRollResult = white.roll()
     // can't tie when you roll for start
     if (blackRollResult === whiteRollResult) {
-      this.rollForStart(black, white)
+      this.rollForStart({ black, white })
     }
     return blackRollResult > whiteRollResult ? 'black' : 'white'
+  }
 
+  static getActivePlayer (players: { white: Player, black: Player }): Player | undefined {
+    let player: Player | undefined = undefined
+    if (!players.white.active && !players.black.active) {
+      throw Error('There is no active player')
+    }
+    if (players.white.active && players.black.active) {
+      throw Error('There are two active players')
+    }
+
+    player = players.black.active ? players.black : players.white
+    return player
   }
 
   private getPoints (): Point[] {
@@ -84,7 +96,5 @@ export class Game {
     })
     return points
   }
-
-
 }
 

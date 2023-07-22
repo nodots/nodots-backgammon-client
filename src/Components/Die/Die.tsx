@@ -1,15 +1,18 @@
+import { useGame } from '../../State'
 import { Color, DieValue } from '../../Models'
 
 interface DieProps {
+  order: number,
   color: Color
   value?: DieValue
 }
 
 const Die = (props: DieProps) => {
-  let value = 1
-  if (props.value) {
-    value = props.value
-  }
+  const { name, rename } = useGame()
+  // console.log(`[DIE] COMPONENT diceState:`, diceState)
+  // console.log(`[DIE] COMPONENT diceState[${props.order}].value:`, diceState[props.order].value)
+  const value = props.value || 1 as DieValue
+
   let valueClass = ''
 
   switch (value) {
@@ -36,7 +39,7 @@ const Die = (props: DieProps) => {
   }
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log('Switching dice not yet implemented')
+
   }
 
   return <div className={`die ${props.color.toString()} ${valueClass}`} onClick={clickHandler}></div>

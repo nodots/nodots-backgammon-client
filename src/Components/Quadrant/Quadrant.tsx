@@ -1,3 +1,4 @@
+import { useGame } from '../../State'
 import { Grid } from '@mui/material'
 import { QuadrantLocation, Quadrant as QuadrantModel, generateId } from '../../Models'
 import Point from '../Point/Point'
@@ -8,6 +9,7 @@ interface QuadrantProps {
 }
 
 const Quadrant = (props: QuadrantProps) => {
+  const { name } = useGame()
   const classes = `quadrant ${props.location}`
   const points: React.JSX.Element[] = []
   props.quadrant.points.forEach(p => {
