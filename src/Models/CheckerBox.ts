@@ -1,11 +1,9 @@
-import { Color, generateId } from '.'
+import { Color, CheckerBoxType, generateId } from '.'
+import { GameError } from './Error'
 import { Checker } from './Checker'
 import { Point } from './Point'
 import { Off } from './Off'
 import { Rail } from './Rail'
-
-
-export type CheckerBoxType = 'point' | 'rail' | 'off'
 
 export class CheckerBox {
   id: string
@@ -31,10 +29,7 @@ export class CheckerBox {
         this.parent = parent as Off
         break
       default:
-        throw Error('Unknown type')
+        throw new GameError({ model: 'CheckerBox', errorMessage: 'Unknown type' })
     }
-
-
   }
-
 }

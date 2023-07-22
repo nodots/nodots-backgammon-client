@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid'
+import { GameError } from './Error'
 import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
 import { Game } from './Game'
@@ -14,11 +15,28 @@ import { Off } from './Off'
 export const modelDebug = true
 export const MAX_CUBE_VALUE = 64
 
+export type CheckerMoveType = {
+  origin: CheckerBox | undefined,
+  destination: CheckerBox | undefined
+  completed: boolean | undefined
+}
+
+export type MoveType = {
+  board: Board,
+  checker: CheckerMoveType,
+  origin: CheckerBox,
+  destination: CheckerBox,
+  completed: boolean
+}
+
+
+export type CheckerBoxType = 'point' | 'rail' | 'off'
 export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
 export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 export type RollResults = [DieValue, DieValue]
+export type MoveDirection = 'clockwise' | 'counterclockwise'
 
 export interface GameMove {
   checkerId: string,
@@ -95,6 +113,7 @@ const generateId = (): string => {
 }
 
 export {
+  GameError,
   Board,
   Checker,
   CheckerBox,

@@ -1,4 +1,4 @@
-import { useGame } from '../../State'
+import { useGame } from '../../State/Game.State'
 import { useEffect, useState } from 'react'
 import { Player } from '../../Models'
 import Die from '../Die/Die'
@@ -10,6 +10,9 @@ interface RollSurfaceProps {
 const RollSurface = (props: RollSurfaceProps) => {
   const { dice, players, activeColor, activeMove, debug, roll, finalizeMove } = useGame()
   const [isRollForStart, setIsRollForStart] = useState<boolean>(false)
+  console.log(activeColor)
+  console.log(players.black.active)
+  console.log(players.white.active)
 
   const player = players[props.player.color]
   console.log(`[ROLL_SURFACE COMPONENT] dice:[${props.player.color}]`, dice[props.player.color])
@@ -30,7 +33,7 @@ const RollSurface = (props: RollSurfaceProps) => {
       console.log('[ROLL_SURFACE COMPONENT]', activeMove)
 
     }
-    if (activeMove && activeMove.checker1.origin && activeMove.checker1.destination && activeMove.checker2.origin && activeMove.checker2.destination) {
+    if (activeMove && activeMove.checkers[0].origin && activeMove.checkers[0].destination && activeMove.checkers[0].origin && activeMove.checkers[1].destination) {
       finalizeMove(activeColor)
     } else {
       roll(activeColor)

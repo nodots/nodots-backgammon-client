@@ -1,4 +1,4 @@
-import { GameProvider } from './State'
+import { GameProvider } from './State/Game.State'
 import { Paper } from '@mui/material'
 import Board from './Components/Board/Board'
 

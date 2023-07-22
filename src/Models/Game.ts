@@ -1,3 +1,4 @@
+import { GameError } from '.'
 import { Point } from './Point'
 import { Checker } from './Checker'
 import { Cube } from './Cube'
@@ -35,7 +36,9 @@ export class Game {
 
     this.setCheckers()
       .then(() => {
-        console.log('Let the game begin!')
+        if (modelDebug) {
+          console.log('Let the game begin!')
+        }
       })
   }
 
@@ -60,7 +63,7 @@ export class Game {
     // console.log(`getCheckersByColor ${color.toString()}`)
     let checkers: Checker[] = []
     if (!this.board) {
-      throw Error('We have no board')
+      throw new GameError({ model: 'Game', errorMessage: 'We have no board' })
     }
     checkers = this.board.getCheckersByColor(color)
     return checkers
@@ -79,10 +82,10 @@ export class Game {
   static getActivePlayer (players: { white: Player, black: Player }): Player | undefined {
     let player: Player | undefined = undefined
     if (!players.white.active && !players.black.active) {
-      throw Error('There is no active player')
+      throw new GameError({ model: 'Game', errorMessage: 'There is no active player' })
     }
     if (players.white.active && players.black.active) {
-      throw Error('There are two active players')
+      throw new GameError({ model: 'Game', errorMessage: 'There are two active players' })
     }
 
     player = players.black.active ? players.black : players.white

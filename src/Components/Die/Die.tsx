@@ -1,4 +1,4 @@
-import { useGame } from '../../State'
+import { GameError } from '../../Models'
 import { Color, DieValue } from '../../Models'
 
 interface DieProps {
@@ -8,9 +8,6 @@ interface DieProps {
 }
 
 const Die = (props: DieProps) => {
-  const { name, rename } = useGame()
-  // console.log(`[DIE] COMPONENT diceState:`, diceState)
-  // console.log(`[DIE] COMPONENT diceState[${props.order}].value:`, diceState[props.order].value)
   const value = props.value || 1 as DieValue
 
   let valueClass = ''
@@ -35,7 +32,7 @@ const Die = (props: DieProps) => {
       valueClass = 'six'
       break
     default:
-      throw Error('Invalid pips for die')
+      throw new GameError({ model: 'Die', errorMessage: 'Invalid pips for die' })
   }
 
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {

@@ -1,3 +1,4 @@
+import { GameError } from './Error'
 import { Checker } from './Checker'
 import { Point } from './Point'
 import { Color, PointProp, QuadrantLocation, generateId } from '.'
@@ -14,11 +15,10 @@ export class Quadrant {
   }
 
   getCheckersByColor (color: Color): Checker[] {
-    // console.log(`getCheckersByColor ${color.toString()}`)
     const checkers: Checker[] = []
     this.points.forEach(p => {
       if (!p.checkers) {
-        throw Error('Checkers not initialized for point')
+        throw new GameError({ model: 'Quadrant', errorMessage: 'Checkers not initialized for point' })
       }
       checkers.push(...p.checkers.filter(c => c.color === color))
     })
