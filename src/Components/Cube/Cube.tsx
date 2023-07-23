@@ -8,11 +8,11 @@ const Cube = (props: CubeProps) => {
   const { cube, double, debug } = useGame()
 
   const clickHandler = (e: React.MouseEvent) => {
-    if (debug) {
+    if (debug.isActive) {
       console.log(`[Cube Component] calling double. ${cube.value}`)
     }
     double()
-    if (debug) {
+    if (debug.isActive) {
       console.log(`[Cube Component] back from double. ${cube.value}`)
     }
   }

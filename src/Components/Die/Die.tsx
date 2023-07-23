@@ -1,22 +1,26 @@
 import { forwardRef, useState, useImperativeHandle } from 'react'
 import { useGame, DieState } from '../../State/Game.State'
-import { GameError, DieValue, Color } from '../../Models'
+import { GameError, DieValue } from '../../Models'
 
 interface DieProps {
   die: DieState
 }
 
 const Die = forwardRef((props: DieProps, ref) => {
-  const { activeColor, dice, roll } = useGame()
+  const { activeColor, dice, roll, debug } = useGame()
   const dieState = dice[props.die.color][props.die.order]
   const [dieValue, setDieValue] = useState<DieValue>(dieState.value)
   const [valueClass, setValueClass] = useState<string>('one')
 
   useImperativeHandle(ref, () => ({
     rollDie () {
-      console.log(`[Die Component]: rollDie()`)
+      if (debug) {
+        console.log(`[Die Component]: rollDie()`)
+      }
       roll(props.die.color, props.die.order)
-      console.log('[Die Component] dieState.value:', dieState.value)
+      if (debug) {
+        console.log('[Die Component] dieState.value:', dieState.value)
+      }
       setDieValue(dieState.value)
       switch (dieState.value) {
         case 1:

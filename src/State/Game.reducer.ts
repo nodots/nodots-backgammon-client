@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { CheckerBox, Cube, Die, CubeValue, GameError, MAX_CUBE_VALUE, MoveType, Color } from '../Models'
+import { CheckerBox, Cube, Die, GameError, MoveType, Color } from '../Models'
 import { GameState, GameAction, GAME_ACTION_TYPE } from './Game.State'
 export const reducer = (state: GameState, action: GameAction): GameState => {
   const { type, payload } = action
@@ -16,10 +16,14 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
       }
       newState = produce(state, draft => {
         const payloadColor = payload.color as Color
-        console.log(`[Game Reducer] ROLL state.dice[${payloadColor}, ${payload.order}]:`, state.dice[payloadColor][payload.order])
+        if (state.debug) {
+          console.log(`[Game Reducer] ROLL state.dice[${payloadColor}, ${payload.order}]:`, state.dice[payloadColor][payload.order])
+        }
         draft.dice[payloadColor][payload.order].value = Die.roll()
       })
-      console.log('[Game Reducer] newState dice', newState.dice)
+      if (state.debug) {
+        console.log('[Game Reducer] newState dice', newState.dice)
+      }
       return newState
     case GAME_ACTION_TYPE.TOGGLE:
       newState = undefined
@@ -58,7 +62,8 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
           const destination = payload
           let moveResults: { origin: CheckerBox, destination: CheckerBox } | undefined = undefined
           try {
-            moveResults = activePlayer.move({ origin, destination, roll: [1, 1] })
+            console.log(`[Game Reducer] STATE state.dice[state.activeColor]: ${state.dice[state.activeColor]}`)
+            moveResults = activePlayer.move({ origin, destination, roll: [state.dice[state.activeColor][0].value, state.dice[state.activeColor][1].value] })
             console.log(`[Game Reducer] moveResults:`, moveResults)
 
           } catch (e: any) {
@@ -79,7 +84,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
             checker: state.activeMove.checkers[0],
             completed: false
           }
-          const { originQuadrantIndex, originPointIndex, destinationQuadrantIndex, destinationPointIndex } = moveChecker(movePayload, state.debug)
+          const { originQuadrantIndex, originPointIndex, destinationQuadrantIndex, destinationPointIndex } = moveChecker(movePayload, state.debug.isActive)
 
           draft.board.quadrants[originQuadrantIndex].points[originPointIndex].checkerBox
             = moveResults.origin

@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { DieValue, Die as DieModel, GameError } from '../../Models'
+import { GameError } from '../../Models'
 import { useGame, RollSurfaceState, DieState } from '../../State/Game.State'
 import Die from '../Die/Die'
 
@@ -11,11 +11,10 @@ interface RollSurfaceProps {
 const RollSurface = (props: RollSurfaceProps) => {
   const die1Ref = useRef<DieState>(null)
   const die2Ref = useRef<DieState>(null)
-  const { players, dice, activeColor, activeMove, debug, rollSurfaces, roll, finalizeMove } = useGame()
+  const { players, dice, activeColor, activeMove, debug, rollSurfaces, finalizeMove } = useGame()
   const die1State = dice[props.rollSurface.color][0] as DieState
   const die2State = dice[props.rollSurface.color][1] as DieState
   const rollSurfaceState = rollSurfaces[props.rollSurface.color]
-
 
   if (debug) {
     console.log('[RollSurface Component dice:', dice)
@@ -35,8 +34,10 @@ const RollSurface = (props: RollSurfaceProps) => {
     if (activeMove && activeMove.checkers[0].origin && activeMove.checkers[0].destination && activeMove.checkers[0].origin && activeMove.checkers[1].destination) {
       finalizeMove(activeColor)
     } else {
-      console.log('[RollSurface Component] die1Ref', die1Ref)
-      console.log('[RollSurface Component] die2Ref', die2Ref)
+      if (debug) {
+        console.log('[RollSurface Component] die1Ref', die1Ref)
+        console.log('[RollSurface Component] die2Ref', die2Ref)
+      }
       if (!die1Ref.current || !die2Ref.current) {
         throw new GameError({ model: 'RollSurface', errorMessage: 'Missing one or more Die' })
       }

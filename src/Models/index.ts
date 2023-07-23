@@ -13,7 +13,7 @@ import { Rail } from './Rail'
 import { RollSurface } from './RollSurface'
 import { Off } from './Off'
 
-export const modelDebug = true
+export const modelDebug = false
 export const MAX_CUBE_VALUE = 64
 
 export type CheckerMoveType = {

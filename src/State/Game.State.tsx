@@ -1,6 +1,6 @@
 import { reducer } from './Game.reducer'
 import { ReactElement, createContext, useCallback, useContext, useReducer } from 'react'
-import { DieValue, Game, Board, Player, Die, Point, Rail, Off, Cube, CheckerBox, Color, RollSurface, CubeValue } from '../Models'
+import { DieValue, Game, Board, Player, Die, Point, Rail, Off, CheckerBox, Color, CubeValue } from '../Models'
 
 export type RollSurfaceState = {
   id: string,
@@ -74,7 +74,18 @@ export type GameState = {
   resetMove: (color: Color) => any,
   toggleActivePlayer: () => any,
   double: () => any,
-  debug: boolean
+  debug: {
+    isActive: boolean,
+    components: {
+      player: boolean,
+      die: boolean,
+      cube: boolean,
+      rollSurface: boolean,
+      quadrant: boolean,
+      off: boolean,
+      checkerBoxes: boolean,
+    }
+  }
 }
 
 const blackPlayer = new Player({ firstName: 'A', lastName: 'Robot', color: 'black' })
@@ -177,7 +188,18 @@ const initGameState: GameState = {
   resetMove: (color: Color) => { },
   double: () => { },
   toggleActivePlayer: () => { },
-  debug: true
+  debug: {
+    isActive: true,
+    components: {
+      player: false,
+      die: false,
+      cube: false,
+      rollSurface: false,
+      quadrant: false,
+      off: false,
+      checkerBoxes: false,
+    }
+  }
 }
 
 export const enum GAME_ACTION_TYPE {
@@ -268,8 +290,19 @@ type UseGameHookType = {
   move: (checkerBox: CheckerBox, container: Point | Rail | Off) => void
   finalizeMove: (color: Color) => void,
   double: () => void,
-  toggleActivePlayer: () => void
-  debug: boolean
+  toggleActivePlayer: () => void,
+  debug: {
+    isActive: boolean,
+    components: {
+      player: boolean,
+      die: boolean,
+      cube: boolean,
+      rollSurface: boolean,
+      quadrant: boolean,
+      off: boolean,
+      checkerBoxes: boolean,
+    }
+  }
 }
 
 export const useGame = (): UseGameHookType => {
