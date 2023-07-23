@@ -192,7 +192,7 @@ const initGameState: GameState = {
     isActive: true,
     components: {
       player: false,
-      die: false,
+      die: true,
       cube: false,
       rollSurface: false,
       quadrant: false,
