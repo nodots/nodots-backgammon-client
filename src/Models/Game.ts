@@ -1,4 +1,4 @@
-import { GameError } from '.'
+import { GameError } from './Error'
 import { Point } from './Point'
 import { Checker } from './Checker'
 import { Cube } from './Cube'
@@ -100,4 +100,3 @@ export class Game {
     return points
   }
 }
-

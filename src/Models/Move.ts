@@ -1,8 +1,5 @@
-import { CheckerMoveType, MoveType } from '.'
-import { Board } from './Board'
-import { CheckerBox } from './CheckerBox'
+import { MoveType } from '.'
 import { Player } from './Player'
-
 
 export class Move {
   player: Player
@@ -11,6 +8,6 @@ export class Move {
   constructor (player: Player, move: MoveType) {
     this.player = player
     this.move = move
-
   }
+
 }

@@ -1,14 +1,13 @@
-import { GameError } from '../../Models'
-import { Color, DieValue } from '../../Models'
+import { useGame } from '../../State/Game.State'
+import { GameError, Die as DieModel, DieValue } from '../../Models'
 
 interface DieProps {
-  order: number,
-  color: Color
-  value?: DieValue
+  die: DieModel
 }
 
 const Die = (props: DieProps) => {
-  const value = props.value || 1 as DieValue
+  const { activeColor } = useGame()
+  const value = props.die.value || 1 as DieValue
 
   let valueClass = ''
 
@@ -39,7 +38,14 @@ const Die = (props: DieProps) => {
 
   }
 
-  return <div className={`die ${props.color.toString()} ${valueClass}`} onClick={clickHandler}></div>
+  let classes = `die ${props.die.color.toString()} ${valueClass}`
+  if (props.die.color === activeColor) {
+    return <div className={classes} onClick={clickHandler}></div>
+  } else {
+    return <></>
+  }
+
+
 }
 
 export default Die

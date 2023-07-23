@@ -10,6 +10,7 @@ import { Board } from './Board'
 import { Quadrant } from './Quadrant'
 import { Point } from './Point'
 import { Rail } from './Rail'
+import { RollSurface } from './RollSurface'
 import { Off } from './Off'
 
 export const modelDebug = true
@@ -20,7 +21,6 @@ export type CheckerMoveType = {
   destination: CheckerBox | undefined
   completed: boolean | undefined
 }
-
 export type MoveType = {
   board: Board,
   checker: CheckerMoveType,
@@ -28,8 +28,6 @@ export type MoveType = {
   destination: CheckerBox,
   completed: boolean
 }
-
-
 export type CheckerBoxType = 'point' | 'rail' | 'off'
 export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
 export type Color = 'black' | 'white'
@@ -124,6 +122,7 @@ export {
   Quadrant,
   Point,
   Rail,
+  RollSurface,
   Off,
   generateId
 }

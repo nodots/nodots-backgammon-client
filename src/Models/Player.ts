@@ -31,14 +31,24 @@ export class Player {
 
   move ({ origin, destination, roll }: { origin: CheckerBox; destination: CheckerBox; roll: [DieValue, DieValue] }): { origin: CheckerBox, destination: CheckerBox } {
     if (modelDebug) {
-      console.log(`[PLAYER MODEL] move ${this.color}:`)
-      console.log(`[PLAYER MODEL] active?: ${this.active.toString()}`)
-      console.log(`[PLAYER MODEL] move origin:`, origin)
-      console.log(`[PLAYER MODEL] move destination:`, destination)
-      console.log(`[PLAYER MODEL] move roll:`, roll)
+      console.log(`[Player Model] move ${this.color}:`)
+      console.log(`[Player Model] active?: ${this.active.toString()}`)
+      console.log(`[Player Model] move origin:`, origin)
+      console.log(`[Player Model] move destination:`, destination)
+      console.log(`[Player Model] move roll:`, roll)
     }
+    if (!this.active) {
+      throw new GameError({ model: 'Player', errorMessage: 'It is not your turn!' })
+    }
+
     if (origin.checkers.length === 0) {
       throw new GameError({ model: 'Player', errorMessage: `There are no checkers to move in ${origin.id}` })
+    }
+
+
+
+    if (origin.checkers[0].color !== this.color) {
+      throw new GameError({ model: 'Player', errorMessage: 'That is not your checker' })
     }
 
     if (!this.active) {
@@ -84,9 +94,9 @@ export class Player {
     }
 
     if (modelDebug) {
-      console.log(`[PLAYER MODEL]origin: `)
+      console.log(`[Player Model]origin: `)
       console.log(origin)
-      console.log(`[PLAYER MODEL]destination: `)
+      console.log(`[Player Model]destination: `)
       console.log(destination)
     }
 

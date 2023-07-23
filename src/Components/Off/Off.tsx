@@ -7,7 +7,6 @@ interface OffProps {
   cube: CubeModel
 }
 
-
 const Off = (props: OffProps) => {
   return <>
     <CheckerBox checkerBox={props.off.checkerBoxes.black} />

@@ -1,9 +1,9 @@
-import { GameError } from '../../Models'
-import { useGame } from '../../State/Game.State'
 import {
+  GameError,
   CheckerBox as CheckerBoxModel,
   Checker as CheckerModel,
 } from '../../Models'
+import { useGame } from '../../State/Game.State'
 import Checker from '../Checker/Checker'
 
 interface CheckerBoxProps {
@@ -14,9 +14,9 @@ const CheckerBox = (props: CheckerBoxProps) => {
   const { board, players, debug, move } = useGame()
   const checkerBoxState = board.getCheckerBoxes().find(cb => cb.id === props.checkerBox.id)
   if (debug) {
-    console.log(`[CHECKERBOX COMPONENT] checkerBoxState:`)
+    console.log(`[CheckerBox Component] checkerBoxState:`)
     console.log(checkerBoxState)
-    console.log(`[CHECKERBOX COMPONENT] players:`)
+    console.log(`[CheckerBox Component] players:`)
     console.log(`white active?: ${players.white.active.toString()}`)
     console.log(`black active?: ${players.black.active.toString()}`)
   }

@@ -1,6 +1,6 @@
 import { reducer } from './Game.reducer'
 import { ReactElement, createContext, useCallback, useContext, useReducer } from 'react'
-import { Game, Board, Player, Die, Point, Rail, Off, Cube, CheckerBox, Color } from '../Models'
+import { Game, Board, Player, Die, Point, Rail, Off, Cube, CheckerBox, Color, RollSurface } from '../Models'
 
 export type GameState = {
   board: Board,
@@ -12,6 +12,10 @@ export type GameState = {
     white: [Die, Die],
     black: [Die, Die]
   },
+  rollSurfaces: {
+    white: RollSurface,
+    black: RollSurface
+  }
   cube: Cube,
   activeMove: {
     color: Color | undefined
@@ -60,9 +64,15 @@ const initGameState: GameState = {
   players: initPlayers,
   cube: game.cube,
   dice: {
+    black: [initPlayers.black.dice[0], initPlayers.black.dice[1]],
     white: [initPlayers.white.dice[0], initPlayers.white.dice[1]],
-    black: [initPlayers.black.dice[0], initPlayers.black.dice[1]]
+
   },
+  rollSurfaces: {
+    black: game.board.rollSurfaces.black,
+    white: game.board.rollSurfaces.white,
+  },
+
   activeMove: {
     color: undefined,
     checkers: [
@@ -152,6 +162,10 @@ type UseGameHookType = {
     white: [Die, Die],
     black: [Die, Die]
   },
+  rollSurfaces: {
+    white: RollSurface,
+    black: RollSurface,
+  }
   cube: Cube,
   activeMove: {
     color: Color | undefined
@@ -178,7 +192,7 @@ type UseGameHookType = {
 }
 
 export const useGame = (): UseGameHookType => {
-  const { state: { board, players, cube, dice, activeMove, activeColor, debug }, roll, move, finalizeMove, double, toggleActivePlayer } = useContext(GameContext)
-  return { board, players, cube, dice, activeMove, activeColor, roll, move, finalizeMove, toggleActivePlayer, double, debug }
+  const { state: { board, players, cube, dice, activeMove, activeColor, rollSurfaces, debug }, roll, move, finalizeMove, double, toggleActivePlayer } = useContext(GameContext)
+  return { board, players, cube, dice, activeMove, activeColor, rollSurfaces, roll, move, finalizeMove, toggleActivePlayer, double, debug }
 }
 

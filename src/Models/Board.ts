@@ -5,21 +5,30 @@ import { Quadrant } from './Quadrant'
 import { Checker } from './Checker'
 import { Rail } from './Rail'
 import { Off } from './Off'
+import { RollSurface } from './RollSurface'
 
 export class Board {
   id: string
   quadrants: Quadrant[]
+  rollSurfaces: {
+    white: RollSurface,
+    black: RollSurface
+  }
   points: Point[]
   rail: Rail
   off: Off
 
-  initialize?: () => Board
-
-  private constructor ({ quadrants, rail, off }: { quadrants: Quadrant[]; rail: Rail; off: Off }) {
+  private constructor (
+    { quadrants, rail, off, rollSurfaces }:
+      { quadrants: Quadrant[]; rail: Rail; off: Off, rollSurfaces: { white: RollSurface, black: RollSurface } }) {
     this.id = generateId()
     this.quadrants = quadrants
     this.rail = rail
     this.off = off
+    this.rollSurfaces = {
+      white: rollSurfaces.white,
+      black: rollSurfaces.black
+    }
 
     this.points = [
       ...this.quadrants[0].points,
@@ -81,6 +90,8 @@ export class Board {
     const quadrants = Quadrant.initialize(setup)
     const rail = Rail.initialize(setup)
     const off = Off.initialize(setup)
-    return new Board({ quadrants, rail, off })
+    const rollSurfaces = { black: new RollSurface('black'), white: new RollSurface('white') }
+
+    return new Board({ quadrants, rail, off, rollSurfaces })
   }
 }

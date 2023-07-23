@@ -1,22 +1,26 @@
 import { useGame } from '../../State/Game.State'
 import { useEffect, useState } from 'react'
-import { Player } from '../../Models'
+import { Die as DieModel, RollSurface as RollSurfaceModel, Player } from '../../Models'
 import Die from '../Die/Die'
 
+// TODO: RollSurface Component has no corresponding Model. Is that indicative of a problem?
 interface RollSurfaceProps {
-  player: Player
+  rollSurface: RollSurfaceModel
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
-  const { dice, players, activeColor, activeMove, debug, roll, finalizeMove } = useGame()
+  console.log('RollSurface props', props)
+  const { players, activeColor, activeMove, debug, rollSurfaces, roll, finalizeMove } = useGame()
+  const rollSurfaceState = rollSurfaces[props.rollSurface.color]
   const [isRollForStart, setIsRollForStart] = useState<boolean>(false)
-  console.log(activeColor)
-  console.log(players.black.active)
-  console.log(players.white.active)
+  const dice: React.JSX.Element[] = []
 
-  const player = players[props.player.color]
-  console.log(`[ROLL_SURFACE COMPONENT] dice:[${props.player.color}]`, dice[props.player.color])
+  if (debug) {
+    console.log('[RollSurface Component] activeColor:', activeColor)
+    console.log('[RollSurface Component] players.black.active:', players.black.active)
+    console.log('[RollSurface Component] players.white.active:', players.white.active)
 
+  }
 
   // FIXME: This is a mess . . .
   useEffect(() => {
@@ -29,8 +33,8 @@ const RollSurface = (props: RollSurfaceProps) => {
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     if (debug) {
-      console.log(`[ROLL_SURFACE COMPONENT] clickHandler activeMove:`)
-      console.log('[ROLL_SURFACE COMPONENT]', activeMove)
+      console.log(`[RollSurface Component] clickHandler activeMove:`)
+      console.log('[RollSurface Component]', activeMove)
 
     }
     if (activeMove && activeMove.checkers[0].origin && activeMove.checkers[0].destination && activeMove.checkers[0].origin && activeMove.checkers[1].destination) {
@@ -39,21 +43,13 @@ const RollSurface = (props: RollSurfaceProps) => {
       roll(activeColor)
     }
   }
-  // TODO: Eventually animate rollForStart process
-  if (debug) {
-    console.log(`${props.player.color}.active? = ${players[props.player.color].active.toString()}`)
-  }
-  return <div className='roll-surface' onClick={clickHandler} >
-    {player.active && player.dice && props.player.color === activeColor &&
-      <>
-        <Die color={props.player.color} order={1} value={players[props.player.color].dice[0].value} />
-        <Die color={props.player.color} order={2} value={players[props.player.color].dice[1].value} />
-      </>
-    }
-    {
-      isRollForStart && player.dice &&
-      <Die color={props.player.color} order={1} />
-    }
+
+  rollSurfaceState.dice.forEach((d: DieModel) => {
+    dice.push(<Die die={d} />)
+  })
+
+  return <div className='roll-surface' onClick={clickHandler}>
+    {dice}
   </div >
 }
 
