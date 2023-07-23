@@ -1,10 +1,11 @@
-import { Off as OffModel, Cube as CubeModel } from '../../Models'
+import { OffState, CubeState } from '../../State/Game.State'
+// import { Off as OffModel, Cube as CubeModel } from '../../Models'
 import Cube from '../Cube/Cube'
 import CheckerBox from '../CheckerBox/CheckerBox'
 
 interface OffProps {
-  off: OffModel
-  cube: CubeModel
+  off: OffState
+  cube: CubeState
 }
 
 const Off = (props: OffProps) => {

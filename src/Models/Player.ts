@@ -8,7 +8,6 @@ export class Player {
   moveDirection: MoveDirection
   nickName?: string
   checkers?: Checker[] = []
-  dice: Die[]
   active: boolean = false
 
   constructor ({ firstName, lastName, color, nickName, checkers, dice }: { firstName: string; lastName: string; color: Color; nickName?: string | undefined; checkers?: Checker[]; dice?: Die[] }) {
@@ -16,17 +15,13 @@ export class Player {
     this.firstName = firstName
     this.lastName = lastName
     this.color = color
-    this.dice = [new Die({ color, order: 1 }), new Die({ color, order: 2 })]
     this.nickName = nickName || firstName
     this.checkers = checkers || []
     this.moveDirection = color === 'white' ? 'clockwise' : 'counterclockwise'
   }
 
-  roll (): [DieValue, DieValue] {
-    if (!this.dice || this.dice.length !== 2) {
-      throw new GameError({ model: 'Player', errorMessage: 'No dice to roll' })
-    }
-    return [this.dice[0].roll() as DieValue, this.dice[1].roll() as DieValue]
+  static roll (): [DieValue, DieValue] {
+    return [Die.roll() as DieValue, Die.roll() as DieValue]
   }
 
   move ({ origin, destination, roll }: { origin: CheckerBox; destination: CheckerBox; roll: [DieValue, DieValue] }): { origin: CheckerBox, destination: CheckerBox } {
@@ -117,10 +112,7 @@ export class Player {
   }
 
   rollForStart (): DieValue {
-    if (!this.dice || this.dice.length !== 2) {
-      throw new GameError({ model: 'Player', errorMessage: `${this.color.toString()} has no dice` })
-    }
-    return this.dice[0].roll()
+    return Die.roll()
 
   }
 }

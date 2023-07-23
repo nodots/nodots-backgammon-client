@@ -70,8 +70,8 @@ export class Game {
   }
 
   static rollForStart ({ black, white }: { black: Player; white: Player }): Color {
-    const blackRollResult = black.roll()
-    const whiteRollResult = white.roll()
+    const blackRollResult = Player.roll()
+    const whiteRollResult = Player.roll()
     // can't tie when you roll for start
     if (blackRollResult === whiteRollResult) {
       this.rollForStart({ black, white })

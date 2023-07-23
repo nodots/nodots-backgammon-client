@@ -1,25 +1,34 @@
 import { produce } from 'immer'
-import { CheckerBox, GameError, MoveType } from '../Models'
+import { CheckerBox, Cube, Die, CubeValue, GameError, MAX_CUBE_VALUE, MoveType, Color } from '../Models'
 import { GameState, GameAction, GAME_ACTION_TYPE } from './Game.State'
 export const reducer = (state: GameState, action: GameAction): GameState => {
   const { type, payload } = action
-  let newState: GameState
+  let newState: GameState | undefined
 
   switch (type) {
     case GAME_ACTION_TYPE.ROLL:
+      newState = undefined
       if (state.debug) {
-        console.log('[GAME REDUCER] ROLL')
+        console.log('[Game Reducer] ROLL')
       }
       if (!state.activeColor) {
         throw new GameError({ model: 'Game', errorMessage: 'fooobar' })
       }
-      return state
+      newState = produce(state, draft => {
+        const payloadColor = payload.color as Color
+        console.log(`[Game Reducer] ROLL state.dice[${payloadColor}, ${payload.order}]:`, state.dice[payloadColor][payload.order])
+        draft.dice[payloadColor][payload.order].value = Die.roll()
+      })
+      console.log('[Game Reducer] newState dice', newState.dice)
+      return newState
     case GAME_ACTION_TYPE.TOGGLE:
-      console.log(`[GAME REDUCER] TOGGLE ${new Date().toTimeString()}:`)
-      console.error('[GAME REDUCER] TOGGLE not yet implemented')
+      newState = undefined
+      console.log(`[Game Reducer] TOGGLE ${new Date().toTimeString()}:`)
+      console.error('[Game Reducer] TOGGLE not yet implemented')
       return state
     // MOVE needs to be refactored, likely to it's own state/reducer
     case GAME_ACTION_TYPE.MOVE:
+      newState = undefined
       const activePlayer = state.players[state.activeColor]
 
       if (!activePlayer) {
@@ -28,7 +37,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
 
       if (!state.activeMove.checkers[0].origin) {
         if (state.debug) {
-          console.log('[GAME REDUCER] Setting checkers[0] origin')
+          console.log('[Game Reducer] Setting checkers[0] origin')
         }
 
         newState = produce(state, draft => {
@@ -41,7 +50,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
         !state.activeMove.checkers[0].destination
       ) {
         if (state.debug) {
-          console.log('[GAME REDUCER] Setting checkers[0] destination')
+          console.log('[Game Reducer] Setting checkers[0] destination')
         }
         newState = produce(state, draft => {
           draft.activeMove.checkers[0].destination = payload
@@ -50,7 +59,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
           let moveResults: { origin: CheckerBox, destination: CheckerBox } | undefined = undefined
           try {
             moveResults = activePlayer.move({ origin, destination, roll: [1, 1] })
-            console.log(`[GAME REDUCER] moveResults:`, moveResults)
+            console.log(`[Game Reducer] moveResults:`, moveResults)
 
           } catch (e: any) {
             return alert(`${e.message}: YOU WILL SEE THIS MESSAGE TWICE IN DEV MODE`)
@@ -59,7 +68,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
             throw new GameError({ model: 'Move', errorMessage: 'No moveResults' })
           }
           if (state.debug) {
-            console.log(`[GAME REDUCER] moveResults: `)
+            console.log(`[Game Reducer] moveResults: `)
             console.log(moveResults)
           }
 
@@ -82,7 +91,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
         return newState
       } else if (!state.activeMove.checkers[1].origin) {
         if (state.debug) {
-          console.log('[GAME REDUCER] Setting checkers[1] origin')
+          console.log('[Game Reducer] Setting checkers[1] origin')
         }
         newState = produce(state, draft => {
           draft.activeMove.color = state.activeColor
@@ -92,7 +101,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
         return newState
       } else if (state.activeMove.checkers[1].origin && !state.activeMove.checkers[1].destination) {
         if (state.debug) {
-          console.log('[GAME REDUCER] Setting checkers[1] destination')
+          console.log('[Game Reducer] Setting checkers[1] destination')
         }
         newState = produce(state, draft => {
           draft.activeMove.checkers[1].destination = payload
@@ -102,7 +111,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
           try {
             moveResults = activePlayer.move({ origin, destination, roll: [1, 1] })
             if (state.debug) {
-              console.log(`[GAME REDUCER] moveResults:`, moveResults)
+              console.log(`[Game Reducer] moveResults:`, moveResults)
             }
           } catch (e: any) {
             return alert(`${e.message}: YOU WILL SEE THIS MESSAGE TWICE IN DEV MODE`)
@@ -111,7 +120,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
             throw new GameError({ model: 'Move', errorMessage: 'No moveResults' })
           }
           if (state.debug) {
-            console.log('[GAME REDUCER] moveResults:', moveResults)
+            console.log('[Game Reducer] moveResults:', moveResults)
           }
 
           const movePayload: MoveType = {
@@ -135,7 +144,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
       return state
     case GAME_ACTION_TYPE.FINALIZE_MOVE:
       if (state.debug) {
-        console.log('[GAME REDUCER] FINALIZE_MOVE')
+        console.log('[Game Reducer] FINALIZE_MOVE')
       }
       newState = produce(state, draft => {
         if (state.activeColor === 'black') {
@@ -154,20 +163,17 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
 
       })
       if (state.debug) {
-        console.log('[GAME REDUCER] FINALIZE_MOVE newState:', newState)
+        console.log('[Game Reducer] FINALIZE_MOVE newState:', newState)
       }
 
       return newState
     case GAME_ACTION_TYPE.DOUBLE:
-      if (state.debug) {
-        console.log('[GAME REDUCER] DOUBLE')
-      }
+      newState = undefined
       newState = produce(state, draft => {
-        draft.cube.value = state.cube.double()
+        console.log(`[Game Reducer] DOUBLE state:`, state.cube)
+        console.log(`[Game Reducer] DOUBLE draft:`, draft.cube)
+        draft.cube.value = Cube.double(state.cube.value)
       })
-      if (state.debug) {
-        console.log('[GAME REDUCER] DOUBLE newState.cube', newState.cube)
-      }
       return newState
     default:
       throw new GameError({ model: 'Game', errorMessage: `Unkown action type ${type}` })
@@ -198,11 +204,11 @@ const moveChecker = (move: MoveType, debug?: boolean) => {
   const destinationPointIndex = destinationQuadrant.points.findIndex(p => p.id === destinationPoint.id)
 
   if (debug) {
-    console.log('[GAME REDUCER] MOVE RESULTS:')
-    console.log(`[GAME REDUCER] originQuadrantIndex = ${originQuadrantIndex}`)
-    console.log(`[GAME REDUCER] originPointIndex = ${originPointIndex}`)
-    console.log(`[GAME REDUCER] destinationQuadrantIndex = ${destinationQuadrantIndex}`)
-    console.log(`[GAME REDUCER] destinationPointIndex = ${destinationPointIndex}`)
+    console.log('[Game Reducer] MOVE RESULTS:')
+    console.log(`[Game Reducer] originQuadrantIndex = ${originQuadrantIndex}`)
+    console.log(`[Game Reducer] originPointIndex = ${originPointIndex}`)
+    console.log(`[Game Reducer] destinationQuadrantIndex = ${destinationQuadrantIndex}`)
+    console.log(`[Game Reducer] destinationPointIndex = ${destinationPointIndex}`)
   }
   return { originQuadrantIndex, originPointIndex, destinationQuadrantIndex, destinationPointIndex }
 }

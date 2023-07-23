@@ -1,4 +1,4 @@
-import { Color, CubeValue, generateId, MAX_CUBE_VALUE } from '.'
+import { Color, CubeValue, generateId, modelDebug, MAX_CUBE_VALUE } from '.'
 
 /**
  * The Cube is the large die and used to double the current point-value of the game 
@@ -18,10 +18,17 @@ export class Cube {
     this.controllingColor = controllingColor ? controllingColor : undefined
   }
 
-  double (): CubeValue {
-    if (this.value === MAX_CUBE_VALUE) {
-      return this.value
+  static double (currentValue: CubeValue): CubeValue {
+    if (modelDebug) {
+      console.log(`[Cube Model]: double(${currentValue})`)
     }
-    return this.value * 2 as CubeValue
+    if (currentValue === MAX_CUBE_VALUE) {
+      return currentValue
+    }
+    const newValue = currentValue * 2 as CubeValue
+    if (modelDebug) {
+      console.log(`[Cube Model] double: newValue = ${newValue}`)
+    }
+    return newValue
   }
 }

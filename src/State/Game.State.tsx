@@ -1,6 +1,40 @@
 import { reducer } from './Game.reducer'
 import { ReactElement, createContext, useCallback, useContext, useReducer } from 'react'
-import { Game, Board, Player, Die, Point, Rail, Off, Cube, CheckerBox, Color, RollSurface } from '../Models'
+import { DieValue, Game, Board, Player, Die, Point, Rail, Off, Cube, CheckerBox, Color, RollSurface, CubeValue } from '../Models'
+
+export type RollSurfaceState = {
+  id: string,
+  color: Color,
+  dice: [DieState, DieState]
+}
+
+export type DieState = {
+  id: string,
+  order: 0 | 1
+  color: Color
+  value: DieValue
+  rollDie: () => any
+}
+
+export type RailState = {
+  id: string
+  checkerBoxes: {
+    black: CheckerBox,
+    white: CheckerBox
+  }
+}
+
+export type CubeState = {
+  value: CubeValue,
+  controllingColor: Color | undefined
+}
+
+export type OffState = {
+  checkerBoxes: {
+    black: CheckerBox,
+    white: CheckerBox
+  }
+}
 
 export type GameState = {
   board: Board,
@@ -9,14 +43,14 @@ export type GameState = {
     black: Player
   },
   dice: {
-    white: [Die, Die],
-    black: [Die, Die]
+    white: [DieState, DieState],
+    black: [DieState, DieState]
   },
   rollSurfaces: {
-    white: RollSurface,
-    black: RollSurface
-  }
-  cube: Cube,
+    white: RollSurfaceState,
+    black: RollSurfaceState
+  },
+  cube: CubeState,
   activeMove: {
     color: Color | undefined
     checkers: [
@@ -34,7 +68,7 @@ export type GameState = {
   },
   activeColor: Color,
   rename: (name: string) => any,
-  roll: (color: Color) => any,
+  roll: (color: Color, order: 0 | 1) => DieValue | undefined,
   move: (action: GameAction) => any,
   finalizeMove: (color: Color) => any,
   resetMove: (color: Color) => any,
@@ -62,15 +96,62 @@ const initPlayers = {
 const initGameState: GameState = {
   board: game.board,
   players: initPlayers,
-  cube: game.cube,
+  cube: {
+    value: 2,
+    controllingColor: undefined
+  },
   dice: {
-    black: [initPlayers.black.dice[0], initPlayers.black.dice[1]],
-    white: [initPlayers.white.dice[0], initPlayers.white.dice[1]],
-
+    black: [
+      new Die({ color: 'black', order: 0 }) as DieState,
+      new Die({ color: 'black', order: 1 }) as DieState,
+    ],
+    white: [
+      new Die({ color: 'white', order: 0 }) as DieState,
+      new Die({ color: 'white', order: 1 }) as DieState,
+    ]
   },
   rollSurfaces: {
-    black: game.board.rollSurfaces.black,
-    white: game.board.rollSurfaces.white,
+    black: {
+      id: game.board.rollSurfaces.black.id,
+      color: game.board.rollSurfaces.black.color,
+      dice: [
+        {
+          id: game.board.rollSurfaces.black.dice[0].id,
+          order: game.board.rollSurfaces.black.dice[0].order,
+          color: 'black',
+          value: game.board.rollSurfaces.black.dice[0].value as DieValue,
+          rollDie () { },
+        },
+        {
+          id: game.board.rollSurfaces.black.dice[1].id,
+          order: game.board.rollSurfaces.black.dice[1].order,
+          color: 'black',
+          value: game.board.rollSurfaces.black.dice[1].value as DieValue,
+          rollDie () { }
+
+        }
+      ]
+    },
+    white: {
+      id: game.board.rollSurfaces.white.id,
+      color: game.board.rollSurfaces.white.color,
+      dice: [
+        {
+          id: game.board.rollSurfaces.white.dice[0].id,
+          order: game.board.rollSurfaces.white.dice[0].order,
+          color: 'white',
+          value: game.board.rollSurfaces.white.dice[0].value as DieValue | 1,
+          rollDie: () => { }
+        },
+        {
+          id: game.board.rollSurfaces.white.dice[1].id,
+          order: game.board.rollSurfaces.white.dice[1].order,
+          color: 'white',
+          value: game.board.rollSurfaces.white.dice[1].value as DieValue | 1,
+          rollDie () { }
+        }
+      ]
+    },
   },
 
   activeMove: {
@@ -90,7 +171,7 @@ const initGameState: GameState = {
   },
   activeColor: winner,
   rename: (name: string) => { },
-  roll: (color: Color) => { },
+  roll: (color: Color, order: 0 | 1) => undefined,
   move: (action: GameAction) => { },
   finalizeMove: (color: Color) => { },
   resetMove: (color: Color) => { },
@@ -119,7 +200,7 @@ export type GameAction = {
 const useGameContext = (initialState: GameState) => {
   const [state, dispatch] = useReducer(reducer, initGameState)
 
-  const roll = useCallback((color: Color) => dispatch({ type: GAME_ACTION_TYPE.ROLL, payload: color }), [])
+  const roll = useCallback((color: Color, order: 0 | 1) => dispatch({ type: GAME_ACTION_TYPE.ROLL, payload: { color, order } }), [])
   const move = useCallback((checkerBox: CheckerBox) => dispatch({ type: GAME_ACTION_TYPE.MOVE, payload: checkerBox }), [])
   const finalizeMove = useCallback((color: Color) => dispatch({ type: GAME_ACTION_TYPE.FINALIZE_MOVE, payload: color }), [])
   const toggleActivePlayer = useCallback(() => dispatch({ type: GAME_ACTION_TYPE.TOGGLE }), [])
@@ -159,14 +240,14 @@ type UseGameHookType = {
     black: Player,
   },
   dice: {
-    white: [Die, Die],
-    black: [Die, Die]
+    white: [DieState, DieState],
+    black: [DieState, DieState]
   },
   rollSurfaces: {
-    white: RollSurface,
-    black: RollSurface,
+    white: RollSurfaceState,
+    black: RollSurfaceState,
   }
-  cube: Cube,
+  cube: CubeState,
   activeMove: {
     color: Color | undefined
     checkers: [
@@ -183,7 +264,7 @@ type UseGameHookType = {
     ]
   },
   activeColor: Color,
-  roll: (color: Color) => void,
+  roll: (color: Color, order: 0 | 1) => void,
   move: (checkerBox: CheckerBox, container: Point | Rail | Off) => void
   finalizeMove: (color: Color) => void,
   double: () => void,

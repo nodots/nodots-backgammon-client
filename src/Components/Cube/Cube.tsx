@@ -1,15 +1,20 @@
-import { useGame } from '../../State/Game.State'
-import { Cube as CubeModel } from '../../Models'
+import { useGame, CubeState } from '../../State/Game.State'
 
 interface CubeProps {
-  cube: CubeModel
+  cube: CubeState
 }
 
 const Cube = (props: CubeProps) => {
-  const { cube, double } = useGame()
+  const { cube, double, debug } = useGame()
 
   const clickHandler = (e: React.MouseEvent) => {
-    return double()
+    if (debug) {
+      console.log(`[Cube Component] calling double. ${cube.value}`)
+    }
+    double()
+    if (debug) {
+      console.log(`[Cube Component] back from double. ${cube.value}`)
+    }
   }
 
   return <div className='cube' onClick={clickHandler}>{cube.value}</div>
