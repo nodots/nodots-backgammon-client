@@ -16,7 +16,7 @@ export class Player {
     this.firstName = firstName
     this.lastName = lastName
     this.color = color
-    this.dice = [new Die({ color }), new Die({ color })]
+    this.dice = [new Die({ color, order: 1 }), new Die({ color, order: 2 })]
     this.nickName = nickName || firstName
     this.checkers = checkers || []
     this.moveDirection = color === 'white' ? 'clockwise' : 'counterclockwise'

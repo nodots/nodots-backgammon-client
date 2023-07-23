@@ -6,7 +6,9 @@ interface DieProps {
 }
 
 const Die = (props: DieProps) => {
-  const { activeColor } = useGame()
+  const { activeColor, dice } = useGame()
+  const dieState = dice[props.die.color]
+  console.log(dieState)
   const value = props.die.value || 1 as DieValue
 
   let valueClass = ''
