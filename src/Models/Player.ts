@@ -20,11 +20,11 @@ export class Player {
     this.moveDirection = color === 'white' ? 'clockwise' : 'counterclockwise'
   }
 
-  static roll (): [DieValue, DieValue] {
+  static roll (): DieValue[] {
     return [Die.roll() as DieValue, Die.roll() as DieValue]
   }
 
-  move ({ origin, destination, roll }: { origin: CheckerBox; destination: CheckerBox; roll: [DieValue, DieValue] }): { origin: CheckerBox, destination: CheckerBox } {
+  move ({ origin, destination, roll }: { origin: CheckerBox; destination: CheckerBox; roll: DieValue[] }): { origin: CheckerBox, destination: CheckerBox } {
     if (modelDebug) {
       console.log(`[Player Model] move ${this.color}:`)
       console.log(`[Player Model] active?: ${this.active.toString()}`)

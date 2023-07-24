@@ -9,7 +9,7 @@ interface DieProps {
 const Die = forwardRef((props: DieProps, ref) => {
   const { activeColor, dice, roll, debug } = useGame()
   const dieState = dice[props.die.color][props.die.order]
-  const [dieValue, setDieValue] = useState<DieValue>(dieState.value)
+  const [dieValue, setDieValue] = useState<DieValue | undefined>(dieState.value)
   const [valueClass, setValueClass] = useState<string>('one')
 
   useImperativeHandle(ref, () => ({

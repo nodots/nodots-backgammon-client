@@ -33,7 +33,7 @@ export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
 export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
-export type RollResults = [DieValue, DieValue]
+export type RollResults = DieValue[]
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 
 export interface GameMove {

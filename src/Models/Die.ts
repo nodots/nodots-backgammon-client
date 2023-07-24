@@ -4,13 +4,13 @@ export class Die {
   id: string
   order: 0 | 1
   color: Color
-  value: DieValue
+  value: DieValue | undefined
 
   constructor ({ color, currentValue, order }: { color: Color; currentValue?: DieValue, order: 0 | 1 }) {
     this.id = generateId()
     this.color = color
     this.order = order
-    this.value = currentValue || 1
+    this.value = currentValue
   }
 
   static roll (): DieValue {

@@ -22,7 +22,7 @@ export type DieState = {
   id: string,
   order: 0 | 1
   color: Color
-  value: DieValue
+  value: DieValue | undefined
   rollDie: () => any
 }
 
@@ -140,14 +140,14 @@ const initGameState: GameState = {
           id: game.board.rollSurfaces.black.dice[0].id,
           order: game.board.rollSurfaces.black.dice[0].order,
           color: 'black',
-          value: game.board.rollSurfaces.black.dice[0].value as DieValue,
+          value: undefined,
           rollDie () { },
         },
         {
           id: game.board.rollSurfaces.black.dice[1].id,
           order: game.board.rollSurfaces.black.dice[1].order,
           color: 'black',
-          value: game.board.rollSurfaces.black.dice[1].value as DieValue,
+          value: undefined,
           rollDie () { }
 
         }
@@ -161,14 +161,14 @@ const initGameState: GameState = {
           id: game.board.rollSurfaces.white.dice[0].id,
           order: game.board.rollSurfaces.white.dice[0].order,
           color: 'white',
-          value: game.board.rollSurfaces.white.dice[0].value as DieValue | 1,
+          value: undefined,
           rollDie: () => { }
         },
         {
           id: game.board.rollSurfaces.white.dice[1].id,
           order: game.board.rollSurfaces.white.dice[1].order,
           color: 'white',
-          value: game.board.rollSurfaces.white.dice[1].value as DieValue | 1,
+          value: undefined,
           rollDie () { }
         }
       ]

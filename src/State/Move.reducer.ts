@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { GameError, CheckerBox, MoveType } from '../Models'
+import { GameError, CheckerBox, MoveType, DieValue } from '../Models'
 import { GameState, GameAction } from './Game.State'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
@@ -10,6 +10,16 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
   if (!activePlayer) {
     throw new GameError({ model: 'Game', errorMessage: 'No activePlayer' })
   }
+  if (!state.dice[state.activeColor][0].value || !state.dice[state.activeColor][1].value) {
+    // throw new GameError({ model: 'Move', errorMessage: 'NO_DICE' })
+    alert('Need to roll your dice: YOU WILL SEE THIS MESSAGE TWICE IN DEV')
+    return state
+  }
+
+  const diceRoll: DieValue[] = [
+    state.dice[state.activeColor][0].value as DieValue,
+    state.dice[state.activeColor][1].value as DieValue
+  ]
 
   if (!state.activeMove.checkers[0].origin) {
     if (state.debug.isActive) {
@@ -35,11 +45,16 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
       let moveResults: { origin: CheckerBox, destination: CheckerBox } | undefined = undefined
       try {
         console.log(`[Game Reducer] STATE state.dice[state.activeColor]: ${state.dice[state.activeColor]}`)
-        moveResults = activePlayer.move({ origin, destination, roll: [state.dice[state.activeColor][0].value, state.dice[state.activeColor][1].value] })
+        moveResults = activePlayer.move({ origin, destination, roll: diceRoll })
         console.log(`[Game Reducer] moveResults:`, moveResults)
 
       } catch (e: any) {
-        return alert(`${e.message}: YOU WILL SEE THIS MESSAGE TWICE IN DEV MODE`)
+        alert(`${e.message}: YOU WILL SEE THIS MESSAGE TWICE IN DEV MODE`)
+        newState = produce(state, draft => {
+          draft.activeMove.checkers[0].origin = undefined
+          draft.activeMove.checkers[0].destination = undefined
+        })
+        return newState
       }
       if (!moveResults) {
         throw new GameError({ model: 'Move', errorMessage: 'No moveResults' })
@@ -86,7 +101,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
       const destination = payload
       let moveResults: { origin: CheckerBox, destination: CheckerBox } | undefined = undefined
       try {
-        moveResults = activePlayer.move({ origin, destination, roll: [1, 1] })
+        moveResults = activePlayer.move({ origin, destination, roll: diceRoll })
         if (state.debug.isActive) {
           console.log(`[Game Reducer] moveResults:`, moveResults)
         }

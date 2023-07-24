@@ -23,6 +23,8 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
     draft.activeMove.checkers[0].destination = undefined
     draft.activeMove.checkers[1].origin = undefined
     draft.activeMove.checkers[1].destination = undefined
+    draft.dice[state.activeColor][0].value = undefined
+
 
   })
   if (state.debug.isActive) {
