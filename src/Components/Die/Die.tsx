@@ -1,6 +1,6 @@
 import { forwardRef, useState, useImperativeHandle } from 'react'
-import { useGame, DieState } from '../../State/Game.State'
-import { GameError, DieValue } from '../../Models'
+import { useGame, DieState, DieRollPayload, GAME_ACTION_TYPE, GameAction } from '../../State/Game.State'
+import { GameError, DieValue, Die as DieModel } from '../../Models'
 
 interface DieProps {
   die: DieState
@@ -13,16 +13,25 @@ const Die = forwardRef((props: DieProps, ref) => {
   const [valueClass, setValueClass] = useState<string>('one')
 
   useImperativeHandle(ref, () => ({
-    rollDie () {
+    rollDie (): DieValue {
       if (debug) {
         console.log(`[Die Component]: rollDie()`)
       }
-      roll(props.die.color, props.die.order)
       if (debug) {
         console.log('[Die Component] dieState.value:', dieState.value)
       }
-      setDieValue(dieState.value)
-      switch (dieState.value) {
+
+      const newValue = DieModel.roll()
+      setDieValue(newValue)
+
+      const dieRollAction: GameAction = {
+        type: GAME_ACTION_TYPE.ROLL,
+        payload: { color: props.die.color, order: props.die.order, value: newValue }
+      }
+
+      roll(dieRollAction)
+
+      switch (newValue) {
         case 1:
           setValueClass('one')
           break
@@ -44,6 +53,8 @@ const Die = forwardRef((props: DieProps, ref) => {
         default:
           throw new GameError({ model: 'Die', errorMessage: `Invalid pips for die ${dieValue}` })
       }
+
+      return newValue
     }
 
   }))

@@ -1,26 +1,23 @@
 import { produce } from 'immer'
-import { GameError, Color, Die } from '../Models'
-import { GameState, GameAction } from './Game.State'
+import { GameError, Color, Die, DieValue, } from '../Models'
+import { GameState, GameAction, DieOrder } from './Game.State'
+
+type DieRollAction = {
+  color: Color,
+  order: DieOrder,
+  value: DieValue
+}
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
-  const { payload } = action
-  let newState: GameState = state
+  let newState = state
 
-  if (state.debug.isActive && state.debug.components.die) {
-    console.log('[Roll Reducer] ROLL')
-  }
-  if (!state.activeColor) {
-    throw new GameError({ model: 'Game', errorMessage: 'fooobar' })
-  }
+  // FIXME
+  const rollAction = action.payload.payload as unknown as DieRollAction
+  console.log(rollAction)
+
   newState = produce(state, draft => {
-    const payloadColor = payload.color as Color
-    if (state.debug.isActive && state.debug.components.die) {
-      console.log(`[Game Reducer] ROLL state.dice[${payloadColor}, ${payload.order}]:`, state.dice[payloadColor][payload.order])
-    }
-    draft.dice[payloadColor][payload.order].value = Die.roll()
+    draft.dice[rollAction.color][rollAction.order].value = rollAction.value
   })
-  if (state.debug.isActive && state.debug.components.die) {
-    console.log('[Game Reducer] newState dice', newState.dice)
-  }
+  console.log(newState.dice[state.activeColor][rollAction.order])
   return newState
 }

@@ -2,6 +2,16 @@ import { reducer } from './Game.reducer'
 import { ReactElement, createContext, useCallback, useContext, useReducer } from 'react'
 import { DieValue, Game, Board, Player, Die, Point, Rail, Off, CheckerBox, Color, CubeValue } from '../Models'
 
+export type DieOrder = 0 | 1
+
+export type DieRollPayload = {
+  color: Color,
+  order: DieOrder
+  value: DieValue
+}
+
+export type DiceRollPayload = [DieRollPayload, DieRollPayload]
+
 export type RollSurfaceState = {
   id: string,
   color: Color,
@@ -68,7 +78,7 @@ export type GameState = {
   },
   activeColor: Color,
   rename: (name: string) => any,
-  roll: (color: Color, order: 0 | 1) => DieValue | undefined,
+  roll: (action: GameAction) => any,
   move: (action: GameAction) => any,
   finalizeMove: (color: Color) => any,
   resetMove: (color: Color) => any,
@@ -182,7 +192,7 @@ const initGameState: GameState = {
   },
   activeColor: winner,
   rename: (name: string) => { },
-  roll: (color: Color, order: 0 | 1) => undefined,
+  roll: (action: GameAction) => undefined,
   move: (action: GameAction) => { },
   finalizeMove: (color: Color) => { },
   resetMove: (color: Color) => { },
@@ -219,10 +229,11 @@ export type GameAction = {
   payload?: any
 }
 
+
 const useGameContext = (initialState: GameState) => {
   const [state, dispatch] = useReducer(reducer, initGameState)
 
-  const roll = useCallback((color: Color, order: 0 | 1) => dispatch({ type: GAME_ACTION_TYPE.ROLL, payload: { color, order } }), [])
+  const roll = useCallback((actions: GameAction) => dispatch({ type: GAME_ACTION_TYPE.ROLL, payload: actions }), [])
   const move = useCallback((checkerBox: CheckerBox) => dispatch({ type: GAME_ACTION_TYPE.MOVE, payload: checkerBox }), [])
   const finalizeMove = useCallback((color: Color) => dispatch({ type: GAME_ACTION_TYPE.FINALIZE_MOVE, payload: color }), [])
   const double = useCallback(() => dispatch({ type: GAME_ACTION_TYPE.DOUBLE }), [])
@@ -284,7 +295,7 @@ type UseGameHookType = {
     ]
   },
   activeColor: Color,
-  roll: (color: Color, order: 0 | 1) => void,
+  roll: (actions: GameAction) => void,
   move: (checkerBox: CheckerBox, container: Point | Rail | Off) => void
   finalizeMove: (color: Color) => void,
   double: () => void,

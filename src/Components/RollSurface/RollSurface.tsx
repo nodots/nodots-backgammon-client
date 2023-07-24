@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { GameError } from '../../Models'
-import { useGame, RollSurfaceState, DieState } from '../../State/Game.State'
+import { useGame, RollSurfaceState, DieState, GAME_ACTION_TYPE, GameAction } from '../../State/Game.State'
 import Die from '../Die/Die'
 
 // TODO: RollSurface Component has no corresponding Model. Is that indicative of a problem?
@@ -11,7 +11,7 @@ interface RollSurfaceProps {
 const RollSurface = (props: RollSurfaceProps) => {
   const die1Ref = useRef<DieState>(null)
   const die2Ref = useRef<DieState>(null)
-  const { players, dice, activeColor, activeMove, debug, rollSurfaces, finalizeMove } = useGame()
+  const { players, dice, activeColor, activeMove, roll, debug, rollSurfaces, finalizeMove } = useGame()
   const die1State = dice[props.rollSurface.color][0] as DieState
   const die2State = dice[props.rollSurface.color][1] as DieState
   const rollSurfaceState = rollSurfaces[props.rollSurface.color]
@@ -41,8 +41,19 @@ const RollSurface = (props: RollSurfaceProps) => {
       if (!die1Ref.current || !die2Ref.current) {
         throw new GameError({ model: 'RollSurface', errorMessage: 'Missing one or more Die' })
       }
-      die1Ref.current.rollDie()
-      die2Ref.current.rollDie()
+      const die1Value = die1Ref.current.rollDie()
+      const die2Value = die2Ref.current.rollDie()
+
+      const payload: GameAction = {
+        type: GAME_ACTION_TYPE.ROLL,
+        payload: [
+          { color: props.rollSurface.color, order: 0, value: die1Value },
+          { color: props.rollSurface.color, order: 1, value: die2Value },
+        ]
+
+      }
+      console.log(payload)
+      // roll(payload)
     }
   }
 
