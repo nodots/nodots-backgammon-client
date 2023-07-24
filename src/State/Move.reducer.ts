@@ -12,7 +12,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
   }
 
   if (!state.activeMove.checkers[0].origin) {
-    if (state.debug) {
+    if (state.debug.isActive) {
       console.log('[Game Reducer] Setting checkers[0] origin')
     }
 
@@ -25,7 +25,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
   } else if (state.activeMove.checkers[0].origin &&
     !state.activeMove.checkers[0].destination
   ) {
-    if (state.debug) {
+    if (state.debug.isActive) {
       console.log('[Game Reducer] Setting checkers[0] destination')
     }
     newState = produce(state, draft => {
@@ -44,7 +44,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
       if (!moveResults) {
         throw new GameError({ model: 'Move', errorMessage: 'No moveResults' })
       }
-      if (state.debug) {
+      if (state.debug.isActive) {
         console.log(`[Game Reducer] moveResults: `)
         console.log(moveResults)
       }
@@ -67,7 +67,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
     })
     return newState
   } else if (!state.activeMove.checkers[1].origin) {
-    if (state.debug) {
+    if (state.debug.isActive) {
       console.log('[Game Reducer] Setting checkers[1] origin')
     }
     newState = produce(state, draft => {
@@ -77,7 +77,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
     })
     return newState
   } else if (state.activeMove.checkers[1].origin && !state.activeMove.checkers[1].destination) {
-    if (state.debug) {
+    if (state.debug.isActive) {
       console.log('[Game Reducer] Setting checkers[1] destination')
     }
     newState = produce(state, draft => {
@@ -87,7 +87,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
       let moveResults: { origin: CheckerBox, destination: CheckerBox } | undefined = undefined
       try {
         moveResults = activePlayer.move({ origin, destination, roll: [1, 1] })
-        if (state.debug) {
+        if (state.debug.isActive) {
           console.log(`[Game Reducer] moveResults:`, moveResults)
         }
       } catch (e: any) {
@@ -96,7 +96,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
       if (!moveResults) {
         throw new GameError({ model: 'Move', errorMessage: 'No moveResults' })
       }
-      if (state.debug) {
+      if (state.debug.isActive) {
         console.log('[Game Reducer] moveResults:', moveResults)
       }
 

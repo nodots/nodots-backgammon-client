@@ -25,7 +25,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
     draft.activeMove.checkers[1].destination = undefined
 
   })
-  if (state.debug) {
+  if (state.debug.isActive) {
     console.log('[Game Reducer] FINALIZE_MOVE newState:', newState)
   }
 

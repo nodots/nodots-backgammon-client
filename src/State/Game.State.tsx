@@ -98,7 +98,7 @@ let blackPlayerCopy = blackPlayer
 let whitePlayerCopy = whitePlayer
 
 winner === 'black' ? blackPlayerCopy.active = true : whitePlayerCopy.active = true
-whitePlayerCopy.active = true
+
 const initPlayers = {
   white: whitePlayerCopy,
   black: blackPlayerCopy
@@ -225,9 +225,8 @@ const useGameContext = (initialState: GameState) => {
   const roll = useCallback((color: Color, order: 0 | 1) => dispatch({ type: GAME_ACTION_TYPE.ROLL, payload: { color, order } }), [])
   const move = useCallback((checkerBox: CheckerBox) => dispatch({ type: GAME_ACTION_TYPE.MOVE, payload: checkerBox }), [])
   const finalizeMove = useCallback((color: Color) => dispatch({ type: GAME_ACTION_TYPE.FINALIZE_MOVE, payload: color }), [])
-  const toggleActivePlayer = useCallback(() => dispatch({ type: GAME_ACTION_TYPE.TOGGLE }), [])
   const double = useCallback(() => dispatch({ type: GAME_ACTION_TYPE.DOUBLE }), [])
-  return { state, roll, move, finalizeMove, double, toggleActivePlayer }
+  return { state, roll, move, finalizeMove, double }
 }
 
 type UseGameContextType = ReturnType<typeof useGameContext>
@@ -238,7 +237,6 @@ const initContextState: UseGameContextType = {
   move () { },
   finalizeMove () { },
   double () { },
-  toggleActivePlayer () { },
 }
 
 export const GameContext = createContext<UseGameContextType>(initContextState)
@@ -290,7 +288,6 @@ type UseGameHookType = {
   move: (checkerBox: CheckerBox, container: Point | Rail | Off) => void
   finalizeMove: (color: Color) => void,
   double: () => void,
-  toggleActivePlayer: () => void,
   debug: {
     isActive: boolean,
     components: {
@@ -306,7 +303,7 @@ type UseGameHookType = {
 }
 
 export const useGame = (): UseGameHookType => {
-  const { state: { board, players, cube, dice, activeMove, activeColor, rollSurfaces, debug }, roll, move, finalizeMove, double, toggleActivePlayer } = useContext(GameContext)
-  return { board, players, cube, dice, activeMove, activeColor, rollSurfaces, roll, move, finalizeMove, toggleActivePlayer, double, debug }
+  const { state: { board, players, cube, dice, activeMove, activeColor, rollSurfaces, debug }, roll, move, finalizeMove, double } = useContext(GameContext)
+  return { board, players, cube, dice, activeMove, activeColor, rollSurfaces, roll, move, finalizeMove, double, debug }
 }
 
