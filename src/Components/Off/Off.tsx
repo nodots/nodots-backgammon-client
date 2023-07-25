@@ -1,5 +1,5 @@
-import { OffState, CubeState } from '../../State/Game.State'
-// import { Off as OffModel, Cube as CubeModel } from '../../Models'
+import { OffState } from '../../State/types/OffState'
+import { CubeState } from '../../State/types/CubeState.d'
 import Cube from '../Cube/Cube'
 import CheckerBox from '../CheckerBox/CheckerBox'
 

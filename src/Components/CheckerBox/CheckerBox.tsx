@@ -3,7 +3,7 @@ import {
   CheckerBox as CheckerBoxModel,
   Checker as CheckerModel,
 } from '../../Models'
-import { useGame } from '../../State/Game.State'
+import { useGame } from '../../Hooks/useGame'
 import Checker from '../Checker/Checker'
 
 interface CheckerBoxProps {
@@ -11,14 +11,10 @@ interface CheckerBoxProps {
 }
 
 const CheckerBox = (props: CheckerBoxProps) => {
-  const { board, players, debug, move } = useGame()
+  const { board, debug, move } = useGame()
   const checkerBoxState = board.getCheckerBoxes().find(cb => cb.id === props.checkerBox.id)
   if (debug) {
-    console.log(`[CheckerBox Component] checkerBoxState:`)
-    console.log(checkerBoxState)
-    console.log(`[CheckerBox Component] players:`)
-    console.log(`white active?: ${players.white.active.toString()}`)
-    console.log(`black active?: ${players.black.active.toString()}`)
+    console.log(`[CheckerBox Component] checkerBoxState:`, checkerBoxState)
   }
   if (!checkerBoxState) {
     throw new GameError({ model: 'CheckerBox', errorMessage: 'No checkerBoxState' })
@@ -28,13 +24,17 @@ const CheckerBox = (props: CheckerBoxProps) => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    if (!container) {
-      throw new GameError({ model: 'CheckerBox', errorMessage: 'No container' })
-    }
-    try {
-      move(props.checkerBox, container)
-    } catch (e) {
-      console.error(e)
+    if (e.type === 'click') {
+      if (!container) {
+        throw new GameError({ model: 'CheckerBox', errorMessage: 'No container' })
+      }
+      try {
+        move(props.checkerBox, container)
+      } catch (e) {
+        console.error(e)
+      }
+    } else if (e.type === 'contextmenu') {
+      console.warn('[CheckerBox Component] props.checkerBox.checkers', props.checkerBox.checkers)
     }
   }
 
@@ -42,7 +42,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
     checkers.push(<Checker checker={c} key={c.id} />)
   })
 
-  return <div className='checker-box' onClick={handleClick}>
+  return <div className='checker-box' onClick={handleClick} onContextMenu={handleClick}>
     {checkers}
   </ div>
 }

@@ -1,6 +1,8 @@
 import { produce } from 'immer'
-import { Color, DieValue, } from '../Models'
-import { GameState, GameAction, DieOrder } from './Game.State'
+import { Color, DieValue, } from '../../Models'
+import { GameState } from '../types/GameState'
+import { GameAction } from '../types/GameAction'
+import { DieOrder } from '../types/DieState'
 
 type DieRollAction = {
   color: Color,

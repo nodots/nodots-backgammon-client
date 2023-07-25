@@ -1,4 +1,4 @@
-import { useGame } from '../../State/Game.State'
+import { useGame } from '../../Hooks/useGame'
 import { Checker as CheckerModel } from '../../Models'
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 import React from 'react'
