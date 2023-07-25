@@ -1,11 +1,11 @@
 import { GameError } from '../../Models'
 import { GAME_ACTION_TYPE } from '../Game.state'
-import { GameState } from '../types/GameState'
-import { GameAction } from '../types/GameAction'
-import { reducer as rollReducer } from './Roll.reducer'
-import { reducer as moveReducer } from './Move.reducer'
-import { reducer as finalizeMoveReducer } from './FinalizeMove.reducer'
-import { reducer as doubleReducer } from './Double.reducer'
+import { GameState } from '../types/game-state'
+import { GameAction } from '../types/game-action'
+import { reducer as rollReducer } from './roll.reducer'
+import { reducer as moveReducer } from './move.reducer'
+import { reducer as finalizeMoveReducer } from './finalize-move.reducer'
+import { reducer as doubleReducer } from './double.reducer'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
   const { type } = action

@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import { Board, Player, Point, Rail, Off, CheckerBox, Color } from '../Models'
-import { DieState, RollSurfaceState } from '../State/types/DieState'
-import { CubeState } from '../State/types/CubeState.d'
-import { GameAction } from '../State/types/GameAction'
+import { DieState, RollSurfaceState } from '../State/types/die-state'
+import { CubeState } from '../State/types/cube-state.d'
+import { GameAction } from '../State/types/game-action'
 import { GameContext } from '../State/Game.context'
 
 type UseGameHookType = {

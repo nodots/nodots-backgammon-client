@@ -1,5 +1,5 @@
-import { OffState } from '../../State/types/OffState'
-import { CubeState } from '../../State/types/CubeState.d'
+import { OffState } from '../../State/types/off-state'
+import { CubeState } from '../../State/types/cube-state.d'
 import Cube from '../Cube/Cube'
 import CheckerBox from '../CheckerBox/CheckerBox'
 

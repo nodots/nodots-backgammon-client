@@ -1,7 +1,7 @@
 import { Board, Player, CheckerBox, Color } from '../../Models'
-import { DieState, RollSurfaceState } from './DieState'
-import { CubeState } from './CubeState.d'
-import { GameAction } from './GameAction'
+import { DieState, RollSurfaceState } from './die-state'
+import { CubeState } from './cube-state'
+import { GameAction } from './game-action'
 
 export type GameState = {
   board: Board

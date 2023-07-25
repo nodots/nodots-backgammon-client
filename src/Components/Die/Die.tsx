@@ -1,8 +1,8 @@
 import { forwardRef, useState, useImperativeHandle } from 'react'
 import { GAME_ACTION_TYPE } from '../../State/Game.state'
 import { useGame } from '../../Hooks/useGame'
-import { GameAction } from '../../State/types/GameAction'
-import { DieState } from '../../State/types/DieState'
+import { GameAction } from '../../State/types/game-action'
+import { DieState } from '../../State/types/die-state'
 import { GameError, DieValue, Die as DieModel } from '../../Models'
 
 interface DieProps {

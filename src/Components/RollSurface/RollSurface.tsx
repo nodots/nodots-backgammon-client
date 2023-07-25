@@ -2,8 +2,8 @@ import { useRef } from 'react'
 import { GameError } from '../../Models'
 import { GAME_ACTION_TYPE } from '../../State/Game.state'
 import { useGame } from '../../Hooks/useGame'
-import { GameAction } from '../../State/types/GameAction'
-import { RollSurfaceState, DieState } from '../../State/types/DieState'
+import { GameAction } from '../../State/types/game-action'
+import { RollSurfaceState, DieState } from '../../State/types/die-state'
 import Die from '../Die/Die'
 
 // TODO: RollSurface Component has no corresponding Model. Is that indicative of a problem?

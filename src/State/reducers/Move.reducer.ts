@@ -1,7 +1,7 @@
 import { produce } from 'immer'
 import { GameError, CheckerBox, MoveType, DieValue } from '../../Models'
-import { GameState } from '../types/GameState'
-import { GameAction } from '../types/GameAction'
+import { GameState } from '../types/game-state'
+import { GameAction } from '../types/game-action'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
   const { payload } = action
@@ -162,11 +162,11 @@ const moveChecker = (move: MoveType, debug?: boolean) => {
   const destinationPointIndex = destinationQuadrant.points.findIndex(p => p.id === destinationPoint.id)
 
   if (debug) {
-    console.log('[Game Reducer] MOVE RESULTS:')
-    console.log(`[Game Reducer] originQuadrantIndex = ${originQuadrantIndex}`)
-    console.log(`[Game Reducer] originPointIndex = ${originPointIndex}`)
-    console.log(`[Game Reducer] destinationQuadrantIndex = ${destinationQuadrantIndex}`)
-    console.log(`[Game Reducer] destinationPointIndex = ${destinationPointIndex}`)
+    console.log('[Move Reducer] MOVE RESULTS:')
+    console.log(`[Move Reducer] originQuadrantIndex = ${originQuadrantIndex}`)
+    console.log(`[Move Reducer] originPointIndex = ${originPointIndex}`)
+    console.log(`[Move Reducer] destinationQuadrantIndex = ${destinationQuadrantIndex}`)
+    console.log(`[Move Reducer] destinationPointIndex = ${destinationPointIndex}`)
   }
   return { originQuadrantIndex, originPointIndex, destinationQuadrantIndex, destinationPointIndex }
 }

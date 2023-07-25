@@ -1,10 +1,9 @@
-import { reducer } from './reducers/Game.reducer'
+import { reducer } from './reducers/game.reducer'
 import { createContext, useCallback, useReducer } from 'react'
 import { CheckerBox, Color } from '../Models'
-import { GameAction } from './types/GameAction'
-import { GameState } from './types/GameState'
+import { GameAction } from './types/game-action'
+import { GameState } from './types/game-state'
 import { initGameState, GAME_ACTION_TYPE } from './Game.state'
-
 
 export const useGameContext = (initialState: GameState) => {
   const [state, dispatch] = useReducer(reducer, initGameState)
@@ -15,7 +14,9 @@ export const useGameContext = (initialState: GameState) => {
   const double = useCallback(() => dispatch({ type: GAME_ACTION_TYPE.DOUBLE }), [])
   return { state, roll, move, finalizeMove, double }
 }
+
 type UseGameContextType = ReturnType<typeof useGameContext>
+
 const initContextState: UseGameContextType = {
   state: initGameState,
   roll () { },

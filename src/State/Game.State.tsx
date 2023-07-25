@@ -1,7 +1,7 @@
 import { Game, Player, Die, Color } from '../Models'
-import { DieState } from './types/DieState'
-import { GameAction } from './types/GameAction'
-import { GameState } from './types/GameState'
+import { DieState } from './types/die-state'
+import { GameAction } from './types/game-action'
+import { GameState } from './types/game-state'
 
 export const enum GAME_ACTION_TYPE {
   RENAME,
