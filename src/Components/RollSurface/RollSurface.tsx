@@ -1,12 +1,14 @@
+// Hooks
 import { useRef } from 'react'
-import { GameError } from '../../Models'
-import { GAME_ACTION_TYPE, MOVE_STATUS } from '../../State/Game.State'
 import { useGame } from '../../hooks/useGame'
-import { GameAction } from '../../State/types/game-action'
+// Models
+import { GameError } from '../../Models'
+// States
+import { MOVE_STATUS } from '../../State/Game.State'
 import { RollSurfaceState, DieState } from '../../State/types/die-state'
+// Components
 import Die from '../Die/Die'
 
-// TODO: RollSurface Component has no corresponding Model. Is that indicative of a problem?
 interface RollSurfaceProps {
   rollSurface: RollSurfaceState
 }
@@ -14,7 +16,7 @@ interface RollSurfaceProps {
 const RollSurface = (props: RollSurfaceProps) => {
   const die1Ref = useRef<DieState>(null)
   const die2Ref = useRef<DieState>(null)
-  const { players, dice, activeColor, activeMove, roll, debug, rollSurfaces, finalizeMove } = useGame()
+  const { players, dice, activeColor, activeMove, debug, rollSurfaces, finalizeMove } = useGame()
   const die1State = dice[props.rollSurface.color][0] as DieState
   const die2State = dice[props.rollSurface.color][1] as DieState
   const rollSurfaceState = rollSurfaces[props.rollSurface.color]

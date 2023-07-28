@@ -1,5 +1,10 @@
+// Hooks
 import { useGame } from '../../hooks/useGame'
+
+// UI
 import { Grid } from '@mui/material'
+
+// Components
 import Quadrant from '../Quadrant/Quadrant'
 import Rail from '../Rail/Rail'
 import Off from '../Off/Off'

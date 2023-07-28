@@ -1,5 +1,8 @@
+// Hooks
 import { useContext } from 'react'
-import { Board, Player, Point, Rail, Off, CheckerBox, Color, DieValue } from '../Models'
+// Models
+import { Board, Player, Point, Rail, Off, CheckerBox, Color } from '../Models'
+// State
 import { DieState, RollSurfaceState } from '../State/types/die-state'
 import { CubeState } from '../State/types/cube-state.d'
 import { CheckerMoveState, DieRollActionPayload } from '../State/types/game-action'

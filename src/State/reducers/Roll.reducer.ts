@@ -2,11 +2,10 @@ import { produce } from 'immer'
 import { Color, GameError } from '../../Models'
 import { GameState } from '../types/game-state'
 import { MOVE_STATUS } from '../Game.State'
-import { GameAction, DieRollActionPayload, CheckerMoveState } from '../types/game-action'
+import { GameAction, DieRollActionPayload } from '../types/game-action'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
   let newState = state
-  let moveCount = 2
 
   const rollAction = action.payload as DieRollActionPayload
   const rollColor = rollAction.color as Color

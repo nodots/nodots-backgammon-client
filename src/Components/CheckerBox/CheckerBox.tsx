@@ -1,9 +1,14 @@
+// Hooks
+import { useGame } from '../../hooks/useGame'
+
+// Models
 import {
   GameError,
   CheckerBox as CheckerBoxModel,
   Checker as CheckerModel,
 } from '../../Models'
-import { useGame } from '../../hooks/useGame'
+
+// Components
 import Checker from '../Checker/Checker'
 
 interface CheckerBoxProps {

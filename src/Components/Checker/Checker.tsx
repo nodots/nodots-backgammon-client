@@ -1,15 +1,14 @@
-import { useGame } from '../../hooks/useGame'
+// Models
 import { Checker as CheckerModel } from '../../Models'
+// UI
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
-import React from 'react'
-import { MOVE_STATUS } from '../../State/Game.State'
+
 
 export interface CheckerProps {
   checker: CheckerModel
 }
 
 const Checker = (props: CheckerProps) => {
-  const { players, activeColor, activeMove } = useGame()
   const classes = `checker ${props.checker.color}`
 
   const handleClick = (e: React.MouseEvent) => {
