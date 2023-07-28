@@ -1,4 +1,4 @@
-import { Color, generateId } from './'
+import { Color, generateId } from '.'
 import { Die } from './Die'
 
 export class RollSurface {

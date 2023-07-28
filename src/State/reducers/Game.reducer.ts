@@ -1,4 +1,4 @@
-import { GameError } from '../../Models'
+import { GameError } from '../../models'
 import { GAME_ACTION_TYPE } from '../Game.State'
 import { GameState } from '../types/game-state'
 import { GameAction } from '../types/game-action'

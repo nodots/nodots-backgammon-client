@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Cube } from '../../Models'
+import { Cube } from '../../models'
 import { GameState } from '../types/game-state'
 import { GameAction } from '../types/game-action'
 

@@ -1,4 +1,4 @@
-import { DieValue, Color } from '../../Models'
+import { DieValue, Color } from '../../models'
 
 export type DieOrder = 0 | 1
 export type DieRollPayload = {

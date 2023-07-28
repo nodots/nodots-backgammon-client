@@ -1,5 +1,5 @@
 // Models
-import { Rail as RailModel } from '../../Models'
+import { Rail as RailModel } from '../../models'
 // Components
 import CheckerBox from '../CheckerBox/CheckerBox'
 

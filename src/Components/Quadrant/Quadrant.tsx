@@ -1,5 +1,5 @@
 // Models
-import { QuadrantLocation, Quadrant as QuadrantModel, generateId } from '../../Models'
+import { QuadrantLocation, Quadrant as QuadrantModel, generateId } from '../../models'
 // Components
 import Point from '../Point/Point'
 // UI

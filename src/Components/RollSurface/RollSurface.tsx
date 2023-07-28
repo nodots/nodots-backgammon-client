@@ -2,10 +2,10 @@
 import { useRef } from 'react'
 import { useGame } from '../../hooks/useGame'
 // Models
-import { GameError } from '../../Models'
+import { GameError } from '../../models'
 // States
-import { MOVE_STATUS } from '../../State/Game.State'
-import { RollSurfaceState, DieState } from '../../State/types/die-state'
+import { MOVE_STATUS } from '../../state/Game.State'
+import { RollSurfaceState, DieState } from '../../state/types/die-state'
 // Components
 import Die from '../Die/Die'
 

@@ -1,5 +1,5 @@
 // Models
-import { Point as PointModel, QuadrantLocation } from '../../Models'
+import { Point as PointModel, QuadrantLocation } from '../../models'
 // Components
 import CheckerBox from '../CheckerBox/CheckerBox'
 

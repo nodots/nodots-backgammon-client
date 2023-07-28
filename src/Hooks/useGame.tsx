@@ -1,13 +1,13 @@
 // Hooks
 import { useContext } from 'react'
 // Models
-import { Board, Player, Point, Rail, Off, CheckerBox, Color } from '../Models'
+import { Board, Player, Point, Rail, Off, CheckerBox, Color } from '../models'
 // State
-import { DieState, RollSurfaceState } from '../State/types/die-state'
-import { CubeState } from '../State/types/cube-state.d'
-import { CheckerMoveState, DieRollActionPayload } from '../State/types/game-action'
-import { GameContext } from '../State/Game.context'
-import { MOVE_STATUS } from '../State/Game.State'
+import { DieState, RollSurfaceState } from '../state/types/die-state'
+import { CubeState } from '../state/types/cube-state'
+import { CheckerMoveState, DieRollActionPayload } from '../state/types/game-action'
+import { GameContext } from '../state/Game.context'
+import { MOVE_STATUS } from '../state/Game.State'
 
 type UseGameHookType = {
   board: Board

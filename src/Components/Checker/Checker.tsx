@@ -1,5 +1,5 @@
 // Models
-import { Checker as CheckerModel } from '../../Models'
+import { Checker as CheckerModel } from '../../models'
 // UI
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 

@@ -1,4 +1,4 @@
-import { Game, Player, Die, Color } from '../Models'
+import { Game, Player, Die, Color } from '../models'
 import { DieState } from './types/die-state'
 import { GameAction } from './types/game-action'
 import { GameState } from './types/game-state'

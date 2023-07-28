@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Color, GameError } from '../../Models'
+import { Color, GameError } from '../../models'
 import { GameState } from '../types/game-state'
 import { MOVE_STATUS } from '../Game.State'
 import { GameAction, DieRollActionPayload } from '../types/game-action'

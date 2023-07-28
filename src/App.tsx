@@ -1,6 +1,6 @@
-import { GameProvider } from './State/Game.provider'
+import { GameProvider } from './state/Game.provider'
 import { Paper } from '@mui/material'
-import Board from './Components/Board/Board'
+import Board from './components/Board/Board'
 
 import './App.scss'
 

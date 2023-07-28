@@ -1,4 +1,4 @@
-import { CheckerBox } from '../../Models'
+import { CheckerBox } from '../../models'
 
 export type OffState = {
   checkerBoxes: {

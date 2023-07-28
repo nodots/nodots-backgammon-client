@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { GameError, CheckerBox, MoveType, DieValue } from '../../Models'
+import { GameError, CheckerBox, MoveType, DieValue } from '../../models'
 import { GameState } from '../types/game-state'
 import { GameAction } from '../types/game-action'
 import { MOVE_STATUS } from '../Game.State'

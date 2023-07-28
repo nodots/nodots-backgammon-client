@@ -6,7 +6,7 @@ import {
   GameError,
   CheckerBox as CheckerBoxModel,
   Checker as CheckerModel,
-} from '../../Models'
+} from '../../models'
 
 // Components
 import Checker from '../Checker/Checker'

@@ -1,4 +1,4 @@
-import { Board, Player, Color } from '../../Models'
+import { Board, Player, Color } from '../../models'
 import { DieState, RollSurfaceState } from './die-state'
 import { CubeState } from './cube-state'
 import { GameAction } from './game-action'

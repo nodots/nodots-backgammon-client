@@ -1,4 +1,4 @@
-import { Color, CubeValue } from '../../Models'
+import { Color, CubeValue } from '../../models'
 
 export type CubeState = {
   value: CubeValue
