@@ -1,8 +1,8 @@
 import { produce } from 'immer'
 import { GameError, CheckerBox, MoveType, DieValue } from '../../models'
-import { GameState } from '../types/game-state'
-import { GameAction } from '../types/game-action'
-import { MOVE_STATUS } from '../Game.State'
+import { GameState } from '../types/game.state'
+import { GameAction } from '../types/game.action'
+import { MOVE_STATUS } from '../Game.state'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
   const { payload } = action

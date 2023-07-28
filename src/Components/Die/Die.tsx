@@ -4,8 +4,8 @@ import { useGame } from '../../hooks/useGame'
 // Models
 import { GameError, DieValue, Die as DieModel } from '../../models'
 // State
-import { DieState } from '../../state/types/die-state'
-import { DieRollActionPayload } from '../../state/types/game-action'
+import { DieState } from '../../state/types/die.state'
+import { DieRollActionPayload } from '../../state/types/game.action'
 
 interface DieProps {
   die: DieState

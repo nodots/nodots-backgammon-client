@@ -1,7 +1,7 @@
 import { produce } from 'immer'
 import { Cube } from '../../models'
-import { GameState } from '../types/game-state'
-import { GameAction } from '../types/game-action'
+import { GameState } from '../types/game.state'
+import { GameAction } from '../types/game.action'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
   let newState: GameState = state

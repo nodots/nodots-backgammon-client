@@ -1,6 +1,6 @@
 // State
-import { OffState } from '../../state/types/off-state'
-import { CubeState } from '../../state/types/cube-state'
+import { OffState } from '../../state/types/off.state'
+import { CubeState } from '../../state/types/cube.state'
 // Components
 import Cube from '../Cube/Cube'
 import CheckerBox from '../CheckerBox/CheckerBox'
