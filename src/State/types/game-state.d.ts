@@ -1,4 +1,4 @@
-import { Board, Player, CheckerBox, Color } from '../../Models'
+import { Board, Player, Color } from '../../Models'
 import { DieState, RollSurfaceState } from './die-state'
 import { CubeState } from './cube-state'
 import { GameAction } from './game-action'
@@ -18,21 +18,7 @@ export type GameState = {
     black: RollSurfaceState
   }
   cube: CubeState
-  activeMove: {
-    color: Color | undefined
-    checkers: [
-      {
-        origin: CheckerBox | undefined
-        destination: CheckerBox | undefined
-        completed: boolean | undefined
-      },
-      {
-        origin: CheckerBox | undefined
-        destination: CheckerBox | undefined
-        completed: boolean | undefined
-      }
-    ]
-  }
+  activeMove: MoveState
   activeColor: Color
   rename: (name: string) => any
   roll: (action: GameAction) => any

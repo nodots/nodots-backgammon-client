@@ -1,4 +1,5 @@
 import { Color, generateId } from '.'
+import { CheckerBox } from './CheckerBox'
 
 /**
  * Checkers are the pieces that move around the board. By tradition they are 
@@ -7,11 +8,12 @@ import { Color, generateId } from '.'
 export class Checker {
   id: string
   color: Color
+  parent: CheckerBox
 
-  constructor (color: Color) {
+  constructor (color: Color, parent: CheckerBox) {
     this.id = generateId()
     this.color = color
+    this.parent = parent
   }
-
 }
 

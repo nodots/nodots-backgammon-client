@@ -17,6 +17,7 @@ export const modelDebug = false
 export const MAX_CUBE_VALUE = 64
 
 export type CheckerMoveType = {
+  dieValue: DieValue | undefined
   origin: CheckerBox | undefined,
   destination: CheckerBox | undefined
   completed: boolean | undefined

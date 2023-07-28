@@ -29,7 +29,7 @@ export class Rail {
     if (blackRailCheckerSetup) {
       blackRailCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          rail.checkerBoxes.black.checkers.push(new Checker('black'))
+          rail.checkerBoxes.black.checkers.push(new Checker('black', rail.checkerBoxes.black))
         }
       })
     }
@@ -39,7 +39,7 @@ export class Rail {
     if (whiteRailCheckerSetup) {
       whiteRailCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          rail.checkerBoxes.white.checkers.push(new Checker('white'))
+          rail.checkerBoxes.white.checkers.push(new Checker('white', rail.checkerBoxes.white))
         }
       })
     }

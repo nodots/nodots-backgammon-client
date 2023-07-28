@@ -1,9 +1,10 @@
 import { useContext } from 'react'
-import { Board, Player, Point, Rail, Off, CheckerBox, Color } from '../Models'
+import { Board, Player, Point, Rail, Off, CheckerBox, Color, DieValue } from '../Models'
 import { DieState, RollSurfaceState } from '../State/types/die-state'
 import { CubeState } from '../State/types/cube-state.d'
-import { GameAction } from '../State/types/game-action'
+import { CheckerMoveState, DieRollActionPayload } from '../State/types/game-action'
 import { GameContext } from '../State/Game.context'
+import { MOVE_STATUS } from '../State/Game.State'
 
 type UseGameHookType = {
   board: Board
@@ -21,22 +22,12 @@ type UseGameHookType = {
   }
   cube: CubeState
   activeMove: {
+    status: MOVE_STATUS | undefined
     color: Color | undefined
-    checkers: [
-      {
-        origin: CheckerBox | undefined
-        destination: CheckerBox | undefined
-        completed: boolean | undefined
-      },
-      {
-        origin: CheckerBox | undefined
-        destination: CheckerBox | undefined
-        completed: boolean | undefined
-      }
-    ]
+    moves: CheckerMoveState[]
   }
   activeColor: Color
-  roll: (actions: GameAction) => void
+  roll: (dieRollAction: DieRollActionPayload) => void
   move: (checkerBox: CheckerBox, container: Point | Rail | Off) => void
   finalizeMove: (color: Color) => void
   double: () => void

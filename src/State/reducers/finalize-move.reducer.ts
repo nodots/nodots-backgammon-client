@@ -10,6 +10,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
   if (state.debug.isActive) {
     console.log('[Game Reducer] FINALIZE_MOVE')
   }
+
   newState = produce(state, draft => {
     if (state.activeColor === 'black') {
       draft.activeColor = 'white'
@@ -20,10 +21,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
     } else {
       throw new GameError({ model: 'Player', errorMessage: 'There is no active player' })
     }
-    draft.activeMove.checkers[0].origin = undefined
-    draft.activeMove.checkers[0].destination = undefined
-    draft.activeMove.checkers[1].origin = undefined
-    draft.activeMove.checkers[1].destination = undefined
+    draft.activeMove.moves = []
     draft.dice[state.activeColor][0].value = undefined
 
 

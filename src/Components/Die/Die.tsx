@@ -1,8 +1,7 @@
 import { forwardRef, useState, useImperativeHandle } from 'react'
-import { GAME_ACTION_TYPE } from '../../State/Game.state'
-import { useGame } from '../../Hooks/useGame'
-import { GameAction } from '../../State/types/game-action'
+import { useGame } from '../../hooks/useGame'
 import { DieState } from '../../State/types/die-state'
+import { DieRollActionPayload } from '../../State/types/game-action'
 import { GameError, DieValue, Die as DieModel } from '../../Models'
 
 interface DieProps {
@@ -25,14 +24,20 @@ const Die = forwardRef((props: DieProps, ref) => {
       }
 
       const newValue = DieModel.roll()
+      // const newValue = 1 as DieValue
       setDieValue(newValue)
 
-      const dieRollAction: GameAction = {
-        type: GAME_ACTION_TYPE.ROLL,
-        payload: { color: props.die.color, order: props.die.order, value: newValue }
+      if (!props.die.color) {
+        throw new GameError({ model: 'Die', errorMessage: `Missing props ${JSON.stringify(props.die)}` })
       }
 
-      roll(dieRollAction)
+      const dieRollActionPayload: DieRollActionPayload = {
+        color: props.die.color,
+        order: props.die.order,
+        value: newValue
+      }
+
+      roll(dieRollActionPayload)
 
       switch (newValue) {
         case 1:

@@ -1,4 +1,4 @@
-import { useGame } from '../../Hooks/useGame'
+import { useGame } from '../../hooks/useGame'
 import { CubeState } from '../../State/types/cube-state.d'
 
 interface CubeProps {

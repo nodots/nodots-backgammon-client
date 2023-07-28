@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { GameError } from '../../Models'
-import { GAME_ACTION_TYPE } from '../../State/Game.state'
-import { useGame } from '../../Hooks/useGame'
+import { GAME_ACTION_TYPE, MOVE_STATUS } from '../../State/Game.State'
+import { useGame } from '../../hooks/useGame'
 import { GameAction } from '../../State/types/game-action'
 import { RollSurfaceState, DieState } from '../../State/types/die-state'
 import Die from '../Die/Die'
@@ -34,9 +34,16 @@ const RollSurface = (props: RollSurfaceProps) => {
     if (debug) {
       console.log(`[RollSurface Component] clickHandler activeMove:`, activeMove)
     }
-    if (activeMove && activeMove.checkers[0].origin && activeMove.checkers[0].destination && activeMove.checkers[0].origin && activeMove.checkers[1].destination) {
+
+    if (activeMove.status === MOVE_STATUS.DESTINATION_SET && activeMove.color === props.rollSurface.color) {
+      activeMove.moves.forEach(m => {
+        if (!m.completed) {
+          throw new GameError({ model: 'Move', errorMessage: 'One or more moves have not been completed' })
+        }
+      })
       finalizeMove(activeColor)
     } else {
+      console.log('[Roll Surface Component] activeMove:', activeMove)
       if (debug) {
         console.log('[RollSurface Component] die1Ref', die1Ref)
         console.log('[RollSurface Component] die2Ref', die2Ref)
@@ -44,19 +51,9 @@ const RollSurface = (props: RollSurfaceProps) => {
       if (!die1Ref.current || !die2Ref.current) {
         throw new GameError({ model: 'RollSurface', errorMessage: 'Missing one or more Die' })
       }
-      const die1Value = die1Ref.current.rollDie()
-      const die2Value = die2Ref.current.rollDie()
+      die1Ref.current.rollDie()
+      die2Ref.current.rollDie()
 
-      const payload: GameAction = {
-        type: GAME_ACTION_TYPE.ROLL,
-        payload: [
-          { color: props.rollSurface.color, order: 0, value: die1Value },
-          { color: props.rollSurface.color, order: 1, value: die2Value },
-        ]
-
-      }
-      console.log(payload)
-      // roll(payload)
     }
   }
 

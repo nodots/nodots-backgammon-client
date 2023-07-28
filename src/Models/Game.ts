@@ -33,7 +33,8 @@ export class Game {
       white: whitePlayer
     }
     this.board = Board.initialize()
-
+    whitePlayer.currentGame = this
+    blackPlayer.currentGame = this
     this.setCheckers()
       .then(() => {
         if (modelDebug) {

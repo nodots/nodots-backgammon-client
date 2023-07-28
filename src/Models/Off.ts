@@ -28,7 +28,7 @@ export class Off {
     if (blackOffCheckerSetup) {
       blackOffCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          off.checkerBoxes.black.checkers.push(new Checker('black'))
+          off.checkerBoxes.black.checkers.push(new Checker('black', off.checkerBoxes.black))
         }
       })
     }
@@ -38,7 +38,7 @@ export class Off {
     if (whiteOffCheckerSetup) {
       whiteOffCheckerSetup.forEach(c => {
         for (let i = 0; i < c.checkerCount; i++) {
-          off.checkerBoxes.white.checkers.push(new Checker('white'))
+          off.checkerBoxes.white.checkers.push(new Checker('white', off.checkerBoxes.white))
         }
       })
     }

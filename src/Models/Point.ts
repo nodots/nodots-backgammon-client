@@ -24,7 +24,7 @@ export class Point {
       const config = setup.find(p => p.position === position)
       if (config) {
         for (let i = 0; i < config.checkerCount; i++) {
-          point.checkers.push(new Checker(config.color))
+          point.checkers.push(new Checker(config.color, point.checkerBox))
         }
       }
 

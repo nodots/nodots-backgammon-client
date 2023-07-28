@@ -3,7 +3,7 @@ import {
   CheckerBox as CheckerBoxModel,
   Checker as CheckerModel,
 } from '../../Models'
-import { useGame } from '../../Hooks/useGame'
+import { useGame } from '../../hooks/useGame'
 import Checker from '../Checker/Checker'
 
 interface CheckerBoxProps {
@@ -13,23 +13,22 @@ interface CheckerBoxProps {
 const CheckerBox = (props: CheckerBoxProps) => {
   const { board, debug, move } = useGame()
   const checkerBoxState = board.getCheckerBoxes().find(cb => cb.id === props.checkerBox.id)
-  if (debug) {
+  if (debug.isActive) {
     console.log(`[CheckerBox Component] checkerBoxState:`, checkerBoxState)
   }
   if (!checkerBoxState) {
     throw new GameError({ model: 'CheckerBox', errorMessage: 'No checkerBoxState' })
   }
-  const container = board.getCheckerBoxContainer(props.checkerBox.id)
   const checkers: React.JSX.Element[] = []
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (e.type === 'click') {
-      if (!container) {
+      if (!props.checkerBox.parent) {
         throw new GameError({ model: 'CheckerBox', errorMessage: 'No container' })
       }
       try {
-        move(props.checkerBox, container)
+        move(props.checkerBox, props.checkerBox.parent)
       } catch (e) {
         console.error(e)
       }

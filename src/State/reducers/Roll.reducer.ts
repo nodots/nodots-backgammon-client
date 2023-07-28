@@ -1,25 +1,32 @@
 import { produce } from 'immer'
-import { Color, DieValue, } from '../../Models'
+import { Color, GameError } from '../../Models'
 import { GameState } from '../types/game-state'
-import { GameAction } from '../types/game-action'
-import { DieOrder } from '../types/die-state'
-
-type DieRollAction = {
-  color: Color,
-  order: DieOrder,
-  value: DieValue
-}
+import { MOVE_STATUS } from '../Game.State'
+import { GameAction, DieRollActionPayload, CheckerMoveState } from '../types/game-action'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
   let newState = state
+  let moveCount = 2
 
-  // FIXME
-  const rollAction = action.payload.payload as unknown as DieRollAction
-  console.log(rollAction)
+  const rollAction = action.payload as DieRollActionPayload
+  const rollColor = rollAction.color as Color
 
   newState = produce(state, draft => {
-    draft.dice[rollAction.color][rollAction.order].value = rollAction.value
+    if (!rollColor) {
+      console.log('[MOVEREDUCERTHING] ROLLREDUCERTHING rollAction', rollAction)
+      console.error('[MOVEREDUCERTHING] ROLLREDUCERTHING rollColor', rollColor)
+      throw new GameError({ model: 'Roll', errorMessage: 'No rollColor' })
+    }
+    draft.dice[rollColor][rollAction.order].value = rollAction.value
+    draft.activeMove.color = rollColor
+    draft.activeMove.status = MOVE_STATUS.INITIALIZED
+    draft.activeMove.moves[rollAction.order] = {
+      // If player rolls doubles we have more moves than dice
+      dieValue: rollAction.value,
+      origin: undefined,
+      destination: undefined,
+      completed: false
+    }
   })
-  console.log(newState.dice[state.activeColor][rollAction.order])
   return newState
 }

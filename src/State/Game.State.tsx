@@ -15,6 +15,16 @@ export const enum GAME_ACTION_TYPE {
   TOGGLE
 }
 
+export enum MOVE_STATUS {
+  INITIALIZED,
+  MOVES_SET,
+  ORIGIN_SET,
+  DESTINATION_SET,
+  MOVE_IN_PROGRESS,
+  MOVE_COMPLETED,
+  MOVE_FAILED
+}
+
 export const initGameState: GameState = initializeGame()
 
 function initializeGame () {
@@ -93,21 +103,10 @@ function initializeGame () {
         ]
       },
     },
-
     activeMove: {
+      status: undefined,
       color: undefined,
-      checkers: [
-        {
-          origin: undefined,
-          destination: undefined,
-          completed: undefined,
-        },
-        {
-          origin: undefined,
-          destination: undefined,
-          completed: undefined,
-        }
-      ],
+      moves: [],
     },
     activeColor: winner,
     rename: (name: string) => { },
@@ -118,7 +117,7 @@ function initializeGame () {
     double: () => { },
     toggleActivePlayer: () => { },
     debug: {
-      isActive: true,
+      isActive: false,
       components: {
         player: false,
         die: true,

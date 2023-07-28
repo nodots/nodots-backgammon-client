@@ -1,4 +1,4 @@
-import { MoveDirection, Point, Color, GameError, CheckerBox, Checker, DieValue, Die, modelDebug, generateId } from '.'
+import { MoveDirection, Game, Point, Color, GameError, CheckerBox, Checker, DieValue, Die, modelDebug, generateId } from '.'
 
 export class Player {
   id: string
@@ -6,11 +6,12 @@ export class Player {
   lastName: string
   color: Color
   moveDirection: MoveDirection
+  active: boolean = false
+  currentGame?: Game
   nickName?: string
   checkers?: Checker[] = []
-  active: boolean = false
 
-  constructor ({ firstName, lastName, color, nickName, checkers, dice }: { firstName: string; lastName: string; color: Color; nickName?: string | undefined; checkers?: Checker[]; dice?: Die[] }) {
+  constructor ({ firstName, lastName, color, nickName, checkers }: { firstName: string; lastName: string; color: Color; nickName?: string | undefined; checkers?: Checker[] }) {
     this.id = generateId()
     this.firstName = firstName
     this.lastName = lastName
@@ -25,6 +26,7 @@ export class Player {
   }
 
   move ({ origin, destination, roll }: { origin: CheckerBox; destination: CheckerBox; roll: DieValue[] }): { origin: CheckerBox, destination: CheckerBox } {
+    let isHit: boolean = false
     if (modelDebug) {
       console.log(`[Player Model] move ${this.color}:`)
       console.log(`[Player Model] active?: ${this.active.toString()}`)
@@ -40,8 +42,6 @@ export class Player {
       throw new GameError({ model: 'Player', errorMessage: `There are no checkers to move in ${origin.id}` })
     }
 
-
-
     if (origin.checkers[0].color !== this.color) {
       throw new GameError({ model: 'Player', errorMessage: 'That is not your checker' })
     }
@@ -53,16 +53,28 @@ export class Player {
       throw new GameError({ model: 'Player', errorMessage: `Only moves between Points are supported currently` })
     }
 
+    if (destination.checkers) {
+      console.error('There are other checkers on this point')
+      if (destination.checkers.length === 1 && destination.checkers[0].color !== this.color) {
+        isHit = true
+        console.log(isHit)
+        const hitChecker = destination.checkers[0]
+        console.log(hitChecker)
+        if (!this.currentGame) {
+          throw new GameError({ model: 'Player', errorMessage: 'No current game' })
+        }
+        const railCheckerBox = this.currentGame.board.rail.checkerBoxes[this.color]
+        destination.checkers = []
+        railCheckerBox.checkers.push(hitChecker)
+      }
+    }
+
     const originPoint = origin.parent as Point
     const destinationPoint = destination.parent as Point
 
     if (!originPoint || !destinationPoint || !originPoint.checkerBox.parent) {
       throw new GameError({ model: 'Player', errorMessage: 'Missing parent Point for checkerBox' })
     }
-
-    console.log(`this.moveDirection = ${this.moveDirection.toString()}`)
-    console.log(`originPoint.position = ${originPoint.position}`)
-    console.log(`destinationPoint.position = ${destinationPoint.position}`)
 
     const moveDelta = Math.abs(originPoint.position - destinationPoint.position)
 
@@ -89,10 +101,9 @@ export class Player {
     }
 
     if (modelDebug) {
-      console.log(`[Player Model]origin: `)
-      console.log(origin)
-      console.log(`[Player Model]destination: `)
-      console.log(destination)
+      console.log(`[Player Model] origin: `, origin)
+      console.log(`[Player Model] destination:`, destination)
+
     }
 
     const newOriginCheckers = origin.checkers.slice(0, origin.checkers.length - 1)

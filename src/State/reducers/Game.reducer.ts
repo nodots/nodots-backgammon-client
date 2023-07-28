@@ -1,5 +1,5 @@
 import { GameError } from '../../Models'
-import { GAME_ACTION_TYPE } from '../Game.state'
+import { GAME_ACTION_TYPE } from '../Game.State'
 import { GameState } from '../types/game-state'
 import { GameAction } from '../types/game-action'
 import { reducer as rollReducer } from './roll.reducer'

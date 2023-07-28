@@ -1,4 +1,4 @@
-import { useGame } from '../../Hooks/useGame'
+import { useGame } from '../../hooks/useGame'
 import { Grid } from '@mui/material'
 import Quadrant from '../Quadrant/Quadrant'
 import Rail from '../Rail/Rail'
