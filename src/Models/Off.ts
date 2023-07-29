@@ -1,4 +1,4 @@
-import { PointProp, generateId } from '.'
+import { CheckerBoxType, PointProp, generateId } from '.'
 import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
 
@@ -16,8 +16,8 @@ export class Off {
   private constructor () {
     this.id = generateId()
     this.checkerBoxes = {
-      black: new CheckerBox({ type: 'off', color: 'black', parent: this }),
-      white: new CheckerBox({ type: 'off', color: 'white', parent: this })
+      black: new CheckerBox({ type: CheckerBoxType.OFF, color: 'black', parent: this }),
+      white: new CheckerBox({ type: CheckerBoxType.OFF, color: 'white', parent: this })
     }
   }
 

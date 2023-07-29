@@ -1,6 +1,6 @@
 import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
-import { POINT_COUNT, PointProp, generateId } from '.'
+import { CheckerBoxType, POINT_COUNT, PointProp, generateId } from '.'
 
 export class Point {
   id: string
@@ -11,7 +11,7 @@ export class Point {
   constructor ({ position, checkers }: { position: number; checkers?: Checker[] }) {
     this.id = generateId()
     this.position = position
-    this.checkerBox = new CheckerBox({ type: 'point', parent: this })
+    this.checkerBox = new CheckerBox({ type: CheckerBoxType.POINT, parent: this })
     this.checkers = this.checkerBox.checkers
   }
 

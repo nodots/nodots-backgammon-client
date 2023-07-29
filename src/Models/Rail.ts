@@ -1,4 +1,4 @@
-import { PointProp, generateId } from '.'
+import { CheckerBoxType, PointProp, generateId } from '.'
 import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
 
@@ -17,8 +17,8 @@ export class Rail {
   constructor () {
     this.id = generateId()
     this.checkerBoxes = {
-      black: new CheckerBox({ type: 'off', color: 'black', parent: this }),
-      white: new CheckerBox({ type: 'off', color: 'white', parent: this })
+      black: new CheckerBox({ type: CheckerBoxType.RAIL, color: 'black', parent: this }),
+      white: new CheckerBox({ type: CheckerBoxType.RAIL, color: 'white', parent: this })
     }
   }
 

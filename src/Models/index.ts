@@ -29,8 +29,20 @@ export type MoveType = {
   destination: CheckerBox,
   completed: boolean
 }
-export type CheckerBoxType = 'point' | 'rail' | 'off'
-export type QuadrantLocation = 'ne' | 'nw' | 'sw' | 'se'
+
+export enum CheckerBoxType {
+  POINT,
+  RAIL,
+  OFF
+}
+
+export enum QuadrantLocation {
+  NE,
+  NW,
+  SE,
+  SW
+}
+
 export type Color = 'black' | 'white'
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
@@ -100,8 +112,13 @@ export const INIT_BOARD_SETUP: PointProp[] = [
     checkerCount: 5,
     color: 'black'
   },
+  // {
+  //   position: 24,
+  //   checkerCount: 2,
+  //   color: 'white'
+  // }
   {
-    position: 24,
+    position: 'rail',
     checkerCount: 2,
     color: 'white'
   }

@@ -28,13 +28,13 @@ export class CheckerBox {
     this.color = color ? color : undefined
     this.checkers = checkers ? checkers : []
     switch (this.type) {
-      case 'point':
+      case CheckerBoxType.POINT:
         this.parent = parent as Point
         break
-      case 'rail':
+      case CheckerBoxType.RAIL:
         this.parent = parent as Rail
         break
-      case 'off':
+      case CheckerBoxType.OFF:
         this.parent = parent as Off
         break
       default:
