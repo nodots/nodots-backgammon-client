@@ -1,4 +1,4 @@
-import { MoveDirection, Game, Point, Color, GameError, CheckerBox, Checker, DieValue, Die, modelDebug, generateId } from '.'
+import { MoveDirection, Game, Point, Color, GameError, CheckerBox, Checker, DieValue, Die, modelDebug, generateId, CheckerBoxType } from '.'
 
 export class Player {
   id: string
@@ -49,7 +49,7 @@ export class Player {
     if (!this.active) {
       throw new GameError({ model: 'Player', errorMessage: `${this.color} is not active and cannot move` })
     }
-    if (origin.type !== 'point' || destination.type !== 'point') {
+    if (origin.type !== CheckerBoxType.POINT || destination.type !== CheckerBoxType.POINT) {
       throw new GameError({ model: 'Player', errorMessage: `Only moves between Points are supported currently` })
     }
 
