@@ -12,6 +12,7 @@ import { Point } from './Point'
 import { Rail } from './Rail'
 import { RollSurface } from './RollSurface'
 import { Off } from './Off'
+import { Turn } from './Turn'
 
 export const modelDebug = false
 export const MAX_CUBE_VALUE = 64
@@ -142,6 +143,7 @@ export {
   Rail,
   RollSurface,
   Off,
+  Turn,
   generateId
 }
 

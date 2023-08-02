@@ -15,15 +15,6 @@ export const enum GAME_ACTION_TYPE {
   TOGGLE
 }
 
-export enum TURN_STATUS {
-  INITIALIZED,
-  MOVES_SET,
-  ORIGIN_SET,
-  DESTINATION_SET,
-  MOVE_IN_PROGRESS,
-  MOVE_COMPLETED,
-  MOVE_FAILED
-}
 
 export const initGameState: GameState = initializeGame()
 
