@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import { initGameState } from './Game.state'
+import { initGameState } from './game.state'
 import { GameContext, useGameContext } from './Game.context'
 
 type ChildrenType = {

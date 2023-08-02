@@ -2,7 +2,7 @@ import { produce } from 'immer'
 import { GameError, CheckerBox, MoveType, DieValue } from '../../models'
 import { GameState } from '../types/game.state'
 import { GameAction } from '../types/game.action'
-import { MOVE_STATUS } from '../Game.state'
+import { MOVE_STATUS } from '../game.state'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {
   const { payload } = action
@@ -22,26 +22,26 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
     state.dice[state.activeColor][1].value as DieValue
   ]
 
-  if (!state.activeMove.moves[0].origin) {
+  if (!state.activeTurn.moves[0].origin) {
     if (state.debug.isActive) {
       console.log('[Game Reducer] Setting checkers[0] origin')
     }
 
     const newState = produce(state, draft => {
-      draft.activeMove.color = state.activeColor
-      draft.activeMove.moves[0].origin = payload
-      draft.activeMove.moves[0].completed = false
+      draft.activeTurn.color = state.activeColor
+      draft.activeTurn.moves[0].origin = payload
+      draft.activeTurn.moves[0].completed = false
     })
     return newState
-  } else if (state.activeMove.moves[0].origin &&
-    !state.activeMove.moves[0].destination
+  } else if (state.activeTurn.moves[0].origin &&
+    !state.activeTurn.moves[0].destination
   ) {
     if (state.debug.isActive) {
       console.log('[Game Reducer] Setting checkers[0] destination')
     }
     const newState = produce(state, draft => {
-      draft.activeMove.moves[0].destination = payload
-      const origin = state.activeMove.moves[0].origin as CheckerBox
+      draft.activeTurn.moves[0].destination = payload
+      const origin = state.activeTurn.moves[0].origin as CheckerBox
       const destination = payload
       let moveResults: { origin: CheckerBox, destination: CheckerBox } | undefined = undefined
       try {
@@ -52,8 +52,8 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
       } catch (e: any) {
         alert(`${e.message}: YOU WILL SEE THIS MESSAGE TWICE IN DEV MODE`)
         const newState = produce(state, draft => {
-          draft.activeMove.moves[0].origin = undefined
-          draft.activeMove.moves[0].destination = undefined
+          draft.activeTurn.moves[0].origin = undefined
+          draft.activeTurn.moves[0].destination = undefined
         })
         return newState
       }
@@ -69,7 +69,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
         board: state.board,
         origin: moveResults.origin,
         destination: moveResults.destination,
-        checker: state.activeMove.moves[0],
+        checker: state.activeTurn.moves[0],
         completed: false
       }
       const { originQuadrantIndex, originPointIndex, destinationQuadrantIndex, destinationPointIndex } = moveChecker(movePayload, state.debug.isActive)
@@ -78,27 +78,27 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
         = moveResults.origin
       draft.board.quadrants[destinationQuadrantIndex].points[destinationPointIndex].checkerBox
         = moveResults.destination
-      draft.activeMove.moves[0].completed = true
+      draft.activeTurn.moves[0].completed = true
 
     })
     return newState
-  } else if (!state.activeMove.moves[1].origin) {
+  } else if (!state.activeTurn.moves[1].origin) {
     if (state.debug.isActive) {
       console.log('[Game Reducer] Setting moves[1] origin')
     }
     const newState = produce(state, draft => {
-      draft.activeMove.color = state.activeColor
-      draft.activeMove.moves[1].origin = payload
-      draft.activeMove.moves[1].completed = false
+      draft.activeTurn.color = state.activeColor
+      draft.activeTurn.moves[1].origin = payload
+      draft.activeTurn.moves[1].completed = false
     })
     return newState
-  } else if (state.activeMove.moves[1].origin && !state.activeMove.moves[1].destination) {
+  } else if (state.activeTurn.moves[1].origin && !state.activeTurn.moves[1].destination) {
     if (state.debug.isActive) {
       console.log('[Game Reducer] Setting moves[1] destination')
     }
     const newState = produce(state, draft => {
-      draft.activeMove.moves[1].destination = payload
-      const origin = state.activeMove.moves[1].origin as CheckerBox
+      draft.activeTurn.moves[1].destination = payload
+      const origin = state.activeTurn.moves[1].origin as CheckerBox
       const destination = payload
       let moveResults: { origin: CheckerBox, destination: CheckerBox } | undefined = undefined
       try {
@@ -120,20 +120,20 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
         board: state.board,
         origin: moveResults.origin,
         destination: moveResults.destination,
-        checker: state.activeMove.moves[1],
+        checker: state.activeTurn.moves[1],
         completed: false
       }
       const { originQuadrantIndex, originPointIndex, destinationQuadrantIndex, destinationPointIndex } = moveChecker(movePayload)
 
-      draft.activeMove.status = MOVE_STATUS.DESTINATION_SET
+      draft.activeTurn.status = MOVE_STATUS.DESTINATION_SET
       draft.board.quadrants[originQuadrantIndex].points[originPointIndex].checkerBox
         = moveResults.origin
       draft.board.quadrants[destinationQuadrantIndex].points[destinationPointIndex].checkerBox
         = moveResults.destination
-      draft.activeMove.moves[1].completed = true
+      draft.activeTurn.moves[1].completed = true
 
     })
-    console.log(newState.activeMove.status)
+    console.log(newState.activeTurn.status)
     return newState
 
   }

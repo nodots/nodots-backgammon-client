@@ -21,7 +21,7 @@ export const reducer = (state: GameState, action: GameAction): GameState => {
     } else {
       throw new GameError({ model: 'Player', errorMessage: 'There is no active player' })
     }
-    draft.activeMove.moves = []
+    draft.activeTurn.moves = []
     draft.dice[state.activeColor][0].value = undefined
 
 

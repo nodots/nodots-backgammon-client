@@ -18,7 +18,7 @@ export type GameState = {
     black: RollSurfaceState
   }
   cube: CubeState
-  activeMove: MoveState
+  activeTurn: MoveState
   activeColor: Color
   rename: (name: string) => any
   roll: (action: GameAction) => any

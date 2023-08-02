@@ -7,7 +7,7 @@ import { DieState, RollSurfaceState } from '../state/types/die.state'
 import { CubeState } from '../state/types/cube.state'
 import { CheckerMoveState, DieRollActionPayload } from '../state/types/game.action'
 import { GameContext } from '../state/Game.context'
-import { MOVE_STATUS } from '../state/Game.state'
+import { MOVE_STATUS } from '../state/game.state'
 
 type UseGameHookType = {
   board: Board
@@ -24,7 +24,7 @@ type UseGameHookType = {
     black: RollSurfaceState
   }
   cube: CubeState
-  activeMove: {
+  activeTurn: {
     status: MOVE_STATUS | undefined
     color: Color | undefined
     moves: CheckerMoveState[]
@@ -49,6 +49,6 @@ type UseGameHookType = {
 }
 
 export const useGame = (): UseGameHookType => {
-  const { state: { board, players, cube, dice, activeMove, activeColor, rollSurfaces, debug }, roll, move, finalizeMove, double } = useContext(GameContext)
-  return { board, players, cube, dice, activeMove, activeColor, rollSurfaces, roll, move, finalizeMove, double, debug }
+  const { state: { board, players, cube, dice, activeTurn, activeColor, rollSurfaces, debug }, roll, move, finalizeMove, double } = useContext(GameContext)
+  return { board, players, cube, dice, activeTurn, activeColor, rollSurfaces, roll, move, finalizeMove, double, debug }
 }

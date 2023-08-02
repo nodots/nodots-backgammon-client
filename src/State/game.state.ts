@@ -103,7 +103,7 @@ function initializeGame () {
         ]
       },
     },
-    activeMove: {
+    activeTurn: {
       status: undefined,
       color: undefined,
       moves: [],

@@ -4,7 +4,7 @@ import { useGame } from '../../hooks/useGame'
 // Models
 import { GameError } from '../../models'
 // States
-import { MOVE_STATUS } from '../../state/Game.state'
+import { MOVE_STATUS } from '../../state/game.state'
 import { RollSurfaceState, DieState } from '../../state/types/die.state'
 // Components
 import Die from '../Die/Die'
@@ -16,7 +16,7 @@ interface RollSurfaceProps {
 const RollSurface = (props: RollSurfaceProps) => {
   const die1Ref = useRef<DieState>(null)
   const die2Ref = useRef<DieState>(null)
-  const { players, dice, activeColor, activeMove, debug, rollSurfaces, finalizeMove } = useGame()
+  const { players, dice, activeColor, activeTurn, debug, rollSurfaces, finalizeMove } = useGame()
   const die1State = dice[props.rollSurface.color][0] as DieState
   const die2State = dice[props.rollSurface.color][1] as DieState
   const rollSurfaceState = rollSurfaces[props.rollSurface.color]
@@ -34,18 +34,18 @@ const RollSurface = (props: RollSurfaceProps) => {
   const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     if (debug) {
-      console.log(`[RollSurface Component] clickHandler activeMove:`, activeMove)
+      console.log(`[RollSurface Component] clickHandler activeTurn:`, activeTurn)
     }
 
-    if (activeMove.status === MOVE_STATUS.DESTINATION_SET && activeMove.color === props.rollSurface.color) {
-      activeMove.moves.forEach(m => {
+    if (activeTurn.status === MOVE_STATUS.DESTINATION_SET && activeTurn.color === props.rollSurface.color) {
+      activeTurn.moves.forEach(m => {
         if (!m.completed) {
           throw new GameError({ model: 'Move', errorMessage: 'One or more moves have not been completed' })
         }
       })
       finalizeMove(activeColor)
     } else {
-      console.log('[Roll Surface Component] activeMove:', activeMove)
+      console.log('[Roll Surface Component] activeTurn:', activeTurn)
       if (debug) {
         console.log('[RollSurface Component] die1Ref', die1Ref)
         console.log('[RollSurface Component] die2Ref', die2Ref)
