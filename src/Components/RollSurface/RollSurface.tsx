@@ -53,8 +53,10 @@ const RollSurface = (props: RollSurfaceProps) => {
       if (!die1Ref.current || !die2Ref.current) {
         throw new GameError({ model: 'RollSurface', errorMessage: 'Missing one or more Die' })
       }
-      die1Ref.current.rollDie()
-      die2Ref.current.rollDie()
+      const die1Value = die1Ref.current.rollDie()
+      const die2Value = die2Ref.current.rollDie()
+
+
 
     }
   }
