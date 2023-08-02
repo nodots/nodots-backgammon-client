@@ -113,13 +113,8 @@ export const INIT_BOARD_SETUP: PointProp[] = [
     checkerCount: 5,
     color: 'black'
   },
-  // {
-  //   position: 24,
-  //   checkerCount: 2,
-  //   color: 'white'
-  // }
   {
-    position: 'rail',
+    position: 24,
     checkerCount: 2,
     color: 'white'
   }
