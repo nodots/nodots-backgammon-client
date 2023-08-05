@@ -16,7 +16,7 @@ const Checker = (props: CheckerProps) => {
     // if (!players[props.checker.color].active &&
     //   (
     //     activeColor !== props.checker.color &&
-    //     activeTurn.status !== MOVE_STATUS.ORIGIN_SET
+    //     activeTurn.status !== MoveStatus.ORIGIN_SET
     //   )
     // ) {
     //   e.stopPropagation()

@@ -1,4 +1,4 @@
-import { MoveDirection, Game, Point, Color, GameError, CheckerBox, Checker, DieValue, Die, modelDebug, generateId, CheckerBoxType } from '.'
+import { MoveDirection, Game, Point, Rail, Off, Color, GameError, CheckerBox, Checker, DieValue, Die, modelDebug, isPoint, isRail, isOff, generateId } from '.'
 
 export class Player {
   id: string
@@ -25,102 +25,102 @@ export class Player {
     return [Die.roll() as DieValue, Die.roll() as DieValue]
   }
 
-  move ({ origin, destination, roll }: { origin: CheckerBox; destination: CheckerBox; roll: DieValue[] }): { origin: CheckerBox, destination: CheckerBox } {
-    let isHit: boolean = false
-    if (modelDebug) {
-      console.log(`[Player Model] move ${this.color}:`)
-      console.log(`[Player Model] active?: ${this.active.toString()}`)
-      console.log(`[Player Model] move origin:`, origin)
-      console.log(`[Player Model] move destination:`, destination)
-      console.log(`[Player Model] move roll:`, roll)
-    }
-    if (!this.active) {
-      throw new GameError({ model: 'Player', errorMessage: 'It is not your turn!' })
-    }
+  // move ({ origin, destination, roll }: { origin: Point | Rail; destination: Point | Off; roll: DieValue[] }): { origin: Point | Rail; destination: Point | Off } {
 
-    if (origin.checkers.length === 0) {
-      throw new GameError({ model: 'Player', errorMessage: `There are no checkers to move in ${origin.id}` })
-    }
 
-    if (origin.checkers[0].color !== this.color) {
-      throw new GameError({ model: 'Player', errorMessage: 'That is not your checker' })
-    }
 
-    if (!this.active) {
-      throw new GameError({ model: 'Player', errorMessage: `${this.color} is not active and cannot move` })
-    }
-    if (origin.type !== CheckerBoxType.POINT || destination.type !== CheckerBoxType.POINT) {
-      throw new GameError({ model: 'Player', errorMessage: `Only moves between Points are supported currently` })
-    }
+  //   let isHit: boolean = false
+  //   if (modelDebug) {
+  //     console.log(`[Player Model] move ${this.color}:`)
+  //     console.log(`[Player Model] active?: ${this.active.toString()}`)
+  //     console.log(`[Player Model] move origin:`, origin)
+  //     console.log(`[Player Model] move destination:`, destination)
+  //     console.log(`[Player Model] move roll:`, roll)
+  //   }
+  //   if (!this.active) {
+  //     throw new GameError({ model: 'Player', errorMessage: 'It is not your turn!' })
+  //   }
 
-    if (destination.checkers) {
-      console.error('There are other checkers on this point')
-      if (destination.checkers.length === 1 && destination.checkers[0].color !== this.color) {
-        isHit = true
-        console.log(isHit)
-        const hitChecker = destination.checkers[0]
-        console.log(hitChecker)
-        if (!this.currentGame) {
-          throw new GameError({ model: 'Player', errorMessage: 'No current game' })
-        }
-        const railCheckerBox = this.currentGame.board.rail.checkerBoxes[this.color]
-        destination.checkers = []
-        railCheckerBox.checkers.push(hitChecker)
-      }
-    }
+  //   if (origin.checkers.length === 0) {
+  //     throw new GameError({ model: 'Player', errorMessage: `There are no checkers to move in ${origin.id}` })
+  //   }
 
-    const originPoint = origin.parent as Point
-    const destinationPoint = destination.parent as Point
+  //   if (origin.checkers[0].color !== this.color) {
+  //     throw new GameError({ model: 'Player', errorMessage: 'That is not your checker' })
+  //   }
 
-    if (!originPoint || !destinationPoint || !originPoint.checkerBox.parent) {
-      throw new GameError({ model: 'Player', errorMessage: 'Missing parent Point for checkerBox' })
-    }
+  //   if (!this.active) {
+  //     throw new GameError({ model: 'Player', errorMessage: `${this.color} is not active and cannot move` })
+  //   }
 
-    const moveDelta = Math.abs(originPoint.position - destinationPoint.position)
+  //   // if (isPoint(origin) && isPoint(destination)) {
 
-    if (moveDelta !== roll[0] && moveDelta !== roll[1] && moveDelta !== roll[0] + roll[1]) {
-      throw new GameError({ model: 'Player', errorMessage: `Illegal move for roll: ${roll[0]} ${roll[1]}` })
-    }
+  //   // }
 
-    if (this.moveDirection === 'clockwise') {
-      if (originPoint.position < destinationPoint.position) {
-        throw new GameError({ model: 'Player', errorMessage: `${this.color} can only move ${this.moveDirection.toString()}` })
-      }
-    } else {
-      if (originPoint.position > destinationPoint.position) {
-        throw new GameError({ model: 'Player', errorMessage: `${this.color} can only move ${this.moveDirection}` })
-      }
-    }
 
-    const checkerToMove = origin.checkers[origin.checkers.length - 1]
-    if (!checkerToMove) {
-      throw new GameError({ model: 'Player', errorMessage: 'No checker to move' })
-    }
-    if (checkerToMove.color !== this.color) {
-      throw new GameError({ model: 'Player', errorMessage: `${this.color} cannot move ${checkerToMove.color} checkers` })
-    }
+  //   // if (destination.checkers) {
+  //   //   console.error('There are other checkers on this point')
+  //   //   if (destination.checkers.length === 1 && destination.checkers[0].color !== this.color) {
+  //   //     isHit = true
+  //   //     console.log(isHit)
+  //   //     const hitChecker = destination.checkers[0]
+  //   //     console.log(hitChecker)
+  //   //     if (!this.currentGame) {
+  //   //       throw new GameError({ model: 'Player', errorMessage: 'No current game' })
+  //   //     }
+  //   //     const railCheckerBox = this.currentGame.board.rail.checkerBoxes[this.color]
+  //   //     destination.checkers = []
+  //   //     railCheckerBox.checkers.push(hitChecker)
+  //   //   }
+  //   // }
 
-    if (modelDebug) {
-      console.log(`[Player Model] origin: `, origin)
-      console.log(`[Player Model] destination:`, destination)
 
-    }
 
-    const newOriginCheckers = origin.checkers.slice(0, origin.checkers.length - 1)
-    const newDestinationCheckers = destination.checkers.concat(checkerToMove)
+  //   // const moveDelta = Math.abs(origin.position - destination.position)
 
-    const newOrigin: CheckerBox = {
-      ...origin,
-      checkers: newOriginCheckers
-    }
+  //   // if (moveDelta !== roll[0] && moveDelta !== roll[1] && moveDelta !== roll[0] + roll[1]) {
+  //   //   throw new GameError({ model: 'Player', errorMessage: `Illegal move for roll: ${roll[0]} ${roll[1]}` })
+  //   // }
 
-    const newDestination: CheckerBox = {
-      ...destination,
-      checkers: newDestinationCheckers
-    }
+  //   // if (this.moveDirection === 'clockwise') {
+  //   //   if (origin.position < destination.position) {
+  //   //     throw new GameError({ model: 'Player', errorMessage: `${this.color} can only move ${this.moveDirection.toString()}` })
+  //   //   }
+  //   // } else {
+  //   //   if (origin.position > destination.position) {
+  //   //     throw new GameError({ model: 'Player', errorMessage: `${this.color} can only move ${this.moveDirection}` })
+  //   //   }
+  //   // }
 
-    return { origin: newOrigin, destination: newDestination }
-  }
+  //   // const checkerToMove = origin.checkers[origin.checkers.length - 1]
+  //   // if (!checkerToMove) {
+  //   //   throw new GameError({ model: 'Player', errorMessage: 'No checker to move' })
+  //   // }
+  //   // if (checkerToMove.color !== this.color) {
+  //   //   throw new GameError({ model: 'Player', errorMessage: `${this.color} cannot move ${checkerToMove.color} checkers` })
+  //   // }
+
+  //   // if (modelDebug) {
+  //   //   console.log(`[Player Model] origin: `, origin)
+  //   //   console.log(`[Player Model] destination:`, destination)
+
+  //   // }
+
+  //   // const newOriginCheckers = origin.checkers.slice(0, origin.checkers.length - 1)
+  //   // const newDestinationCheckers = destination.checkers.concat(checkerToMove)
+
+  //   // const newOrigin: CheckerBox = {
+  //   //   ...origin,
+  //   //   checkers: newOriginCheckers
+  //   // }
+
+  //   // const newDestination: CheckerBox = {
+  //   //   ...destination,
+  //   //   checkers: newDestinationCheckers
+  //   // }
+
+  //   // return { origin: newOrigin, destination: newDestination }
+  // }
 
   rollForStart (): DieValue {
     return Die.roll()

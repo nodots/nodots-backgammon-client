@@ -1,7 +1,6 @@
 import { produce } from 'immer'
-import { Turn, Color, GameError } from '../../models'
+import { Color, GameError } from '../../models'
 import { GameState } from '../types/game.state'
-import { MOVE_STATUS } from '../game.state'
 import { GameAction, DieRollActionPayload } from '../types/game.action'
 
 export const reducer = (state: GameState, action: GameAction): GameState => {

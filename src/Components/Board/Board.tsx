@@ -29,7 +29,8 @@ const Board = () => {
         {swQuadrant && <Quadrant location={QuadrantLocation.SW} locationString='sw' quadrant={swQuadrant} />}
       </Grid>
       <Grid item className='rail'>
-        <Rail rail={board.rail} />
+        <Rail rail={board.rail.black} />
+        <Rail rail={board.rail.white} />
       </Grid>
       <Grid item className='col right'>
         {neQuadrant && <Quadrant location={QuadrantLocation.NE} locationString='ne' quadrant={neQuadrant} />}
@@ -40,7 +41,9 @@ const Board = () => {
         {seQuadrant && <Quadrant location={QuadrantLocation.SE} locationString='sw' quadrant={seQuadrant} />}
       </Grid>
       <Grid item className='off-container'>
-        {board.off && cube && <Off off={board.off} cube={cube} />}
+        <Off off={board.off.black} />
+        <Off off={board.off.white} />
+
       </Grid>
     </Grid>
   } else {

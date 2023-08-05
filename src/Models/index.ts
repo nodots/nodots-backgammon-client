@@ -12,7 +12,8 @@ import { Point } from './Point'
 import { Rail } from './Rail'
 import { RollSurface } from './RollSurface'
 import { Off } from './Off'
-import { Turn } from './Turn'
+import { Turn, TurnStatus } from './Turn'
+import { Move, MoveStatus } from './Move'
 
 export const modelDebug = false
 export const MAX_CUBE_VALUE = 64
@@ -31,12 +32,6 @@ export type MoveType = {
   completed: boolean
 }
 
-export enum CheckerBoxType {
-  POINT,
-  RAIL,
-  OFF
-}
-
 export enum QuadrantLocation {
   NE,
   NW,
@@ -45,10 +40,49 @@ export enum QuadrantLocation {
 }
 
 export type Color = 'black' | 'white'
+export type DieOrder = 0 | 1
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 export type RollResults = DieValue[]
 export type MoveDirection = 'clockwise' | 'counterclockwise'
+export type CheckerBoxPosition = number | 'rail' | 'off'
+
+export const isDieValue = (v: unknown): v is DieValue => {
+  if (v && typeof v === 'number' && v >= 1 && v <= 6) {
+    return true
+  }
+  return false
+}
+
+export const isDieOrder = (o: unknown): o is DieOrder => {
+  if (o && typeof o === 'number' && o >= 0 && o <= 1) {
+    return true
+  }
+  return false
+}
+
+export const isPoint = (cb: CheckerBox): cb is Point => {
+  if (cb && typeof cb.position === 'number') {
+    return true
+  }
+  return false
+}
+
+export const isRail = (cb: CheckerBox): cb is Rail => {
+  if (cb && cb.position === 'rail') {
+    return true
+  }
+  return false
+}
+
+export const isOff = (cb: CheckerBox): cb is Off => {
+  if (cb && cb.position === 'off') {
+    return true
+  }
+  return false
+}
+
+
 
 export interface GameMove {
   checkerId: string,
@@ -58,7 +92,7 @@ export interface GameMove {
   endCheckerBoxId: string,
 }
 
-export interface PointProp {
+export interface CheckerProp {
   position: number | 'rail' | 'off'
   checkerCount: number
   color: Color
@@ -77,7 +111,7 @@ export interface PlayerProp {
 export const POINT_COUNT = 24
 export const CHECKERS_PER_PLAYER = 15
 export const INIT_PIP_COUNT = 167
-export const INIT_BOARD_SETUP: PointProp[] = [
+export const INIT_BOARD_SETUP: CheckerProp[] = [
   {
     position: 1,
     checkerCount: 2,
@@ -139,6 +173,9 @@ export {
   RollSurface,
   Off,
   Turn,
+  TurnStatus,
+  Move,
+  MoveStatus,
   generateId
 }
 

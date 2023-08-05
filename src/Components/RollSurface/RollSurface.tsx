@@ -4,22 +4,34 @@ import { useGame } from '../../hooks/useGame'
 // Models
 import { GameError } from '../../models'
 // States
-import { MOVE_STATUS } from '../../state/game.state'
 import { RollSurfaceState, DieState } from '../../state/types/die.state'
 // Components
 import Die from '../Die/Die'
+import { InitializeTurnActionPayload } from '../../state/Game.context'
+import { MoveStatus } from '../../models/Move'
+import { TurnStatus } from '../../models/Turn'
 
 interface RollSurfaceProps {
   rollSurface: RollSurfaceState
 }
 
+
 const RollSurface = (props: RollSurfaceProps) => {
   const die1Ref = useRef<DieState>(null)
   const die2Ref = useRef<DieState>(null)
-  const { players, dice, activeColor, activeTurn, debug, rollSurfaces, finalizeMove } = useGame()
+  const { players, dice, activeColor, activeTurn, debug, rollSurfaces } = useGame()
   const die1State = dice[props.rollSurface.color][0] as DieState
   const die2State = dice[props.rollSurface.color][1] as DieState
   const rollSurfaceState = rollSurfaces[props.rollSurface.color]
+  const activePlayer = players[props.rollSurface.color]
+
+  const rollDice = async (): Promise<void> => {
+    if (!die1Ref.current?.value || !die2Ref.current?.value) {
+      throw new GameError({ model: 'Turn', errorMessage: 'No dice values' })
+    }
+    await die1Ref.current.rollDie()
+    await die2Ref.current.rollDie()
+  }
 
   if (debug) {
     console.log('[RollSurface Component dice:', dice)
@@ -31,19 +43,23 @@ const RollSurface = (props: RollSurfaceProps) => {
     console.log('[RollSurface Component] die2State:', die2State)
   }
 
-  const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+  const clickHandler = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     if (debug) {
       console.log(`[RollSurface Component] clickHandler activeTurn:`, activeTurn)
     }
 
-    if (activeTurn.status === MOVE_STATUS.DESTINATION_SET && activeTurn.color === props.rollSurface.color) {
+    if (!activePlayer || activePlayer.color !== activeColor) {
+      throw new GameError({ model: 'Move', errorMessage: 'There is either no active player or activePlayer and activeColor are out of sync' })
+    }
+
+    if (activeTurn.status === TurnStatus.DESTINATION_SET) {
       activeTurn.moves.forEach(m => {
-        if (!m.completed) {
+        if (m.status !== MoveStatus.COMPLETED) {
           throw new GameError({ model: 'Move', errorMessage: 'One or more moves have not been completed' })
         }
       })
-      finalizeMove(activeColor)
+      // finalizeTurn(activeColor)
     } else {
       console.log('[Roll Surface Component] activeTurn:', activeTurn)
       if (debug) {
@@ -53,14 +69,19 @@ const RollSurface = (props: RollSurfaceProps) => {
       if (!die1Ref.current || !die2Ref.current) {
         throw new GameError({ model: 'RollSurface', errorMessage: 'Missing one or more Die' })
       }
-      const die1Value = die1Ref.current.rollDie()
-      const die2Value = die2Ref.current.rollDie()
 
+      rollDice()
+        .then(() => {
+          console.log(dice)
+          const payload: InitializeTurnActionPayload = {
+            player: activePlayer,
+          }
+          // initializeTurn(payload)
 
+        })
 
     }
   }
-
 
   return <div className='roll-surface' onClick={clickHandler}>
     <Die die={die1State} ref={die1Ref} />

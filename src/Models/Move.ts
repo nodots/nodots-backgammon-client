@@ -1,7 +1,6 @@
-import { DieValue, generateId } from '.'
+import { DieValue, Player, generateId } from '.'
 import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
-import { Player } from './Player'
 
 export enum MoveMode {
   POINT_TO_POINT,
@@ -36,8 +35,6 @@ export class Move {
     this.id = generateId()
     this.dieValue = dieValue
   }
-
-
 
 }
 

@@ -1,7 +1,7 @@
 import { GameError } from './Error'
 import { Checker } from './Checker'
 import { Point } from './Point'
-import { Color, PointProp, QuadrantLocation, generateId } from '.'
+import { Color, CheckerProp, QuadrantLocation, generateId } from '.'
 
 /**
  * The Board is divided into 4 quadrants each with 6 Points. QuadrantLocation 
@@ -32,7 +32,7 @@ export class Quadrant {
   }
 
   // FIXME: currently returns a tuple. Should be an object to prevent ordering errors
-  static initialize (setup: PointProp[]): Quadrant[] {
+  static initialize (setup: CheckerProp[]): Quadrant[] {
     const points = Point.initialize(setup)
     // Need the typeof filter since we are treating the rail (position = 'rail') and bear off trays (p.position = 'off') types of points
     const SEQuadrant = new Quadrant({ location: QuadrantLocation.SE, points: points.filter(p => typeof p.position === 'number' && p.position <= 6) })

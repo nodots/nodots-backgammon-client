@@ -9,8 +9,7 @@ interface RailProps {
 
 const Rail = (props: RailProps) => {
   return <>
-    <CheckerBox checkerBox={props.rail.checkerBoxes.black} />
-    <CheckerBox checkerBox={props.rail.checkerBoxes.white} />
+    <CheckerBox checkerBox={props.rail} />
   </>
 }
 

@@ -1,20 +1,14 @@
 // State
-import { OffState } from '../../state/types/off.state'
-import { CubeState } from '../../state/types/cube.state'
-// Components
-import Cube from '../Cube/Cube'
+import { Off as OffModel } from '../../models'
 import CheckerBox from '../CheckerBox/CheckerBox'
 
 interface OffProps {
-  off: OffState
-  cube: CubeState
+  off: OffModel
 }
 
 const Off = (props: OffProps) => {
   return <>
-    <CheckerBox checkerBox={props.off.checkerBoxes.black} />
-    <Cube cube={props.cube} />
-    <CheckerBox checkerBox={props.off.checkerBoxes.white} />
+    <CheckerBox checkerBox={props.off} />
   </>
 }
 

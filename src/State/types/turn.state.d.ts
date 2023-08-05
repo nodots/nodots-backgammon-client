@@ -1,14 +1,12 @@
-import { Die } from './Die'
 import { Player } from './Player'
 import { Move } from './Move'
-import { DieValue, generateId } from '.'
-import { TurnStatus } from '../../models/Turn'
+import { TurnStatus, Roll } from '../../models/Turn'
 
 export interface TurnState {
-  id: string
-  player: Player
-  dice: [Die, Die]
-  status: TurnStatus
+  id: string | undefined
+  player: Player | undefined
+  roll: Roll | undefined
+  status: TurnStatus | undefined
   moves: Move[] = []
 
 }

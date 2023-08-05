@@ -1,9 +1,7 @@
-import { CheckerBox } from '../../models'
+import { Rail } from '../../models'
 
 export type RailState = {
   id: string
-  checkerBoxes: {
-    black: CheckerBox
-    white: CheckerBox
-  }
+  black: Rail
+  white: Rail
 }

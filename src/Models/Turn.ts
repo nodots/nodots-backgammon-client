@@ -4,7 +4,7 @@ import { Move } from './Move'
 import { GameError } from '.'
 import { DieValue, generateId } from '.'
 
-export type Roll = [Die, Die]
+export type Roll = [DieValue, DieValue]
 
 export enum TurnStatus {
   INITIALIZED,
@@ -19,28 +19,28 @@ export enum TurnStatus {
 export class Turn {
   id: string
   player: Player
-  dice: [Die, Die]
+  roll: Roll
   status: TurnStatus
   moves: Move[] = []
 
-  constructor (player: Player, dice: Roll) {
+  constructor (player: Player, roll: Roll) {
     this.id = generateId()
     this.player = player
-    this.dice = dice
+    this.roll = roll
     this.status = TurnStatus.INITIALIZED
     let moveCount = 2
 
-    if (!this.dice[0].value || !this.dice[1].value) {
+    if (!this.roll[0] || !this.roll[1]) {
       throw new GameError({ model: 'Turn', errorMessage: 'Dice have no values' })
     }
 
-    if (dice[0].value === dice[1].value) {
+    // If the player rolls doubles, they get two extra moves.
+    if (this.roll[0] === this.roll[1]) {
       moveCount = 2
     }
 
-    // If the player rolls doubles, they get two extra moves.
     for (let i = 0; i < moveCount; i++) {
-      const dieValue: DieValue = i % 2 ? this.dice[0].value : this.dice[1].value
+      const dieValue: DieValue = i % 2 ? this.roll[0] : this.roll[1]
       this.moves.push(new Move(dieValue))
     }
 

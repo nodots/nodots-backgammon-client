@@ -1,12 +1,12 @@
-import { Color, CheckerBoxType, generateId } from '.'
-
-// TODO: Make CheckerBox an abstract class. Point, Rail, and Off inherit from 
-// CheckerBox.
-import { GameError } from './Error'
+import { CheckerBoxPosition, Color, generateId } from '.'
 import { Checker } from './Checker'
-import { Point } from './Point'
-import { Off } from './Off'
-import { Rail } from './Rail'
+
+
+export interface ICheckerBox {
+  color?: Color,
+  checkers?: Checker[]
+  position: CheckerBoxPosition
+}
 
 /**
 * Checkers can be in three different places:
@@ -14,31 +14,18 @@ import { Rail } from './Rail'
 *  2. Rail: On the bar between the points after being "hit" by opponent.
 *  3. Off: Successfully moved off the board.
 */
-export class CheckerBox {
+export abstract class CheckerBox {
   id: string
-  type: CheckerBoxType
   color: Color | undefined
   checkers: Checker[]
-  parent?: Point | Rail | Off
+  position: CheckerBoxPosition
 
-  constructor ({ type, parent, color, checkers }: { type: CheckerBoxType; parent: Point | Rail | Off, color?: Color; checkers?: Checker[] }) {
+  constructor (attrs: ICheckerBox) {
     this.id = generateId()
-    this.type = type
 
-    this.color = color ? color : undefined
-    this.checkers = checkers ? checkers : []
-    switch (this.type) {
-      case CheckerBoxType.POINT:
-        this.parent = parent as Point
-        break
-      case CheckerBoxType.RAIL:
-        this.parent = parent as Rail
-        break
-      case CheckerBoxType.OFF:
-        this.parent = parent as Off
-        break
-      default:
-        throw new GameError({ model: 'CheckerBox', errorMessage: 'Unknown type' })
-    }
+    this.color = attrs.color ? attrs.color : undefined
+    this.checkers = attrs.checkers ? attrs.checkers : []
+    this.position = attrs.position
   }
 }
+

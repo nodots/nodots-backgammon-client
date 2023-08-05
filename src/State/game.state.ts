@@ -1,28 +1,19 @@
 import { Game, Player, Die, Color } from '../models'
 import { DieState } from './types/die.state'
-import { GameAction } from './types/game.action'
+import { GameAction, InitializeTurnAction } from './types/game.action'
 import { GameState } from './types/game.state'
 
 export const enum GAME_ACTION_TYPE {
   RENAME,
   MOVE,
-  FINALIZE_MOVE,
-  RESET_MOVE,
+  INITIALIZE_TURN,
+  FINALIZE_TURN,
+  RESET_TURN,
   ROLL,
   ROLL_FOR_START,
   DOUBLE,
   RESIGN,
   TOGGLE
-}
-
-export enum MOVE_STATUS {
-  INITIALIZED,
-  MOVES_SET,
-  ORIGIN_SET,
-  DESTINATION_SET,
-  MOVE_IN_PROGRESS,
-  MOVE_COMPLETED,
-  MOVE_FAILED
 }
 
 export const initGameState: GameState = initializeGame()
@@ -104,15 +95,18 @@ function initializeGame () {
       },
     },
     activeTurn: {
+      id: undefined,
       status: undefined,
-      color: undefined,
+      player: undefined,
+      roll: undefined,
       moves: [],
     },
     activeColor: winner,
     rename: (name: string) => { },
     roll: (action: GameAction) => undefined,
     move: (action: GameAction) => { },
-    finalizeMove: (color: Color) => { },
+    initializeTurn: (action: InitializeTurnAction) => { },
+    finalizeTurn: (color: Color) => { },
     resetMove: (color: Color) => { },
     double: () => { },
     toggleActivePlayer: () => { },

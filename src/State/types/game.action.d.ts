@@ -1,3 +1,4 @@
+import { InitializeTurnActionPayload } from '../Game.context'
 import { GAME_ACTION_TYPE } from '../game-state'
 import { CheckerState } from './checker-state'
 
@@ -7,22 +8,19 @@ export interface DieRollActionPayload {
   value: DieValue
 }
 
-export interface CheckerMoveState {
-  dieValue: DieValue | undefined
-  origin: CheckerBox | undefined
-  destination: CheckerBox | undefined
-  completed: boolean | undefined
-}
-
-export interface MoveState {
-  status: MOVE_STATUS | undefined
-  color: Color | undefined,
-  moves: CheckerMoveState[]
-}
-
-export type GameActionPayload = DieRollActionPayload | CheckerState | MoveActionState | Color
+export type GameActionPayload = DieRollActionPayload | CheckerState | MoveActionState | Color | InitializeTurnActionPayload
 
 export interface GameAction {
   type: GAME_ACTION_TYPE
-  payload?: GameActionPayload
+  payload: GameActionPayload
+}
+
+export interface InitializeTurnAction extends GameAction {
+  type: GAME_ACTION_TYPE.INITIALIZE_TURN
+  payload: InitializeTurnActionPayload
+}
+
+export interface DieRollAction extends GameAction {
+  type: GAME_ACTION_TYPE.ROLL
+  payload: DieRollActionPayload
 }

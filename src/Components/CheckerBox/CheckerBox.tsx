@@ -17,7 +17,8 @@ interface CheckerBoxProps {
 
 const CheckerBox = (props: CheckerBoxProps) => {
   const { board, debug, move } = useGame()
-  const checkerBoxState = board.getCheckerBoxes().find(cb => cb.id === props.checkerBox.id)
+  const checkerBoxState = props.checkerBox
+
   if (debug.isActive) {
     console.log(`[CheckerBox Component] checkerBoxState:`, checkerBoxState)
   }
@@ -29,11 +30,8 @@ const CheckerBox = (props: CheckerBoxProps) => {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (e.type === 'click') {
-      if (!props.checkerBox.parent) {
-        throw new GameError({ model: 'CheckerBox', errorMessage: 'No container' })
-      }
       try {
-        move(props.checkerBox, props.checkerBox.parent)
+        move(props.checkerBox)
       } catch (e) {
         console.error(e)
       }

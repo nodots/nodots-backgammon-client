@@ -18,7 +18,7 @@ const Die = forwardRef((props: DieProps, ref) => {
   const [valueClass, setValueClass] = useState<string>('one')
 
   useImperativeHandle(ref, () => ({
-    rollDie (): DieValue {
+    async rollDie (): Promise<DieValue> {
       if (debug) {
         console.log(`[Die Component]: rollDie()`)
       }

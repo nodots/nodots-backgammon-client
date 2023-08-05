@@ -1,8 +1,6 @@
-import { CheckerBox } from '../../models'
+import { Off } from '../../models'
 
 export type OffState = {
-  checkerBoxes: {
-    black: CheckerBox
-    white: CheckerBox
-  }
+  black: Off
+  white: Off
 }
