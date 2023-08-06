@@ -4,6 +4,7 @@ import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
 import { Game } from './Game'
 import { Die } from './Die'
+import { DieOrder, DieValue } from '../state/dice/types'
 import { Cube } from './Cube'
 import { Player } from './Player'
 import { Board } from './Board'
@@ -40,8 +41,6 @@ export enum QuadrantLocation {
 }
 
 export type Color = 'black' | 'white'
-export type DieOrder = 0 | 1
-export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 export type RollResults = DieValue[]
 export type MoveDirection = 'clockwise' | 'counterclockwise'
@@ -156,6 +155,11 @@ export const INIT_BOARD_SETUP: CheckerProp[] = [
 
 const generateId = (): string => {
   return uuid()
+}
+
+export type {
+  DieOrder,
+  DieValue,
 }
 
 export {

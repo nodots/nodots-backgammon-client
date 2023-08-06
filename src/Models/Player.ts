@@ -1,4 +1,5 @@
-import { MoveDirection, Game, Point, Rail, Off, Color, GameError, CheckerBox, Checker, DieValue, Die, modelDebug, isPoint, isRail, isOff, generateId } from '.'
+import { MoveDirection, Game, Die, Color, CheckerBox, Checker, DieValue, modelDebug, isPoint, isRail, isOff, generateId } from '.'
+import { MoveAction } from './Move'
 
 export class Player {
   id: string
@@ -7,6 +8,7 @@ export class Player {
   color: Color
   moveDirection: MoveDirection
   active: boolean = false
+  dice?: [Die, Die]
   currentGame?: Game
   nickName?: string
   checkers?: Checker[] = []
@@ -21,8 +23,17 @@ export class Player {
     this.moveDirection = color === 'white' ? 'clockwise' : 'counterclockwise'
   }
 
+  static rollForStart (): DieValue {
+    return Die.roll()
+  }
+
   static roll (): DieValue[] {
     return [Die.roll() as DieValue, Die.roll() as DieValue]
+  }
+
+  static move (action: MoveAction, checkerboxes: CheckerBox[]): CheckerBox[] {
+    // let draft: CheckerBox[] = checkerboxes
+    return checkerboxes
   }
 
   // move ({ origin, destination, roll }: { origin: Point | Rail; destination: Point | Off; roll: DieValue[] }): { origin: Point | Rail; destination: Point | Off } {
@@ -68,7 +79,7 @@ export class Player {
   //   //     if (!this.currentGame) {
   //   //       throw new GameError({ model: 'Player', errorMessage: 'No current game' })
   //   //     }
-  //   //     const railCheckerBox = this.currentGame.board.rail.checkerBoxes[this.color]
+  //   //     const railCheckerBox = this.currentGame.board.rail.checkerboxes[this.color]
   //   //     destination.checkers = []
   //   //     railCheckerBox.checkers.push(hitChecker)
   //   //   }
@@ -122,9 +133,6 @@ export class Player {
   //   // return { origin: newOrigin, destination: newDestination }
   // }
 
-  rollForStart (): DieValue {
-    return Die.roll()
 
-  }
 }
 

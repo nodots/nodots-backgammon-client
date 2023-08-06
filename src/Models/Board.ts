@@ -45,13 +45,13 @@ export class Board {
   }
 
   getCheckerBoxes (): CheckerBox[] {
-    const checkerBoxes: CheckerBox[] = []
-    checkerBoxes.push(...this.points)
-    checkerBoxes.push(this.rail.black)
-    checkerBoxes.push(this.rail.white)
-    checkerBoxes.push(this.off.black)
-    checkerBoxes.push(this.off.white)
-    return checkerBoxes
+    const checkerboxes: CheckerBox[] = []
+    checkerboxes.push(...this.points)
+    checkerboxes.push(this.rail.black)
+    checkerboxes.push(this.rail.white)
+    checkerboxes.push(this.off.black)
+    checkerboxes.push(this.off.white)
+    return checkerboxes
   }
 
   getCheckersByColor (color: Color): Checker[] {

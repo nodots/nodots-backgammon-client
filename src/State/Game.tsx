@@ -1,5 +1,4 @@
-import { Game, Player, Die, Color } from '../models'
-import { DieState } from './types/die.state'
+import { Game, Player, Color } from '../models'
 import { GameAction } from './types/game.action'
 import { GameState } from './types/game.state'
 
@@ -14,7 +13,6 @@ export const enum GAME_ACTION_TYPE {
   RESIGN,
   TOGGLE
 }
-
 
 export const initGameState: GameState = initializeGame()
 
@@ -42,58 +40,6 @@ function initializeGame () {
       value: 2,
       controllingColor: undefined
     },
-    dice: {
-      black: [
-        new Die({ color: 'black', order: 0 }) as DieState,
-        new Die({ color: 'black', order: 1 }) as DieState,
-      ],
-      white: [
-        new Die({ color: 'white', order: 0 }) as DieState,
-        new Die({ color: 'white', order: 1 }) as DieState,
-      ]
-    },
-    rollSurfaces: {
-      black: {
-        id: game.board.rollSurfaces.black.id,
-        color: game.board.rollSurfaces.black.color,
-        dice: [
-          {
-            id: game.board.rollSurfaces.black.dice[0].id,
-            order: game.board.rollSurfaces.black.dice[0].order,
-            color: 'black',
-            value: undefined,
-            rollDie () { },
-          },
-          {
-            id: game.board.rollSurfaces.black.dice[1].id,
-            order: game.board.rollSurfaces.black.dice[1].order,
-            color: 'black',
-            value: undefined,
-            rollDie () { }
-          }
-        ]
-      },
-      white: {
-        id: game.board.rollSurfaces.white.id,
-        color: game.board.rollSurfaces.white.color,
-        dice: [
-          {
-            id: game.board.rollSurfaces.white.dice[0].id,
-            order: game.board.rollSurfaces.white.dice[0].order,
-            color: 'white',
-            value: undefined,
-            rollDie: () => { }
-          },
-          {
-            id: game.board.rollSurfaces.white.dice[1].id,
-            order: game.board.rollSurfaces.white.dice[1].order,
-            color: 'white',
-            value: undefined,
-            rollDie () { }
-          }
-        ]
-      },
-    },
     activeTurn: {
       id: undefined,
       status: undefined,
@@ -102,14 +48,11 @@ function initializeGame () {
       moves: [],
     },
     activeColor: winner,
-    rename: (name: string) => { },
-    roll: (action: GameAction) => undefined,
     move: (action: GameAction) => { },
     initializeTurn: (action: GameAction) => { },
     finalizeTurn: (color: Color) => { },
     resetMove: (color: Color) => { },
     double: () => { },
-    toggleActivePlayer: () => { },
     debug: {
       isActive: false,
       components: {
@@ -119,7 +62,7 @@ function initializeGame () {
         rollSurface: false,
         quadrant: false,
         off: false,
-        checkerBoxes: false,
+        checkerboxes: false,
       }
     }
   }

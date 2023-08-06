@@ -18,6 +18,8 @@ export enum MoveStatus {
 }
 
 export interface MoveAction {
+  // Yes, really should be "checkerBoxes" but that gets tiring
+  checkerboxes: CheckerBox[]
   origin: CheckerBox
   destination: CheckerBox
 }

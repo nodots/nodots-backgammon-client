@@ -9,10 +9,11 @@ import Quadrant from '../Quadrant/Quadrant'
 import Rail from '../Rail/Rail'
 import Off from '../Off/Off'
 import RollSurface from '../RollSurface/RollSurface'
+import { DiceProvider } from '../../state/dice/dice.provider'
 import { QuadrantLocation } from '../../models'
 
 const Board = () => {
-  const { board, players, cube, rollSurfaces, debug } = useGame()
+  const { board, players, } = useGame()
 
   if (board && players?.white && players?.black) {
     const neQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NE)
@@ -24,7 +25,7 @@ const Board = () => {
       <Grid item className='col left'>
         {nwQuadrant && <Quadrant location={QuadrantLocation.NW} locationString='nw' quadrant={nwQuadrant} />}
         <Grid item className='roll-surface'>
-          {players.black && <RollSurface rollSurface={rollSurfaces.black} />}
+          {players.black && <DiceProvider><RollSurface color='black' /></DiceProvider>}
         </Grid>
         {swQuadrant && <Quadrant location={QuadrantLocation.SW} locationString='sw' quadrant={swQuadrant} />}
       </Grid>
@@ -35,8 +36,8 @@ const Board = () => {
       <Grid item className='col right'>
         {neQuadrant && <Quadrant location={QuadrantLocation.NE} locationString='ne' quadrant={neQuadrant} />}
         <Grid item className='roll-surface'>
-          {players.white && <RollSurface rollSurface={rollSurfaces.white} />}
 
+          {players.white && <DiceProvider><RollSurface color='white' /></DiceProvider>}
         </Grid>
         {seQuadrant && <Quadrant location={QuadrantLocation.SE} locationString='sw' quadrant={seQuadrant} />}
       </Grid>
