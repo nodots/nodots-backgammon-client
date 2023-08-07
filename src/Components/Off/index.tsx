@@ -1,9 +1,8 @@
-// State
-import { Off as OffModel } from '../../models'
 import CheckerBox from '../CheckerBox'
+import { Off as OffType } from './state/types'
 
 interface OffProps {
-  off: OffModel
+  off: OffType
 }
 
 const Off = (props: OffProps) => {

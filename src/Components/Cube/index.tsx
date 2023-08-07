@@ -1,10 +1,10 @@
-import { useGame } from '../../hooks/useGame'
 import { useCube } from './state/useCube'
 import { SetCubeValuePayload } from './state/cube.context'
 import { isCubeValue, double } from './state/types'
 
 const Cube = () => {
-  const { activeColor } = useGame()
+  // const { activeColor } = useGame()
+  const activeColor = 'white'
   const { cube, setCubeValue } = useCube()
 
   const clickHandler = (e: React.MouseEvent) => {

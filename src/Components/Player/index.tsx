@@ -1,8 +1,8 @@
 import { Card, CardHeader, CardContent } from '@mui/material'
-import { Player as PlayerModel } from '../../models'
+import { Player as PlayerType } from './state/types'
 
 interface PlayerProps {
-  player: PlayerModel
+  player: PlayerType
 }
 
 const clickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -16,7 +16,7 @@ const Player = (props: PlayerProps) => {
     classes += ' active'
   }
   return <Card className={classes} onClick={clickHandler}>
-    <CardHeader title={props.player.nickName} />
+    <CardHeader title={props.player.id} />
     <CardContent>
       <div>Checker Color: {props.player.color.toString()}</div>
       <div>Active: {props.player.active.toString()} </div>

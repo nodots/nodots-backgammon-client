@@ -1,11 +1,11 @@
 import { Color, CheckerBoxPosition } from '../../../../models'
 import { Checker } from '../../../Checker/state/types'
 
-// export interface ICheckerBox {
-//   color?: Color,
-//   checkers?: Checker[]
-//   position: CheckerBoxPosition
-// }
+// interface for importing initial board config
+export interface CheckerBoxProp {
+  color?: string,
+
+}
 
 /**
 * Checkers can be in three different places:
@@ -14,7 +14,7 @@ import { Checker } from '../../../Checker/state/types'
 *  3. Off: Successfully moved off the board.
 */
 export type CheckerBox = {
-  color: Color | undefined
+  color?: Color | undefined
   checkers: Checker[]
   position: CheckerBoxPosition
 }

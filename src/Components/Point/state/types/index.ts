@@ -1,26 +1,29 @@
-import { CheckerBoxPosition, Color } from '../../../../models'
+import { CheckerBoxPosition, CheckerProp, Color, POINT_COUNT, generateId } from '../../../../models'
+import { Checker } from '../../../Checker/state/types'
 
 export type Point = {
-  color: Color,
+  color?: Color
+  checkers: Checker[]
   position: CheckerBoxPosition
+}
 
-  // static initialize (setup: CheckerProp[]): Point[] {
-  //   const points: Point[] = []
-  //   for (let i = 0; i < POINT_COUNT; i++) {
-  //     const position = i + 1
-  //     const pointAttrs: ICheckerBox = {
-  //       position,
-  //     }
-  //     const point = new Point(pointAttrs)
-  //     const config = setup.find(p => p.position === position)
-  //     if (config) {
-  //       for (let i = 0; i < config.checkerCount; i++) {
-  //         point.checkers.push(new Checker(config.color, point))
-  //       }
-  //     }
 
-  //     points.push(point)
-  //   }
-  //   return points
-  // }
+export const initialize = (setup: CheckerProp[]): Point[] => {
+  const points: Point[] = []
+  for (let i = 0; i < POINT_COUNT; i++) {
+    const position = i + 1
+    const point: Point = {
+      position,
+      checkers: []
+    }
+    const config = setup.find(p => p.position === position)
+    if (config) {
+      for (let i = 0; i < config.checkerCount; i++) {
+        // FIXME: bad cast
+        point.checkers.push({ id: generateId(), color: config.color as Color })
+      }
+    }
+    points.push(point)
+  }
+  return points
 }

@@ -1,10 +1,13 @@
 // Models
-import { Point as PointModel, QuadrantLocation } from '../../models'
+// import { Point as PointModel, QuadrantLocation } from '../../models'
 // Components
+import { CheckerBox as CheckerBoxType } from '../CheckerBox/state/types'
+import { QuadrantLocation } from '../Quadrant/state/types'
+
 import CheckerBox from '../CheckerBox'
 
 interface PointProps {
-  point: PointModel
+  point: CheckerBoxType
   locationString: string
   location: QuadrantLocation
 }

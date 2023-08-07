@@ -1,5 +1,4 @@
 // Hooks
-import { useGame } from '../../hooks/useGame'
 
 // Models
 import {
@@ -11,18 +10,15 @@ import { CheckerBox as CheckerBoxType } from './state/types'
 
 // Components
 import Checker from '../Checker'
+import { Checker as CheckerType } from '../Checker/state/types'
 
 interface CheckerBoxProps {
   checkerBox: CheckerBoxType
 }
 
 const CheckerBox = (props: CheckerBoxProps) => {
-  const { board, debug, move } = useGame()
   const checkerBoxState = props.checkerBox
 
-  if (debug.isActive) {
-    console.log(`[CheckerBox Component] checkerBoxState:`, checkerBoxState)
-  }
   if (!checkerBoxState) {
     throw new GameError({ model: 'CheckerBox', errorMessage: 'No checkerBoxState' })
   }
@@ -32,7 +28,8 @@ const CheckerBox = (props: CheckerBoxProps) => {
     e.preventDefault()
     if (e.type === 'click') {
       try {
-        move(props.checkerBox)
+        // FIXME: call move code
+        // move(props.checkerBox)
       } catch (e) {
         console.error(e)
       }
@@ -41,7 +38,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
     }
   }
 
-  checkerBoxState.checkers.forEach((c: CheckerModel) => {
+  checkerBoxState.checkers.forEach((c: CheckerType) => {
     checkers.push(<Checker checker={c} key={c.id} />)
   })
 

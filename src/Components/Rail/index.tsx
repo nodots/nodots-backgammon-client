@@ -1,10 +1,10 @@
 // Models
-import { Rail as RailModel } from '../../models'
+import { Rail as RailType } from './state/types'
 // Components
 import CheckerBox from '../CheckerBox'
 
 interface RailProps {
-  rail: RailModel
+  rail: RailType
 }
 
 const Rail = (props: RailProps) => {
