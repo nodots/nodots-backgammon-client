@@ -9,7 +9,7 @@ import {
 } from '../../models'
 
 // Components
-import Checker from '../Checker/Checker'
+import Checker from '../Checker'
 
 interface CheckerBoxProps {
   checkerBox: CheckerBoxModel

@@ -5,15 +5,18 @@ import { useGame } from '../../hooks/useGame'
 import { Grid } from '@mui/material'
 
 // Components
-import Quadrant from '../Quadrant/Quadrant'
-import Rail from '../Rail/Rail'
-import Off from '../Off/Off'
-import RollSurface from '../RollSurface/RollSurface'
-import { DiceProvider } from '../../state/dice/dice.provider'
+import Quadrant from '../Quadrant'
+import Rail from '../Rail'
+import Off from '../Off'
+import RollSurface from '../RollSurface'
+import Cube from '../Cube'
+import { DiceProvider } from '../Die/state/dice.provider'
 import { QuadrantLocation } from '../../models'
+import { useCube } from '../Cube/state/useCube'
 
 const Board = () => {
   const { board, players, } = useGame()
+  const { cube } = useCube()
 
   if (board && players?.white && players?.black) {
     const neQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NE)
@@ -36,15 +39,26 @@ const Board = () => {
       <Grid item className='col right'>
         {neQuadrant && <Quadrant location={QuadrantLocation.NE} locationString='ne' quadrant={neQuadrant} />}
         <Grid item className='roll-surface'>
-
           {players.white && <DiceProvider><RollSurface color='white' /></DiceProvider>}
         </Grid>
         {seQuadrant && <Quadrant location={QuadrantLocation.SE} locationString='sw' quadrant={seQuadrant} />}
       </Grid>
+      {/* Cube position changes with ownership, starting un-owned */}
       <Grid item className='off-container'>
+        <div className='cube-container'>
+          {cube.owner === 'black' && <Cube />}
+        </div>
         <Off off={board.off.black} />
+        <div className='cube-container'>
+          {!cube.owner &&
+            <Cube />
+          }
+        </div>
         <Off off={board.off.white} />
-
+        <div className='cube-container'>
+          {cube.owner === 'white'
+            && <Cube />}
+        </div>
       </Grid>
     </Grid>
   } else {

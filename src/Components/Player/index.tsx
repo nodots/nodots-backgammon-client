@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardContent } from '@mui/material'
-import { Player as PlayerModel, Color } from '../../models'
+import { Player as PlayerModel } from '../../models'
 
 interface PlayerProps {
   player: PlayerModel
@@ -21,8 +21,6 @@ const Player = (props: PlayerProps) => {
       <div>Checker Color: {props.player.color.toString()}</div>
       <div>Active: {props.player.active.toString()} </div>
       <div>PIPS: 167</div>
-
-
     </CardContent>
   </Card>
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useGame } from '../../hooks/useGame'
 import { Color, GameError } from '../../models'
-import { DieOrder, DieValue } from '../../state/dice/types'
+import { DieOrder, DieValue } from './state/types'
 
 interface DieProps {
   order: DieOrder

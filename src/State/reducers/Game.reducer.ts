@@ -6,14 +6,11 @@ import { reducer as rollReducer } from './roll.reducer'
 import { reducer as moveReducer } from './move.reducer'
 import { reducer as initializeTurnReducer } from './initialize-turn.reducer'
 import { reducer as finalizeTurnReducer } from './finalize-turn.reducer'
-import { reducer as doubleReducer } from './double.reducer'
 
 export const reducer = (state: GameState, action: GameAction | InitializeTurnAction): GameState => {
   const { type } = action
 
   switch (type) {
-    case GAME_ACTION_TYPE.ROLL:
-      return rollReducer(state, action)
     case GAME_ACTION_TYPE.MOVE:
       return moveReducer(state, action)
     case GAME_ACTION_TYPE.INITIALIZE_TURN:
@@ -21,8 +18,6 @@ export const reducer = (state: GameState, action: GameAction | InitializeTurnAct
       return state
     case GAME_ACTION_TYPE.FINALIZE_TURN:
       return finalizeTurnReducer(state, action)
-    case GAME_ACTION_TYPE.DOUBLE:
-      return doubleReducer(state, action)
     default:
       throw new GameError({ model: 'Game', errorMessage: `Unkown action type ${type}` })
   }

@@ -1,7 +1,7 @@
 // Models
 import { QuadrantLocation, Quadrant as QuadrantModel, generateId } from '../../models'
 // Components
-import Point from '../Point/Point'
+import Point from '../Point'
 // UI
 import { Grid } from '@mui/material'
 

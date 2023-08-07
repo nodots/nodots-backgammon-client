@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import Cube from './Cube'
+import Cube from '.'
 
 test('renders Cube', () => {
 

@@ -1,7 +1,6 @@
 import { GameError } from './Error'
 import { Point } from './Point'
 import { Checker } from './Checker'
-import { Cube } from './Cube'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
@@ -9,7 +8,6 @@ import { generateId, modelDebug, Color } from '.'
 
 export interface GameParams {
   id: string
-  cube: Cube
   board: Board
   checkers: Checker[]
   activePlayer: Player
@@ -17,7 +15,6 @@ export interface GameParams {
 
 export class Game {
   id: string
-  cube: Cube
   players: {
     black: Player
     white: Player,
@@ -27,7 +24,6 @@ export class Game {
 
   constructor ({ whitePlayer, blackPlayer }: { whitePlayer: Player; blackPlayer: Player }) {
     this.id = generateId()
-    this.cube = new Cube()
     this.players = {
       black: blackPlayer,
       white: whitePlayer

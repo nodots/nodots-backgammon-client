@@ -4,8 +4,7 @@ import { Checker } from './Checker'
 import { CheckerBox } from './CheckerBox'
 import { Game } from './Game'
 import { Die } from './Die'
-import { DieOrder, DieValue } from '../state/dice/types'
-import { Cube } from './Cube'
+import { DieOrder, DieValue } from '../components/Die/state/types'
 import { Player } from './Player'
 import { Board } from './Board'
 import { Quadrant } from './Quadrant'
@@ -41,7 +40,6 @@ export enum QuadrantLocation {
 }
 
 export type Color = 'black' | 'white'
-export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 export type RollResults = DieValue[]
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 export type CheckerBoxPosition = number | 'rail' | 'off'
@@ -168,7 +166,6 @@ export {
   Checker,
   CheckerBox,
   Die,
-  Cube,
   Game,
   Player,
   Quadrant,

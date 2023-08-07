@@ -1,4 +1,4 @@
-import { Color, } from '../../../models'
+import { Color } from '../../../../models'
 export type DieOrder = 0 | 1
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 

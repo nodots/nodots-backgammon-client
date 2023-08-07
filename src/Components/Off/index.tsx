@@ -1,6 +1,6 @@
 // State
 import { Off as OffModel } from '../../models'
-import CheckerBox from '../CheckerBox/CheckerBox'
+import CheckerBox from '../CheckerBox'
 
 interface OffProps {
   off: OffModel

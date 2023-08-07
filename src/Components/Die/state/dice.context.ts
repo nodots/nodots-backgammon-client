@@ -1,5 +1,5 @@
 import reducer from './reducers/dice.reducer'
-import { Color } from '../../models'
+import { Color } from '../../../models'
 import { createContext, useCallback, useReducer } from 'react'
 import { initDiceState, Dice, DICE_ACTION_TYPE } from './dice.state'
 import { DieValue } from './types'
@@ -14,7 +14,6 @@ export interface SetDiceValuesPayload {
 
 export const useDiceContext = (initialState: Dice) => {
   const [dice, dispatch] = useReducer(reducer, initialState)
-  console.log('useDiceContext')
 
   const setDiceValues = useCallback((payload: SetDiceValuesPayload) => dispatch({ type: DICE_ACTION_TYPE.SET_VALUES, payload }), [])
   return { dice, setDiceValues }

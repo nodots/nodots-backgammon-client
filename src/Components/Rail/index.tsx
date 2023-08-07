@@ -1,7 +1,7 @@
 // Models
 import { Rail as RailModel } from '../../models'
 // Components
-import CheckerBox from '../CheckerBox/CheckerBox'
+import CheckerBox from '../CheckerBox'
 
 interface RailProps {
   rail: RailModel

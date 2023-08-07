@@ -1,7 +1,7 @@
 // Models
 import { Point as PointModel, QuadrantLocation } from '../../models'
 // Components
-import CheckerBox from '../CheckerBox/CheckerBox'
+import CheckerBox from '../CheckerBox'
 
 interface PointProps {
   point: PointModel
