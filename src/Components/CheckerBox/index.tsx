@@ -4,15 +4,16 @@ import { useGame } from '../../hooks/useGame'
 // Models
 import {
   GameError,
-  CheckerBox as CheckerBoxModel,
-  Checker as CheckerModel,
 } from '../../models'
+
+// Types
+import { CheckerBox as CheckerBoxType } from './state/types'
 
 // Components
 import Checker from '../Checker'
 
 interface CheckerBoxProps {
-  checkerBox: CheckerBoxModel
+  checkerBox: CheckerBoxType
 }
 
 const CheckerBox = (props: CheckerBoxProps) => {

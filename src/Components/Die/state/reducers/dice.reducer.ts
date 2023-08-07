@@ -2,8 +2,7 @@ import { produce } from 'immer'
 import { Dice } from '../dice.state'
 import { DICE_ACTION_TYPE } from '../dice.state'
 import { SetDiceValuesPayload } from '../dice.context'
-import { isDieValue } from '../../../../models'
-
+import { isDieValue } from '../types/'
 interface DiceAction {
   type: DICE_ACTION_TYPE,
   payload: SetDiceValuesPayload

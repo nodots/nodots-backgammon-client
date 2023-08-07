@@ -1,4 +1,4 @@
-import { Die, DieOrder, DieValue, roll } from './die'
+import { Die, DieOrder, DieValue, isDieValue, isDieOrder, roll } from './die'
 import { DiePair } from './die-pair'
 
 export type {
@@ -9,5 +9,7 @@ export type {
 }
 
 export {
+  isDieValue,
+  isDieOrder,
   roll
 }
