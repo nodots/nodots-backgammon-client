@@ -8,7 +8,7 @@ interface CubeAction {
   payload: SetCubeValuePayload
 }
 
-const reducer = (state: Cube, action: CubeAction): Cube => {
+export const reducer = (state: Cube, action: CubeAction): Cube => {
   const { payload } = action
   console.log(`[Cube Reducer]: state`, state)
   console.log(`[Cube Reducer]: action`, action)
@@ -29,5 +29,3 @@ const reducer = (state: Cube, action: CubeAction): Cube => {
   })
   return newState
 }
-
-export default reducer

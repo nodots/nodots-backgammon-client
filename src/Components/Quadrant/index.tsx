@@ -1,7 +1,3 @@
-// Models
-// import { QuadrantLocation, Quadrant as QuadrantModel, generateId } from '../../models'
-import { useBoard } from '../Board/state/useBoard'
-
 import { Quadrant as QuadrantType, QuadrantLocation } from './state/types'
 // Components
 import Point from '../Point'
@@ -15,13 +11,10 @@ interface QuadrantProps {
 }
 
 const Quadrant = (props: QuadrantProps) => {
-  const { board } = useBoard()
-
-  // const quadrant = Object.keys(board.quadrants).find(ql => ql === props.location.toString())
   const classes = `quadrant ${props.locationString}`
   const points: React.JSX.Element[] = []
   props.quadrant.points.forEach(p => {
-    points.push(<Point point={p} location={props.location} locationString={props.locationString} key={props.quadrant.id} />)
+    points.push(<Point point={p} location={props.location} locationString={props.locationString} key={p.id} />)
   })
   return <Grid item className={classes}>
     {points}

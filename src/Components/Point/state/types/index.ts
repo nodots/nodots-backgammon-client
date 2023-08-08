@@ -2,6 +2,7 @@ import { CheckerBoxPosition, CheckerProp, Color, POINT_COUNT, generateId } from 
 import { Checker } from '../../../Checker/state/types'
 
 export type Point = {
+  id: string,
   color?: Color
   checkers: Checker[]
   position: CheckerBoxPosition
@@ -13,6 +14,7 @@ export const initialize = (setup: CheckerProp[]): Point[] => {
   for (let i = 0; i < POINT_COUNT; i++) {
     const position = i + 1
     const point: Point = {
+      id: generateId(),
       position,
       checkers: []
     }

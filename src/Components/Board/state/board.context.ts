@@ -1,5 +1,5 @@
 import { createContext, useReducer } from 'react'
-import reducer from './reducers/board.reducer'
+import { reducer } from './reducers'
 import { initBoardState } from './board.state'
 import { BOARD_ACTION_TYPE, Board, MoveAction } from './types'
 

@@ -1,5 +1,4 @@
-import { CubeProvider } from './components/Cube/state/cube.provider'
-import { BoardProvider } from './components/Board/state/board.provider'
+import { GameProvider } from './game.provider'
 import { Paper } from '@mui/material'
 import Board from './components/Board'
 
@@ -9,13 +8,11 @@ const App = () => {
   return (
     <div className="App">
       <Paper className='board-frame' elevation={8}>
-        <BoardProvider>
-          <CubeProvider>
-            <Board />
-          </CubeProvider>
-        </BoardProvider>
-      </Paper>
-    </div>
+        <GameProvider>
+          <Board />
+        </GameProvider>
+      </Paper >
+    </div >
 
   )
 }

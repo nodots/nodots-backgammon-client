@@ -1,13 +1,18 @@
-import { useCube } from './state/useCube'
+import { useGame } from '../../useGame'
 import { SetCubeValuePayload } from './state/cube.context'
 import { isCubeValue, double } from './state/types'
 
 const Cube = () => {
-  // const { activeColor } = useGame()
-  const activeColor = 'white'
-  const { cube, setCubeValue } = useCube()
+  const { game, setCubeValue } = useGame()
+  const activeColor = game.activeColor
+  if (!activeColor) {
+    throw new Error('No active color')
+  }
+  const cube = game.cube
 
   const clickHandler = (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('[Cube Component] game:', game)
     if (cube.value === undefined) {
       cube.value = 2
     }

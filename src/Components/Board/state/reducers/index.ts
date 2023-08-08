@@ -6,7 +6,7 @@ export interface BoardAction {
   payload: MoveAction
 }
 
-const reducer = (state: Board, action: BoardAction): Board => {
+export const reducer = (state: Board, action: BoardAction): Board => {
   console.log(`[Board Reducer]: state`, state)
   console.log(`[Board Reducer]: action`, action)
 
@@ -15,5 +15,3 @@ const reducer = (state: Board, action: BoardAction): Board => {
   })
   return newState
 }
-
-export default reducer
