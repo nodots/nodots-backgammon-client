@@ -1,10 +1,8 @@
-import { generateId } from './models'
-import { MoveDirection } from './models'
 import { initCubeState } from './components/Cube/state'
 import { Player } from './components/Player/state'
 import { initBoardState } from './components/Board/state'
 import { initDiceState, roll } from './components/Die/state'
-import { Game } from './game'
+import { Game, generateId } from './game'
 
 // FIXME: needs to be from user input
 const blackPlayer: Player = {

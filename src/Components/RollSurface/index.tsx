@@ -1,10 +1,10 @@
 import { useGame } from '../../useGame'
 import { useState } from 'react'
-import { Color, generateId } from '../../models'
+import { Color } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
 import { DieValue, roll } from '../Die/state/types'
 import Die from '../Die'
-import { Turn, TurnStatus } from '../Player/state/types'
+import { TurnStatus } from '../Player/state/types'
 import { TurnActionPayload } from '../Player/state/reducers/turn'
 
 interface RollSurfaceProps {

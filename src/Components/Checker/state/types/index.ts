@@ -1,4 +1,4 @@
-import { Color } from '../../../../models'
+import { Color } from '../../../../game'
 
 /**
  * Checkers are the pieces that move around the board. By tradition they are 

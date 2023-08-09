@@ -1,4 +1,5 @@
-import { generateId, CheckerProp } from '../../../../models'
+import { generateId } from '../../../../game'
+import { CheckerProp } from '../../../Board/state/types/board'
 import { Point, initialize as initializePoints } from '../../../Point/state/types'
 
 export enum QuadrantLocation {
@@ -28,16 +29,16 @@ export type Grid = {
   NE: Quadrant
 }
 
-export const initialize = (setup: CheckerProp[]): Grid => {
+export const initialize = (setup: CheckerProp[]): Quadrant[] => {
+  const quadrants: Quadrant[] = []
   const points = initializePoints(setup)
-  const grid: Grid = {
-    SE: { id: generateId(), location: QuadrantLocation.SE, points: points.filter(p => typeof p.position === 'number' && p.position <= 6) },
-    SW: { id: generateId(), location: QuadrantLocation.SW, points: points.filter(p => typeof p.position === 'number' && p.position >= 7 && p.position <= 12) },
-    NW: { id: generateId(), location: QuadrantLocation.NW, points: points.filter(p => typeof p.position === 'number' && p.position >= 13 && p.position <= 18) },
-    NE: { id: generateId(), location: QuadrantLocation.NE, points: points.filter(p => typeof p.position === 'number' && p.position >= 19) }
 
-  }
+  quadrants[0] = { id: generateId(), location: QuadrantLocation.SE, points: points.filter(p => typeof p.position === 'number' && p.position <= 6) }
+  quadrants[1] = { id: generateId(), location: QuadrantLocation.SW, points: points.filter(p => typeof p.position === 'number' && p.position >= 7 && p.position <= 12) }
+  quadrants[2] = { id: generateId(), location: QuadrantLocation.NW, points: points.filter(p => typeof p.position === 'number' && p.position >= 13 && p.position <= 18) }
+  quadrants[3] = { id: generateId(), location: QuadrantLocation.NE, points: points.filter(p => typeof p.position === 'number' && p.position >= 19) }
 
-  return grid
+  return quadrants
 }
+
 

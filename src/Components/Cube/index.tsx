@@ -12,6 +12,13 @@ const Cube = () => {
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
+    if (!game.players[activeColor].active) {
+      throw new Error('It is not your turn')
+    }
+    if (game.cube.owner !== undefined && game.players[activeColor].color !== game.cube.owner) {
+      throw new Error('You do not control the cube')
+    }
+
     // TODO: Do nothing if cube is already maxxed out. Should this logic be elsewhere?
     if (cube.value === 64) {
       return

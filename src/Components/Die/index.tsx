@@ -1,6 +1,7 @@
 import { useGame } from '../../useGame'
 import { useState, useEffect } from 'react'
-import { Color, GameError } from '../../models'
+import { Color } from '../../game'
+import { GameError } from '../../game'
 import { DieOrder, DieValue } from './state/types'
 
 interface DieProps {

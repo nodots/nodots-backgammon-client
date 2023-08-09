@@ -1,5 +1,5 @@
 import { reducer } from './reducers'
-import { Color } from '../../../models'
+import { Color } from '../../../game'
 import { createContext, useCallback, useReducer } from 'react'
 import { DICE_ACTION_TYPE } from './reducers'
 import { initDiceState, Dice } from './dice.state'

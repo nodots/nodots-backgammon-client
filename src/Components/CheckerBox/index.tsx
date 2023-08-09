@@ -1,17 +1,14 @@
 // Hooks
 import { useGame } from '../../useGame'
-// Models
-import {
-  GameError,
-} from '../../models'
-
 // Types
+import { GameError } from '../../game'
 import { CheckerBox as CheckerBoxType } from './state/types'
 
 // Components
 import Checker from '../Checker'
 import { Checker as CheckerType } from '../Checker/state/types'
 import { MoveActionPayload } from './state/types/move'
+import { TurnStatus } from '../Player/state/types'
 
 interface CheckerBoxProps {
   checkerBox: CheckerBoxType
@@ -32,8 +29,9 @@ const CheckerBox = (props: CheckerBoxProps) => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    game.activeTurn.moves.forEach(m => {
-      console.log(m)
+    console.log('[CheckerBox Component] game.activeTurn.status', game.activeTurn.status)
+    game.activeTurn.moves.forEach((m, i) => {
+      console.log(`[CheckerBox Component] moves[${i}]`, m)
     })
     if (e.type === 'click') {
       try {
@@ -41,6 +39,9 @@ const CheckerBox = (props: CheckerBoxProps) => {
         const payload: MoveActionPayload = {
           player: activePlayer,
           checkerbox: props.checkerBox
+        }
+        if (game.activeTurn.status === TurnStatus.AWAITING_FINALIZATION) {
+          alert('You need to finalize the turn by clicking on the dice again')
         }
         move(payload)
       } catch (e) {

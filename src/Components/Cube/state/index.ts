@@ -1,4 +1,3 @@
-
 import { Cube, CubeValue, double } from './types'
 import { initCubeState, CUBE_ACTION_TYPE } from './cube.state'
 import { SetCubeValuePayload } from './cube.context'

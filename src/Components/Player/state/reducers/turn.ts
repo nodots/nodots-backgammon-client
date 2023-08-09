@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { generateId } from '../../../../models'
+import { generateId } from '../../../../game'
 import { Player, Turn, TurnStatus, initializeMoves } from '../types'
 import { Roll } from '../../../Die/state/types'
 import { GAME_ACTION_TYPE } from '../../../../game.reducer'

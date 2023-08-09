@@ -1,5 +1,4 @@
 import { produce } from 'immer'
-import { generateId } from '../../../../models'
 import { Turn } from '../../../Player/state'
 import { Checker } from '../../../Checker/state'
 import { CheckerBox } from '.'

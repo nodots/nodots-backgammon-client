@@ -1,12 +1,13 @@
-import { CheckerBoxPosition, Color, CheckerProp, generateId } from '../../../../models'
+import { Color, CheckerBoxPosition, generateId } from '../../../../game'
 import { Checker } from '../../../Checker/state/types'
+import { CheckerProp } from '../../../Board/state/types/board'
 
 export type Off = {
+  id: string,
   color: Color,
   checkers: Checker[],
   position: CheckerBoxPosition
 }
-
 
 export interface OffContainer {
   white: Off,
@@ -29,11 +30,13 @@ export const initialize = (setup: CheckerProp[]): OffContainer => {
 
   const offContainer: OffContainer = {
     white: {
+      id: generateId(),
       color: 'white',
       position: 'off',
       checkers: whiteCheckers
     },
     black: {
+      id: generateId(),
       color: 'black',
       position: 'off',
       checkers: blackCheckers

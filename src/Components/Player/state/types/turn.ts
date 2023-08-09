@@ -1,4 +1,4 @@
-import { generateId } from '../../../../models'
+import { generateId } from '../../../../game'
 import { Player } from './player'
 import { Move, MoveStatus } from '../../../Board/state/types'
 import { Roll } from '../../../Die/state/types'
@@ -8,7 +8,8 @@ export const MOVES_PER_TURN = 2
 export enum TurnStatus {
   INITIALIZED,
   IN_PROGRESS,
-  COMPLETED,
+  AWAITING_FINALIZATION,
+  FINALIZED,
   ERROR,
 }
 

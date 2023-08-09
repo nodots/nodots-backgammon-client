@@ -1,5 +1,6 @@
-import { Color, CheckerBoxPosition } from '../../../../models'
+import { CheckerBoxPosition } from '../../../../game'
 import { Checker } from '../../../Checker/state/types'
+import { Color } from '../../../../game'
 
 // interface for importing initial board config
 export interface CheckerBoxProp {
@@ -13,6 +14,7 @@ export interface CheckerBoxProp {
 *  3. Off: Successfully moved off the board.
 */
 export type CheckerBox = {
+  id: string,
   color?: Color | undefined
   checkers: Checker[]
   position: CheckerBoxPosition

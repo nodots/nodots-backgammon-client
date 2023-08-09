@@ -1,4 +1,5 @@
-import { CheckerBoxPosition, CheckerProp, Color, POINT_COUNT, generateId } from '../../../../models'
+import { Color, CheckerBoxPosition, generateId } from '../../../../game'
+import { POINT_COUNT, CheckerProp } from '../../../Board/state/types/board'
 import { Checker } from '../../../Checker/state/types'
 
 export type Point = {
