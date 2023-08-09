@@ -1,10 +1,11 @@
-import { Color, generateId } from '../../../../models'
+import { Color, MoveDirection, generateId } from '../../../../models'
 import { Move } from '../../../Board/state/types'
 import { Roll, DiePair } from '../../../Die/state/types'
 import { Turn, TurnStatus, initializeMoves } from './turn'
 
 export interface InitializeTurnAction {
-  player: Player, roll: Roll
+  player: Player,
+  roll: Roll
 }
 
 export type Player = {
@@ -12,6 +13,7 @@ export type Player = {
   color: Color
   active: boolean
   dice: DiePair
+  moveDirection: MoveDirection
   initializeTurn?: (action: InitializeTurnAction) => void
 }
 

@@ -13,10 +13,10 @@ export enum TurnStatus {
 }
 
 export type Turn = {
-  id: string
-  player: Player
-  status: TurnStatus
-  roll: Roll
+  id: string | undefined
+  player: Player | undefined
+  status: TurnStatus | undefined
+  roll: Roll | undefined
   moves: Move[]
 }
 

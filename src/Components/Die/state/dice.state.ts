@@ -1,9 +1,5 @@
 import { DiePair } from './types/'
 
-export const enum DICE_ACTION_TYPE {
-  SET_VALUES
-}
-
 export const initDiceState: Dice = initializeDice()
 
 export type Dice = {

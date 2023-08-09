@@ -1,9 +1,9 @@
 import { useGame } from '../../useGame'
-import { SetCubeValuePayload } from './state/cube.context'
-import { isCubeValue, double } from './state/types'
+import { SetCubeValuePayload } from './state'
+import { CubeValue, isCubeValue } from './state/types'
 
 const Cube = () => {
-  const { game, setCubeValue } = useGame()
+  const { game, double, setCubeValue } = useGame()
   const activeColor = game.activeColor
   if (!activeColor) {
     throw new Error('No active color')
@@ -12,23 +12,22 @@ const Cube = () => {
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
+    // TODO: Do nothing if cube is already maxxed out. Should this logic be elsewhere?
+    if (cube.value === 64) {
+      return
+    }
     console.log('[Cube Component] game:', game)
     if (cube.value === undefined) {
       cube.value = 2
     }
-
     if (!isCubeValue(cube.value)) {
       throw new Error('Invalid cube value')
     }
-
-    const newValue = double(cube.value)
-
-    const setCubeValuePayload: SetCubeValuePayload = {
-      color: activeColor,
+    const newValue: CubeValue = double(cube.value)
+    const payload: SetCubeValuePayload = {
       value: newValue
     }
-
-    setCubeValue(setCubeValuePayload)
+    setCubeValue(payload)
   }
 
   return <div className='cube' onClick={clickHandler}>{cube.value ? cube.value : 2}</div>

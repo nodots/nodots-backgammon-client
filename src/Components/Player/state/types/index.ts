@@ -1,7 +1,7 @@
 import { Player, initializeTurn } from './player'
-import { Turn, TurnStatus } from './turn'
+import { Turn, TurnStatus, initializeMoves } from './turn'
 
-export { TurnStatus, initializeTurn }
+export { TurnStatus, initializeTurn, initializeMoves }
 
 export type {
   Player,

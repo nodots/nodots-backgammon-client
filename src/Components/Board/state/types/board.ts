@@ -3,7 +3,7 @@
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Grid, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import { MoveAction } from './move'
+import { MoveAction } from '../../../CheckerBox/state/types/move'
 import DEFAULT_SETUP from '../config/DEFAULT.json'
 
 export enum BOARD_ACTION_TYPE {

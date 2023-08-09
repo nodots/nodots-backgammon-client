@@ -4,7 +4,6 @@ import { Checker } from '../../../Checker/state/types'
 // interface for importing initial board config
 export interface CheckerBoxProp {
   color?: string,
-
 }
 
 /**

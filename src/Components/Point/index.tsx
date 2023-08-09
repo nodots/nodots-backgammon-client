@@ -1,6 +1,3 @@
-// Models
-// import { Point as PointModel, QuadrantLocation } from '../../models'
-// Components
 import { CheckerBox as CheckerBoxType } from '../CheckerBox/state/types'
 import { QuadrantLocation } from '../Quadrant/state/types'
 
@@ -24,8 +21,6 @@ const Point = (props: PointProps) => {
     <span className='point-position'>{props.point.position}</span>
     <CheckerBox checkerBox={props.point} />
   </div>
-  // console.error(props)
-  // return <div>Point</div>
 }
 
 export default Point

@@ -1,3 +1,4 @@
+import { useGame } from '../../useGame'
 import { useState, useEffect } from 'react'
 import { Color, GameError } from '../../models'
 import { DieOrder, DieValue } from './state/types'
@@ -9,7 +10,8 @@ interface DieProps {
 }
 
 const Die = (props: DieProps) => {
-  const activeColor = 'white' //useGame()
+  const { game } = useGame()
+  const activeColor = game.activeColor
   const [valueClass, setValueClass] = useState<string>('one')
 
   useEffect(() => {

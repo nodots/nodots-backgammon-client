@@ -13,18 +13,18 @@ export const reducer = (state: Cube, action: CubeAction): Cube => {
   console.log(`[Cube Reducer]: state`, state)
   console.log(`[Cube Reducer]: action`, action)
 
-  if (!payload.color) {
-    throw Error('No payload color')
-  }
-
   const newState = produce(state, draft => {
     if (isCubeValue(payload.value)) {
-      draft.value = payload.value
-      if (state.owner === 'black') {
-        draft.owner = 'white'
-      } else {
-        draft.owner = 'black'
+      // Do nothing if we are already maxxed out
+      if (payload.value <= 64) {
+        draft.value = payload.value
+        if (state.owner === 'black') {
+          draft.owner = 'white'
+        } else {
+          draft.owner = 'black'
+        }
       }
+
     }
   })
   return newState

@@ -1,5 +1,5 @@
 import { Board, initialize, BOARD_ACTION_TYPE } from './board'
-import { Move, MoveStatus, MoveMode, MoveAction } from './move'
+import { Move, MoveStatus, MoveMode, MoveAction } from '../../../CheckerBox/state/types/move'
 
 export {
   BOARD_ACTION_TYPE,

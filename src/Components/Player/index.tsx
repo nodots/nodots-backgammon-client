@@ -23,7 +23,6 @@ const Player = (props: PlayerProps) => {
       <div>PIPS: 167</div>
     </CardContent>
   </Card>
-
 }
 
 export default Player

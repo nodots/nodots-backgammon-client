@@ -1,12 +1,10 @@
 import { reducer } from './reducers'
-import { Color } from '../../../models'
 import { createContext, useReducer } from 'react'
 
 import { Cube, CubeValue } from './types'
 import { CUBE_ACTION_TYPE, initCubeState } from './cube.state'
 
 export interface SetCubeValuePayload {
-  color: Color
   value: CubeValue | undefined
 }
 

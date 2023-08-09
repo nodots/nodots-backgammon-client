@@ -8,7 +8,6 @@ export type Point = {
   position: CheckerBoxPosition
 }
 
-
 export const initialize = (setup: CheckerProp[]): Point[] => {
   const points: Point[] = []
   for (let i = 0; i < POINT_COUNT; i++) {
