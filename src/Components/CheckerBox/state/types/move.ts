@@ -4,8 +4,8 @@ import { Checker } from '../../../Checker/state'
 import { CheckerBox } from '.'
 import { DieValue } from '../../../Die/state'
 import { Player } from '../../../Player/state'
-import { GAME_ACTION_TYPE } from '../../../../game.reducer'
 
+import { GAME_ACTION_TYPE } from '../../../../game/game.reducer'
 export enum MoveMode {
   POINT_TO_POINT,
   HIT,

@@ -1,4 +1,4 @@
-import { useGame } from '../../useGame'
+import { useGame } from '../../game/useGame'
 import { useState } from 'react'
 import { Color } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'

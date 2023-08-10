@@ -1,4 +1,4 @@
-import { GameProvider } from './game.provider'
+import { GameProvider } from './game/game.provider'
 import { Paper } from '@mui/material'
 import Board from './components/Board'
 
@@ -11,9 +11,8 @@ const App = () => {
         <GameProvider>
           <Board />
         </GameProvider>
-      </Paper >
-    </div >
-
+      </Paper>
+    </div>
   )
 }
 

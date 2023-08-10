@@ -1,5 +1,5 @@
 // Hooks
-import { useGame } from '../../useGame'
+import { useGame } from '../../game/useGame'
 
 // Types
 import { QuadrantLocation } from '../Quadrant/state/types'

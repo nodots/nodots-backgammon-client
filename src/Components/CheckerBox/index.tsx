@@ -1,7 +1,7 @@
 // Hooks
-import { useGame } from '../../useGame'
+import { useGame } from '../../game/useGame'
 // Types
-import { GameError } from '../../game'
+import { GameError } from '../../game/game'
 import { CheckerBox as CheckerBoxType } from './state/types'
 
 // Components

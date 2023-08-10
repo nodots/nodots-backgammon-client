@@ -1,16 +1,11 @@
 import { createContext, useReducer } from 'react'
-
-import { SetDiceValuesPayload } from './components/Die/state/'
-
-import { SetCubeValuePayload } from './components/Cube/state/'
-
-import { reducer } from './game.reducer'
+import { SetDiceValuesPayload } from '../components/Die/state'
+import { SetCubeValuePayload } from '../components/Cube/state'
+import { reducer, GAME_ACTION_TYPE } from './game.reducer'
 import { Game } from './game'
 import { initialGameState } from './game.state'
-
-import { GAME_ACTION_TYPE } from './game.reducer'
-import { InitializeTurnAction } from './components/Player/state/types/player'
-import { MoveActionPayload } from './components/CheckerBox/state/types/move'
+import { InitializeTurnAction } from '../components/Player/state/types/player'
+import { MoveActionPayload } from '../components/CheckerBox/state/types/move'
 
 export const useGameContext = (initialState: Game) => {
   const [game, dispatch] = useReducer(reducer, initialGameState)
@@ -38,4 +33,3 @@ const initGameContextState: UseGameContextType = {
 }
 
 export const GameContext = createContext<UseGameContextType>(initGameContextState)
-

@@ -1,7 +1,7 @@
-import { initCubeState } from './components/Cube/state'
-import { Player } from './components/Player/state'
-import { initBoardState } from './components/Board/state'
-import { initDiceState, roll } from './components/Die/state'
+import { initCubeState } from '../components/Cube/state'
+import { Player } from '../components/Player/state'
+import { initBoardState } from '../components/Board/state'
+import { initDiceState, roll } from '../components/Die/state'
 import { Game, generateId } from './game'
 
 // FIXME: needs to be from user input

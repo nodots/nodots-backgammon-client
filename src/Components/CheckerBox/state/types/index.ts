@@ -2,10 +2,6 @@ import { CheckerBoxPosition } from '../../../../game'
 import { Checker } from '../../../Checker/state/types'
 import { Color } from '../../../../game'
 
-// interface for importing initial board config
-export interface CheckerBoxProp {
-  color?: string,
-}
 
 /**
 * Checkers can be in three different places:

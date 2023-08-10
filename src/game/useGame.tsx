@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 import { GameContext } from './game.context'
-import { Game } from './game'
-import { CubeValue, SetCubeValuePayload, double } from './components/Cube/state'
-import { SetDiceValuesPayload } from './components/Die/state'
-import { TurnActionPayload } from './components/Player/state/reducers/turn'
-import { MoveActionPayload } from './components/CheckerBox/state/types/move'
+import { Game } from '.'
+import { CubeValue, SetCubeValuePayload, double } from '../components/Cube/state'
+import { SetDiceValuesPayload } from '../components/Die/state'
+import { TurnActionPayload } from '../components/Player/state/reducers/turn'
+import { MoveActionPayload } from '../components/CheckerBox/state/types/move'
 
 type UseGameHookType = {
   game: Game

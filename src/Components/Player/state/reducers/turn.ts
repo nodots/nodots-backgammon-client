@@ -2,7 +2,7 @@ import { produce } from 'immer'
 import { generateId } from '../../../../game'
 import { Player, Turn, TurnStatus, initializeMoves } from '../types'
 import { Roll } from '../../../Die/state/types'
-import { GAME_ACTION_TYPE } from '../../../../game.reducer'
+import { GAME_ACTION_TYPE } from '../../../../game/game.reducer'
 
 // import { CUBE_ACTION_TYPE } from '../cube.state'
 // import { SetCubeValuePayload } from '../cube.context'

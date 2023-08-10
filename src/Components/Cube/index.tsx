@@ -1,4 +1,4 @@
-import { useGame } from '../../useGame'
+import { useGame } from '../../game/useGame'
 import { SetCubeValuePayload } from './state'
 import { CubeValue, isCubeValue } from './state/types'
 
