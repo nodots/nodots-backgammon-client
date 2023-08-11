@@ -19,9 +19,6 @@ const RollSurface = (props: RollSurfaceProps) => {
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
-
-    console.log(game.activeTurn)
-
     if (!game.activeColor) {
       throw new Error('No Active Color')
     }

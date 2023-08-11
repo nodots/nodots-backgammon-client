@@ -23,9 +23,9 @@ export const reducer = (state: Game, action: any): Game => {
   if (!state.activeColor) {
     throw new GameError({ model: 'Move', errorMessage: 'No active color' })
   }
-  // console.log('[Game Context] reducer params state', state)
-  // console.log('[Game Context] reducer params action.type', type)
-  // console.log('[Game Context] reducer params action.payload', payload)
+  console.log('[Game Context] reducer params state', state)
+  console.log('[Game Context] reducer params action.type', type)
+  console.log('[Game Context] reducer params action.payload', payload)
   switch (type) {
     case GAME_ACTION_TYPE.SET_CUBE_VALUE:
       const newCube = cubeReducer(state.cube, action)
@@ -46,41 +46,44 @@ export const reducer = (state: Game, action: any): Game => {
     case GAME_ACTION_TYPE.FINALIZE_TURN:
       console.log('GAME_ACTION_TYPE.FINALIZE_TURN')
       return produce(state, draft => {
-        if (!state.activeColor || !state.players[state.activeColor].active || !state.activeTurn.status) {
-          throw new GameError(
-            {
-              model: 'Turn',
-              errorMessage: 'No active color or player or turn'
-            }
-          )
-        }
-        // FIXME
+        // FIXME: typeguard
         const activeColor = state.activeColor as Color
-        const inactiveColor = activeColor === 'black' ? 'black' : 'white'
+        const inActiveColor = activeColor === 'white' ? 'black' : 'white'
 
-        return produce(state, draft => {
-          draft.activeTurn.id = undefined
-          draft.activeTurn.player = undefined
-          draft.activeTurn.roll = undefined
-          draft.activeTurn.status = undefined
-          draft.players[activeColor].active = false
-          draft.players[inactiveColor].active = true
-          draft.activeColor = inactiveColor
-        })
+        draft.players[activeColor].active = false
+        draft.players[inActiveColor].active = true
+        draft.activeColor = inActiveColor
+
+        draft.activeTurn.status = undefined
+        draft.activeTurn.id = undefined
+        draft.activeTurn.roll = undefined
+        draft.activeTurn.moves = []
 
       })
     case GAME_ACTION_TYPE.MOVE:
       // FIXME: Move all of this stuff to move reducer
-      const activeMoveIndex = state.activeTurn.moves.findIndex(m => m.status !== MoveStatus.COMPLETED)
-      if (activeMoveIndex >= 0) {
+      let activeMoveIndex = state.activeTurn.moves.findIndex(m => m.status !== MoveStatus.COMPLETED)
+      if (activeMoveIndex === -1) {
+        console.log('All moves completed')
+      } else {
+        console.warn('STEP 1: SET MOVE ORIGIN')
+        // const activeTurn = state.activeTurn
+        // const activeMove = activeTurn.moves[activeMoveIndex]
+        // moveChecker(activeTurn, activeMove)
         if (state.activeTurn.moves[activeMoveIndex].status === MoveStatus.INITIALIZED) {
           return produce(state, draft => {
             draft.activeTurn.moves[activeMoveIndex].origin = payload.checkerbox
             draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.ORIGIN_SET
+            draft.activeTurn.status = TurnStatus.IN_PROGRESS
           })
         } else if (state.activeTurn.moves[activeMoveIndex].status === MoveStatus.ORIGIN_SET
           && state.activeTurn.moves[activeMoveIndex].origin
         ) {
+          console.warn(`STEP 2: SET MOVE DESTINATION AND MOVE CHECKER AND MOVE!`)
+          if (state.activeTurn) {
+            console.warn('TURN_STATUS: ', TurnStatus[state.activeTurn.status as TurnStatus])
+
+          }
           const originCheckers = state.activeTurn.moves[activeMoveIndex].origin?.checkers as Checker[]
           const newOriginCheckers = produce(originCheckers, draft => {
             draft.splice(originCheckers.length - 1, 1)
@@ -99,30 +102,83 @@ export const reducer = (state: Game, action: any): Game => {
           const newMoveState = produce(state, draft => {
             draft.activeTurn.moves[activeMoveIndex].origin = newOrigin
             draft.activeTurn.moves[activeMoveIndex].destination = destination
-            draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.COMPLETED
+            draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.DESTINATION_SET
             draft.activeTurn.status = TurnStatus.IN_PROGRESS
           })
           const newBoardState = produce(newMoveState, draft => {
-            const checkerboxes = getCheckerBoxes(state.board)
+            const checkerboxes = getCheckerBoxes(draft.board)
             const originInfo = getQuadrantAndPointIndexForCheckerbox(checkerboxes, newMoveState.activeTurn.moves[activeMoveIndex].origin?.id)
             if (originInfo.quadrantIndex && originInfo.pointIndex) {
-              // console.log(state.board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex])
               draft.board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex].checkers = newOriginCheckers
             } else {
               throw Error('No origin')
             }
             const destinationInfo = getQuadrantAndPointIndexForCheckerbox(checkerboxes, newMoveState.activeTurn.moves[activeMoveIndex].destination?.id)
             if (destinationInfo.quadrantIndex && destinationInfo.pointIndex) {
-              // console.log(state.board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex])
               draft.board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers = newDestinationCheckers
             } else {
               throw Error('No destination')
             }
-            if (activeMoveIndex === draft.activeTurn.moves.length - 1) {
-              draft.activeTurn.status = TurnStatus.AWAITING_FINALIZATION
-            }
           })
           return newBoardState
+        } else if (state.activeTurn.moves[activeMoveIndex].status === MoveStatus.DESTINATION_SET
+          && state.activeTurn.moves[activeMoveIndex].destination) {
+          console.warn('STEP 3: COMPLETE MOVE AND CHECK FOR NEXT MOVE')
+          return produce(state, draft => {
+            draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.COMPLETED
+            activeMoveIndex++
+
+            if (state.activeTurn.moves[activeMoveIndex]) {
+              // draft.activeTurn.moves[activeMoveIndex].origin = payload
+              if (state.activeTurn.moves[activeMoveIndex].status === MoveStatus.INITIALIZED) {
+                console.warn('STEP 4: SET ORIGIN FOR SUBSEQUENT MOVE')
+                draft.activeTurn.moves[activeMoveIndex].origin = payload.checkerbox
+                draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.ORIGIN_SET
+              } else {
+                console.warn('STEP 5: Set destination and move subsequent checker')
+              }
+              // const destinationCheckers = payload.checkerbox.checkers as Checker[]
+              // const newDestinationCheckers = produce(destinationCheckers, draft => {
+              //   const checkerToMove = originCheckers[originCheckers.length - 1]
+              //   draft.push(checkerToMove)
+              // })
+              // const newOrigin = produce(state.activeTurn.moves[activeMoveIndex].origin as CheckerBox, draft => {
+              //   draft.checkers = newOriginCheckers
+              // })
+              // const destination = produce(payload.checkerbox as CheckerBox, draft => {
+              //   draft.checkers = newDestinationCheckers
+              // })
+              // const newMoveState = produce(state, draft => {
+              //   draft.activeTurn.moves[activeMoveIndex].origin = newOrigin
+              //   draft.activeTurn.moves[activeMoveIndex].destination = destination
+              //   draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.DESTINATION_SET
+              //   draft.activeTurn.status = TurnStatus.IN_PROGRESS
+              // })
+              // const newBoardState = produce(newMoveState, draft => {
+              //   const checkerboxes = getCheckerBoxes(state.board)
+              //   const originInfo = getQuadrantAndPointIndexForCheckerbox(checkerboxes, newMoveState.activeTurn.moves[activeMoveIndex].origin?.id)
+              //   if (originInfo.quadrantIndex && originInfo.pointIndex) {
+              //     draft.board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex].checkers = newOriginCheckers
+              //   } else {
+              //     throw Error('No origin')
+              //   }
+              //   const destinationInfo = getQuadrantAndPointIndexForCheckerbox(checkerboxes, newMoveState.activeTurn.moves[activeMoveIndex].destination?.id)
+              //   if (destinationInfo.quadrantIndex && destinationInfo.pointIndex) {
+              //     draft.board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers = newDestinationCheckers
+              //   } else {
+              //     throw Error('No destination')
+              //   }
+              // })
+              // return newBoardState
+
+            } else {
+              console.warn('STEP 5: SET TURN STATUS TO AWAITING_FINALIZATION')
+
+              draft.activeTurn.status = TurnStatus.AWAITING_FINALIZATION
+            }
+
+          })
+
         } else {
           throw new GameError({ model: 'Move', errorMessage: 'No more moves left in turn' })
         }
