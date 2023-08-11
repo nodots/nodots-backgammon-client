@@ -11,11 +11,12 @@ type UseGameHookType = {
   setDiceValues: (payload: SetDiceValuesPayload) => void
   setCubeValue: (payload: SetCubeValuePayload) => void
   initializeTurn: (payload: TurnActionPayload) => void
+  finalizeTurn: () => void
   double: (value: CubeValue) => CubeValue
   move: (payload: MoveActionPayload) => void
 }
 
 export const useGame = (): UseGameHookType => {
-  const { game, initializeTurn, setDiceValues, setCubeValue, move } = useContext(GameContext)
-  return { game, initializeTurn, setDiceValues, setCubeValue, move, double }
+  const { game, initializeTurn, finalizeTurn, setDiceValues, setCubeValue, move } = useContext(GameContext)
+  return { game, initializeTurn, finalizeTurn, setDiceValues, setCubeValue, move, double }
 }

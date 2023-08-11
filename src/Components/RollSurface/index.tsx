@@ -12,7 +12,7 @@ interface RollSurfaceProps {
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
-  const { game, initializeTurn, setDiceValues } = useGame()
+  const { game, initializeTurn, finalizeTurn, setDiceValues } = useGame()
   const activeTurn = game.activeTurn
   const [die1Value, setDie1Value] = useState<DieValue>(1)
   const [die2Value, setDie2Value] = useState<DieValue>(1)
@@ -20,10 +20,15 @@ const RollSurface = (props: RollSurfaceProps) => {
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
 
+    console.log(game.activeTurn)
+
     if (!game.activeColor) {
       throw new Error('No Active Color')
     }
 
+    if (game.activeTurn.status) {
+      finalizeTurn()
+    }
     const newValues = [roll(), roll()]
     console.log('[RollSurface Component] clickHandler newValues:', newValues)
 
@@ -51,8 +56,11 @@ const RollSurface = (props: RollSurfaceProps) => {
 
   return (
     <div className='roll-surface' onClick={clickHandler}>
-      <Die order={0} value={die1Value} color={props.color} />
-      <Die order={1} value={die2Value} color={props.color} />
+      {game.activeColor && game.activeColor === props.color && <>
+        <Die order={0} value={die1Value} color={props.color} />
+        <Die order={1} value={die2Value} color={props.color} />
+      </>}
+
     </div>
   )
 

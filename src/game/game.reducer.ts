@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Game, GameError } from './game'
+import { Game, GameError, Color } from './game'
 import { Board } from '../components/Board/state'
 import { CheckerBox } from '../components/CheckerBox/state/types'
 import { reducer as diceReducer } from '../components/Die/state/'
@@ -14,6 +14,7 @@ export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
   SET_CUBE_VALUE,
   INITIALIZE_TURN,
+  FINALIZE_TURN,
   MOVE
 }
 
@@ -41,6 +42,32 @@ export const reducer = (state: Game, action: any): Game => {
       const newTurn = turnReducer(state.activeTurn, action)
       return produce(state, draft => {
         draft.activeTurn = newTurn
+      })
+    case GAME_ACTION_TYPE.FINALIZE_TURN:
+      console.log('GAME_ACTION_TYPE.FINALIZE_TURN')
+      return produce(state, draft => {
+        if (!state.activeColor || !state.players[state.activeColor].active || !state.activeTurn.status) {
+          throw new GameError(
+            {
+              model: 'Turn',
+              errorMessage: 'No active color or player or turn'
+            }
+          )
+        }
+        // FIXME
+        const activeColor = state.activeColor as Color
+        const inactiveColor = activeColor === 'black' ? 'black' : 'white'
+
+        return produce(state, draft => {
+          draft.activeTurn.id = undefined
+          draft.activeTurn.player = undefined
+          draft.activeTurn.roll = undefined
+          draft.activeTurn.status = undefined
+          draft.players[activeColor].active = false
+          draft.players[inactiveColor].active = true
+          draft.activeColor = inactiveColor
+        })
+
       })
     case GAME_ACTION_TYPE.MOVE:
       // FIXME: Move all of this stuff to move reducer

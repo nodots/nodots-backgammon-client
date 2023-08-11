@@ -3,9 +3,10 @@ import {
   GameError,
   GameErrorType,
   Color,
-  generateId
+  generateId,
+  CheckerBoxPosition,
+  MoveDirection
 } from './game'
-
 
 export {
   generateId
@@ -15,5 +16,6 @@ export type {
   GameError,
   GameErrorType,
   Color,
-
+  CheckerBoxPosition,
+  MoveDirection
 }
