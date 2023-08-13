@@ -19,18 +19,21 @@ const Cube = () => {
       throw new Error('You do not control the cube')
     }
 
+    let value = cube.value
+
     // TODO: Do nothing if cube is already maxxed out. Should this logic be elsewhere?
-    if (cube.value === 64) {
+    if (value === 64) {
       return
     }
     console.log('[Cube Component] game:', game)
-    if (cube.value === undefined) {
-      cube.value = 2
+
+    if (value === undefined) {
+      value = 2
     }
-    if (!isCubeValue(cube.value)) {
+    if (!isCubeValue(value)) {
       throw new Error('Invalid cube value')
     }
-    const newValue: CubeValue = double(cube.value)
+    const newValue: CubeValue = double(value)
     const payload: SetCubeValuePayload = {
       value: newValue
     }

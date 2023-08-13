@@ -20,7 +20,6 @@ type UseCubeContextType = ReturnType<typeof useCubeContext>
 const initContextState: UseCubeContextType = {
   cube: initCubeState,
   setCubeValue () { }
-
 }
 
 export const CubeContext = createContext<UseCubeContextType>(initContextState)

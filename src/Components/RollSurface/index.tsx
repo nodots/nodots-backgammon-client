@@ -23,32 +23,40 @@ const RollSurface = (props: RollSurfaceProps) => {
       throw new Error('No Active Color')
     }
 
-    if (game.activeTurn.status) {
+    console.log(game.activeTurn)
+
+    if (game.activeTurn.moves.length > 0 &&
+      game.activeTurn.moves[game.activeTurn.moves.length - 1].destination &&
+      game.activeTurn.moves[game.activeTurn.moves.length - 1].origin
+    ) {
+      console.log('[RollSurface Component] finalizeTurn')
       finalizeTurn()
-    }
-    const newValues = [roll(), roll()]
-    console.log('[RollSurface Component] clickHandler newValues:', newValues)
+    } else {
+      const newValues = [roll(), roll()]
+      console.log('[RollSurface Component] clickHandler newValues:', newValues)
 
-    const setDiceValuesPayload: SetDiceValuesPayload = {
-      color: props.color,
-      values: {
-        die1: newValues[0],
-        die2: newValues[1]
+      const setDiceValuesPayload: SetDiceValuesPayload = {
+        color: props.color,
+        values: {
+          die1: newValues[0],
+          die2: newValues[1]
+        }
       }
-    }
-    setDie1Value(newValues[0])
-    setDie2Value(newValues[1])
-    if (!activeTurn.status) {
-      console.log('RollSurface Component] clickHandler Preparing to initialize turn')
-      const turn: TurnActionPayload = {
-        player: game.players[game.activeColor],
-        roll: [newValues[0], newValues[1]],
-        status: TurnStatus.INITIALIZED,
+      setDie1Value(newValues[0])
+      setDie2Value(newValues[1])
+      if (!activeTurn.status) {
+        console.log('RollSurface Component] clickHandler Preparing to initialize turn')
+        const turn: TurnActionPayload = {
+          player: game.players[game.activeColor],
+          roll: [newValues[0], newValues[1]],
+          status: TurnStatus.INITIALIZED,
+        }
+        initializeTurn(turn)
       }
-      initializeTurn(turn)
-    }
 
-    setDiceValues(setDiceValuesPayload)
+      setDiceValues(setDiceValuesPayload)
+
+    }
   }
 
   return (

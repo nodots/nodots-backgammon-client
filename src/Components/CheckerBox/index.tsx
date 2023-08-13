@@ -35,7 +35,6 @@ const CheckerBox = (props: CheckerBoxProps) => {
     })
     if (e.type === 'click') {
       try {
-        // FIXME: call move code
         const payload: MoveActionPayload = {
           player: activePlayer,
           checkerbox: props.checkerBox
