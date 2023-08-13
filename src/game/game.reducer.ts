@@ -195,21 +195,15 @@ export const reducer = (state: Game, action: any): Game => {
     console.log(originInfo)
     console.log(destinationInfo)
 
-    const newMoveState = produce(board, draft => {
+    return produce(board, draft => {
       // FIXME: Tons of problems here
       const hitChecker = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[0] as Checker
       console.log('[GameReducer] hitChecker', hitChecker)
       const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex].checkers[0] as Checker
       console.log('[GameReducer] checkerToMove', checkerToMove)
       draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[0] = checkerToMove
-      draft.off[hitChecker.color].checkers[0] = hitChecker
-
-
-
-
+      draft.rail[hitChecker.color].checkers.push(hitChecker)
     })
-    console.log(newMoveState)
-    return board
   }
 
   function pointToPoint (board: Board, move: Move): Board {
@@ -268,19 +262,16 @@ export const reducer = (state: Game, action: any): Game => {
 
     if (checkerbox) {
       if (typeof checkerbox.position === 'number') {
-        if (checkerbox.position >= 7 && checkerbox.position <= 12) {
-          // quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.SW)
-          quadrantIndex = 1
+        if (checkerbox.position <= 6) {
+          quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.SE)
+        } else if (checkerbox.position >= 7 && checkerbox.position <= 12) {
+          quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.SW)
         } else if (checkerbox.position >= 13 && checkerbox.position <= 18) {
-          // quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.NW)
-          quadrantIndex = 2
+          quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.NW)
         } else if (checkerbox.position >= 19 && checkerbox.position <= 24) {
-          // quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.NE)
-          quadrantIndex = 3
+          quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.NE)
         } else {
-          quadrantIndex = 0
-          // console.log(checkerbox.position)
-          // throw new GameError({ model: 'Move', errorMessage: 'No quadrant' })
+          throw new GameError({ model: 'Move', errorMessage: 'No quadrant' })
         }
 
         if (typeof quadrantIndex !== 'number' ||

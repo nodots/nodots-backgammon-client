@@ -4,7 +4,7 @@ import { OffContainer, initialize as initializeOff } from '../../../Off/state/ty
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
 import { MoveAction } from '../../../CheckerBox/state/types/move'
-import DEFAULT_SETUP from '../config/DEFAULT.json'
+import DEFAULT_SETUP from '../config/HIT.json'
 import { CheckerBoxPosition } from '../../../../game'
 
 export const POINT_COUNT = 24
