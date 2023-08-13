@@ -1,3 +1,4 @@
+import { AlertColor } from '@mui/material'
 import { createContext, useReducer } from 'react'
 import { SetDiceValuesPayload } from '../components/Die/state'
 import { SetCubeValuePayload } from '../components/Cube/state'
@@ -18,7 +19,6 @@ export const useGameContext = (initialState: Game) => {
     dispatch({ type: GAME_ACTION_TYPE.INITIALIZE_TURN, payload })
   const finalizeTurn = () =>
     dispatch({ type: GAME_ACTION_TYPE.FINALIZE_TURN, payload: {} })
-
   const move = (payload: MoveActionPayload) =>
     dispatch({ type: GAME_ACTION_TYPE.MOVE, payload })
 

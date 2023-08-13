@@ -12,7 +12,7 @@ const App = () => {
         <Paper className='board-frame' elevation={8}>
           <Board />
         </Paper>
-        <Info />
+        <Info elevation={8} />
       </GameProvider>
     </div>
   )

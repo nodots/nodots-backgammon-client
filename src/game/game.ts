@@ -31,6 +31,7 @@ export type Game = {
   }
   activeTurn: Turn
   activeColor?: Color
+  error?: GameError
   setCubeValue?: (value: CubeValue) => CubeValue
   initializeTurn?: (turn: TurnActionPayload) => Turn
   finalizeTurn?: () => void

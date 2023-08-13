@@ -29,6 +29,10 @@
       border: none;
       border-radius: none;
 
+      // FIXME: bad colors for checkers
+      &.white {
+        background-color: #fff;
+      }
       .checker-overlay {
         display: none;
       }

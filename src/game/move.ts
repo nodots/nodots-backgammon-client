@@ -111,11 +111,15 @@ export const off = (board: Board, move: Move): Board => {
     })
   }
   const originInfo = getQuadrantAndPointIndexForCheckerbox(board, move.origin.id)
-
+  const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number]
+  const newOrigin = produce(oldOrigin, draft => {
+    draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
+  })
   return produce(board, draft => {
     // FIXME: Typeguard
     const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[0] as Checker
     draft.off[checkerToMove.color].checkers.push(checkerToMove)
+    draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
   })
 }
 

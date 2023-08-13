@@ -1,4 +1,10 @@
 .info {
-  width: 30vw;
+  width: 20vw;
   margin: 0px 5px;
+}
+
+.info-column {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
 }

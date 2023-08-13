@@ -29,10 +29,6 @@ const CheckerBox = (props: CheckerBoxProps) => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log('[CheckerBox Component] game.activeTurn.status', game.activeTurn.status)
-    game.activeTurn.moves.forEach((m, i) => {
-      console.log(`[CheckerBox Component] moves[${i}]`, m)
-    })
     if (e.type === 'click') {
       try {
         const payload: MoveActionPayload = {

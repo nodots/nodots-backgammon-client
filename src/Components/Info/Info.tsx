@@ -1,12 +1,17 @@
 import { useGame } from '../../game/useGame'
 import {
   Card, CardHeader, CardContent,
-  Table, TableBody, TableCell, TableHead, TableRow, Tab
+  Table, TableBody, TableCell, TableRow
 } from '@mui/material'
 import { Move, MoveStatus } from '../CheckerBox/state'
 import { TurnStatus } from '../Player/state/types'
+import Error, { ErrorProps } from '../Error'
 
-export const Info = () => {
+export interface InfoProps {
+  elevation?: number
+}
+
+export const Info = (props: InfoProps) => {
   const { game } = useGame()
   const activeColor = game.activeColor
   const activeTurn = game.activeTurn
@@ -27,35 +32,38 @@ export const Info = () => {
   if (activeColor) {
     activePlayer = game.players[activeColor]
   }
-  return <Card className='info'>
-    <CardHeader title='Active Turn'></CardHeader>
-    <CardContent>
-      <Table>
-        <TableBody>
-          <TableRow>
-            <TableCell>Status</TableCell>
-            <TableCell>{activeTurn.status ? TurnStatus[activeTurn.status] : 'N/A'}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Active Color</TableCell>
-            <TableCell>{activeColor ? activeColor.toString().toUpperCase() : 'N/A'}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Active Player</TableCell>
-            <TableCell>{activePlayer ? activePlayer.color.toString().toUpperCase() : 'N/A'}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Roll</TableCell>
-            <TableCell>{roll ? roll[0] : 'X'}:{roll ? roll[1] : 'X'}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-      <h2>Moves ({moves.length})</h2>
-      {newFunction(activeMove, 'Active')}
-      {previousMove ? newFunction(previousMove, 'Previous') : <></>}
-      {nextMove ? newFunction(nextMove, 'Next') : <></>}
-    </CardContent >
-  </Card >
+  return <div className='info-column'>
+
+    <Card className='info' elevation={props.elevation ? props.elevation : 0}>
+      <CardHeader title='Active Turn'></CardHeader>
+      <CardContent>
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>Status</TableCell>
+              <TableCell>{activeTurn.status ? TurnStatus[activeTurn.status] : 'N/A'}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Active Color</TableCell>
+              <TableCell>{activeColor ? activeColor.toString().toUpperCase() : 'N/A'}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Active Player</TableCell>
+              <TableCell>{activePlayer ? activePlayer.color.toString().toUpperCase() : 'N/A'}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Roll</TableCell>
+              <TableCell>{roll ? roll[0] : 'X'}:{roll ? roll[1] : 'X'}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+        <h2>Moves ({moves.length})</h2>
+        {newFunction(activeMove, 'Active')}
+        {previousMove ? newFunction(previousMove, 'Previous') : <></>}
+        {nextMove ? newFunction(nextMove, 'Next') : <></>}
+      </CardContent >
+    </Card >
+  </div>
 }
 
 function newFunction (activeMove: Move, label: string) {
