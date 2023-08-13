@@ -47,7 +47,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
         throw new GameError({ model: 'Move', errorMessage: 'Failed to update activeTurn' })
       }
     } else if (e.type === 'contextmenu') {
-      console.warn('[CheckerBox Component] props.checkerBox.checkers', props.checkerBox.checkers)
+      console.warn('[CheckerBox Component] props.checkerBox', props.checkerBox)
     }
   }
 

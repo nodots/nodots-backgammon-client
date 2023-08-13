@@ -31,7 +31,7 @@ export const initializeMoves = (roll: Roll): Move[] => {
   for (let i = 0; i < moveCount; i++) {
     const move: Move = {
       id: generateId(),
-      dieValue: i % 2 ? roll[0] : roll[1],
+      dieValue: i % 2 ? roll[1] : roll[0],
       status: MoveStatus.INITIALIZED
     }
     moves.push(move)
