@@ -2,13 +2,11 @@ import { produce } from 'immer'
 import { Game, GameError, Color } from './game'
 import { Board } from '../components/Board/state'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
-import { getMoveMode, hit, pointToPoint, off, getQuadrantAndPointIndexForCheckerbox } from './move'
+import { getMoveMode, pointToPoint, off, hit } from './move'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
-import { Move } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state/reducers'
-import { Checker } from '../components/Checker/state'
 import { TurnStatus } from '../components/Player/state/types'
 
 export enum GAME_ACTION_TYPE {
@@ -178,37 +176,6 @@ export const reducer = (state: Game, action: any): Game => {
       return state
   }
 
-  function hit (board: Board, move: Move): Board {
-    console.log(board)
-    console.log(move)
 
-    if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
-      throw new GameError({
-        model: 'Move',
-        errorMessage: 'Missing origin or destination'
-      })
-    }
-
-    const originInfo = getQuadrantAndPointIndexForCheckerbox(board, move.origin.id)
-    const destinationInfo = getQuadrantAndPointIndexForCheckerbox(board, move.destination.id)
-    console.log(originInfo)
-    console.log(destinationInfo)
-
-    // FIXME: Write propper typeguard
-    if (typeof originInfo.quadrantIndex !== 'number' || typeof originInfo.pointIndex !== 'number') {
-      throw new GameError({
-        model: 'Move',
-        errorMessage: 'Quadrant or point index invalid'
-      })
-    }
-
-    return produce(board, draft => {
-      // FIXME: Tons of problems here
-      const hitChecker = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number].checkers[0] as Checker
-      const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[0] as Checker
-      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number].checkers[0] = checkerToMove
-      draft.rail[hitChecker.color].checkers.push(hitChecker)
-    })
-  }
 
 }

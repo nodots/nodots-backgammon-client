@@ -1,8 +1,9 @@
-import { Board } from './types'
+import { Board, MoveMode } from './types'
 import { initBoardState } from './board.state'
 
 export {
-  initBoardState
+  initBoardState,
+  MoveMode,
 }
 
 export type {

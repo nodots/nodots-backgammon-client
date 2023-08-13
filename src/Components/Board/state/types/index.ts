@@ -5,7 +5,7 @@ export {
   BOARD_ACTION_TYPE,
   MoveStatus,
   MoveMode,
-  initialize
+  initialize,
 }
 
 export type {

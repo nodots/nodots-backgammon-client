@@ -27,22 +27,5 @@ export const isCheckerBox = (v: any): v is CheckerBox => {
     return false
   }
 
-  // if (typeof v.id !== 'string') {
-  //   return false
-  // }
-
-  // console.log(v.checkers)
-
-  // if (
-  //   (typeof v.position === 'number' &&
-  //     (v.position < 1 || v.position > 24)
-  //   ) || (
-  //     typeof v.position === 'string' &&
-  //     v.position !== 'rail' &&
-  //     v.position !== 'off')
-  // ) {
-  //   return false
-  // }
-
   return true
 }

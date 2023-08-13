@@ -10,16 +10,6 @@
       "color": "black"
     },
     {
-      "position": 7,
-      "checkerCount": 1,
-      "color": "white"
-    },
-    {
-      "position": 6,
-      "checkerCount": 4,
-      "color": "white"
-    },
-    {
       "position": 17,
       "checkerCount": 3,
       "color": "black"
@@ -29,19 +19,14 @@
       "checkerCount": 5,
       "color": "black"
     },
-        {
-      "position": 4,
-      "checkerCount": 5,
-      "color": "white"
-    },
     {
       "position": 3,
-      "checkerCount": 3,
+      "checkerCount": 7,
       "color": "white"
     },
     {
       "position": 2,
-      "checkerCount": 2,
+      "checkerCount": 8,
       "color": "white"
     }
   ]

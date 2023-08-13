@@ -1,7 +1,8 @@
 import { produce } from 'immer'
 import { Color } from '.'
 import { GameError } from './game'
-import { Board } from '../components/Board/state'
+import { isOffEligible } from '../components/Board/state/types/board'
+import { Board, } from '../components/Board/state'
 import { QuadrantLocation } from '../components/Quadrant/state/types'
 import { Checker } from '../components/Checker/state'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
@@ -110,31 +111,49 @@ export const off = (board: Board, move: Move): Board => {
       errorMessage: 'Missing origin or destination'
     })
   }
+
   const originInfo = getQuadrantAndPointIndexForCheckerbox(board, move.origin.id)
   const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number]
   const newOrigin = produce(oldOrigin, draft => {
     draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
   })
-  return produce(board, draft => {
-    // FIXME: Typeguard
-    const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[0] as Checker
-    draft.off[checkerToMove.color].checkers.push(checkerToMove)
-    draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
+  const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[0] as Checker
+  const activeColor = checkerToMove.color
+  const offEligible = isOffEligible(board, activeColor)
+
+  if (!offEligible) {
+    console.error('Ineligible player attempted to move a checker off')
+  }
+
+  let maxPosition: number = 0
+  board.quadrants[originInfo.quadrantIndex].points.forEach(p => {
+    if (p.checkers.length !== 0) {
+      maxPosition = p.position as number
+    }
   })
+
+
+  if ((move.dieValue === oldOrigin.position) || move.dieValue >= maxPosition) {
+    return produce(board, draft => {
+      draft.off[checkerToMove.color].checkers.push(checkerToMove)
+      draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
+    })
+
+  } else {
+    console.error('Cannot move to off from that point with current dieValue')
+  }
+
+  return board
+
 }
 
 export const hit = (board: Board, move: Move): Board => {
-  console.log(board)
-  console.log(move)
-
   if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
     throw new GameError({
       model: 'Move',
       errorMessage: 'Missing origin or destination'
     })
   }
-
-
   const originInfo = getQuadrantAndPointIndexForCheckerbox(board, move.origin.id)
 
   // FIXME: Write propper typeguard
@@ -146,7 +165,6 @@ export const hit = (board: Board, move: Move): Board => {
   }
 
   const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex].checkers[0]
-
   const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex]
   const newOrigin = produce(oldOrigin, draft => {
     draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
@@ -160,12 +178,15 @@ export const hit = (board: Board, move: Move): Board => {
     draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
     draft.off[checkerToMove.color] = newDestination
   })
+}
 
+export const reenter = (board: Board, move: Move): Board => {
+
+  return board
 }
 
 
-
-export function getQuadrantAndPointIndexForCheckerbox (board: Board, id: string | undefined) {
+function getQuadrantAndPointIndexForCheckerbox (board: Board, id: string | undefined) {
   let quadrantIndex: number | undefined = undefined
   let pointIndex: number | undefined = undefined
   const checkerbox = getCheckerBoxes(board).find(cb => cb.id === id)
