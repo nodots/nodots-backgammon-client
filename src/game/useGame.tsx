@@ -4,7 +4,7 @@ import { Game } from '.'
 import { CubeValue, SetCubeValuePayload, double } from '../components/Cube/state'
 import { SetDiceValuesPayload } from '../components/Die/state'
 import { TurnActionPayload } from '../components/Player/state/reducers/turn'
-import { MoveActionPayload } from '../components/CheckerBox/state/types/move'
+import { MoveActionPayload } from './move'
 
 type UseGameHookType = {
   game: Game

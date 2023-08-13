@@ -1,14 +1,14 @@
 import { produce } from 'immer'
-import { Color } from '../../../../game'
-import { GameError } from '../../../../game/game'
-import { Board } from '../../../Board/state'
-import { QuadrantLocation } from '../../../Quadrant/state/types'
-import { Checker } from '../../../Checker/state'
-import { CheckerBox, isCheckerBox } from '.'
-import { DieValue } from '../../../Die/state'
-import { Player } from '../../../Player/state'
+import { Color } from '.'
+import { GameError } from './game'
+import { Board } from '../components/Board/state'
+import { QuadrantLocation } from '../components/Quadrant/state/types'
+import { Checker } from '../components/Checker/state'
+import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
+import { DieValue } from '../components/Die/state'
+import { Player } from '../components/Player/state'
 
-import { GAME_ACTION_TYPE } from '../../../../game/game.reducer'
+import { GAME_ACTION_TYPE } from './game.reducer'
 export enum MoveMode {
   POINT_TO_POINT,
   HIT,

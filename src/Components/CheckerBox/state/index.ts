@@ -1,4 +1,4 @@
-import { Move, MoveAction, MoveStatus, MoveMode } from './types/move'
+import { Move, MoveAction, MoveStatus, MoveMode } from '../../../game/move'
 import { isCheckerBox } from './types'
 
 

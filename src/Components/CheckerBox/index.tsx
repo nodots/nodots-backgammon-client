@@ -7,7 +7,7 @@ import { CheckerBox as CheckerBoxType } from './state/types'
 // Components
 import Checker from '../Checker'
 import { Checker as CheckerType } from '../Checker/state/types'
-import { MoveActionPayload } from './state/types/move'
+import { MoveActionPayload } from '../../game/move'
 import { TurnStatus } from '../Player/state/types'
 
 interface CheckerBoxProps {

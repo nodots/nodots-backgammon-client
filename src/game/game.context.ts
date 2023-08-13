@@ -5,7 +5,7 @@ import { reducer, GAME_ACTION_TYPE } from './game.reducer'
 import { Game } from './game'
 import { initialGameState } from './game.state'
 import { InitializeTurnAction } from '../components/Player/state/types/player'
-import { MoveActionPayload } from '../components/CheckerBox/state/types/move'
+import { MoveActionPayload } from './move'
 
 export const useGameContext = (initialState: Game) => {
   const [game, dispatch] = useReducer(reducer, initialGameState)

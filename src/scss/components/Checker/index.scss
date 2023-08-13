@@ -23,10 +23,15 @@
 .off-container {
   .checker-box {
     .checker {
+      border-radius: 5px;
       width: 3vw;
       height: 1vh;
       border: none;
       border-radius: none;
+
+      .checker-overlay {
+        display: none;
+      }
     }
   }
 }

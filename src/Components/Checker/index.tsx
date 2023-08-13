@@ -16,7 +16,7 @@ const Checker = (props: CheckerProps) => {
     e.preventDefault()
   }
 
-  return <div className={classes} id={props.checker.id} onClick={handleClick}><RadioButtonCheckedTwoToneIcon sx={{ fill: 'rgba(69, 109, 157, .4)' }} /></div>
+  return <div className={classes} id={props.checker.id} onClick={handleClick}><RadioButtonCheckedTwoToneIcon className='checker-overlay' sx={{ fill: 'rgba(69, 109, 157, .4)' }} /></div>
 }
 
 export default Checker

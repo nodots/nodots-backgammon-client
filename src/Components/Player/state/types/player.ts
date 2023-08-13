@@ -1,7 +1,7 @@
 import { Color, generateId, MoveDirection } from '../../../../game'
 import { Move } from '../../../Board/state/types'
 import { Roll, DiePair } from '../../../Die/state/types'
-import { Turn, TurnStatus, initializeMoves } from './turn'
+import { Turn, TurnStatus, initializeMoves } from '../../../../game/turn'
 
 export interface InitializeTurnAction {
   player: Player,

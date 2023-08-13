@@ -1,5 +1,5 @@
 import { Player, initializeTurn } from './player'
-import { Turn, TurnStatus, initializeMoves } from './turn'
+import { Turn, TurnStatus, initializeMoves } from '../../../../game/turn'
 
 export { TurnStatus, initializeTurn, initializeMoves }
 
