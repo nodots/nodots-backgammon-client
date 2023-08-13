@@ -23,15 +23,12 @@ const RollSurface = (props: RollSurfaceProps) => {
       throw new Error('No Active Color')
     }
 
-    console.log(game.activeTurn)
-
     if (game.activeTurn.moves.length > 0 &&
       game.activeTurn.moves[game.activeTurn.moves.length - 1].destination &&
       game.activeTurn.moves[game.activeTurn.moves.length - 1].origin
     ) {
-      console.log('[RollSurface Component] finalizeTurn')
       finalizeTurn()
-    } else {
+    } else if (!game.activeTurn.status) {
       const newValues = [roll(), roll()]
       console.log('[RollSurface Component] clickHandler newValues:', newValues)
 
@@ -56,6 +53,8 @@ const RollSurface = (props: RollSurfaceProps) => {
 
       setDiceValues(setDiceValuesPayload)
 
+    } else {
+      console.error('Turn in progress')
     }
   }
 
@@ -65,10 +64,8 @@ const RollSurface = (props: RollSurfaceProps) => {
         <Die order={0} value={die1Value} color={props.color} />
         <Die order={1} value={die2Value} color={props.color} />
       </>}
-
     </div>
   )
-
 }
 
 export default RollSurface
