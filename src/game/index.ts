@@ -5,11 +5,13 @@ import {
   Color,
   generateId,
   CheckerBoxPosition,
-  MoveDirection
+  MoveDirection,
+  isColor
 } from './game'
 
 export {
-  generateId
+  generateId,
+  isColor
 }
 export type {
   Game,

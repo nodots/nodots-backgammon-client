@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Color } from '.'
+import { Color, isColor } from '.'
 import { GameError } from './game'
 import { isOffEligible } from '../components/Board/state/types/board'
 import { Board, } from '../components/Board/state'
@@ -49,11 +49,6 @@ export type Move = {
   destination?: CheckerBox
 }
 
-// export const reducer = (state: Turn, action: MoveAction): Turn => {
-//   // TKTK
-// }
-
-
 // Start move methods
 export const pointToPoint = (board: Board, move: Move): Board => {
   if (!move.origin || !move.destination) {
@@ -74,7 +69,6 @@ export const pointToPoint = (board: Board, move: Move): Board => {
     }
     const originInfo = getQuadrantAndPointIndexForCheckerbox(board, move.origin.id)
     const destinationInfo = getQuadrantAndPointIndexForCheckerbox(board, move.destination.id)
-    console.log(originInfo)
     if (originInfo.quadrantIndex !== -1 && originInfo.pointIndex !== -1) {
       checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[0]
       if (!checkerToMove) {
@@ -118,8 +112,13 @@ export const off = (board: Board, move: Move): Board => {
     draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
   })
   const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[0] as Checker
-  const activeColor = checkerToMove.color
-  const offEligible = isOffEligible(board, activeColor)
+  if (!isColor(checkerToMove.color)) {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'Invalid color'
+    })
+  }
+  const offEligible = isOffEligible(board, checkerToMove.color)
 
   if (!offEligible) {
     console.error('Ineligible player attempted to move a checker off')
@@ -127,24 +126,21 @@ export const off = (board: Board, move: Move): Board => {
 
   let maxPosition: number = 0
   board.quadrants[originInfo.quadrantIndex].points.forEach(p => {
-    if (p.checkers.length !== 0) {
+    console.log(p)
+    if (p.checkers.length > 0) {
       maxPosition = p.position as number
     }
   })
-
 
   if ((move.dieValue === oldOrigin.position) || move.dieValue >= maxPosition) {
     return produce(board, draft => {
       draft.off[checkerToMove.color].checkers.push(checkerToMove)
       draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
     })
-
   } else {
     console.error('Cannot move to off from that point with current dieValue')
   }
-
   return board
-
 }
 
 export const hit = (board: Board, move: Move): Board => {
@@ -155,6 +151,7 @@ export const hit = (board: Board, move: Move): Board => {
     })
   }
   const originInfo = getQuadrantAndPointIndexForCheckerbox(board, move.origin.id)
+  const destinationInfo = getQuadrantAndPointIndexForCheckerbox(board, move.destination.id)
 
   // FIXME: Write propper typeguard
   if (typeof originInfo.quadrantIndex !== 'number' || typeof originInfo.pointIndex !== 'number') {
@@ -164,19 +161,28 @@ export const hit = (board: Board, move: Move): Board => {
     })
   }
 
-  const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex].checkers[0]
   const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex]
   const newOrigin = produce(oldOrigin, draft => {
     draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
   })
-  const oldDestination = board.off[checkerToMove.color]
+
+  const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
+  const hitChecker = oldDestination.checkers[0]
   const newDestination = produce(oldDestination, draft => {
-    draft.checkers.push(checkerToMove)
+    draft.checkers.splice(oldDestination.checkers.length - 1, 1)
   })
+
+  const oldRail = board.rail[hitChecker.color]
+  const newRail = produce(oldRail, draft => {
+    draft.checkers.push(hitChecker)
+  })
+
   return produce(board, draft => {
     // FIXME
     draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
-    draft.off[checkerToMove.color] = newDestination
+    draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
+    draft.rail[hitChecker.color] = newRail
+
   })
 }
 

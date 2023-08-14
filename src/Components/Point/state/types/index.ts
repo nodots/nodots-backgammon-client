@@ -1,4 +1,4 @@
-import { Color, CheckerBoxPosition, generateId } from '../../../../game'
+import { Color, isColor, CheckerBoxPosition, generateId } from '../../../../game'
 import { POINT_COUNT, CheckerProp } from '../../../Board/state/types/board'
 import { Checker } from '../../../Checker/state/types'
 
@@ -21,8 +21,9 @@ export const initialize = (setup: CheckerProp[]): Point[] => {
     const config = setup.find(p => p.position === position)
     if (config) {
       for (let i = 0; i < config.checkerCount; i++) {
-        // FIXME: bad cast
-        point.checkers.push({ id: generateId(), color: config.color as Color })
+        if (isColor(config.color)) {
+          point.checkers.push({ id: generateId(), color: config.color })
+        }
       }
     }
     points.push(point)

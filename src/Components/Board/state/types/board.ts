@@ -1,13 +1,12 @@
 import { Color } from '../../../../game'
 // import { CheckerBox } from '../../../CheckerBox/state/types'
-import { Checker } from '../../../Checker/state'
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
 import { MoveAction } from '../../../../game/move'
-import DEFAULT_SETUP from '../config/OFF.json'
+import DEFAULT_SETUP from '../config/DEFAULT.json'
 import { CheckerBoxPosition } from '../../../../game'
-import { check } from 'prettier'
+import { CHECKERS_PER_PLAYER } from '../../../../game/game'
 
 export const POINT_COUNT = 24
 // For importing setup
@@ -61,6 +60,6 @@ export const isOffEligible = (board: Board, color: Color): boolean => {
       }
     })
   })
-  return checkerCount === 15 ? true : false
+  return checkerCount === CHECKERS_PER_PLAYER ? true : false
 }
 
