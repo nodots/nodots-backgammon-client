@@ -11,8 +11,8 @@ export type CheckerBoxPosition = number | 'rail' | 'off'
 export type GameErrorType = 'Game' | 'Turn' | 'Move' | 'Roll' | 'Player' | 'Die' | 'Cube' | 'CheckerBox' | 'Quadrant' | 'Point' | 'RollSurface'
 export const CHECKERS_PER_PLAYER = 15
 
-
 export const isColor = (c: unknown): c is Color => {
+  console.log(c)
   if (c && typeof c === 'string' && (c === 'white' || c === 'black')) {
     return true
   }

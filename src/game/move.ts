@@ -3,6 +3,7 @@ import { Color, isColor } from '.'
 import { GameError } from './game'
 import { isOffEligible } from '../components/Board/state/types/board'
 import { Board, } from '../components/Board/state'
+import { Rail } from '../components/Rail/state/types'
 import { QuadrantLocation } from '../components/Quadrant/state/types'
 import { Checker } from '../components/Checker/state'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
@@ -10,6 +11,7 @@ import { DieValue } from '../components/Die/state'
 import { Player } from '../components/Player/state'
 
 import { GAME_ACTION_TYPE } from './game.reducer'
+import { check } from 'prettier'
 export enum MoveMode {
   POINT_TO_POINT,
   HIT,
@@ -189,9 +191,77 @@ export const hit = (board: Board, move: Move): Board => {
 }
 
 export const reenter = (board: Board, move: Move): Board => {
-  console.log('[Move] reenter move', move)
-  console.log('[Move] reenter board.rail', board.rail)
-  return board
+  if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'Missing origin or destination'
+    })
+  }
+  const destinationInfo = getQuadrantAndPointIndexForCheckerbox(board, move.destination.id)
+  const checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
+  if (!isColor(checkerToMove.color)) {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'Invalid color'
+    })
+  }
+
+  // FIXME: Typeguard
+  if (
+    (checkerToMove.color === 'white' &&
+      destinationInfo.quadrantIndex !== 3)
+    ||
+    (checkerToMove.color === 'black' &&
+      destinationInfo.quadrantIndex !== 0)
+  ) {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: `${checkerToMove.color} cannot reenter to this destination ${destinationInfo.pointIndex}`
+    })
+  }
+
+  const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
+
+  let canReenter: boolean = false
+  let isHit: boolean = false
+
+  if (oldDestination.checkers.length === 0) {
+    canReenter = true
+  }
+  if (oldDestination.checkers.length === 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
+    canReenter = true
+    isHit = true
+  }
+  if (oldDestination.checkers.length > 0 && oldDestination.checkers[0].color === checkerToMove.color) {
+    canReenter = true
+  }
+
+  if (!canReenter) {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'Reentry point owned by opponent'
+    })
+  }
+
+  const newDestination = produce(oldDestination, draft => {
+    draft.checkers.push(checkerToMove)
+  })
+
+  const newOrigin = produce(move.origin as Rail, draft => {
+    draft.checkers = draft.checkers.splice(draft.checkers.length - 1, 1) as Checker[]
+  })
+
+  return produce(board, draft => {
+    draft.rail[checkerToMove.color] = newOrigin
+
+    if (isHit) {
+      const hitChecker = draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[0]
+      draft.rail[hitChecker.color].checkers.push(hitChecker)
+      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[0] = checkerToMove
+    } else {
+      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
+    }
+  })
 }
 
 
@@ -279,8 +349,10 @@ export const getMoveMode = (origin: CheckerBox, destination: CheckerBox, activeC
       console.error('Player moves counterclockwise')
     }
     if (destination.checkers && destination.checkers.length === 1 && destination.checkers[0].color !== activeColor) {
+      console.log('MoveMode = HIT')
       return MoveMode.HIT
     } else {
+      console.log('MoveMode = POINT_TO_POINT')
       return MoveMode.POINT_TO_POINT
     }
   } else if (origin.position === 'rail' && typeof destination.position === 'number') {

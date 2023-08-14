@@ -2,7 +2,7 @@ import { produce } from 'immer'
 import { Game, GameError, Color } from './game'
 import { Board } from '../components/Board/state'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
-import { getMoveMode, pointToPoint, off, hit } from './move'
+import { getMoveMode, pointToPoint, off, hit, reenter } from './move'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
@@ -86,6 +86,7 @@ export const reducer = (state: Game, action: any): Game => {
 
             if (isCheckerBox(activeMove.origin) && isCheckerBox(payload.checkerbox)) {
               draft.mode = getMoveMode(activeMove.origin, payload.checkerbox, activeColor, activePlayer, activeMove.dieValue)
+              console.log(draft.mode)
             } else {
               throw new GameError({
                 model: 'Game',
@@ -103,6 +104,10 @@ export const reducer = (state: Game, action: any): Game => {
               break
             case MoveMode.OFF:
               newBoard = off(state.board, newMove)
+              break
+            case MoveMode.REENTER:
+              console.log('[Game Reducer] MoveMode.REENTER newMove', newMove)
+              newBoard = reenter(state.board, newMove)
               break
             default:
               newBoard = state.board
