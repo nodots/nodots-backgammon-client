@@ -57,7 +57,8 @@ export const pointToPoint = (board: Board, move: Move): Board => {
 
   // FIXME: Check for mismatch of die value and move
   if (Math.abs((move.origin.position as number) - (move.destination.position as number)) !== (move.dieValue as number)) {
-    throw new GameError({ model: 'Move', errorMessage: 'Move does not match die value' })
+    // throw new GameError({ model: 'Move', errorMessage: 'Move does not match die value' })
+    console.error('Move does not match die')
   }
   return produce(board, draft => {
     let checkerToMove: Checker | undefined = undefined
@@ -124,7 +125,7 @@ export const off = (board: Board, move: Move): Board => {
     console.error('Ineligible player attempted to move a checker off')
   }
 
-  let maxPosition: number = 0
+  let maxPosition: number = move.dieValue
   board.quadrants[originInfo.quadrantIndex].points.forEach(p => {
     console.log(p)
     if (p.checkers.length > 0) {
@@ -132,7 +133,7 @@ export const off = (board: Board, move: Move): Board => {
     }
   })
 
-  if ((move.dieValue === oldOrigin.position) || move.dieValue >= maxPosition) {
+  if (move.dieValue === oldOrigin.position || move.dieValue >= maxPosition) {
     return produce(board, draft => {
       draft.off[checkerToMove.color].checkers.push(checkerToMove)
       draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
@@ -162,6 +163,7 @@ export const hit = (board: Board, move: Move): Board => {
   }
 
   const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex]
+  const checkerToMove = oldOrigin.checkers[oldOrigin.checkers.length - 1]
   const newOrigin = produce(oldOrigin, draft => {
     draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
   })
@@ -169,7 +171,7 @@ export const hit = (board: Board, move: Move): Board => {
   const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
   const hitChecker = oldDestination.checkers[0]
   const newDestination = produce(oldDestination, draft => {
-    draft.checkers.splice(oldDestination.checkers.length - 1, 1)
+    draft.checkers = [checkerToMove]
   })
 
   const oldRail = board.rail[hitChecker.color]
@@ -187,7 +189,8 @@ export const hit = (board: Board, move: Move): Board => {
 }
 
 export const reenter = (board: Board, move: Move): Board => {
-
+  console.log('[Move] reenter move', move)
+  console.log('[Move] reenter board.rail', board.rail)
   return board
 }
 
@@ -260,16 +263,20 @@ export const getMoveMode = (origin: CheckerBox, destination: CheckerBox, activeC
       throw new GameError({ model: 'Move', errorMessage: 'No active player' })
     }
     if (destination.checkers && destination.checkers.length > 1 && destination.checkers[0].color !== activeColor) {
-      throw new GameError({ model: 'Move', errorMessage: 'Destination is owned by opponent' })
+      // throw new GameError({ model: 'Move', errorMessage: 'Destination is owned by opponent' })
+      console.error('Checker is owned by other player')
     }
     if (destination.position === origin.position) {
-      throw new GameError({ model: 'Move', errorMessage: 'Origin and destination cannot be the same' })
+      // throw new GameError({ model: 'Move', errorMessage: 'Origin and destination cannot be the same' })
+      console.error('Origin and destination cannot be the same')
     }
     if (activePlayer.moveDirection === 'clockwise' && destination.position < origin.position) {
-      throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
+      // throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
+      console.error('Player moves clockwise')
     }
     if (activePlayer.moveDirection === 'counterclockwise' && destination.position > origin.position) {
-      throw new GameError({ model: 'Move', errorMessage: 'Player moves counterclockwise' })
+      // throw new GameError({ model: 'Move', errorMessage: 'Player moves counterclockwise' })
+      console.error('Player moves counterclockwise')
     }
     if (destination.checkers && destination.checkers.length === 1 && destination.checkers[0].color !== activeColor) {
       return MoveMode.HIT
