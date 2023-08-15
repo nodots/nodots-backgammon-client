@@ -19,6 +19,10 @@ const RollSurface = (props: RollSurfaceProps) => {
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
+    if (game.activeTurn.moves.length > 0) {
+      return console.error('Turn in progress. Cannot roll.')
+    }
+
     if (!game.activeColor) {
       throw new Error('No Active Color')
     }

@@ -23,6 +23,7 @@ export const initialize = (setup: CheckerProp[]): Point[] => {
       for (let i = 0; i < config.checkerCount; i++) {
         if (isColor(config.color)) {
           point.checkers.push({ id: generateId(), color: config.color })
+          point.color = config.color
         }
       }
     }

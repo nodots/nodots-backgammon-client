@@ -29,6 +29,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
+
     if (e.type === 'click') {
       try {
         const payload: MoveActionPayload = {
@@ -47,7 +48,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
     }
   }
 
-  checkerBoxState.checkers.forEach((c: CheckerType) => {
+  checkerBoxState.checkers.forEach((c: CheckerType, i) => {
     checkers.push(<Checker checker={c} key={c.id} />)
   })
 

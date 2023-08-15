@@ -3,15 +3,13 @@ import { Color, isColor } from '.'
 import { GameError } from './game'
 import { isOffEligible } from '../components/Board/state/types/board'
 import { Board, } from '../components/Board/state'
-import { Rail } from '../components/Rail/state/types'
 import { QuadrantLocation } from '../components/Quadrant/state/types'
 import { Checker } from '../components/Checker/state'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
 import { DieValue } from '../components/Die/state'
 import { Player } from '../components/Player/state'
-
 import { GAME_ACTION_TYPE } from './game.reducer'
-import { check } from 'prettier'
+
 export enum MoveMode {
   POINT_TO_POINT,
   HIT,
@@ -54,10 +52,12 @@ export type Move = {
 // Start move methods
 export const pointToPoint = (board: Board, move: Move): Board => {
   if (!move.origin || !move.destination) {
-    throw new GameError({ model: 'Move', errorMessage: 'Missing origin or destination' })
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'Missing origin or destination'
+    })
   }
 
-  // FIXME: Check for mismatch of die value and move
   if (Math.abs((move.origin.position as number) - (move.destination.position as number)) !== (move.dieValue as number)) {
     // throw new GameError({ model: 'Move', errorMessage: 'Move does not match die value' })
     console.error('Move does not match die')
@@ -96,7 +96,10 @@ export const pointToPoint = (board: Board, move: Move): Board => {
         })
       }
     } else {
-      throw Error('No origin')
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'Missing origin'
+      })
     }
   })
 }
@@ -129,7 +132,6 @@ export const off = (board: Board, move: Move): Board => {
 
   let maxPosition: number = move.dieValue
   board.quadrants[originInfo.quadrantIndex].points.forEach(p => {
-    console.log(p)
     if (p.checkers.length > 0) {
       maxPosition = p.position as number
     }
@@ -141,6 +143,9 @@ export const off = (board: Board, move: Move): Board => {
       draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
     })
   } else {
+    console.log(move.dieValue)
+    console.log(oldOrigin.position)
+    console.log(maxPosition)
     console.error('Cannot move to off from that point with current dieValue')
   }
   return board
@@ -182,11 +187,9 @@ export const hit = (board: Board, move: Move): Board => {
   })
 
   return produce(board, draft => {
-    // FIXME
     draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
     draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
     draft.rail[hitChecker.color] = newRail
-
   })
 }
 
@@ -206,7 +209,6 @@ export const reenter = (board: Board, move: Move): Board => {
     })
   }
 
-  // FIXME: Typeguard
   if (
     (checkerToMove.color === 'white' &&
       destinationInfo.quadrantIndex !== 3)
@@ -247,12 +249,8 @@ export const reenter = (board: Board, move: Move): Board => {
     draft.checkers.push(checkerToMove)
   })
 
-  const newOrigin = produce(move.origin as Rail, draft => {
-    draft.checkers = draft.checkers.splice(draft.checkers.length - 1, 1) as Checker[]
-  })
-
   return produce(board, draft => {
-    draft.rail[checkerToMove.color] = newOrigin
+    draft.rail[checkerToMove.color].checkers.pop()
 
     if (isHit) {
       const hitChecker = draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[0]
@@ -263,7 +261,6 @@ export const reenter = (board: Board, move: Move): Board => {
     }
   })
 }
-
 
 function getQuadrantAndPointIndexForCheckerbox (board: Board, id: string | undefined) {
   let quadrantIndex: number | undefined = undefined
@@ -287,17 +284,18 @@ function getQuadrantAndPointIndexForCheckerbox (board: Board, id: string | undef
       if (typeof quadrantIndex !== 'number' ||
         quadrantIndex < 0 ||
         quadrantIndex > 3) {
-        console.log(checkerbox.position)
-        console.log(typeof checkerbox.position)
         throw new GameError({
           model: 'Move',
-          errorMessage: 'NO QI'
+          errorMessage: 'No Quadrant Index'
         })
 
       }
       pointIndex = board.quadrants[quadrantIndex].points.findIndex(p => p.id === id)
     } else {
-      throw Error('No origin checkerbox')
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'No Quadrant'
+      })
     }
     return { quadrantIndex, pointIndex }
 
@@ -333,26 +331,20 @@ export const getMoveMode = (origin: CheckerBox, destination: CheckerBox, activeC
       throw new GameError({ model: 'Move', errorMessage: 'No active player' })
     }
     if (destination.checkers && destination.checkers.length > 1 && destination.checkers[0].color !== activeColor) {
-      // throw new GameError({ model: 'Move', errorMessage: 'Destination is owned by opponent' })
-      console.error('Checker is owned by other player')
+      throw new GameError({ model: 'Move', errorMessage: 'Destination is owned by opponent' })
     }
     if (destination.position === origin.position) {
-      // throw new GameError({ model: 'Move', errorMessage: 'Origin and destination cannot be the same' })
-      console.error('Origin and destination cannot be the same')
+      throw new GameError({ model: 'Move', errorMessage: 'Origin and destination cannot be the same' })
     }
     if (activePlayer.moveDirection === 'clockwise' && destination.position < origin.position) {
-      // throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
-      console.error('Player moves clockwise')
+      throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
     }
     if (activePlayer.moveDirection === 'counterclockwise' && destination.position > origin.position) {
-      // throw new GameError({ model: 'Move', errorMessage: 'Player moves counterclockwise' })
-      console.error('Player moves counterclockwise')
+      throw new GameError({ model: 'Move', errorMessage: 'Player moves counterclockwise' })
     }
     if (destination.checkers && destination.checkers.length === 1 && destination.checkers[0].color !== activeColor) {
-      console.log('MoveMode = HIT')
       return MoveMode.HIT
     } else {
-      console.log('MoveMode = POINT_TO_POINT')
       return MoveMode.POINT_TO_POINT
     }
   } else if (origin.position === 'rail' && typeof destination.position === 'number') {

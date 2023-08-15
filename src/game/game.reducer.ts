@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Game, GameError, Color } from './game'
+import { Game, GameError, Color, isColor } from './game'
 import { Board } from '../components/Board/state'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
 import { getMoveMode, pointToPoint, off, hit, reenter } from './move'
@@ -19,9 +19,6 @@ export enum GAME_ACTION_TYPE {
 
 export const reducer = (state: Game, action: any): Game => {
   const { type, payload } = action
-  if (!state.activeColor) {
-    throw new GameError({ model: 'Move', errorMessage: 'No active color' })
-  }
   console.log('[Game Context] reducer params state', state)
   console.log('[Game Context] reducer params action.type', type)
   console.log('[Game Context] reducer params action.payload', payload)
@@ -44,9 +41,15 @@ export const reducer = (state: Game, action: any): Game => {
       })
     case GAME_ACTION_TYPE.FINALIZE_TURN:
       console.log('GAME_ACTION_TYPE.FINALIZE_TURN')
+
       return produce(state, draft => {
-        // FIXME: typeguard
-        const activeColor = state.activeColor as Color
+        if (!isColor(state.activeColor)) {
+          throw new GameError({
+            model: 'Turn',
+            errorMessage: 'Invalid color'
+          })
+        }
+        const activeColor = state.activeColor
         const inActiveColor = activeColor === 'white' ? 'black' : 'white'
 
         draft.players[activeColor].active = false
@@ -61,7 +64,12 @@ export const reducer = (state: Game, action: any): Game => {
     case GAME_ACTION_TYPE.MOVE:
       // FIXME: Move all of this stuff to move reducer
       let activeMoveIndex = state.activeTurn.moves.findIndex(m => m.status !== MoveStatus.COMPLETED)
-      // FIXME: Typeguard
+      if (!isColor(state.activeColor)) {
+        throw new GameError({
+          model: 'Turn',
+          errorMessage: 'Invalid color'
+        })
+      }
       const activeColor = state.activeColor as Color
       const activePlayer = state.players[activeColor]
       let activeMove = state.activeTurn.moves[activeMoveIndex]
@@ -74,6 +82,12 @@ export const reducer = (state: Game, action: any): Game => {
       } else {
         // Always set the origin if it isn't set
         if (!activeMove.origin) {
+          if (activePlayer.color !== payload.checkerbox.color) {
+            throw new GameError({
+              model: 'Move',
+              errorMessage: 'Not your checker to move'
+            })
+          }
           return produce(state, draft => {
             draft.activeTurn.moves[activeMoveIndex].origin = payload.checkerbox
             draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.ORIGIN_SET
@@ -125,6 +139,14 @@ export const reducer = (state: Game, action: any): Game => {
             draft.board = newBoard as Board
           })
         } else if (activeMove.destination && activeMove.status === MoveStatus.DESTINATION_SET) {
+          if (activePlayer.color !== payload.checkerbox.color) {
+            throw new GameError({
+              model: 'Move',
+              errorMessage: 'Not your checker to move'
+            })
+          }
+
+
           // Mark current move active
 
           const priorMove = produce(activeMove, draft => {

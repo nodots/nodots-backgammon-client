@@ -12,7 +12,6 @@ export type GameErrorType = 'Game' | 'Turn' | 'Move' | 'Roll' | 'Player' | 'Die'
 export const CHECKERS_PER_PLAYER = 15
 
 export const isColor = (c: unknown): c is Color => {
-  console.log(c)
   if (c && typeof c === 'string' && (c === 'white' || c === 'black')) {
     return true
   }
