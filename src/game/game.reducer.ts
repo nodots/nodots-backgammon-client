@@ -96,6 +96,10 @@ export const reducer = (state: Game, action: any): Game => {
       const activePlayer = state.players[activeColor]
       let activeMove = state.activeTurn.moves[activeMoveIndex]
       console.log('[ActiveMove] activeMove:', activeMove)
+      if (activeMove === undefined) {
+        console.log(state)
+        throw Error('This should not happen')
+      }
       state.activeTurn.moves.forEach((m, i) => {
         console.log(`state.activeTurn.moves[${i}].status:`, MoveStatus[state.activeTurn.moves[i].status])
       })
@@ -105,6 +109,8 @@ export const reducer = (state: Game, action: any): Game => {
         // Always set the origin if it isn't set
         if (!activeMove.origin) {
           if (activePlayer.color !== payload.checkerbox.color) {
+            console.log(activePlayer)
+            console.log(payload)
             throw new GameError({
               model: 'Move',
               errorMessage: 'Not your checker to move'
@@ -115,13 +121,55 @@ export const reducer = (state: Game, action: any): Game => {
             draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.ORIGIN_SET
             draft.activeTurn.status = TurnStatus.IN_PROGRESS
           })
+          // Handle reentering logic
+        } else if (activeMove.status === MoveStatus.NO_MOVE) {
+          activeMoveIndex++
+          activeMove = state.activeTurn.moves[activeMoveIndex]
+          console.log(activeMove)
+          if (!isCheckerBox(state.activeTurn.moves[activeMoveIndex].origin)) {
+            return produce(state, draft => {
+              draft.activeTurn.moves[activeMoveIndex].origin = payload.checkerbox
+              draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.ORIGIN_SET
+              draft.activeTurn.status = TurnStatus.IN_PROGRESS
+            })
+
+          } else if (!isCheckerBox(state.activeTurn.moves[activeMoveIndex].destination)) {
+            let inActiveColor: Color | undefined = undefined
+            if (isColor(state.activeColor)) {
+              inActiveColor = state.activeColor === 'black' ? 'white' : 'black'
+            }
+            const quadrantIndex = state.activeColor === 'black' ? 0 : 3
+            const quadrant = state.board.quadrants[quadrantIndex]
+            const availablePoints = quadrant.points.find(p => p.color !== inActiveColor)
+            if (availablePoints === undefined) {
+              // FIXME: Need to check for no move situation before moving when player is on the board
+              // There is no place to move the last checker in the turn. Next move.
+              return produce(state, draft => {
+                if (isColor(inActiveColor)) {
+                  draft.activeTurn.id = undefined
+                  draft.activeTurn.player = undefined
+                  draft.activeTurn.roll = undefined
+                  draft.activeTurn.moves = []
+                  draft.activeTurn.status = undefined
+                  draft.activeColor = inActiveColor
+                  draft.players[activeColor].active = false
+                  draft.players[inActiveColor].active = true
+                } else {
+                  throw Error('Should never get here')
+                }
+              })
+
+            }
+
+          }
+
         } else if (!activeMove.destination) {
           const newMove = produce(activeMove, draft => {
             draft.destination = payload.checkerbox
             draft.status = MoveStatus.DESTINATION_SET
 
             if (isCheckerBox(activeMove.origin) && isCheckerBox(payload.checkerbox)) {
-              draft.mode = getMoveMode(activeMove.origin, payload.checkerbox, activeColor, activePlayer, activeMove.dieValue)
+              draft.mode = getMoveMode(state.board, activeMove.origin, payload.checkerbox, activeColor, activePlayer, activeMove.dieValue)
               console.log(draft.mode)
             } else {
               throw new GameError({
@@ -143,7 +191,14 @@ export const reducer = (state: Game, action: any): Game => {
               break
             case MoveMode.REENTER:
               console.log('[Game Reducer] MoveMode.REENTER newMove', newMove)
+              // let inActiveColor: Color | undefined = undefined
               newBoard = reenter(state.board, newMove)
+              // player couldn't reenter
+              if (!newBoard) {
+                return produce(state, draft => {
+                  draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.NO_MOVE
+                })
+              }
               break
             default:
               newBoard = state.board
@@ -168,15 +223,16 @@ export const reducer = (state: Game, action: any): Game => {
             })
           }
 
-
           // Mark current move active
-
           const priorMove = produce(activeMove, draft => {
             draft.status = MoveStatus.COMPLETED
           })
           // and move to the next
           activeMoveIndex++
           activeMove = state.activeTurn.moves[activeMoveIndex]
+          if (activeMove === undefined) {
+            throw new Error('Undefined activeMove')
+          }
 
           const newMove = produce(activeMove, draft => {
             draft.origin = payload.checkerbox
@@ -191,7 +247,7 @@ export const reducer = (state: Game, action: any): Game => {
           const newMove = produce(activeMove, draft => {
             draft.destination = payload.checkerbox
             draft.status = MoveStatus.DESTINATION_SET
-            draft.mode = getMoveMode(activeMove.origin as CheckerBox, draft.destination as CheckerBox, activeColor, activePlayer, activeMove.dieValue)
+            draft.mode = getMoveMode(state.board, activeMove.origin as CheckerBox, draft.destination as CheckerBox, activeColor, activePlayer, activeMove.dieValue)
           })
           console.log('NEW MOVE:', newMove)
           let finalBoard: Board | undefined = undefined
@@ -202,6 +258,16 @@ export const reducer = (state: Game, action: any): Game => {
               break
             case MoveMode.HIT:
               finalBoard = hit(state.board, newMove)
+              break
+            case MoveMode.REENTER:
+              finalBoard = reenter(state.board, newMove)
+              // There was no legal way to reenter with the roll
+              if (!finalBoard) {
+                newMove.status = MoveStatus.NO_MOVE
+                return produce(state, draft => {
+                  draft.activeTurn.moves[activeMoveIndex] = newMove
+                })
+              }
               break
             default:
               finalBoard = state.board
@@ -218,6 +284,9 @@ export const reducer = (state: Game, action: any): Game => {
             draft.activeTurn.moves[activeMoveIndex] = newMove
             draft.board = finalBoard as Board
           })
+        } else {
+          console.log(activeMove)
+          throw Error('Unknown situation')
         }
       }
       return state

@@ -3,9 +3,8 @@ import {
   Card, CardHeader, CardContent,
   Table, TableBody, TableCell, TableRow
 } from '@mui/material'
-import { Move, MoveStatus } from '../CheckerBox/state'
+import { Move, MoveStatus, MoveMode } from '../CheckerBox/state'
 import { TurnStatus } from '../Player/state/types'
-import Error, { ErrorProps } from '../Error'
 
 export interface InfoProps {
   elevation?: number
@@ -58,15 +57,15 @@ export const Info = (props: InfoProps) => {
           </TableBody>
         </Table>
         <h2>Moves ({moves.length})</h2>
-        {newFunction(activeMove, 'Active')}
-        {previousMove ? newFunction(previousMove, 'Previous') : <></>}
-        {nextMove ? newFunction(nextMove, 'Next') : <></>}
+        {moveTable(activeMove, 'Active')}
+        {previousMove ? moveTable(previousMove, 'Previous') : <></>}
+        {nextMove ? moveTable(nextMove, 'Next') : <></>}
       </CardContent >
     </Card >
   </div>
 }
 
-function newFunction (activeMove: Move, label: string) {
+function moveTable (activeMove: Move, label: string) {
   return <Table>
     <TableBody>
       <TableRow>
@@ -75,6 +74,10 @@ function newFunction (activeMove: Move, label: string) {
       <TableRow>
         <TableCell>Status</TableCell>
         <TableCell>{activeMove ? MoveStatus[activeMove.status] : 'N/A'}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Mode</TableCell>
+        <TableCell>{activeMove?.mode ? MoveMode[activeMove.mode] : 'N/A'}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell>Origin</TableCell>

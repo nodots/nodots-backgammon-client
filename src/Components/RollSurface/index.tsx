@@ -22,8 +22,6 @@ const RollSurface = (props: RollSurfaceProps) => {
   let die1: DieType | undefined = undefined
   let die2: DieType | undefined = undefined
   if (game.activeColor) {
-    console.log(game.dice[game.activeColor])
-
     die1 = game.dice[game.activeColor].dice[0]
     die2 = game.dice[game.activeColor].dice[1]
   }

@@ -11,6 +11,7 @@ export enum TurnStatus {
   AWAITING_FINALIZATION,
   FINALIZED,
   ERROR,
+  NO_MOVES
 }
 
 export type Turn = {

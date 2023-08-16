@@ -15,18 +15,21 @@ export interface RailContainer {
 }
 
 export const initialize = (setup: CheckerProp[]): RailContainer => {
-  const whiteCheckerSetup = setup.filter(cp => cp.color === 'white' && cp.position === 'rail')
+  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'rail')
   const whiteCheckers: Checker[] = []
-  whiteCheckerSetup.forEach(c => {
-    whiteCheckers.push({ id: generateId(), color: 'white' })
-  })
+  if (whiteCheckerSetup) {
+    for (let i = 0; i < whiteCheckerSetup.checkerCount; i++) {
+      whiteCheckers.push({ id: generateId(), color: 'white' })
+    }
+  }
 
-  const blackCheckerSetup = setup.filter(cp => cp.color === 'black' && cp.position === 'rail')
+  const blackCheckerSetup = setup.find(cp => cp.color === 'black' && cp.position === 'rail')
   const blackCheckers: Checker[] = []
-  blackCheckerSetup.forEach(c => {
-    blackCheckers.push({ id: generateId(), color: 'black' })
-  })
-
+  if (blackCheckerSetup) {
+    for (let i = 0; i < blackCheckerSetup.checkerCount; i++) {
+      blackCheckers.push({ id: generateId(), color: 'black' })
+    }
+  }
 
   const railContainer: RailContainer = {
     white: {

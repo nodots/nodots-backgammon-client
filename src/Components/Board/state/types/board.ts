@@ -4,7 +4,6 @@ import { OffContainer, initialize as initializeOff } from '../../../Off/state/ty
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
 import DEFAULT_SETUP from '../config/DEFAULT.json'
-import { CheckerBoxPosition } from '../../../../game'
 import { CHECKERS_PER_PLAYER } from '../../../../game/game'
 
 export const POINT_COUNT = 24
@@ -12,7 +11,7 @@ export const POINT_COUNT = 24
 export interface CheckerProp {
   color: string,
   checkerCount: number,
-  position: CheckerBoxPosition
+  position: any
 }
 
 export enum BOARD_ACTION_TYPE {

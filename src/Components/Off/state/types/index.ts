@@ -17,18 +17,21 @@ export interface OffContainer {
 }
 
 export const initialize = (setup: CheckerProp[]): OffContainer => {
-  const whiteCheckerSetup = setup.filter(cp => cp.color === 'white' && cp.position === 'off')
+  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'off')
   const whiteCheckers: Checker[] = []
-  whiteCheckerSetup.forEach(c => {
-    whiteCheckers.push({ id: generateId(), color: 'white' })
-  })
+  if (whiteCheckerSetup) {
+    for (let i = 0; i < whiteCheckerSetup.checkerCount; i++) {
+      whiteCheckers.push({ id: generateId(), color: 'white' })
+    }
+  }
 
-  const blackCheckerSetup = setup.filter(cp => cp.color === 'black' && cp.position === 'off')
+  const blackCheckerSetup = setup.find(cp => cp.color === 'black' && cp.position === 'off')
   const blackCheckers: Checker[] = []
-  blackCheckerSetup.forEach(c => {
-    blackCheckers.push({ id: generateId(), color: 'black' })
-  })
-
+  if (blackCheckerSetup) {
+    for (let i = 0; i < blackCheckerSetup.checkerCount; i++) {
+      blackCheckers.push({ id: generateId(), color: 'black' })
+    }
+  }
 
   const offContainer: OffContainer = {
     white: {

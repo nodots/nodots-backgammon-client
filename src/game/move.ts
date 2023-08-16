@@ -2,6 +2,7 @@ import { produce } from 'immer'
 import { Color, isColor } from '.'
 import { GameError } from './game'
 import { isOffEligible } from '../components/Board/state/types/board'
+import { Off } from '../components/Off/state/types'
 import { Board, } from '../components/Board/state'
 import { QuadrantLocation } from '../components/Quadrant/state/types'
 import { Checker } from '../components/Checker/state'
@@ -15,6 +16,7 @@ export enum MoveMode {
   HIT,
   REENTER,
   OFF,
+  ERROR
 }
 
 export enum MoveStatus {
@@ -22,6 +24,7 @@ export enum MoveStatus {
   ORIGIN_SET,
   DESTINATION_SET,
   COMPLETED,
+  NO_MOVE,
   ERROR,
 }
 
@@ -83,6 +86,11 @@ export const pointToPoint = (board: Board, move: Move): Board => {
       } else {
         // FIXME typeguard
         let ctm: Checker = checkerToMove as Checker
+        // Player has checkers on the rail and must move them first
+        if (board.rail[ctm.color].checkers.length > 0) {
+          console.log('Checkers on the rail')
+          return board
+        }
         const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number]
         const newOrigin = produce(oldOrigin, draft => {
           draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
@@ -195,7 +203,7 @@ export const hit = (board: Board, move: Move): Board => {
   })
 }
 
-export const reenter = (board: Board, move: Move): Board => {
+export const reenter = (board: Board, move: Move): Board | undefined => {
   if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
     throw new GameError({
       model: 'Move',
@@ -218,10 +226,8 @@ export const reenter = (board: Board, move: Move): Board => {
     (checkerToMove.color === 'black' &&
       destinationInfo.quadrantIndex !== 0)
   ) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: `${checkerToMove.color} cannot reenter to this destination ${destinationInfo.pointIndex}`
-    })
+    console.error(`${checkerToMove.color} cannot reenter to this destination ${destinationInfo.pointIndex}`)
+    return board
   }
 
   const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
@@ -241,10 +247,9 @@ export const reenter = (board: Board, move: Move): Board => {
   }
 
   if (!canReenter) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'Reentry point owned by opponent'
-    })
+    console.log('Reentry point owned by opponent')
+
+    return
   }
 
   const newDestination = produce(oldDestination, draft => {
@@ -322,7 +327,12 @@ function getCheckerBoxes (board: Board): CheckerBox[] {
   return checkerBoxes
 }
 
-export const getMoveMode = (origin: CheckerBox, destination: CheckerBox, activeColor: Color, activePlayer: Player, dieValue: DieValue): MoveMode => {
+export const getMoveMode = (board: Board, origin: CheckerBox, destination: CheckerBox, activeColor: Color, activePlayer: Player, dieValue: DieValue): MoveMode => {
+
+  if (board.off[activeColor].checkers.length > 0) {
+    return MoveMode.REENTER
+  }
+
   if (origin.position === 'off') {
     throw new GameError({ model: 'Move', errorMessage: 'Cannot move from off' })
   }
@@ -340,7 +350,9 @@ export const getMoveMode = (origin: CheckerBox, destination: CheckerBox, activeC
       throw new GameError({ model: 'Move', errorMessage: 'Origin and destination cannot be the same' })
     }
     if (activePlayer.moveDirection === 'clockwise' && destination.position < origin.position) {
-      throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
+      // throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
+      // console.error('Player moves clockwise')
+      return MoveMode.ERROR
     }
     if (activePlayer.moveDirection === 'counterclockwise' && destination.position > origin.position) {
       throw new GameError({ model: 'Move', errorMessage: 'Player moves counterclockwise' })

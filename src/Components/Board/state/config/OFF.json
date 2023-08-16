@@ -26,7 +26,12 @@
     },
     {
       "position": 2,
-      "checkerCount": 8,
+      "checkerCount": 5,
+      "color": "white"
+    },
+    {
+      "position": "off",
+      "checkerCount": 3,
       "color": "white"
     }
   ]
