@@ -4,5 +4,4 @@ export type Roll = [DieValue, DieValue]
 
 export type DiePair = {
   dice: [Die, Die]
-  roll?: () => Roll
 }

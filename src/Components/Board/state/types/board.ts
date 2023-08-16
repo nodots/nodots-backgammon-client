@@ -3,7 +3,6 @@ import { Color } from '../../../../game'
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import { MoveAction } from '../../../../game/move'
 import DEFAULT_SETUP from '../config/DEFAULT.json'
 import { CheckerBoxPosition } from '../../../../game'
 import { CHECKERS_PER_PLAYER } from '../../../../game/game'
@@ -24,7 +23,6 @@ export type Board = {
   quadrants: Quadrant[]
   off: OffContainer
   rail: RailContainer
-  moveChecker?: (action: MoveAction) => void
 }
 
 export const initialize = (): Board => {

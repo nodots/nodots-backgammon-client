@@ -4,9 +4,9 @@ import { Checker } from '../../../Checker/state/types'
 
 export type Point = {
   id: string,
-  color?: Color
   checkers: Checker[]
   position: CheckerBoxPosition
+  color?: Color
 }
 
 export const initialize = (setup: CheckerProp[]): Point[] => {

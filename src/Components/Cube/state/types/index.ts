@@ -21,7 +21,6 @@ export const isCubeValue = (v: unknown): v is CubeValue => {
 export type Cube = {
   value: CubeValue | undefined
   owner: Color | undefined
-  double?: (value: CubeValue) => CubeValue
 }
 
 export const double = (value: CubeValue): CubeValue => {

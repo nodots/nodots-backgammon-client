@@ -1,13 +1,14 @@
 import { produce } from 'immer'
 import { Game, GameError, Color, isColor } from './game'
 import { Board } from '../components/Board/state'
+import { Roll } from '../components/Die/state/types'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
 import { getMoveMode, pointToPoint, off, hit, reenter } from './move'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
-import { TurnStatus } from '../components/Player/state/types'
+import { TurnStatus, initializeTurn } from '../components/Player/state/types'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -31,6 +32,25 @@ export const reducer = (state: Game, action: any): Game => {
       return newCubeState
     case GAME_ACTION_TYPE.SET_DICE_VALUES:
       const newDice = diceReducer(state.dice, action)
+      console.log(action)
+      if (state.activeTurn === undefined || state.activeTurn.status === undefined) {
+        if (!isColor(state.activeColor)) {
+          throw new GameError({
+            model: 'Turn',
+            errorMessage: `Invalid activeColor ${state.activeColor}`
+          })
+        }
+        const activePlayer = state.players[state.activeColor]
+        if (!activePlayer || activePlayer.active === false) {
+          throw new GameError({
+            model: 'Turn',
+            errorMessage: `No activePlayer`
+          })
+        }
+        const roll: Roll = [action.payload.values.die1, action.payload.values.die2]
+
+        initializeTurn({ player: activePlayer, roll })
+      }
       return produce(state, draft => {
         draft.dice = newDice
       })

@@ -14,10 +14,10 @@ export type Player = {
   active: boolean
   dice: DiePair
   moveDirection: MoveDirection
-  initializeTurn?: (action: InitializeTurnAction) => void
 }
 
 export const initializeTurn = (action: InitializeTurnAction): Turn => {
+  console.log('initializeTurn')
   const moves: Move[] = initializeMoves(action.roll)
   const turn: Turn = {
     id: generateId(),

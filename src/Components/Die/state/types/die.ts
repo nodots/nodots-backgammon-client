@@ -20,7 +20,6 @@ export type Die = {
   order: DieOrder
   color: Color
   value?: DieValue | undefined
-  roll?: () => DieValue
 }
 
 export const roll = (): DieValue => {

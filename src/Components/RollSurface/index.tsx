@@ -1,9 +1,10 @@
 import { useGame } from '../../game/useGame'
 import { useState } from 'react'
-import { Color } from '../../game'
+
+import { Color, isColor } from '../../game'
 import { GameError } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
-import { DieValue, roll } from '../Die/state/types'
+import { DieValue, Roll, roll } from '../Die/state/types'
 import Die from '../Die'
 import { TurnStatus } from '../Player/state/types'
 import { TurnActionPayload } from '../Player/state/reducers/turn'
@@ -21,40 +22,41 @@ const RollSurface = (props: RollSurfaceProps) => {
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
 
-    if (!game.activeColor) {
-      throw new GameError({
-        model: 'Game',
-        errorMessage: 'No Active Color'
-      })
-    }
-
-
-    if (!game.activeTurn.status) {
-      const newValues = [roll(), roll()]
-      console.log('[RollSurface Component] clickHandler newValues:', newValues)
+    if (activeTurn?.status === TurnStatus.AWAITING_FINALIZATION) {
+      console.log('finalize')
+    } else {
+      const newRollValues = [roll(), roll()]
+      console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
       const setDiceValuesPayload: SetDiceValuesPayload = {
         color: props.color,
         values: {
-          die1: newValues[0],
-          die2: newValues[1]
+          die1: newRollValues[0],
+          die2: newRollValues[1]
         }
       }
-      setDie1Value(newValues[0])
-      setDie2Value(newValues[1])
+      setDie1Value(newRollValues[0])
+      setDie2Value(newRollValues[1])
+      setDiceValues(setDiceValuesPayload)
       if (!activeTurn.status) {
         console.log('RollSurface Component] clickHandler Preparing to initialize turn')
+        if (!isColor(game.activeColor)) {
+          throw new GameError({
+            model: 'Game',
+            errorMessage: `Invalid activeColor ${game.activeColor}`
+          })
+        }
         const turn: TurnActionPayload = {
           player: game.players[game.activeColor],
-          roll: [newValues[0], newValues[1]],
+          roll: [newRollValues[0], newRollValues[1]],
           status: TurnStatus.INITIALIZED,
         }
+
         initializeTurn(turn)
+
       }
-
-      setDiceValues(setDiceValuesPayload)
-
     }
+
   }
 
   return (
@@ -66,5 +68,4 @@ const RollSurface = (props: RollSurfaceProps) => {
     </div>
   )
 }
-
 export default RollSurface
