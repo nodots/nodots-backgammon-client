@@ -75,6 +75,8 @@ export const reducer = (state: Game, action: any): Game => {
         draft.players[activeColor].active = false
         draft.players[inActiveColor].active = true
         draft.activeColor = inActiveColor
+        draft.dice[activeColor].dice[0].value = undefined
+        draft.dice[activeColor].dice[1].value = undefined
 
         draft.activeTurn.status = undefined
         draft.activeTurn.id = undefined
@@ -159,7 +161,7 @@ export const reducer = (state: Game, action: any): Game => {
             draft.board = newBoard as Board
           })
         } else if (activeMove.destination && activeMove.status === MoveStatus.DESTINATION_SET) {
-          if (activePlayer.color !== payload.checkerbox.color) {
+          if (payload.checkerbox.color !== undefined && (activePlayer.color !== payload.checkerbox.color)) {
             throw new GameError({
               model: 'Move',
               errorMessage: 'Not your checker to move'

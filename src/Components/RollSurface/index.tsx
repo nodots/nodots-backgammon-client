@@ -1,14 +1,16 @@
+// Hooks
 import { useGame } from '../../game/useGame'
 import { useState } from 'react'
-
+// Types
+import { Die as DieType } from '../Die/state/types'
 import { Color, isColor } from '../../game'
 import { GameError } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
-import { DieValue, Roll, roll } from '../Die/state/types'
-import Die from '../Die'
+import { DieValue, roll } from '../Die/state/types'
 import { TurnStatus } from '../Player/state/types'
 import { TurnActionPayload } from '../Player/state/reducers/turn'
-import { isCheckerBox } from '../CheckerBox/state'
+// Components
+import Die from '../Die'
 
 interface RollSurfaceProps {
   color: Color
@@ -17,8 +19,18 @@ interface RollSurfaceProps {
 const RollSurface = (props: RollSurfaceProps) => {
   const { game, initializeTurn, finalizeTurn, setDiceValues } = useGame()
   const activeTurn = game.activeTurn
-  const [die1Value, setDie1Value] = useState<DieValue>(1)
-  const [die2Value, setDie2Value] = useState<DieValue>(1)
+  let die1: DieType | undefined = undefined
+  let die2: DieType | undefined = undefined
+  if (game.activeColor) {
+    console.log(game.dice[game.activeColor])
+
+    die1 = game.dice[game.activeColor].dice[0]
+    die2 = game.dice[game.activeColor].dice[1]
+  }
+
+
+  const [die1Value, setDie1Value] = useState<DieValue>(die1?.value ? die1.value : 1)
+  const [die2Value, setDie2Value] = useState<DieValue>(die2?.value ? die2.value : 1)
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -35,6 +47,14 @@ const RollSurface = (props: RollSurfaceProps) => {
       isTurnInProgress = true
     }
 
+    /* TODO: Think about whether we want this logic here.
+      PROS:
+        - Easy check that prevents waiting for response 
+        from reducer. Probably not that big a deal.
+      CONS:
+        - Logic in two places. It has to be in the reducer, it's
+        a nice-to-have (maybe) here.
+    */
     if (isTurnComplete) {
       finalizeTurn()
     } else if (isTurnInProgress) {
@@ -67,12 +87,9 @@ const RollSurface = (props: RollSurfaceProps) => {
           roll: [newRollValues[0], newRollValues[1]],
           status: TurnStatus.INITIALIZED,
         }
-
         initializeTurn(turn)
-
       }
     }
-
   }
 
   return (
@@ -84,4 +101,5 @@ const RollSurface = (props: RollSurfaceProps) => {
     </div>
   )
 }
+
 export default RollSurface
