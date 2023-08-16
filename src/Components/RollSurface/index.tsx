@@ -1,6 +1,7 @@
 import { useGame } from '../../game/useGame'
 import { useState } from 'react'
 import { Color } from '../../game'
+import { GameError } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
 import { DieValue, roll } from '../Die/state/types'
 import Die from '../Die'
@@ -19,20 +20,16 @@ const RollSurface = (props: RollSurfaceProps) => {
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
-    if (game.activeTurn.moves.length > 0) {
-      return console.error('Turn in progress. Cannot roll.')
-    }
 
     if (!game.activeColor) {
-      throw new Error('No Active Color')
+      throw new GameError({
+        model: 'Game',
+        errorMessage: 'No Active Color'
+      })
     }
 
-    if (game.activeTurn.moves.length > 0 &&
-      game.activeTurn.moves[game.activeTurn.moves.length - 1].destination &&
-      game.activeTurn.moves[game.activeTurn.moves.length - 1].origin
-    ) {
-      finalizeTurn()
-    } else if (!game.activeTurn.status) {
+
+    if (!game.activeTurn.status) {
       const newValues = [roll(), roll()]
       console.log('[RollSurface Component] clickHandler newValues:', newValues)
 
@@ -57,8 +54,6 @@ const RollSurface = (props: RollSurfaceProps) => {
 
       setDiceValues(setDiceValuesPayload)
 
-    } else {
-      console.error('Turn in progress')
     }
   }
 

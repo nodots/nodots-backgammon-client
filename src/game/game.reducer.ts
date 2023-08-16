@@ -6,7 +6,7 @@ import { getMoveMode, pointToPoint, off, hit, reenter } from './move'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
-import { turnReducer } from '../components/Player/state/reducers'
+import { turnReducer } from '../components/Player/state'
 import { TurnStatus } from '../components/Player/state/types'
 
 export enum GAME_ACTION_TYPE {

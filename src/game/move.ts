@@ -73,7 +73,8 @@ export const pointToPoint = (board: Board, move: Move): Board => {
     const originInfo = getQuadrantAndPointIndexForCheckerbox(board, move.origin.id)
     const destinationInfo = getQuadrantAndPointIndexForCheckerbox(board, move.destination.id)
     if (originInfo.quadrantIndex !== -1 && originInfo.pointIndex !== -1) {
-      checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[0]
+      const draftCheckers = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers
+      checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[draftCheckers.length - 1]
       if (!checkerToMove) {
         throw new GameError({
           model: 'Move',
@@ -117,7 +118,8 @@ export const off = (board: Board, move: Move): Board => {
   const newOrigin = produce(oldOrigin, draft => {
     draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
   })
-  const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[0] as Checker
+  const boardCheckers = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers
+  const checkerToMove = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number].checkers[boardCheckers.length - 1] as Checker
   if (!isColor(checkerToMove.color)) {
     throw new GameError({
       model: 'Move',
@@ -253,9 +255,10 @@ export const reenter = (board: Board, move: Move): Board => {
     draft.rail[checkerToMove.color].checkers.pop()
 
     if (isHit) {
+      const draftCheckers = draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers
       const hitChecker = draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[0]
       draft.rail[hitChecker.color].checkers.push(hitChecker)
-      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[0] = checkerToMove
+      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[draftCheckers.length - 1] = checkerToMove
     } else {
       draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
     }

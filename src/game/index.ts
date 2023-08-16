@@ -10,12 +10,12 @@ import {
 } from './game'
 
 export {
+  GameError,
   generateId,
   isColor
 }
 export type {
   Game,
-  GameError,
   GameErrorType,
   Color,
   CheckerBoxPosition,
