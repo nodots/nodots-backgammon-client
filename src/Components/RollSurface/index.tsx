@@ -8,6 +8,7 @@ import { DieValue, Roll, roll } from '../Die/state/types'
 import Die from '../Die'
 import { TurnStatus } from '../Player/state/types'
 import { TurnActionPayload } from '../Player/state/reducers/turn'
+import { isCheckerBox } from '../CheckerBox/state'
 
 interface RollSurfaceProps {
   color: Color
@@ -22,8 +23,23 @@ const RollSurface = (props: RollSurfaceProps) => {
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
 
-    if (activeTurn?.status === TurnStatus.AWAITING_FINALIZATION) {
-      console.log('finalize')
+    let isTurnComplete = false
+    const lastMove = activeTurn.moves[activeTurn.moves.length - 1]
+
+    if (lastMove && lastMove.origin && lastMove.destination) {
+      isTurnComplete = true
+    }
+
+    let isTurnInProgress = false
+    if (activeTurn.moves.length > 0) {
+      isTurnInProgress = true
+    }
+
+    if (isTurnComplete) {
+      finalizeTurn()
+    } else if (isTurnInProgress) {
+      console.log('Turn in progress')
+      // noop
     } else {
       const newRollValues = [roll(), roll()]
       console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
