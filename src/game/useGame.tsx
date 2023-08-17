@@ -3,7 +3,7 @@ import { GameContext } from './game.context'
 import { Game } from '.'
 import { CubeValue, SetCubeValuePayload, double } from '../components/Cube/state'
 import { SetDiceValuesPayload } from '../components/Die/state'
-import { TurnActionPayload } from '../components/Player/state/reducers/turn'
+import { TurnActionPayload } from './turn.reducer'
 import { MoveActionPayload } from './move'
 
 type UseGameHookType = {

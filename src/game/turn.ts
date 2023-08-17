@@ -1,7 +1,9 @@
-import { generateId } from '.'
+import { generateId, GameError } from '.'
 import { Player } from '../components/Player/state/types/player'
-import { Move, MoveStatus } from '../components/Board/state/types'
-import { Roll } from '../components/Die/state/types'
+import { Board, Move, MoveStatus } from '../components/Board/state/types'
+import { DieValue, Roll } from '../components/Die/state/types'
+import { POINT_COUNT } from '../components/Board/state/types/board'
+import { QuadrantLocation } from '../components/Quadrant/state'
 
 export const MOVES_PER_TURN = 2
 
@@ -16,13 +18,14 @@ export enum TurnStatus {
 
 export type Turn = {
   id: string | undefined
+  board: Board | undefined
   player: Player | undefined
   status: TurnStatus | undefined
   roll: Roll | undefined
   moves: Move[]
 }
 
-export const initializeMoves = (roll: Roll): Move[] => {
+export const initializeMoves = (board: Board, roll: Roll, player: Player): Move[] => {
   let moveCount = MOVES_PER_TURN
   const moves: Move[] = []
   // Handle double roll
@@ -30,12 +33,50 @@ export const initializeMoves = (roll: Roll): Move[] => {
     moveCount = moveCount * 2
   }
   for (let i = 0; i < moveCount; i++) {
+    const dieValue = i % 2 ? roll[1] : roll[0]
     const move: Move = {
       id: generateId(),
-      dieValue: i % 2 ? roll[1] : roll[0],
-      status: MoveStatus.INITIALIZED
+      dieValue,
+      status: canMove(board, dieValue, player) ? MoveStatus.INITIALIZED : MoveStatus.NO_MOVE
     }
     moves.push(move)
   }
   return moves
+}
+
+function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
+  if (board.rail[player.color].checkers.length > 0) {
+    console.log('Player has to reenter')
+    const homeQuadrant = board.quadrants.find(q => q.location === player.homeQuadrant)
+    if (homeQuadrant === undefined) {
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'No home quadrant for player'
+      })
+    }
+    // if home quadrant = 0, roll = position
+    //
+    const pointPosition = homeQuadrant.location === QuadrantLocation.SE ? dieValue : POINT_COUNT - dieValue + 1
+
+    const point = homeQuadrant.points.find(p => p.position === pointPosition)
+
+    if (point === undefined) {
+      console.log(pointPosition)
+      console.log(dieValue)
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'Could not find point to reenter'
+      })
+    }
+
+    if (point.color && point.color !== player.color) {
+      return false
+    } else {
+      console.log(dieValue)
+      console.log(point)
+    }
+    return true
+  }
+
+  return true
 }

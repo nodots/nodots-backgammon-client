@@ -3,7 +3,7 @@ import { Cube, CubeValue } from '../components/Cube/state'
 import { Player, Turn } from '../components/Player/state'
 import { Board } from '../components/Board/state'
 import { Dice } from '../components/Die/state'
-import { TurnActionPayload } from '../components/Player/state/reducers/turn'
+import { TurnActionPayload } from './turn.reducer'
 
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'

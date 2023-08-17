@@ -3,7 +3,7 @@ import { Color } from '../../../../game'
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import DEFAULT_SETUP from '../config/DEFAULT.json'
+import DEFAULT_SETUP from '../config/REENTER.json'
 import { CHECKERS_PER_PLAYER } from '../../../../game/game'
 
 export const POINT_COUNT = 24

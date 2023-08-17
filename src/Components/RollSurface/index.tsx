@@ -8,9 +8,10 @@ import { GameError } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
 import { DieValue, roll } from '../Die/state/types'
 import { TurnStatus } from '../Player/state/types'
-import { TurnActionPayload } from '../Player/state/reducers/turn'
+import { TurnActionPayload } from '../../game/turn.reducer'
 // Components
 import Die from '../Die'
+import { MoveStatus } from '../CheckerBox/state'
 
 interface RollSurfaceProps {
   color: Color
@@ -33,10 +34,14 @@ const RollSurface = (props: RollSurfaceProps) => {
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
 
+    if (game.activeColor !== props.color) {
+      console.error('Not your turn')
+    }
+
     let isTurnComplete = false
     const lastMove = activeTurn.moves[activeTurn.moves.length - 1]
 
-    if (lastMove && lastMove.origin && lastMove.destination) {
+    if ((lastMove && lastMove.origin && lastMove.destination) || (lastMove && lastMove.status === MoveStatus.NO_MOVE)) {
       isTurnComplete = true
     }
 
@@ -81,6 +86,7 @@ const RollSurface = (props: RollSurfaceProps) => {
           })
         }
         const turn: TurnActionPayload = {
+          board: game.board,
           player: game.players[game.activeColor],
           roll: [newRollValues[0], newRollValues[1]],
           status: TurnStatus.INITIALIZED,

@@ -2,7 +2,6 @@ import { produce } from 'immer'
 import { Color, isColor } from '.'
 import { GameError } from './game'
 import { isOffEligible } from '../components/Board/state/types/board'
-import { Off } from '../components/Off/state/types'
 import { Board, } from '../components/Board/state'
 import { QuadrantLocation } from '../components/Quadrant/state/types'
 import { Checker } from '../components/Checker/state'
@@ -15,6 +14,7 @@ export enum MoveMode {
   POINT_TO_POINT,
   HIT,
   REENTER,
+  NO_MOVE,
   OFF,
   ERROR
 }
@@ -230,6 +230,22 @@ export const reenter = (board: Board, move: Move): Board | undefined => {
     return board
   }
 
+  if (checkerToMove.color === 'white' && destinationInfo.quadrantIndex === 3) {
+    const openPoints = board.quadrants[3].points.filter(p => p.color !== 'black')
+    if (openPoints.length === 0) {
+      console.error(`No valid moves for white`)
+      return board
+    }
+  }
+
+  if (checkerToMove.color === 'black' && destinationInfo.quadrantIndex === 0) {
+    const openPoints = board.quadrants[0].points.filter(p => p.color !== 'white')
+    if (openPoints.length === 0) {
+      console.error(`No valid moves for black`)
+      return board
+    }
+  }
+
   const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
 
   let canReenter: boolean = false
@@ -248,7 +264,6 @@ export const reenter = (board: Board, move: Move): Board | undefined => {
 
   if (!canReenter) {
     console.log('Reentry point owned by opponent')
-
     return
   }
 
@@ -328,11 +343,9 @@ function getCheckerBoxes (board: Board): CheckerBox[] {
 }
 
 export const getMoveMode = (board: Board, origin: CheckerBox, destination: CheckerBox, activeColor: Color, activePlayer: Player, dieValue: DieValue): MoveMode => {
-
   if (board.off[activeColor].checkers.length > 0) {
     return MoveMode.REENTER
   }
-
   if (origin.position === 'off') {
     throw new GameError({ model: 'Move', errorMessage: 'Cannot move from off' })
   }
@@ -362,10 +375,10 @@ export const getMoveMode = (board: Board, origin: CheckerBox, destination: Check
     } else {
       return MoveMode.POINT_TO_POINT
     }
-  } else if (origin.position === 'rail' && typeof destination.position === 'number') {
-    return MoveMode.REENTER
   } else if (typeof origin.position === 'number' && destination.position === 'off') {
     return MoveMode.OFF
+  } else if (origin.position === 'rail' && typeof destination.position === 'number') {
+    return MoveMode.REENTER
   } else {
     throw new GameError({ model: 'Move', errorMessage: 'Unknown MoveMode' })
   }

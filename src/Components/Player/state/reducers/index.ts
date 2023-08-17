@@ -1,4 +1,4 @@
-import { reducer as turnReducer, TurnAction } from './turn'
+import { reducer as turnReducer, TurnAction } from '../../../../game/turn.reducer'
 
 export { turnReducer }
 

@@ -1,5 +1,5 @@
 import { Player, Turn } from './types'
-import { reducer as turnReducer } from './reducers/turn'
+import { reducer as turnReducer } from '../../../game/turn.reducer'
 export {
   turnReducer
 }

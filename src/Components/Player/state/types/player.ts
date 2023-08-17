@@ -1,10 +1,13 @@
 import { Color, isColor, generateId, MoveDirection } from '../../../../game'
 import { Move } from '../../../Board/state/types'
 import { Roll, DiePair } from '../../../Die/state/types'
+import { Board } from '../../../Board/state/types'
 import { Turn, TurnStatus, initializeMoves } from '../../../../game/turn'
 import { isDiePair } from '../../../Die/state/types/die-pair'
+import { QuadrantLocation } from '../../../Quadrant/state'
 
 export interface InitializeTurnAction {
+  board: Board,
   player: Player,
   roll: Roll
 }
@@ -15,6 +18,7 @@ export type Player = {
   active: boolean
   dice: DiePair
   moveDirection: MoveDirection
+  homeQuadrant: QuadrantLocation
 }
 
 
@@ -63,12 +67,13 @@ export const isPlayer = (v: any): v is Player => {
   return true
 }
 
-
 export const initializeTurn = (action: InitializeTurnAction): Turn => {
   console.log('initializeTurn')
-  const moves: Move[] = initializeMoves(action.roll)
+  const moves: Move[] = initializeMoves(action.board, action.roll, action.player)
+  console.log(moves)
   const turn: Turn = {
     id: generateId(),
+    board: action.board,
     player: action.player,
     roll: action.roll,
     status: TurnStatus.INITIALIZED,
