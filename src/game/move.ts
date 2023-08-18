@@ -218,7 +218,6 @@ export const reenter = (board: Board, move: Move): Board | undefined => {
       errorMessage: 'Invalid color'
     })
   }
-
   if (
     (checkerToMove.color === 'white' &&
       destinationInfo.quadrantIndex !== 3)
@@ -227,14 +226,14 @@ export const reenter = (board: Board, move: Move): Board | undefined => {
       destinationInfo.quadrantIndex !== 0)
   ) {
     console.error(`${checkerToMove.color} cannot reenter to this destination ${destinationInfo.pointIndex}`)
-    return board
+    return
   }
 
   if (checkerToMove.color === 'white' && destinationInfo.quadrantIndex === 3) {
     const openPoints = board.quadrants[3].points.filter(p => p.color !== 'black')
     if (openPoints.length === 0) {
       console.error(`No valid moves for white`)
-      return board
+      return
     }
   }
 

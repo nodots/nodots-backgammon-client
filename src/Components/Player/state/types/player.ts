@@ -18,7 +18,7 @@ export type Player = {
   active: boolean
   dice: DiePair
   moveDirection: MoveDirection
-  homeQuadrant: QuadrantLocation
+  homeQuadrantLocation: QuadrantLocation
 }
 
 

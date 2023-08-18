@@ -47,7 +47,7 @@ export const initializeMoves = (board: Board, roll: Roll, player: Player): Move[
 function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
   if (board.rail[player.color].checkers.length > 0) {
     console.log('Player has to reenter')
-    const homeQuadrant = board.quadrants.find(q => q.location === player.homeQuadrant)
+    const homeQuadrant = board.quadrants.find(q => q.location === player.homeQuadrantLocation)
     if (homeQuadrant === undefined) {
       throw new GameError({
         model: 'Move',

@@ -1,14 +1,16 @@
 // Hooks
 import { useGame } from '../../game/useGame'
 // Types
+import { isColor } from '../../game/game'
 import { GameError } from '../../game/game'
-import { CheckerBox as CheckerBoxType } from './state/types'
+import { CheckerBox as CheckerBoxType, isCheckerBox } from './state/types'
 
 // Components
 import Checker from '../Checker'
 import { Checker as CheckerType } from '../Checker/state/types'
-import { MoveActionPayload } from '../../game/move'
+import { MoveActionPayload, MoveMode, MoveStatus } from '../../game/move'
 import { TurnStatus } from '../Player/state/types'
+import { isPlayer } from '../Player/state/types/player'
 
 interface CheckerBoxProps {
   checkerBox: CheckerBoxType
@@ -30,7 +32,39 @@ const CheckerBox = (props: CheckerBoxProps) => {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
 
+    if (!isColor(game.activeColor)) {
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'Invalid activeColor'
+      })
+    }
+
+    const activePlayer = game.players[game.activeColor]
+    if (!isPlayer(activePlayer)) {
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'Invalid activePlayer'
+      })
+    }
+
+    const homeQuadrant = game.board.quadrants.find(q => q.location === activePlayer.homeQuadrantLocation)
+    // FIXME: Proper typeguard
+    if (!homeQuadrant) {
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'No home quadrant'
+      })
+    }
+    const activeMove = game.activeTurn.moves.find(m => m.status !== MoveStatus.COMPLETED && m.status !== MoveStatus.NO_MOVE)
+
     if (e.type === 'click') {
+      if (!props.checkerBox.checkers) {
+        return console.error('No checkers to move')
+      } else if (activeMove && !activeMove.origin && props.checkerBox.checkers[0].color !== game.activeColor) {
+        return console.error('Not your checker to move')
+      } else if (isColor(game.activeColor) && game.board.rail[game.activeColor].checkers.length > 0 && !activeMove?.origin && props.checkerBox.position !== 'rail') {
+        return console.error('You have checkers on the rail that must be moved first')
+      }
       try {
         const payload: MoveActionPayload = {
           player: activePlayer,

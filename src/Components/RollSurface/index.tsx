@@ -61,7 +61,7 @@ const RollSurface = (props: RollSurfaceProps) => {
     if (isTurnComplete) {
       finalizeTurn()
     } else if (isTurnInProgress) {
-      console.log('Turn in progress')
+      console.error('Turn in progress')
       // noop
     } else {
       const newRollValues = [roll(), roll()]

@@ -12,7 +12,7 @@ const blackPlayer: Player = {
   active: false,
   moveDirection: 'clockwise',
   dice: initDiceState.black,
-  homeQuadrant: QuadrantLocation.SE
+  homeQuadrantLocation: QuadrantLocation.SE
 }
 const whitePlayer: Player = {
   id: generateId(),
@@ -20,7 +20,7 @@ const whitePlayer: Player = {
   active: false,
   moveDirection: 'counterclockwise',
   dice: initDiceState.white,
-  homeQuadrant: QuadrantLocation.NE
+  homeQuadrantLocation: QuadrantLocation.NE
 }
 // Game starts by both players rolling one die to determine who goes first
 function rollForStart (white: Player, black: Player): Player {

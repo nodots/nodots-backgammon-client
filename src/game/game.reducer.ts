@@ -112,7 +112,7 @@ export const reducer = (state: Game, action: any): Game => {
       }
       const activeColor = state.activeColor as Color
       const activePlayer = state.players[activeColor]
-      const homeQuadrant = state.board.quadrants.find(q => q.location === activePlayer.homeQuadrant)
+      const homeQuadrant = state.board.quadrants.find(q => q.location === activePlayer.homeQuadrantLocation)
       if (homeQuadrant === undefined) {
         throw new GameError({
           model: 'Turn',
@@ -174,15 +174,14 @@ export const reducer = (state: Game, action: any): Game => {
               newBoard = off(state.board, newMove)
               break
             case MoveMode.REENTER:
-
-              console.log('[Game Reducer] MoveMode.REENTER newMove', newMove)
               const openPoints = homeQuadrant.points.filter(p => p.checkers.length <= 1 || (p.checkers.length > 1 && p.checkers[0].color === activeColor))
-              console.log(openPoints)
               newBoard = reenter(state.board, newMove)
               // player couldn't reenter
               if (!newBoard) {
                 return produce(state, draft => {
-                  draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.NO_MOVE
+                  draft.activeTurn.moves[activeMoveIndex].origin = undefined
+                  draft.activeTurn.moves[activeMoveIndex].destination = undefined
+                  draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.INITIALIZED
                 })
               }
               break
