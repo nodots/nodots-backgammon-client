@@ -21,21 +21,17 @@ const whitePlayer: Player = {
   dice: initDiceState.white,
 }
 // Game starts by both players rolling one die to determine who goes first
-// function rollForStart (white: Player, black: Player): Player {
-//   const whiteRoll = roll()
-//   const blackRoll = roll()
-//   // no ties
-//   if (whiteRoll === blackRoll) {
-//     rollForStart(white, black)
-//   }
-//   return blackRoll > whiteRoll ? black : white
-// }
-// const winner = rollForStart(whitePlayer, blackPlayer)
-// winner.color === 'black' ? blackPlayer.active = true : whitePlayer.active = true
-const winner = {
-  color: 'white' as Color
+function rollForStart (white: Player, black: Player): Player {
+  const whiteRoll = roll()
+  const blackRoll = roll()
+  // no ties
+  if (whiteRoll === blackRoll) {
+    rollForStart(white, black)
+  }
+  return blackRoll > whiteRoll ? black : white
 }
-whitePlayer.active = true
+const winner = rollForStart(whitePlayer, blackPlayer)
+winner.color === 'black' ? blackPlayer.active = true : whitePlayer.active = true
 
 export const initialGameState: Game = {
   board: initBoardState,
