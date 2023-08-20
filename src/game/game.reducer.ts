@@ -3,7 +3,7 @@ import { Game, GameError, Color, isColor, CHECKERS_PER_PLAYER } from './game'
 import { Board } from '../components/Board/state'
 import { Roll } from '../components/Die/state/types'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
-import { pointToPoint, off, hit, reenter } from './move'
+import { pointToPoint, hit, off, reenter } from './move'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { MoveStatus, MoveMode, Move } from '../components/CheckerBox/state/'
@@ -79,12 +79,9 @@ export const reducer = (state: Game, action: any): Game => {
         return produce(state, draft => {
           draft.activeTurn = newTurn
         })
-
       }
 
     case GAME_ACTION_TYPE.FINALIZE_TURN:
-      console.log('GAME_ACTION_TYPE.FINALIZE_TURN')
-
       return produce(state, draft => {
         if (!isColor(state.activeColor)) {
           throw new GameError({
@@ -108,7 +105,6 @@ export const reducer = (state: Game, action: any): Game => {
       })
     case GAME_ACTION_TYPE.MOVE:
       // FIXME: Move all of this stuff to move reducer
-      console.log(state.activeTurn.moves)
       let activeMove = state.activeTurn.moves.find(m => m.status === MoveStatus.INITIALIZED)
 
       if (!isColor(state.activeColor)) {
@@ -119,7 +115,6 @@ export const reducer = (state: Game, action: any): Game => {
       }
       const activeColor = state.activeColor as Color
       const activePlayer = state.players[activeColor]
-      // const homeQuadrant = state.board.quadrants.find(q => q.location === activePlayer.bearOffQuadrantLocation)
       const bearOffQuadrantLocation = getBearOffQuadrantLocation(activePlayer.moveDirection)
       const bearOffQuadrant = state.board.quadrants.find(q => q.location === bearOffQuadrantLocation)
       if (bearOffQuadrant === undefined) {
@@ -128,17 +123,15 @@ export const reducer = (state: Game, action: any): Game => {
           errorMessage: 'Invalid color'
         })
       }
-      console.log('[ActiveMove] activeMove:', activeMove)
       let moveMode: MoveMode | undefined = undefined
       let origin: CheckerBox | undefined = undefined
       let destination: CheckerBox | undefined = undefined
+
       if (activeMove === undefined) {
         console.error(state)
         return state
       }
-      state.activeTurn.moves.forEach((m, i) => {
-        console.log(`state.activeTurn.moves[${i}].status:`, MoveStatus[state.activeTurn.moves[i].status])
-      })
+
       if (!activeMove) {
         console.error('No more moves')
       } else {
@@ -199,7 +192,6 @@ export const reducer = (state: Game, action: any): Game => {
           if (moveMode === undefined) {
             moveMode = MoveMode.NO_MOVE
           }
-          console.log(MoveMode[moveMode])
         } else {
           if (origin.position === 'rail') {
             if (activeMove === undefined) {
@@ -208,7 +200,6 @@ export const reducer = (state: Game, action: any): Game => {
                 errorMessage: 'No activeMove'
               })
             }
-            console.log('REENTER')
             const homeQuadrantLocation = getHomeQuadrantLocation(activePlayer.moveDirection)
             const homeQuadrant = state.board.quadrants.find(q => q.location === homeQuadrantLocation)
             if (homeQuadrant === undefined) {
@@ -242,10 +233,9 @@ export const reducer = (state: Game, action: any): Game => {
             }
             moveMode = MoveMode.REENTER
           } else {
-            throw Error('Huh?')
+            console.error('[Game Reducer]: Should not happen')
           }
         }
-        console.log('moveMode', MoveMode[moveMode])
 
         const newMove = produce(activeMove, draft => {
           draft.origin = origin
@@ -267,7 +257,6 @@ export const reducer = (state: Game, action: any): Game => {
             break
           case MoveMode.REENTER:
             finalBoard = reenter(state.board, newMove)
-            console.log(finalBoard?.off)
             break
           default:
             return state
@@ -278,7 +267,7 @@ export const reducer = (state: Game, action: any): Game => {
             errorMessage: `No new board for ${MoveMode[activeMove.mode as MoveMode]}`
           })
         }
-        // FIXME
+
         let activeMoveIndex = state.activeTurn.moves.findIndex(m => m.id === newMove.id)
         const newState = produce(state, draft => {
           draft.activeTurn.moves[activeMoveIndex] = newMove
