@@ -1,7 +1,7 @@
 import { GameProvider } from './game/game.provider'
 import { Paper } from '@mui/material'
 import Board from './components/Board'
-import { Info } from './components/Info/Info'
+import { Debug } from './components/Debug'
 
 import './App.scss'
 
@@ -12,7 +12,6 @@ const App = () => {
         <Paper className='board-frame' elevation={8}>
           <Board />
         </Paper>
-        <Info elevation={8} />
       </GameProvider>
     </div>
   )

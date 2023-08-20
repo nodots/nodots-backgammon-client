@@ -6,11 +6,11 @@ import {
 import { Move, MoveStatus, MoveMode } from '../CheckerBox/state'
 import { TurnStatus } from '../Player/state/types'
 
-export interface InfoProps {
+export interface DebugProps {
   elevation?: number
 }
 
-export const Info = (props: InfoProps) => {
+export const Debug = (props: DebugProps) => {
   const { game } = useGame()
   const activeColor = game.activeColor
   const activeTurn = game.activeTurn

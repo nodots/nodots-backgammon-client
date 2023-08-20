@@ -1,13 +1,15 @@
 $border: #212121;
+$border-light: #ccc;
 $dark: #006b5f;
 $background: #26a89d;
+$accent: #6b000c;
 
 #NodotsBgBoard {
   width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  border: 1px solid $border;
+  border: 1px solid $border-light;
   border-radius: 5px;
 
   .col {
@@ -20,8 +22,8 @@ $background: #26a89d;
     flex-direction: column;
     justify-content: space-evenly;
     background-color: $dark;
-    border-left: 1px solid $border;
-    border-right: 1px solid $border;
+    border-left: 1px solid $border-light;
+    border-right: 1px solid $border-light;
     padding: 4px;
     .checker-box {
       height: 18vw;
@@ -40,7 +42,7 @@ $background: #26a89d;
   }
 
   .off-container {
-    border-left: 1px solid $border;
+    border-left: 1px solid $border-light;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -48,7 +50,8 @@ $background: #26a89d;
     padding: 2px;
 
     .checker-box {
-      border: 0.25px solid $border;
+      border: 0.25px solid $border-light;
+      background-color: $background;
       border-radius: 5px;
       height: 8vw;
     }
