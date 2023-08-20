@@ -16,6 +16,10 @@ $accent: #6b000c;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  .checker-count {
+    font-size: 1rem;
+    color: $accent;
+  }
 
   &.black {
     background-color: $accent;
@@ -29,6 +33,54 @@ $accent: #6b000c;
 .off-container {
   .checker-box {
     .checker {
+      border-radius: 1px;
+      width: 3vw;
+      border-radius: none;
+      .checker-overlay {
+        display: none;
+      }
+    }
+  }
+}
+
+$border: #212121;
+$border-light: #ccc;
+$dark: #006b5f;
+$background: #26a89d;
+$accent: #6b000c;
+
+.checker {
+  border: 2px solid $border;
+  border-radius: 50%;
+  width: 2.8vw;
+  height: 2.8vw;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &.black {
+    background-color: $accent;
+  }
+
+  &.white {
+    background-color: #fff;
+  }
+}
+
+.checker-overlay {
+  &.count {
+    color: $dark;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+}
+.off-container {
+  .checker-box {
+    .checker {
       border-radius: 5px;
       width: 3vw;
       height: 0.5vh;
@@ -37,9 +89,6 @@ $accent: #6b000c;
       // FIXME: bad colors for checkers
       &.white {
         background-color: #fff;
-      }
-      .checker-overlay {
-        display: none;
       }
     }
   }

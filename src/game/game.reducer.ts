@@ -160,18 +160,17 @@ export const reducer = (state: Game, action: any): Game => {
           // noop
           console.error('Not your checker')
           return state
-        }
-        else if (totalHomeboardCheckers === CHECKERS_PER_PLAYER) {
+        } else if (totalHomeboardCheckers === CHECKERS_PER_PLAYER) {
           moveMode = MoveMode.BEAR_OFF
           destination = state.board.off[activePlayer.color]
         } else if (typeof origin.position === 'number') {
+          console.log(totalHomeboardCheckers)
           const destinationPosition =
             activePlayer.moveDirection === 'clockwise'
               ? origin.position + activeMove.dieValue
               : origin.position - activeMove.dieValue
           destination = getCheckerBoxes(state.board).find((cb: CheckerBox) => cb.position === destinationPosition)
-          if (!destination) {
-            console.log(destinationPosition)
+          if (!isCheckerBox(destination)) {
             throw new GameError({
               model: 'Move',
               errorMessage: `No destination position from ${origin.position} with ${activeMove.dieValue}`

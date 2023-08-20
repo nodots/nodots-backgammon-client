@@ -151,9 +151,6 @@ export const off = (board: Board, move: Move): Board => {
       draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
     })
   } else {
-    console.log(move.dieValue)
-    console.log(oldOrigin.position)
-    console.log(maxPosition)
     console.error('Cannot move to off from that point with current dieValue')
   }
   return board
@@ -218,7 +215,11 @@ export const reenter = (board: Board, move: Move): Board | undefined => {
   }
   const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
 
-  if (oldDestination.checkers.length === 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
+  // Blocked point
+  if (oldDestination.checkers.length > 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
+    console.error('Point owned by opponent')
+    // Reenter and hit
+  } else if (oldDestination.checkers.length === 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
     if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
       throw new GameError({
         model: 'Move',
@@ -231,7 +232,6 @@ export const reenter = (board: Board, move: Move): Board | undefined => {
     const newOrigin = produce(oldOrigin, draft => {
       draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
     })
-    console.log(newOrigin)
 
     const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
     const hitChecker = oldDestination.checkers[0]

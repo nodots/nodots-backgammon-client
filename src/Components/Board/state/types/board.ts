@@ -2,7 +2,7 @@ import { CheckerBox } from '../../../CheckerBox/state/types'
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import DEFAULT_SETUP from '../config/OFF.json'
+import DEFAULT_SETUP from '../config/DEFAULT.json'
 
 export const POINT_COUNT = 24
 // For importing setup

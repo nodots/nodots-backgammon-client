@@ -3,20 +3,24 @@ import { Checker as CheckerType } from './state/types'
 // UI
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 
-
 export interface CheckerProps {
   checker: CheckerType
+  count: number | undefined
 }
 
 const Checker = (props: CheckerProps) => {
   const classes = `checker ${props.checker.color}`
 
-  // N
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-  }
+  return <div className={classes} id={props.checker.id}>
+    {
+      props.count
+        ? <span className='checker-count'>{props.count ? props.count : ''}</span>
+        : <RadioButtonCheckedTwoToneIcon className='checker-overlay' sx={{ fill: 'rgba(69, 109, 157, .4)' }} />
 
-  return <div className={classes} id={props.checker.id} onClick={handleClick}><RadioButtonCheckedTwoToneIcon className='checker-overlay' sx={{ fill: 'rgba(69, 109, 157, .4)' }} /></div>
+    }
+
+
+  </div>
 }
 
 export default Checker
