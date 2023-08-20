@@ -2,8 +2,7 @@ import { initCubeState } from '../components/Cube/state'
 import { Player } from '../components/Player/state'
 import { initBoardState } from '../components/Board/state'
 import { initDiceState, roll } from '../components/Die/state'
-import { Color, Game, generateId } from './game'
-import { QuadrantLocation } from '../components/Quadrant/state'
+import { Game, generateId } from './game'
 
 // FIXME: needs to be from user input
 const blackPlayer: Player = {

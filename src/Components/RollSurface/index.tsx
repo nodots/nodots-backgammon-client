@@ -13,6 +13,9 @@ import { TurnActionPayload } from '../../game/turn.reducer'
 import Die from '../Die'
 import { MoveStatus } from '../CheckerBox/state'
 
+// MUI
+import SyncAltIcon from '@mui/icons-material/SyncAlt'
+
 interface RollSurfaceProps {
   color: Color
 }
@@ -22,14 +25,40 @@ const RollSurface = (props: RollSurfaceProps) => {
   const activeTurn = game.activeTurn
   let die1: DieType | undefined = undefined
   let die2: DieType | undefined = undefined
+
   if (game.activeColor) {
     die1 = game.dice[game.activeColor].dice[0]
     die2 = game.dice[game.activeColor].dice[1]
   }
 
-
   const [die1Value, setDie1Value] = useState<DieValue>(die1?.value ? die1.value : 1)
   const [die2Value, setDie2Value] = useState<DieValue>(die2?.value ? die2.value : 1)
+
+  const swapDiceHandler = (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    if (isColor(game.activeColor)) {
+      if (game.dice[game.activeColor].dice[0].value === undefined ||
+        game.dice[game.activeColor].dice[1].value === undefined
+      ) {
+        e.stopPropagation()
+        return console.error('Dice are not set yet')
+      }
+    }
+
+    setDie1Value(die2Value)
+    setDie2Value(die1Value)
+
+    const setDiceValuesPayload: SetDiceValuesPayload = {
+      color: props.color,
+      values: {
+        die1: die2Value,
+        die2: die1Value
+      }
+    }
+    setDiceValues(setDiceValuesPayload)
+    e.stopPropagation()
+  }
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -100,6 +129,7 @@ const RollSurface = (props: RollSurfaceProps) => {
     <div className='roll-surface' onClick={clickHandler}>
       {game.activeColor && game.activeColor === props.color && <>
         <Die order={0} value={die1Value} color={props.color} />
+        <SyncAltIcon onClick={swapDiceHandler} />
         <Die order={1} value={die2Value} color={props.color} />
       </>}
     </div>

@@ -10,7 +10,6 @@ import { MoveStatus, MoveMode, Move } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
 import { getBearOffQuadrantLocation, initializeTurn } from '../components/Player/state/types'
 import { POINT_COUNT, getCheckerBoxes } from '../components/Board/state/types/board'
-import { QuadrantLocation } from '../components/Quadrant/state'
 import { getHomeQuadrantLocation } from '../components/Player/state/types/player'
 
 export enum GAME_ACTION_TYPE {
@@ -35,6 +34,9 @@ export const reducer = (state: Game, action: any): Game => {
       return newCubeState
     case GAME_ACTION_TYPE.SET_DICE_VALUES:
       const newDice = diceReducer(state.dice, action)
+      console.log('[Game Reducer]: SET_DICE_VALUES state.dice:', state.dice)
+      console.log('[Game Reducer]: SET_DICE_VALUES type', type)
+      console.log('[Game Reducer]: SET_DICE_VALUES payload.values:', payload.values)
       if (state.activeTurn === undefined || state.activeTurn.status === undefined) {
         if (!isColor(state.activeColor)) {
           throw new GameError({
@@ -50,8 +52,9 @@ export const reducer = (state: Game, action: any): Game => {
           })
         }
         const roll: Roll = [action.payload.values.die1, action.payload.values.die2]
-
-        initializeTurn({ board: state.board, player: activePlayer, roll })
+        if (state.activeTurn.player === undefined) {
+          initializeTurn({ board: state.board, player: activePlayer, roll })
+        }
       }
       return produce(state, draft => {
         draft.dice = newDice

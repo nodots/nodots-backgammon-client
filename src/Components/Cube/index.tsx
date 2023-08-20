@@ -13,10 +13,12 @@ const Cube = () => {
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!game.players[activeColor].active) {
-      throw new Error('It is not your turn')
+      e.stopPropagation()
+      return console.error('It is not your turn')
     }
     if (game.cube.owner !== undefined && game.players[activeColor].color !== game.cube.owner) {
-      throw new Error('You do not control the cube')
+      e.stopPropagation()
+      return console.error('You do not control the cube')
     }
 
     let value = cube.value

@@ -3,7 +3,6 @@ import { Dice } from '../dice.state'
 import { SetDiceValuesPayload } from '../dice.context'
 import { isDieValue } from '../types'
 
-
 export enum DICE_ACTION_TYPE {
   SET_DICE_VALUES
 }
