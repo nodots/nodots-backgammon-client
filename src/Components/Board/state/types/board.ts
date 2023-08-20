@@ -1,10 +1,8 @@
-import { Color } from '../../../../game'
-// import { CheckerBox } from '../../../CheckerBox/state/types'
+import { CheckerBox } from '../../../CheckerBox/state/types'
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import DEFAULT_SETUP from '../config/REENTER.json'
-import { CHECKERS_PER_PLAYER } from '../../../../game/game'
+import DEFAULT_SETUP from '../config/DEFAULT.json'
 
 export const POINT_COUNT = 24
 // For importing setup
@@ -39,24 +37,35 @@ a checker to off
 
 */
 // FIXME: Assumes that players always move in direction automatically assigned for color
-export const isOffEligible = (board: Board, color: Color): boolean => {
-  let homeQuadrant: Quadrant | undefined
-  const off = board.off[color]
-  if (color === 'white') {
-    homeQuadrant = board.quadrants[0]
-  } else {
-    homeQuadrant = board.quadrants[3]
-  }
+// export const isOffEligible = (board: Board, color: Color): boolean => {
+//   let homeQuadrant: Quadrant | undefined
+//   const off = board.off[color]
+//   if (color === 'white') {
+//     homeQuadrant = board.quadrants[0]
+//   } else {
+//     homeQuadrant = board.quadrants[3]
+//   }
 
-  const offCheckers = off.checkers
-  let checkerCount = offCheckers.length
-  homeQuadrant.points.forEach(p => {
-    p.checkers.forEach(c => {
-      if (c.color === color) {
-        checkerCount++
-      }
-    })
+//   const offCheckers = off.checkers
+//   let checkerCount = offCheckers.length
+//   homeQuadrant.points.forEach(p => {
+//     p.checkers.forEach(c => {
+//       if (c.color === color) {
+//         checkerCount++
+//       }
+//     })
+//   })
+//   return checkerCount === CHECKERS_PER_PLAYER ? true : false
+// }
+
+export const getCheckerBoxes = (board: Board): CheckerBox[] => {
+  const checkerBoxes: CheckerBox[] = []
+  board.quadrants.forEach(q => {
+    checkerBoxes.push(...q.points)
   })
-  return checkerCount === CHECKERS_PER_PLAYER ? true : false
+  checkerBoxes.push(board.off.white)
+  checkerBoxes.push(board.off.black)
+  checkerBoxes.push(board.rail.white)
+  checkerBoxes.push(board.rail.black)
+  return checkerBoxes
 }
-

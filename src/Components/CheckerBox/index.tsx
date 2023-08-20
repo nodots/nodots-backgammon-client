@@ -4,6 +4,7 @@ import { useGame } from '../../game/useGame'
 import { isColor } from '../../game/game'
 import { GameError } from '../../game/game'
 import { CheckerBox as CheckerBoxType, isCheckerBox } from './state/types'
+import { getHomeQuadrantLocation } from '../Player/state/types/player'
 
 // Components
 import Checker from '../Checker'
@@ -47,7 +48,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
       })
     }
 
-    const homeQuadrant = game.board.quadrants.find(q => q.location === activePlayer.homeQuadrantLocation)
+    const homeQuadrant = game.board.quadrants.find(q => q.location === getHomeQuadrantLocation(activePlayer.moveDirection))
     // FIXME: Proper typeguard
     if (!homeQuadrant) {
       throw new GameError({
@@ -55,16 +56,19 @@ const CheckerBox = (props: CheckerBoxProps) => {
         errorMessage: 'No home quadrant'
       })
     }
-    const activeMove = game.activeTurn.moves.find(m => m.status !== MoveStatus.COMPLETED && m.status !== MoveStatus.NO_MOVE)
+    // const activeMove = game.activeTurn.moves.find(m => m.status !== MoveStatus.COMPLETED && m.status !== MoveStatus.NO_MOVE)
 
     if (e.type === 'click') {
-      if (!props.checkerBox.checkers) {
-        return console.error('No checkers to move')
-      } else if (activeMove && !activeMove.origin && props.checkerBox.checkers[0].color !== game.activeColor) {
-        return console.error('Not your checker to move')
-      } else if (isColor(game.activeColor) && game.board.rail[game.activeColor].checkers.length > 0 && !activeMove?.origin && props.checkerBox.position !== 'rail') {
-        return console.error('You have checkers on the rail that must be moved first')
+      if (props.checkerBox.checkers.length === 0) {
+        return console.error('No checker to move')
       }
+      // if (!props.checkerBox.checkers) {
+      //   return console.error('No checkers to move')
+      // } else if (activeMove && !activeMove.origin && props.checkerBox.checkers[0].color !== game.activeColor) {
+      //   return console.error('Not your checker to move')
+      // } else if (isColor(game.activeColor) && game.board.rail[game.activeColor].checkers.length > 0 && !activeMove?.origin && props.checkerBox.position !== 'rail') {
+      //   return console.error('You have checkers on the rail that must be moved first')
+      // }
       try {
         const payload: MoveActionPayload = {
           player: activePlayer,

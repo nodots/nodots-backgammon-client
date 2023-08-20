@@ -1,21 +1,21 @@
 import { produce } from 'immer'
 import { Color, isColor } from '.'
 import { GameError } from './game'
-import { isOffEligible } from '../components/Board/state/types/board'
+import { getCheckerBoxes } from '../components/Board/state/types/board'
 import { Board, } from '../components/Board/state'
 import { QuadrantLocation } from '../components/Quadrant/state/types'
-import { Checker } from '../components/Checker/state'
+import { Checker, isChecker } from '../components/Checker/state'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
+import { Rail, isRail } from '../components/Rail/state/types'
 import { DieValue } from '../components/Die/state'
 import { Player } from '../components/Player/state'
 import { GAME_ACTION_TYPE } from './game.reducer'
-
 export enum MoveMode {
   POINT_TO_POINT,
   HIT,
   REENTER,
   NO_MOVE,
-  OFF,
+  BEAR_OFF,
   ERROR
 }
 
@@ -134,11 +134,6 @@ export const off = (board: Board, move: Move): Board => {
       errorMessage: 'Invalid color'
     })
   }
-  const offEligible = isOffEligible(board, checkerToMove.color)
-
-  if (!offEligible) {
-    console.error('Ineligible player attempted to move a checker off')
-  }
 
   let maxPosition: number = move.dieValue
   board.quadrants[originInfo.quadrantIndex].points.forEach(p => {
@@ -146,6 +141,9 @@ export const off = (board: Board, move: Move): Board => {
       maxPosition = p.position as number
     }
   })
+  console.log(move)
+  console.log(oldOrigin)
+  console.log(maxPosition)
 
   if (move.dieValue === oldOrigin.position || move.dieValue >= maxPosition) {
     return produce(board, draft => {
@@ -218,70 +216,90 @@ export const reenter = (board: Board, move: Move): Board | undefined => {
       errorMessage: 'Invalid color'
     })
   }
-  if (
-    (checkerToMove.color === 'white' &&
-      destinationInfo.quadrantIndex !== 3)
-    ||
-    (checkerToMove.color === 'black' &&
-      destinationInfo.quadrantIndex !== 0)
-  ) {
-    console.error(`${checkerToMove.color} cannot reenter to this destination ${destinationInfo.pointIndex}`)
-    return
-  }
-
-  if (checkerToMove.color === 'white' && destinationInfo.quadrantIndex === 3) {
-    const openPoints = board.quadrants[3].points.filter(p => p.color !== 'black')
-    if (openPoints.length === 0) {
-      console.error(`No valid moves for white`)
-      return
-    }
-  }
-
-  if (checkerToMove.color === 'black' && destinationInfo.quadrantIndex === 0) {
-    const openPoints = board.quadrants[0].points.filter(p => p.color !== 'white')
-    if (openPoints.length === 0) {
-      console.error(`No valid moves for black`)
-      return board
-    }
-  }
-
   const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
 
-  let canReenter: boolean = false
-  let isHit: boolean = false
-
-  if (oldDestination.checkers.length === 0) {
-    canReenter = true
-  }
   if (oldDestination.checkers.length === 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
-    canReenter = true
-    isHit = true
-  }
-  if (oldDestination.checkers.length > 0 && oldDestination.checkers[0].color === checkerToMove.color) {
-    canReenter = true
-  }
-
-  if (!canReenter) {
-    console.log('Reentry point owned by opponent')
-    return
-  }
-
-  const newDestination = produce(oldDestination, draft => {
-    draft.checkers.push(checkerToMove)
-  })
-
-  return produce(board, draft => {
-    draft.rail[checkerToMove.color].checkers.pop()
-
-    if (isHit) {
-      const draftCheckers = draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers
-      const hitChecker = draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[0]
-      draft.rail[hitChecker.color].checkers.push(hitChecker)
-      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex].checkers[draftCheckers.length - 1] = checkerToMove
-    } else {
-      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
+    if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'Missing origin or destination'
+      })
     }
-  })
+    const oldOrigin = board.rail[checkerToMove.color]
+    const destinationInfo = getQuadrantAndPointIndexForCheckerbox(board, move.destination.id)
+
+    const newOrigin = produce(oldOrigin, draft => {
+      draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
+    })
+    console.log(newOrigin)
+
+    const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
+    const hitChecker = oldDestination.checkers[0]
+    const newDestination = produce(oldDestination, draft => {
+      draft.checkers = [checkerToMove]
+    })
+
+    const oldRail = board.rail[hitChecker.color]
+    const newRail = produce(oldRail, draft => {
+      draft.checkers.push(hitChecker)
+    })
+
+    return produce(board, draft => {
+      draft.rail[checkerToMove.color] = newOrigin
+      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
+      draft.rail[hitChecker.color] = newRail
+    })
+  } else {
+    console.log('PLAIN REENTER')
+
+    return produce(board, draft => {
+      if (!isRail(move.origin)) {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: 'Origin is not a rail'
+        })
+      }
+      if (!move.origin) {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: 'Missing origin'
+        })
+      }
+      if (!move.destination) {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: 'Missing destination'
+        })
+      }
+
+      const destinationInfo = getQuadrantAndPointIndexForCheckerbox(board, move.destination.id)
+      if (!checkerToMove) {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: 'No checker to move'
+        })
+      } else {
+        // FIXME typeguard
+        const checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
+        // Player has checkers on the rail and must move them first
+        // const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number]
+        const oldOrigin = board.rail[checkerToMove.color]
+        console.log(oldOrigin)
+        const newOrigin = produce(oldOrigin, draft => {
+          draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
+        })
+        console.log(newOrigin)
+        const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number]
+        const newDestination = produce(oldDestination, draft => {
+          draft.checkers.push(checkerToMove)
+        })
+        return produce(board, draft => {
+          draft.rail[checkerToMove.color] = newOrigin
+          draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
+        })
+      }
+    })
+  }
 }
 
 function getQuadrantAndPointIndexForCheckerbox (board: Board, id: string | undefined) {
@@ -329,18 +347,6 @@ function getQuadrantAndPointIndexForCheckerbox (board: Board, id: string | undef
   }
 }
 
-function getCheckerBoxes (board: Board): CheckerBox[] {
-  const checkerBoxes: CheckerBox[] = []
-  board.quadrants.forEach(q => {
-    checkerBoxes.push(...q.points)
-  })
-  checkerBoxes.push(board.off.white)
-  checkerBoxes.push(board.off.black)
-  checkerBoxes.push(board.rail.white)
-  checkerBoxes.push(board.rail.black)
-  return checkerBoxes
-}
-
 export const getMoveMode = (board: Board, origin: CheckerBox, destination: CheckerBox, activeColor: Color, activePlayer: Player, dieValue: DieValue): MoveMode => {
   if (board.off[activeColor].checkers.length > 0) {
     return MoveMode.REENTER
@@ -375,7 +381,7 @@ export const getMoveMode = (board: Board, origin: CheckerBox, destination: Check
       return MoveMode.POINT_TO_POINT
     }
   } else if (typeof origin.position === 'number' && destination.position === 'off') {
-    return MoveMode.OFF
+    return MoveMode.BEAR_OFF
   } else if (origin.position === 'rail' && typeof destination.position === 'number') {
     return MoveMode.REENTER
   } else {

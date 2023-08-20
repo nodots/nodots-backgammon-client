@@ -18,7 +18,8 @@ export type Player = {
   active: boolean
   dice: DiePair
   moveDirection: MoveDirection
-  homeQuadrantLocation: QuadrantLocation
+  homeQuadrantLocation?: QuadrantLocation
+  bearOffQuadrantLocation?: QuadrantLocation
 }
 
 
@@ -80,4 +81,12 @@ export const initializeTurn = (action: InitializeTurnAction): Turn => {
     moves: moves
   }
   return turn
+}
+
+export const getBearOffQuadrantLocation = (moveDirection: MoveDirection) => {
+  return moveDirection === 'clockwise' ? QuadrantLocation.NE : QuadrantLocation.SE
+}
+
+export const getHomeQuadrantLocation = (moveDirection: MoveDirection) => {
+  return moveDirection === 'clockwise' ? QuadrantLocation.SE : QuadrantLocation.NE
 }

@@ -1,14 +1,17 @@
 import { produce } from 'immer'
-import { Game, GameError, Color, isColor } from './game'
+import { Game, GameError, Color, isColor, CHECKERS_PER_PLAYER } from './game'
 import { Board } from '../components/Board/state'
 import { Roll } from '../components/Die/state/types'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
-import { getMoveMode, pointToPoint, off, hit, reenter } from './move'
+import { pointToPoint, off, hit, reenter } from './move'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
-import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
+import { MoveStatus, MoveMode, Move } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
-import { TurnStatus, initializeTurn } from '../components/Player/state/types'
+import { getBearOffQuadrantLocation, initializeTurn } from '../components/Player/state/types'
+import { POINT_COUNT, getCheckerBoxes } from '../components/Board/state/types/board'
+import { QuadrantLocation } from '../components/Quadrant/state'
+import { getHomeQuadrantLocation } from '../components/Player/state/types/player'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -21,7 +24,7 @@ export enum GAME_ACTION_TYPE {
 export const reducer = (state: Game, action: any): Game => {
   const { type, payload } = action
   console.log('[Game Context] reducer params state', state)
-  console.log('[Game Context] reducer params action.type', type)
+  console.log('[Game Context] reducer params action.type', GAME_ACTION_TYPE[type])
   console.log('[Game Context] reducer params action.payload', payload)
   switch (type) {
     case GAME_ACTION_TYPE.SET_CUBE_VALUE:
@@ -32,7 +35,6 @@ export const reducer = (state: Game, action: any): Game => {
       return newCubeState
     case GAME_ACTION_TYPE.SET_DICE_VALUES:
       const newDice = diceReducer(state.dice, action)
-      console.log(action)
       if (state.activeTurn === undefined || state.activeTurn.status === undefined) {
         if (!isColor(state.activeColor)) {
           throw new GameError({
@@ -58,6 +60,7 @@ export const reducer = (state: Game, action: any): Game => {
       const newTurn = turnReducer(state.activeTurn, action)
       const possibleMoves = newTurn.moves.filter(m => m.status !== MoveStatus.NO_MOVE)
       if (possibleMoves.length === 0) {
+        console.error('Resetting activeTurn. No moves.', state)
         return produce(state, draft => {
           draft.activeTurn.id = undefined
           draft.activeTurn.player = undefined
@@ -102,8 +105,9 @@ export const reducer = (state: Game, action: any): Game => {
       })
     case GAME_ACTION_TYPE.MOVE:
       // FIXME: Move all of this stuff to move reducer
-      let activeMoveIndex = state.activeTurn.moves.findIndex(m => m.status !== MoveStatus.COMPLETED && m.status !== MoveStatus.NO_MOVE)
       console.log(state.activeTurn.moves)
+      let activeMove = state.activeTurn.moves.find(m => m.status === MoveStatus.INITIALIZED)
+
       if (!isColor(state.activeColor)) {
         throw new GameError({
           model: 'Turn',
@@ -112,172 +116,176 @@ export const reducer = (state: Game, action: any): Game => {
       }
       const activeColor = state.activeColor as Color
       const activePlayer = state.players[activeColor]
-      const homeQuadrant = state.board.quadrants.find(q => q.location === activePlayer.homeQuadrantLocation)
-      if (homeQuadrant === undefined) {
+      // const homeQuadrant = state.board.quadrants.find(q => q.location === activePlayer.bearOffQuadrantLocation)
+      const bearOffQuadrantLocation = getBearOffQuadrantLocation(activePlayer.moveDirection)
+      const bearOffQuadrant = state.board.quadrants.find(q => q.location === bearOffQuadrantLocation)
+      if (bearOffQuadrant === undefined) {
         throw new GameError({
           model: 'Turn',
           errorMessage: 'Invalid color'
         })
       }
-      let activeMove = state.activeTurn.moves[activeMoveIndex]
       console.log('[ActiveMove] activeMove:', activeMove)
+      let moveMode: MoveMode | undefined = undefined
+      let origin: CheckerBox | undefined = undefined
+      let destination: CheckerBox | undefined = undefined
       if (activeMove === undefined) {
-        console.log(state)
-        throw Error('This should not happen')
+        console.error(state)
+        return state
       }
       state.activeTurn.moves.forEach((m, i) => {
         console.log(`state.activeTurn.moves[${i}].status:`, MoveStatus[state.activeTurn.moves[i].status])
       })
-      if (activeMoveIndex === -1) {
+      if (!activeMove) {
         console.error('No more moves')
       } else {
-        // Always set the origin if it isn't set
-        if (!activeMove.origin) {
-          if (activePlayer.color && payload.checkerBox && activePlayer.color !== payload.checkerbox.color) {
-            console.log(activePlayer)
-            console.log(payload)
+        origin = payload.checkerbox
+        if (!isCheckerBox(origin)) {
+          throw new GameError({
+            model: 'Move',
+            errorMessage: 'No origin checkerbox'
+          })
+        }
+        let totalHomeboardCheckers = state.board.off[activePlayer.color].checkers.length
+        bearOffQuadrant.points.forEach(p => {
+          if (p.checkers.length > 0 && p.checkers[0].color === activePlayer.color) {
+            totalHomeboardCheckers += p.checkers.length
+          }
+        })
+
+        if (origin.checkers.length > 0 && origin.checkers[0].color !== activePlayer.color) {
+          // noop
+          console.error('Not your checker')
+          return state
+        }
+        else if (totalHomeboardCheckers === CHECKERS_PER_PLAYER) {
+          moveMode = MoveMode.BEAR_OFF
+          destination = state.board.off[activePlayer.color]
+        } else if (typeof origin.position === 'number') {
+          const destinationPosition =
+            activePlayer.moveDirection === 'clockwise'
+              ? origin.position + activeMove.dieValue
+              : origin.position - activeMove.dieValue
+          destination = getCheckerBoxes(state.board).find((cb: CheckerBox) => cb.position === destinationPosition)
+          if (!destination) {
+            console.log(destinationPosition)
             throw new GameError({
               model: 'Move',
-              errorMessage: 'Not your checker to move'
+              errorMessage: `No destination position from ${origin.position} with ${activeMove.dieValue}`
             })
           }
-          return produce(state, draft => {
-            draft.activeTurn.moves[activeMoveIndex].origin = payload.checkerbox
-            draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.ORIGIN_SET
-            draft.activeTurn.status = TurnStatus.IN_PROGRESS
-          })
-          // Handle reentering logic
-        } else if (!activeMove.destination) {
-          const newMove = produce(activeMove, draft => {
-            draft.destination = payload.checkerbox
-            draft.status = MoveStatus.DESTINATION_SET
-
-            if (isCheckerBox(activeMove.origin) && isCheckerBox(payload.checkerbox)) {
-              draft.mode = activeMove.mode ? activeMove.mode : getMoveMode(state.board, activeMove.origin, payload.checkerbox, activeColor, activePlayer, activeMove.dieValue)
-              console.log(draft.mode)
-            } else {
+          if (
+            destination.checkers.length === 0 ||
+            (
+              destination.checkers.length >= 1 &&
+              destination.checkers[0].color === activePlayer.color
+            )
+          ) {
+            moveMode = MoveMode.POINT_TO_POINT
+          } else if (
+            destination.checkers.length === 1 &&
+            destination.checkers[0].color !== activePlayer.color
+          ) {
+            moveMode = MoveMode.HIT
+          } else {
+            console.log(origin)
+            console.log(destination)
+            console.log(activeMove)
+            console.log(activePlayer)
+            return state
+          }
+          if (moveMode === undefined) {
+            moveMode = MoveMode.NO_MOVE
+          }
+          console.log(MoveMode[moveMode])
+        } else {
+          if (origin.position === 'rail') {
+            if (activeMove === undefined) {
               throw new GameError({
-                model: 'Game',
-                errorMessage: 'Invalid origin or destination'
+                model: 'Move',
+                errorMessage: 'No activeMove'
               })
             }
-          })
-          let newBoard: Board | undefined = undefined
-          switch (newMove.mode) {
-            case MoveMode.POINT_TO_POINT:
-              newBoard = pointToPoint(state.board, newMove)
-              break
-            case MoveMode.HIT:
-              newBoard = hit(state.board, newMove)
-              break
-            case MoveMode.OFF:
-              newBoard = off(state.board, newMove)
-              break
-            case MoveMode.REENTER:
-              const openPoints = homeQuadrant.points.filter(p => p.checkers.length <= 1 || (p.checkers.length > 1 && p.checkers[0].color === activeColor))
-              newBoard = reenter(state.board, newMove)
-              // player couldn't reenter
-              if (!newBoard) {
-                return produce(state, draft => {
-                  draft.activeTurn.moves[activeMoveIndex].origin = undefined
-                  draft.activeTurn.moves[activeMoveIndex].destination = undefined
-                  draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.INITIALIZED
-                })
-              }
-              break
-            default:
-              newBoard = state.board
+            console.log('REENTER')
+            const homeQuadrantLocation = getHomeQuadrantLocation(activePlayer.moveDirection)
+            const homeQuadrant = state.board.quadrants.find(q => q.location === homeQuadrantLocation)
+            if (homeQuadrant === undefined) {
+              throw new GameError({
+                model: 'Move',
+                errorMessage: 'No homeQuadrant'
+              })
+            }
+            // FIXME
+            const am = activeMove as Move
+            if (activePlayer.moveDirection === 'counterclockwise') {
+              destination = homeQuadrant.points.find(p => p.position === POINT_COUNT - am.dieValue + 1)
+            } else {
+              destination = homeQuadrant.points.find(p => p.position === am.dieValue)
+            }
+            if (destination === undefined) {
+              throw new GameError({
+                model: 'Move',
+                errorMessage: 'No destination'
+              })
+            }
+            console.error('THERE IS A BUG RIGHT HERE')
+            console.log(destination.checkers.length)
+            // console.log(destination.checkers[0].color)
+            console.error(activePlayer)
+            console.log(activePlayer.color)
+            if (destination.checkers.length > 1 && destination.checkers[0].color !== activePlayer.color) {
+              console.log(am)
+              console.log(state.activeTurn.moves)
+              // moveMode = MoveMode.NO_MOVE
+            }
+            moveMode = MoveMode.REENTER
+          } else {
+            throw Error('Huh?')
           }
-
-          if (!newBoard) {
-            throw new GameError({
-              model: 'Move',
-              errorMessage: `No new board for ${MoveMode[activeMove.mode as MoveMode]}`
-            })
-          }
-          return produce(state, draft => {
-            draft.activeTurn.moves[activeMoveIndex] = newMove
-            draft.activeTurn.status = TurnStatus.IN_PROGRESS
-            draft.board = newBoard as Board
-          })
-        } else if (activeMove.destination && activeMove.status === MoveStatus.DESTINATION_SET) {
-          if (payload.checkerbox.color !== undefined && (activePlayer.color !== payload.checkerbox.color)) {
-            throw new GameError({
-              model: 'Move',
-              errorMessage: 'Not your checker to move'
-            })
-          }
-
-          // Mark current move active
-          const priorMove = produce(activeMove, draft => {
-            draft.status = MoveStatus.COMPLETED
-          })
-          // and move to the next
-          activeMoveIndex++
-          activeMove = state.activeTurn.moves[activeMoveIndex]
-          if (activeMove === undefined) {
-            throw new Error('Undefined activeMove')
-          }
-
-          const newMove = produce(activeMove, draft => {
-            draft.origin = payload.checkerbox
-            draft.status = MoveStatus.ORIGIN_SET
-          })
-
-          return produce(state, draft => {
-            draft.activeTurn.moves[activeMoveIndex - 1] = priorMove
-            draft.activeTurn.moves[activeMoveIndex] = newMove
-          })
-        } else if (!activeMove.destination && activeMove.status === MoveStatus.ORIGIN_SET) {
-          const newMove = produce(activeMove, draft => {
-            draft.destination = payload.checkerbox
-            draft.status = MoveStatus.DESTINATION_SET
-          })
-          console.log('NEW MOVE:', newMove)
-          let finalBoard: Board | undefined = undefined
-
-          switch (newMove.mode) {
-            case MoveMode.POINT_TO_POINT:
-              finalBoard = pointToPoint(state.board, newMove)
-              break
-            case MoveMode.HIT:
-              finalBoard = hit(state.board, newMove)
-              break
-            case MoveMode.REENTER:
-              finalBoard = reenter(state.board, newMove)
-              // There was no legal way to reenter with the roll
-              if (!finalBoard) {
-                newMove.status = MoveStatus.NO_MOVE
-                return produce(state, draft => {
-                  draft.activeTurn.moves[activeMoveIndex] = newMove
-                })
-              }
-              break
-            default:
-              finalBoard = state.board
-          }
-
-          if (!finalBoard) {
-            throw new GameError({
-              model: 'Move',
-              errorMessage: `No new board for ${MoveMode[activeMove.mode as MoveMode]}`
-            })
-          }
-
-          return produce(state, draft => {
-            draft.activeTurn.moves[activeMoveIndex] = newMove
-            draft.board = finalBoard as Board
-          })
-        } else {
-          console.log(activeMove)
-          throw Error('Unknown situation')
         }
+        console.log('moveMode', MoveMode[moveMode])
+
+        const newMove = produce(activeMove, draft => {
+          draft.origin = origin
+          draft.destination = destination
+          draft.status = MoveStatus.COMPLETED
+        })
+
+        let finalBoard: Board | undefined = undefined
+
+        switch (moveMode) {
+          case MoveMode.POINT_TO_POINT:
+            finalBoard = pointToPoint(state.board, newMove)
+            break
+          case MoveMode.HIT:
+            finalBoard = hit(state.board, newMove)
+            break
+          case MoveMode.BEAR_OFF:
+            finalBoard = off(state.board, newMove)
+            break
+          case MoveMode.REENTER:
+            finalBoard = reenter(state.board, newMove)
+            console.log(finalBoard?.off)
+            break
+          default:
+            return state
+        }
+        if (!finalBoard) {
+          throw new GameError({
+            model: 'Move',
+            errorMessage: `No new board for ${MoveMode[activeMove.mode as MoveMode]}`
+          })
+        }
+        // FIXME
+        let activeMoveIndex = state.activeTurn.moves.findIndex(m => m.id === newMove.id)
+        const newState = produce(state, draft => {
+          draft.activeTurn.moves[activeMoveIndex] = newMove
+          draft.board = finalBoard as Board
+        })
+        return newState
       }
-      return state
-    default:
+
       return state
   }
-
-
-
+  return state
 }

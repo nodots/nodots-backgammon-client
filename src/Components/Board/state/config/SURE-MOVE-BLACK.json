@@ -1,0 +1,46 @@
+[    {
+      "position": 16,
+      "checkerCount": 5,
+      "color": "black"
+    },
+    {
+      "position": 17,
+      "checkerCount": 5,
+      "color": "black"
+    },
+    {
+      "position": 18,
+      "checkerCount": 5,
+      "color": "black"
+    },
+    {
+      "position": 6,
+      "checkerCount": 2,
+      "color": "white"
+    },
+        {
+      "position": 5,
+      "checkerCount": 3,
+      "color": "white"
+    },
+    {
+      "position": 4,
+      "checkerCount": 3,
+      "color": "white"
+    },
+    {
+      "position": 3,
+      "checkerCount": 3,
+      "color": "white"
+    },
+    {
+      "position": 2,
+      "checkerCount": 3,
+      "color": "white"
+    },
+    {
+      "position": 1,
+      "checkerCount": 1,
+      "color": "white"
+    }
+]

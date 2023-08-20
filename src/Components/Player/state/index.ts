@@ -1,7 +1,8 @@
-import { Player, Turn } from './types'
+import { Player, Turn, getBearOffQuadrantLocation } from './types'
 import { reducer as turnReducer } from '../../../game/turn.reducer'
 export {
-  turnReducer
+  turnReducer,
+  getBearOffQuadrantLocation
 }
 export type {
   Player,

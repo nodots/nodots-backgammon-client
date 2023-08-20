@@ -2,7 +2,7 @@ import { initCubeState } from '../components/Cube/state'
 import { Player } from '../components/Player/state'
 import { initBoardState } from '../components/Board/state'
 import { initDiceState, roll } from '../components/Die/state'
-import { Game, generateId } from './game'
+import { Color, Game, generateId } from './game'
 import { QuadrantLocation } from '../components/Quadrant/state'
 
 // FIXME: needs to be from user input
@@ -12,7 +12,6 @@ const blackPlayer: Player = {
   active: false,
   moveDirection: 'clockwise',
   dice: initDiceState.black,
-  homeQuadrantLocation: QuadrantLocation.SE
 }
 const whitePlayer: Player = {
   id: generateId(),
@@ -20,20 +19,23 @@ const whitePlayer: Player = {
   active: false,
   moveDirection: 'counterclockwise',
   dice: initDiceState.white,
-  homeQuadrantLocation: QuadrantLocation.NE
 }
 // Game starts by both players rolling one die to determine who goes first
-function rollForStart (white: Player, black: Player): Player {
-  const whiteRoll = roll()
-  const blackRoll = roll()
-  // no ties
-  if (whiteRoll === blackRoll) {
-    rollForStart(white, black)
-  }
-  return blackRoll > whiteRoll ? black : white
+// function rollForStart (white: Player, black: Player): Player {
+//   const whiteRoll = roll()
+//   const blackRoll = roll()
+//   // no ties
+//   if (whiteRoll === blackRoll) {
+//     rollForStart(white, black)
+//   }
+//   return blackRoll > whiteRoll ? black : white
+// }
+// const winner = rollForStart(whitePlayer, blackPlayer)
+// winner.color === 'black' ? blackPlayer.active = true : whitePlayer.active = true
+const winner = {
+  color: 'white' as Color
 }
-const winner = rollForStart(whitePlayer, blackPlayer)
-winner.color === 'black' ? blackPlayer.active = true : whitePlayer.active = true
+whitePlayer.active = true
 
 export const initialGameState: Game = {
   board: initBoardState,

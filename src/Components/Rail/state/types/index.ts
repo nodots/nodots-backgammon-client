@@ -1,4 +1,4 @@
-import { Color, CheckerBoxPosition, generateId } from '../../../../game'
+import { Color, CheckerBoxPosition, generateId, isColor } from '../../../../game'
 import { Checker } from '../../../Checker/state/types'
 import { CheckerProp } from '../../../Board/state/types/board'
 
@@ -8,6 +8,27 @@ export type Rail = {
   checkers: Checker[],
   position: CheckerBoxPosition
 }
+
+export const isRail = (v: any): v is Rail => {
+  if (typeof v !== 'object') {
+    return false
+  }
+  const keys = Object.keys(v)
+  const idIndex = keys.findIndex(k => k === 'id')
+  const checkersIndex = keys.findIndex(k => k === 'checkers')
+  const positionIndex = keys.findIndex(k => k === 'position')
+  const colorIndex = keys.findIndex(k => k === 'color')
+  if (idIndex === -1 || checkersIndex === -1 || positionIndex === -1 || colorIndex === -1) {
+    return false
+  }
+
+  if (!isColor(v.color)) {
+    return false
+  }
+
+  return true
+}
+
 
 export interface RailContainer {
   white: Rail,

@@ -1,0 +1,36 @@
+[    {
+      "position": 18,
+      "checkerCount": 15,
+      "color": "black"
+    },
+    {
+      "position": 24,
+      "checkerCount": 2,
+      "color": "white"
+    },
+        {
+      "position": 23,
+      "checkerCount": 3,
+      "color": "white"
+    },
+    {
+      "position": 22,
+      "checkerCount": 3,
+      "color": "white"
+    },
+    {
+      "position": 21,
+      "checkerCount": 3,
+      "color": "white"
+    },
+    {
+      "position": 20,
+      "checkerCount": 3,
+      "color": "white"
+    },
+    {
+      "position": 8,
+      "checkerCount": 1,
+      "color": "white"
+    }
+]
