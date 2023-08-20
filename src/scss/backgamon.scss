@@ -8,23 +8,28 @@
 @import url('./components/Point/index.scss');
 @import url('./components/Info/index.scss');
 
+$border: #212121;
+$dark: #006b5f;
+$background: #26a89d;
+
 .App {
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100vw;
+  background-color: $border;
 }
 
 .board-frame {
   display: flex;
   padding: 20px;
-  background-color: wheat !important;
-  .game-id {
-    font-size: 0.75rem;
-    display: inline-block;
-    width: 100%;
-    margin: auto auto;
-    text-align: center;
-  }
+  background-color: $dark !important;
+  color: #eee !important;
+}
+
+body {
+  margin: 0px;
 }

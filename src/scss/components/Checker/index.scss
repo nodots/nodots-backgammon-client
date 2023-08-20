@@ -1,5 +1,8 @@
+$border: #212121;
+$dark: #006b5f;
+
 .checker {
-  border: 2px solid black;
+  border: 2px solid $border;
   border-radius: 50%;
   width: 2.8vw;
   height: 2.8vw;
@@ -12,11 +15,11 @@
   cursor: pointer;
 
   &.black {
-    background-color: #770000;
+    background-color: $border;
   }
 
   &.white {
-    background-color: #ddd;
+    background-color: #fff;
   }
 }
 

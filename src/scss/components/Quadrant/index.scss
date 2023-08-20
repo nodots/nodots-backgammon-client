@@ -1,8 +1,12 @@
+$border: #212121;
+$dark: #006b5f;
+$background: #26a89d;
+
 .quadrant {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  background-color: rgba(235, 162, 96, 1);
+  background-color: $background;
 }
 
 .quadrant.sw,
