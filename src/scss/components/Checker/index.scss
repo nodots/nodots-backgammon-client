@@ -1,5 +1,7 @@
 $border: #212121;
 $dark: #006b5f;
+$background: #26a89d;
+$accent: #6b000c;
 
 .checker {
   border: 2px solid $border;
@@ -15,7 +17,7 @@ $dark: #006b5f;
   cursor: pointer;
 
   &.black {
-    background-color: $border;
+    background-color: $accent;
   }
 
   &.white {
