@@ -1,16 +1,16 @@
 import { produce } from 'immer'
-import { Game, GameError, Color, isColor, CHECKERS_PER_PLAYER } from './game'
 import { Board } from '../components/Board/state'
+import { Game, GameError, Color, isColor, CHECKERS_PER_PLAYER } from './game'
 import { Roll } from '../components/Die/state/types'
 import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
 import { pointToPoint, hit, off, reenter } from './move'
+import { reducer as moveReducer } from './move/reducer'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { MoveStatus, MoveMode, Move } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
-import { getBearOffQuadrantLocation, initializeTurn } from '../components/Player/state/types'
-import { POINT_COUNT, getCheckerBoxes } from '../components/Board/state/types/board'
-import { getHomeQuadrantLocation } from '../components/Player/state/types/player'
+import { initializeTurn } from '../components/Player/state/types'
+
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -105,178 +105,55 @@ export const reducer = (state: Game, action: any): Game => {
       })
     case GAME_ACTION_TYPE.MOVE:
       // FIXME: Move all of this stuff to move reducer
-      let activeMove = state.activeTurn.moves.find(m => m.status === MoveStatus.INITIALIZED)
-
-      if (!isColor(state.activeColor)) {
-        throw new GameError({
-          model: 'Turn',
-          errorMessage: 'Invalid color'
-        })
-      }
-      const activeColor = state.activeColor as Color
-      const activePlayer = state.players[activeColor]
-      const bearOffQuadrantLocation = getBearOffQuadrantLocation(activePlayer.moveDirection)
-      const bearOffQuadrant = state.board.quadrants.find(q => q.location === bearOffQuadrantLocation)
-      if (bearOffQuadrant === undefined) {
-        throw new GameError({
-          model: 'Turn',
-          errorMessage: 'Invalid color'
-        })
-      }
-      let moveMode: MoveMode | undefined = undefined
-      let origin: CheckerBox | undefined = undefined
-      let destination: CheckerBox | undefined = undefined
-
-      if (activeMove === undefined) {
-        console.error(state)
-        return state
-      }
-
-      if (!activeMove) {
-        console.error('No more moves')
-      } else {
-        origin = payload.checkerbox
-        if (!isCheckerBox(origin)) {
-          throw new GameError({
-            model: 'Move',
-            errorMessage: 'No origin checkerbox'
-          })
+      const activeTurn = produce(state.activeTurn, draft => {
+        if (state.activeTurn.board === undefined) {
+          draft.board = state.board
         }
-        let totalHomeboardCheckers = state.board.off[activePlayer.color].checkers.length
-        bearOffQuadrant.points.forEach(p => {
-          if (p.checkers.length > 0 && p.checkers[0].color === activePlayer.color) {
-            totalHomeboardCheckers += p.checkers.length
-          }
-        })
-
-        if (origin.checkers.length > 0 && origin.checkers[0].color !== activePlayer.color) {
-          // noop
-          console.error('Not your checker')
-          return state
-        } else if (totalHomeboardCheckers === CHECKERS_PER_PLAYER) {
-          moveMode = MoveMode.BEAR_OFF
-          destination = state.board.off[activePlayer.color]
-        } else if (typeof origin.position === 'number') {
-          console.log(totalHomeboardCheckers)
-          const destinationPosition =
-            activePlayer.moveDirection === 'clockwise'
-              ? origin.position + activeMove.dieValue
-              : origin.position - activeMove.dieValue
-          destination = getCheckerBoxes(state.board).find((cb: CheckerBox) => cb.position === destinationPosition)
-          if (!isCheckerBox(destination)) {
+        if (state.activeTurn.player === undefined) {
+          if (!isColor(state.activeColor)) {
             throw new GameError({
               model: 'Move',
-              errorMessage: `No destination position from ${origin.position} with ${activeMove.dieValue}`
+              errorMessage: 'Invalid color'
             })
           }
-          if (
-            destination.checkers.length === 0 ||
-            (
-              destination.checkers.length >= 1 &&
-              destination.checkers[0].color === activePlayer.color
-            )
-          ) {
-            moveMode = MoveMode.POINT_TO_POINT
-          } else if (
-            destination.checkers.length === 1 &&
-            destination.checkers[0].color !== activePlayer.color
-          ) {
-            moveMode = MoveMode.HIT
-          } else {
-            console.log(origin)
-            console.log(destination)
-            console.log(activeMove)
-            console.log(activePlayer)
-            return state
-          }
-          if (moveMode === undefined) {
-            moveMode = MoveMode.NO_MOVE
-          }
-        } else {
-          if (origin.position === 'rail') {
-            if (activeMove === undefined) {
-              throw new GameError({
-                model: 'Move',
-                errorMessage: 'No activeMove'
-              })
-            }
-            const homeQuadrantLocation = getHomeQuadrantLocation(activePlayer.moveDirection)
-            const homeQuadrant = state.board.quadrants.find(q => q.location === homeQuadrantLocation)
-            if (homeQuadrant === undefined) {
-              throw new GameError({
-                model: 'Move',
-                errorMessage: 'No homeQuadrant'
-              })
-            }
-            // FIXME
-            const am = activeMove as Move
-            if (activePlayer.moveDirection === 'counterclockwise') {
-              destination = homeQuadrant.points.find(p => p.position === POINT_COUNT - am.dieValue + 1)
-            } else {
-              destination = homeQuadrant.points.find(p => p.position === am.dieValue)
-            }
-            if (destination === undefined) {
-              throw new GameError({
-                model: 'Move',
-                errorMessage: 'No destination'
-              })
-            }
-            console.error('THERE IS A BUG RIGHT HERE')
-            console.log(destination.checkers.length)
-            // console.log(destination.checkers[0].color)
-            console.error(activePlayer)
-            console.log(activePlayer.color)
-            if (destination.checkers.length > 1 && destination.checkers[0].color !== activePlayer.color) {
-              console.log(am)
-              console.log(state.activeTurn.moves)
-              // moveMode = MoveMode.NO_MOVE
-            }
-            moveMode = MoveMode.REENTER
-          } else {
-            console.error('[Game Reducer]: Should not happen')
-          }
+          draft.player = state.players[state.activeColor]
         }
+      })
 
-        const newMove = produce(activeMove, draft => {
-          draft.origin = origin
-          draft.destination = destination
-          draft.status = MoveStatus.COMPLETED
+      const newMove = moveReducer(activeTurn, payload.checkerbox)
+      console.log('[GAME_REDUCER] newMove:', newMove)
+      let finalBoard: Board | undefined = undefined
+
+      switch (newMove.mode) {
+        case MoveMode.POINT_TO_POINT:
+          finalBoard = pointToPoint(state.board, newMove)
+          break
+        case MoveMode.HIT:
+          finalBoard = hit(state.board, newMove)
+          break
+        case MoveMode.BEAR_OFF:
+          finalBoard = off(state.board, newMove)
+          break
+        case MoveMode.REENTER:
+          finalBoard = reenter(state.board, newMove)
+          break
+        default:
+          return state
+      }
+      if (!finalBoard) {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: `No new board for ${MoveMode[newMove.mode as MoveMode]}`
         })
-
-        let finalBoard: Board | undefined = undefined
-
-        switch (moveMode) {
-          case MoveMode.POINT_TO_POINT:
-            finalBoard = pointToPoint(state.board, newMove)
-            break
-          case MoveMode.HIT:
-            finalBoard = hit(state.board, newMove)
-            break
-          case MoveMode.BEAR_OFF:
-            finalBoard = off(state.board, newMove)
-            break
-          case MoveMode.REENTER:
-            finalBoard = reenter(state.board, newMove)
-            break
-          default:
-            return state
-        }
-        if (!finalBoard) {
-          throw new GameError({
-            model: 'Move',
-            errorMessage: `No new board for ${MoveMode[activeMove.mode as MoveMode]}`
-          })
-        }
-
-        let activeMoveIndex = state.activeTurn.moves.findIndex(m => m.id === newMove.id)
-        const newState = produce(state, draft => {
-          draft.activeTurn.moves[activeMoveIndex] = newMove
-          draft.board = finalBoard as Board
-        })
-        return newState
       }
 
-      return state
+      let activeMoveIndex = state.activeTurn.moves.findIndex(m => m.id === newMove.id)
+      const newState = produce(state, draft => {
+        draft.activeTurn.moves[activeMoveIndex] = newMove
+        draft.board = finalBoard as Board
+      })
+      return newState
   }
+
   return state
 }

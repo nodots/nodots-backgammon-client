@@ -2,7 +2,7 @@ import { CheckerBox } from '../../../CheckerBox/state/types'
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import DEFAULT_SETUP from '../config/BLOCKED-REENTER-WHITE.json'
+import DEFAULT_SETUP from '../config/DEFAULT.json'
 import { CHECKERS_PER_PLAYER, generateId } from '../../../../game/game'
 import { GameError } from '../../../../game/game'
 
