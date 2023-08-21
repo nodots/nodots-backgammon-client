@@ -1,11 +1,10 @@
 // Hooks
 import { useGame } from '../../game/useGame'
 // Types
-import { isColor } from '../../game/game'
+import { isColor, generateId } from '../../game/game'
 import { GameError } from '../../game/game'
 import { CheckerBox as CheckerBoxType } from './state/types'
 import { getHomeQuadrantLocation } from '../Player/state/types/player'
-
 // Components
 import Checker from '../Checker'
 import { Checker as CheckerType } from '../Checker/state/types'
@@ -19,7 +18,7 @@ interface CheckerBoxProps {
 }
 
 const CheckerBox = (props: CheckerBoxProps) => {
-  const { game, move } = useGame()
+  const { game, move, revert } = useGame()
   if (!game.activeColor) {
     throw new GameError({ model: 'Move', errorMessage: 'No activeColor' })
   }
@@ -73,7 +72,24 @@ const CheckerBox = (props: CheckerBoxProps) => {
         console.error(e)
       }
     } else if (e.type === 'contextmenu') {
-      console.warn('[CheckerBox Component] props.checkerBox', props.checkerBox)
+      // Revert move
+      // console.warn('[CheckerBox Component] props.checkerBox', props.checkerBox)
+      const checkers = props.checkerBox.checkers
+      const checkerToRevert = checkers[checkers.length - 1] || undefined
+      console.log('[Revert]: double-click on checkerbox')
+      console.log('[Revert] checkerToRevert:', checkerToRevert)
+      console.log('[Revert] activeTurn.moves', game.activeTurn.moves)
+      const moveToRevert = game.activeTurn.moves.find(m => m.checker?.id === checkerToRevert.id)
+      console.log('[Revert] moveToRevert', moveToRevert)
+      const payload: MoveActionPayload = {
+        player: activePlayer,
+        checkerbox: props.checkerBox
+      }
+      try {
+        revert(payload)
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 
@@ -85,7 +101,8 @@ const CheckerBox = (props: CheckerBoxProps) => {
       countDisplay = checkerCount
     }
     if (((typeof props.checkerBox.position === 'number' || props.checkerBox.position === 'rail') && i < 6) || props.checkerBox.position === 'off') {
-      checkers.push(<Checker checker={c} key={c.id} count={countDisplay} />)
+      // FIXME: losing checker id in some revert situations
+      checkers.push(<Checker checker={c} key={c.id ? c.id : generateId()} count={countDisplay} />)
     }
   })
 

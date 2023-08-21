@@ -20,8 +20,11 @@ export const useGameContext = (initialState: Game) => {
     dispatch({ type: GAME_ACTION_TYPE.FINALIZE_TURN, payload: {} })
   const move = (payload: MoveActionPayload) =>
     dispatch({ type: GAME_ACTION_TYPE.MOVE, payload })
+  const revert = (payload: MoveActionPayload) => {
+    dispatch({ type: GAME_ACTION_TYPE.REVERT_MOVE, payload })
+  }
 
-  return { game, setCubeValue, setDiceValues, move, initializeTurn, finalizeTurn }
+  return { game, setCubeValue, setDiceValues, move, revert, initializeTurn, finalizeTurn }
 }
 
 type UseGameContextType = ReturnType<typeof useGameContext>
@@ -32,7 +35,8 @@ const initGameContextState: UseGameContextType = {
   setDiceValues: () => { },
   initializeTurn: () => { },
   finalizeTurn: () => { },
-  move: () => { }
+  move: () => { },
+  revert: () => { }
 }
 
 export const GameContext = createContext<UseGameContextType>(initGameContextState)

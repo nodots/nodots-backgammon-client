@@ -4,9 +4,7 @@ import { Board } from '../../components/Board/state'
 import { isCheckerBox } from '../../components/CheckerBox/state/types'
 import { Move, getCheckerboxCoordinates } from '.'
 
-
-
-export const hit = (board: Board, move: Move): Board => {
+export const hit = (board: Board, move: Move): { board: Board, move: Move } => {
   if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
     throw new GameError({
       model: 'Move',
@@ -41,9 +39,19 @@ export const hit = (board: Board, move: Move): Board => {
     draft.checkers.push(hitChecker)
   })
 
-  return produce(board, draft => {
+  const newBoard = produce(board, draft => {
     draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
     draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
     draft.rail[hitChecker.color] = newRail
   })
+
+  const newMove = produce(move, draft => {
+    const hit = {
+      checker: hitChecker,
+      checkerbox: oldDestination
+    }
+    draft.hit = hit
+  })
+
+  return { board: newBoard, move: newMove }
 }

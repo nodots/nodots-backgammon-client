@@ -4,7 +4,7 @@ import { GameError } from '../game'
 import { Board } from '../../components/Board/state'
 import { isCheckerBox } from '../../components/CheckerBox/state/types'
 import { isRail } from '../../components/Rail/state/types'
-import { Move, MoveStatus, getCheckerboxCoordinates } from '.'
+import { Move, getCheckerboxCoordinates } from '.'
 import { isChecker } from '../../components/Checker/state'
 
 export const reenter = (board: Board, move: Move): Board => {
