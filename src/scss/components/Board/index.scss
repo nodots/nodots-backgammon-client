@@ -4,6 +4,8 @@ $dark: #006b5f;
 $background: #26a89d;
 $accent: #6b000c;
 
+$blue-accent: #2c486b;
+
 #NodotsBgBoard {
   width: 100%;
   display: flex;
@@ -21,7 +23,7 @@ $accent: #6b000c;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    background-color: $dark;
+    background-color: $blue-accent;
     border-left: 1px solid $border-light;
     border-right: 1px solid $border-light;
     padding: 4px;

@@ -11,6 +11,7 @@
 $border: #212121;
 $dark: #006b5f;
 $background: #26a89d;
+$blue-accent: #2c486b;
 
 .App {
   margin: 0;
@@ -26,7 +27,7 @@ $background: #26a89d;
 .board-frame {
   display: flex;
   padding: 20px;
-  background-color: $dark !important;
+  background-color: $blue-accent !important;
   color: #eee !important;
 }
 

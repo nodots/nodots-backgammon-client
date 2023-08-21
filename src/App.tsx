@@ -1,6 +1,6 @@
 import { GameProvider } from './game/game.provider'
-import { Paper } from '@mui/material'
-import Board from './components/Board'
+import { RegistrationPage } from './pages/registration'
+import { BoardPage } from './pages/board'
 import { Debug } from './components/Debug'
 
 import './App.scss'
@@ -9,9 +9,7 @@ const App = () => {
   return (
     <div className="App">
       <GameProvider>
-        <Paper className='board-frame' elevation={8}>
-          <Board />
-        </Paper>
+        <BoardPage />
       </GameProvider>
     </div>
   )
