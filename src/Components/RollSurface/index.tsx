@@ -129,7 +129,7 @@ const RollSurface = (props: RollSurfaceProps) => {
     <div className='roll-surface' onClick={clickHandler}>
       {game.activeColor && game.activeColor === props.color && <>
         <Die order={0} value={die1Value} color={props.color} />
-        <SyncAltIcon onClick={swapDiceHandler} />
+        <SyncAltIcon onClick={swapDiceHandler} sx={{ color: '#006b5f' }} />
         <Die order={1} value={die2Value} color={props.color} />
       </>}
     </div>

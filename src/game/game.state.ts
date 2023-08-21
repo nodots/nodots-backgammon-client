@@ -2,7 +2,15 @@ import { initCubeState } from '../components/Cube/state'
 import { Player } from '../components/Player/state'
 import { initBoardState } from '../components/Board/state'
 import { initDiceState, roll } from '../components/Die/state'
+import { retrieveState } from './game.reducer'
 import { Game, generateId } from './game'
+
+let gameState: Game | undefined = undefined
+const activeGame = retrieveState()
+
+if (activeGame) {
+  gameState = activeGame
+}
 
 // FIXME: needs to be from user input
 const blackPlayer: Player = {
@@ -32,7 +40,7 @@ function rollForStart (white: Player, black: Player): Player {
 const winner = rollForStart(whitePlayer, blackPlayer)
 winner.color === 'black' ? blackPlayer.active = true : whitePlayer.active = true
 
-export const initialGameState: Game = {
+const defaultGameState: Game = {
   board: initBoardState,
   dice: initDiceState,
   cube: initCubeState,
@@ -50,3 +58,7 @@ export const initialGameState: Game = {
     white: whitePlayer,
   },
 }
+
+console.log(gameState)
+
+export const initialGameState = defaultGameState

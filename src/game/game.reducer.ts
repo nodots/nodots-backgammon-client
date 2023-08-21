@@ -1,13 +1,12 @@
 import { produce } from 'immer'
 import { Board } from '../components/Board/state'
-import { Game, GameError, Color, isColor, CHECKERS_PER_PLAYER } from './game'
+import { Game, GameError, isColor } from './game'
 import { Roll } from '../components/Die/state/types'
-import { CheckerBox, isCheckerBox } from '../components/CheckerBox/state/types'
 import { pointToPoint, hit, off, reenter } from './move'
 import { reducer as moveReducer } from './move/reducer'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
-import { MoveStatus, MoveMode, Move } from '../components/CheckerBox/state/'
+import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
 import { initializeTurn } from '../components/Player/state/types'
 
@@ -18,6 +17,19 @@ export enum GAME_ACTION_TYPE {
   INITIALIZE_TURN,
   FINALIZE_TURN,
   MOVE
+}
+
+const saveState = (state: Game): void => {
+  localStorage.setItem('game', JSON.stringify(state))
+}
+
+export const retrieveState = (): Game | undefined => {
+  const gameString = localStorage.getItem('game')
+  let game: Game | undefined = undefined
+  if (gameString) {
+    game = JSON.parse(gameString)
+  }
+  return game
 }
 
 export const reducer = (state: Game, action: any): Game => {
@@ -152,8 +164,9 @@ export const reducer = (state: Game, action: any): Game => {
         draft.activeTurn.moves[activeMoveIndex] = newMove
         draft.board = finalBoard as Board
       })
+      saveState(newState)
       return newState
   }
-
+  saveState(state)
   return state
 }
