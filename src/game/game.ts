@@ -8,7 +8,7 @@ import { TurnActionPayload } from './turn.reducer'
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 export type CheckerBoxPosition = number | 'rail' | 'off'
-export type GameErrorType = 'Game' | 'Turn' | 'Move' | 'Roll' | 'Player' | 'Die' | 'Cube' | 'CheckerBox' | 'Quadrant' | 'Point' | 'RollSurface'
+export type GameErrorType = 'Configuration' | 'Game' | 'Turn' | 'Move' | 'Roll' | 'Player' | 'Die' | 'Cube' | 'CheckerBox' | 'Quadrant' | 'Point' | 'RollSurface'
 export const CHECKERS_PER_PLAYER = 15
 
 export const isColor = (c: unknown): c is Color => {

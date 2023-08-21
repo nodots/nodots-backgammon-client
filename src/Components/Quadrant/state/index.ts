@@ -1,11 +1,12 @@
-import { Quadrant, QuadrantLocation } from './types'
+import { Quadrant, isQuadrant, QuadrantLocation } from './types'
 import { initialize } from './types'
 
 export {
   QuadrantLocation,
-
-  initialize
+  isQuadrant,
+  initialize,
 }
+
 export type {
   Quadrant,
 }

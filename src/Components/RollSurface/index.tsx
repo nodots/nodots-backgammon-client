@@ -93,7 +93,8 @@ const RollSurface = (props: RollSurfaceProps) => {
       console.error('Turn in progress')
       // noop
     } else {
-      const newRollValues = [roll(), roll()]
+      // const newRollValues = [roll(), roll()]
+      const newRollValues = [1 as DieValue, 6 as DieValue]
       console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
       const setDiceValuesPayload: SetDiceValuesPayload = {

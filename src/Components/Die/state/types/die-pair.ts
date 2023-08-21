@@ -11,8 +11,8 @@ export const isDiePair = (v: any): v is DiePair => {
     return false
   }
   const keys = Object.keys(v)
-  const idIndex = keys.findIndex(k => k === 'dice')
-  if (idIndex === -1) {
+  const diceIndex = keys.findIndex(k => k === 'dice')
+  if (diceIndex === -1) {
     return false
   }
 

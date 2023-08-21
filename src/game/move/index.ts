@@ -55,6 +55,24 @@ export type Move = {
   destination?: CheckerBox
 }
 
+export const isMove = (m: any): m is Move => {
+  if (typeof m !== 'object') {
+    return false
+  }
+
+  const keys = Object.keys(m)
+
+  const idIndex = keys.findIndex(k => k === 'id')
+  if (idIndex === -1) return false
+  const dieValueIndex = keys.findIndex(k => k === 'dieValue')
+  if (dieValueIndex === -1) return false
+  const statusIndex = keys.findIndex(k => k === 'status')
+  if (statusIndex === -1) return false
+
+  return true
+}
+
+
 export function getCheckerboxCoordinates (board: Board, id: string | undefined) {
   let quadrantIndex: number | undefined = undefined
   let pointIndex: number | undefined = undefined

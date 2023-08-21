@@ -19,14 +19,37 @@ export type Quadrant = {
   id: string
   location: QuadrantLocation
   points: Point[]
-
 }
 
-export type Grid = {
-  SE: Quadrant,
-  SW: Quadrant,
-  NW: Quadrant,
-  NE: Quadrant
+export const isQuadrant = (v: any): v is Quadrant => {
+  if (typeof v !== 'object') {
+    return false
+  }
+  const keys = Object.keys(v)
+  const idIndex = keys.findIndex(k => k === 'id')
+  if (idIndex === -1) {
+    return false
+  }
+
+  const locationIndex = keys.findIndex(k => k === 'location')
+  if (locationIndex === -1) {
+    return false
+  }
+
+  if (!(v.location in QuadrantLocation)) {
+    return false
+  }
+
+  const pointIndex = keys.findIndex(k => k === 'points')
+  if (!pointIndex) {
+    return false
+  }
+
+  if (v.points.length !== 6) {
+    return false
+  }
+
+  return true
 }
 
 export const initialize = (setup: CheckerProp[]): Quadrant[] => {

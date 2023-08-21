@@ -1,10 +1,9 @@
+import { produce } from 'immer'
 import { generateId, GameError } from '.'
-import { isCheckerBox } from '../components/CheckerBox/state'
 import { Player } from '../components/Player/state/types/player'
 import { Board, Move, MoveStatus } from '../components/Board/state/types'
 import { DieValue, Roll } from '../components/Die/state/types'
 import { POINT_COUNT, getCheckerBoxes } from '../components/Board/state/types/board'
-import { QuadrantLocation } from '../components/Quadrant/state'
 import { getHomeQuadrantLocation } from '../components/Player/state/types/player'
 
 export const MOVES_PER_TURN = 2
@@ -61,7 +60,6 @@ function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
 
   if (railCheckers.length > 0) {
     // Player is on the rail and must move from there before doing anything else
-    console.error('On the rail')
     if (typeof dieValue !== 'number') {
       throw new GameError({
         model: 'Move',
@@ -80,7 +78,6 @@ function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
       }
       console.error(`possibleDestinationPosition = ${possibleDestinationPosition} for dieValue ${dieValue}`)
       const possibleDestination = checkerboxes.find(cb => cb.position === possibleDestinationPosition)
-      console.log(possibleDestination)
       if (
         (
           possibleDestination &&
@@ -117,4 +114,14 @@ function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
     return true
   }
   return false
+}
+
+export const resetTurn = (turn: Turn): Turn => {
+  return produce(turn, draft => {
+    draft.id = undefined
+    draft.player = undefined
+    draft.status = undefined
+    draft.roll = undefined
+    draft.moves = []
+  })
 }
