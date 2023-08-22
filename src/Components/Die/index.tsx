@@ -43,13 +43,7 @@ const Die = (props: DieProps) => {
 
 
   let classes = `die ${props.color.toString()} ${valueClass}`
-  if (props.color === activeColor) {
-    return <div className={classes}></div>
-  } else {
-    return <></>
-  }
-
-
+  return <div className={classes}></div>
 }
 
 export default Die

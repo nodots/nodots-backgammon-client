@@ -1,4 +1,3 @@
-import { Color } from '..'
 import { GameError } from '../game'
 import { getCheckerBoxes } from '../../components/Board/state/types/board'
 import { Board, } from '../../components/Board/state'
@@ -12,6 +11,7 @@ import { pointToPoint } from './pointToPoint'
 import { hit } from './hit'
 import { reenter } from './reenter'
 import { off } from './off'
+import { revert } from './revert'
 
 export enum MoveMode {
   POINT_TO_POINT,
@@ -19,13 +19,13 @@ export enum MoveMode {
   REENTER,
   NO_MOVE,
   BEAR_OFF,
+  REVERT,
   ERROR
 }
 
 export enum MoveStatus {
   INITIALIZED,
-  ORIGIN_SET,
-  DESTINATION_SET,
+  REVERTED,
   COMPLETED,
   NO_MOVE,
   ERROR,
@@ -53,6 +53,10 @@ export type Move = {
   checker?: Checker
   origin?: CheckerBox
   destination?: CheckerBox
+  hit?: {
+    checker: Checker
+    checkerbox: CheckerBox
+  }
 }
 
 export const isMove = (m: any): m is Move => {
@@ -71,7 +75,6 @@ export const isMove = (m: any): m is Move => {
 
   return true
 }
-
 
 export function getCheckerboxCoordinates (board: Board, id: string | undefined) {
   let quadrantIndex: number | undefined = undefined
@@ -118,51 +121,64 @@ export function getCheckerboxCoordinates (board: Board, id: string | undefined) 
   }
 }
 
-export const getMoveMode = (board: Board, origin: CheckerBox, destination: CheckerBox, activeColor: Color, activePlayer: Player, dieValue: DieValue): MoveMode => {
-  if (board.off[activeColor].checkers.length > 0) {
-    return MoveMode.REENTER
+export const isCheckerInTurn = (origin: CheckerBox, moves: Move[]): boolean => {
+  let inTurn: boolean = false
+  console.log('[Revert] moves', moves)
+  const ctm = origin.checkers[origin.checkers.length - 1]
+  if (moves.length > 0 && moves.find(m => m.checker?.id !== undefined && m.checker.id === ctm.id)) {
+    inTurn = true
   }
-  if (origin.position === 'off') {
-    throw new GameError({ model: 'Move', errorMessage: 'Cannot move from off' })
-  }
-  if (destination.position === 'rail') {
-    throw new GameError({ model: 'Move', errorMessage: 'Cannot move to rail' })
-  }
-  if (typeof origin.position === 'number' && typeof destination.position === 'number') {
-    if (!activePlayer || !activePlayer.active) {
-      throw new GameError({ model: 'Move', errorMessage: 'No active player' })
-    }
-    if (destination.checkers && destination.checkers.length > 1 && destination.checkers[0].color !== activeColor) {
-      throw new GameError({ model: 'Move', errorMessage: 'Destination is owned by opponent' })
-    }
-    if (destination.position === origin.position) {
-      throw new GameError({ model: 'Move', errorMessage: 'Origin and destination cannot be the same' })
-    }
-    if (activePlayer.moveDirection === 'clockwise' && destination.position < origin.position) {
-      // throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
-      // console.error('Player moves clockwise')
-      return MoveMode.ERROR
-    }
-    if (activePlayer.moveDirection === 'counterclockwise' && destination.position > origin.position) {
-      throw new GameError({ model: 'Move', errorMessage: 'Player moves counterclockwise' })
-    }
-    if (destination.checkers && destination.checkers.length === 1 && destination.checkers[0].color !== activeColor) {
-      return MoveMode.HIT
-    } else {
-      return MoveMode.POINT_TO_POINT
-    }
-  } else if (typeof origin.position === 'number' && destination.position === 'off') {
-    return MoveMode.BEAR_OFF
-  } else if (origin.position === 'rail' && typeof destination.position === 'number') {
-    return MoveMode.REENTER
-  } else {
-    throw new GameError({ model: 'Move', errorMessage: 'Unknown MoveMode' })
-  }
+  return inTurn
 }
+
+// export const getMoveMode = (board: Board, origin: CheckerBox, destination: CheckerBox, activeColor: Color, activePlayer: Player, dieValue: DieValue): MoveMode => {
+
+//   if (board.rail[activeColor].checkers.length > 0) {
+//     return MoveMode.REENTER
+//   }
+//   if (origin.position === 'off') {
+//     throw new GameError({ model: 'Move', errorMessage: 'Cannot move from off' })
+//   }
+//   if (destination.position === 'rail') {
+//     throw new GameError({ model: 'Move', errorMessage: 'Cannot move to rail' })
+//   }
+//   if (typeof origin.position === 'number' && typeof destination.position === 'number') {
+//     if (!activePlayer || !activePlayer.active) {
+//       throw new GameError({ model: 'Move', errorMessage: 'No active player' })
+//     }
+//     if (destination.checkers && destination.checkers.length > 1 && destination.checkers[0].color !== activeColor) {
+//       throw new GameError({ model: 'Move', errorMessage: 'Destination is owned by opponent' })
+//     }
+
+//     if (destination.position === origin.position) {
+//       throw new GameError({ model: 'Move', errorMessage: 'Origin and destination cannot be the same' })
+//     }
+//     if (activePlayer.moveDirection === 'clockwise' && destination.position < origin.position) {
+//       // throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
+//       // console.error('Player moves clockwise')
+//       return MoveMode.ERROR
+//     }
+//     if (activePlayer.moveDirection === 'counterclockwise' && destination.position > origin.position) {
+//       throw new GameError({ model: 'Move', errorMessage: 'Player moves counterclockwise' })
+//     }
+//     if (destination.checkers && destination.checkers.length === 1 && destination.checkers[0].color !== activeColor) {
+//       return MoveMode.HIT
+//     } else {
+//       return MoveMode.POINT_TO_POINT
+//     }
+//   } else if (typeof origin.position === 'number' && destination.position === 'off') {
+//     return MoveMode.BEAR_OFF
+//   } else if (origin.position === 'rail' && typeof destination.position === 'number') {
+//     return MoveMode.REENTER
+//   } else {
+//     throw new GameError({ model: 'Move', errorMessage: 'Unknown MoveMode' })
+//   }
+// }
 
 export {
   pointToPoint,
   reenter,
+  revert,
   hit,
   off
 }

@@ -2,8 +2,9 @@ import { produce } from 'immer'
 import { isPlayer } from '../../components/Player/state/types/player'
 import { isColor, CHECKERS_PER_PLAYER } from '../game'
 import { GameError } from '../game'
-import { Move } from '../move'
+import { Move, isCheckerInTurn } from '../move'
 import { Turn } from '../turn'
+import { Checker } from '../../components/Checker/state'
 import { MoveMode, POINT_COUNT } from '../../components/Board/state'
 import { MoveStatus, isCheckerBox, CheckerBox } from '../../components/CheckerBox/state'
 import { getBearOffQuadrantLocation } from '../../components/Player/state'
@@ -13,7 +14,8 @@ import { isBoard } from '../../components/Board/state/types/board'
 
 export const reducer = (state: Turn, origin: CheckerBox): Move => {
   // FIXME
-  let activeMove = state.moves.find((m: Move) => m.status === MoveStatus.INITIALIZED) as Move
+  console.log('[Move Reducer] state.moves', state.moves)
+  let activeMove = state.moves.find((m: Move) => (m.status === MoveStatus.INITIALIZED)) as Move
   if (!isBoard(state.board)) {
     console.log(state.board)
     throw new GameError({
@@ -43,8 +45,11 @@ export const reducer = (state: Turn, origin: CheckerBox): Move => {
       errorMessage: 'Invalid color'
     })
   }
+  let checkerToMove: Checker | undefined = undefined
   let moveMode: MoveMode | undefined = undefined
   let destination: CheckerBox | undefined = undefined
+  let revertOrigin: CheckerBox | undefined = undefined
+  let revertDestination: CheckerBox | undefined = undefined
 
   if (!activeMove) {
     console.error('No more moves')
@@ -55,6 +60,7 @@ export const reducer = (state: Turn, origin: CheckerBox): Move => {
         errorMessage: 'No origin checkerbox'
       })
     }
+    checkerToMove = origin.checkers[origin.checkers.length - 1]
     let totalHomeboardCheckers = state.board?.off[activePlayer.color].checkers.length || 0
     bearOffQuadrant.points.forEach(p => {
       if (p.checkers.length > 0 && p.checkers[0].color === activePlayer.color) {
@@ -133,15 +139,42 @@ export const reducer = (state: Turn, origin: CheckerBox): Move => {
         }
         moveMode = MoveMode.REENTER
       } else {
-        console.error('[Game Reducer]: Should not happen')
+        moveMode = MoveMode.ERROR
       }
     }
 
     return produce(activeMove, draft => {
+      if (moveMode === undefined) {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: 'No moveMode'
+        })
+      }
+      console.log('[Game Reducer] moveMode:', MoveMode[moveMode])
+      let moveStatus = MoveStatus.COMPLETED
+      if (moveMode === MoveMode.REVERT) {
+        moveStatus = MoveStatus.REVERTED
+        if (!revertOrigin) {
+          throw new GameError({
+            model: 'Move',
+            errorMessage: 'No revertOrigin'
+          })
+        }
+        if (!revertDestination) {
+          throw new GameError({
+            model: 'Move',
+            errorMessage: 'No revertDestination'
+          })
+        }
+        origin = revertOrigin
+        destination = revertDestination
+      }
+
       draft.origin = origin
       draft.destination = destination
       draft.mode = moveMode
-      draft.status = MoveStatus.COMPLETED
+      draft.checker = checkerToMove
+      draft.status = moveStatus
     })
 
 

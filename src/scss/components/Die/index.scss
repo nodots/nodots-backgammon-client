@@ -1,3 +1,9 @@
+$border: #212121;
+$border-light: #ccc;
+$dark: #006b5f;
+$background: #26a89d;
+$accent: #6b000c;
+
 .die {
   display: flex;
   flex-direction: row;
@@ -52,4 +58,16 @@
       background-image: url('./images/white/dice-six-faces-six.svg');
     }
   }
+}
+
+.dice-container {
+  border: 0.5px solid $border-light;
+  border-radius: 5px;
+  height: 4.5vw;
+  width: 2.5vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  background-color: $background;
 }

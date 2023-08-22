@@ -6,17 +6,19 @@ import { pointToPoint, hit, off, reenter } from './move'
 import { reducer as moveReducer } from './move/reducer'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
+import { Move } from './move'
 import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
 import { initializeTurn } from '../components/Player/state/types'
-
+import { revert } from './move/revert'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
   SET_CUBE_VALUE,
   INITIALIZE_TURN,
   FINALIZE_TURN,
-  MOVE
+  MOVE,
+  REVERT_MOVE
 }
 
 const saveState = (state: Game): void => {
@@ -135,13 +137,15 @@ export const reducer = (state: Game, action: any): Game => {
       const newMove = moveReducer(activeTurn, payload.checkerbox)
       console.log('[GAME_REDUCER] newMove:', newMove)
       let finalBoard: Board | undefined = undefined
-
+      let finalMove: Move | undefined = undefined
       switch (newMove.mode) {
         case MoveMode.POINT_TO_POINT:
           finalBoard = pointToPoint(state.board, newMove)
           break
         case MoveMode.HIT:
-          finalBoard = hit(state.board, newMove)
+          const hitResults = hit(state.board, newMove)
+          finalBoard = hitResults.board
+          finalMove = hitResults.move
           break
         case MoveMode.BEAR_OFF:
           finalBoard = off(state.board, newMove)
@@ -161,12 +165,47 @@ export const reducer = (state: Game, action: any): Game => {
 
       let activeMoveIndex = state.activeTurn.moves.findIndex(m => m.id === newMove.id)
       const newState = produce(state, draft => {
-        draft.activeTurn.moves[activeMoveIndex] = newMove
+        // reset origin and destination for reverted move
         draft.board = finalBoard as Board
+        draft.activeTurn.moves[activeMoveIndex] = finalMove || newMove
       })
+
+
       saveState(newState)
       return newState
+
+    case GAME_ACTION_TYPE.REVERT_MOVE: {
+      const checkerToRevert = payload.checkerbox.checkers[payload.checkerbox.checkers.length - 1]
+      if (!checkerToRevert) {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: 'No checkerToRevert'
+        })
+      }
+      const moveToRevert = state.activeTurn.moves.find(m => m.checker?.id === checkerToRevert.id)
+      if (!moveToRevert) {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: 'No moveToRevert'
+        })
+      }
+      const revertResults = revert(state.board, moveToRevert)
+
+      const revertMoveIndex = state.activeTurn.moves.findIndex(m => m.id === moveToRevert.id)
+
+      const revertedState = produce(state, draft => {
+        draft.activeTurn.moves[revertMoveIndex] = revertResults.move
+        draft.board = revertResults.board
+      })
+
+      console.log('[Revert] revertedState:', revertedState)
+
+
+      return revertedState
+    }
   }
+
+
   saveState(state)
   return state
 }
