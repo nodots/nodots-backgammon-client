@@ -169,7 +169,6 @@ export const reducer = (state: Turn, origin: CheckerBox): Move => {
         origin = revertOrigin
         destination = revertDestination
       }
-
       draft.origin = origin
       draft.destination = destination
       draft.mode = moveMode

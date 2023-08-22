@@ -5,8 +5,6 @@ import { Checker } from '../../components/Checker/state'
 import { isCheckerBox } from '../../components/CheckerBox/state/types'
 import { Move, getCheckerboxCoordinates } from '.'
 
-
-
 export const pointToPoint = (board: Board, move: Move): Board => {
   if (!move.origin || !move.destination) {
     throw new GameError({

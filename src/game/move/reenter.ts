@@ -89,7 +89,6 @@ export const reenter = (board: Board, move: Move): Board => {
           errorMessage: 'No checker to move'
         })
       } else {
-        // FIXME typeguard
         const checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
         if (!isChecker(checkerToMove)) {
           throw new GameError({

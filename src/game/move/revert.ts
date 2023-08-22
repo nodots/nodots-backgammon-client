@@ -4,7 +4,6 @@ import { Board } from '../../components/Board/state'
 import { Rail } from '../../components/Rail/state/types'
 import { CheckerBox } from '../../components/CheckerBox/state'
 import { Move, MoveStatus, getCheckerboxCoordinates } from './index'
-import { isChecker } from '../../components/Checker/state'
 
 export const revert = (board: Board, move: Move): { board: Board, move: Move } => {
   console.log('[Revert] move', move)
@@ -58,6 +57,7 @@ export const revert = (board: Board, move: Move): { board: Board, move: Move } =
     const checkerToMove = oldOrigin.checkers[oldOrigin.checkers.length - 1]
     draft.checkers.push(checkerToMove)
   })
+
   let newRail: Rail | undefined = undefined
   let newHitCheckerbox: CheckerBox | undefined = undefined
   if (move.hit?.checker && move.hit?.checker) {
