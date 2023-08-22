@@ -1,9 +1,10 @@
 import { v4 as uuid } from 'uuid'
 import { Cube, CubeValue } from '../components/Cube/state'
 import { Player, Turn } from '../components/Player/state'
-import { Board } from '../components/Board/state'
+import { Board, POINT_COUNT, getCheckerBoxes } from '../components/Board/state'
 import { Dice } from '../components/Die/state'
 import { TurnActionPayload } from './turn.reducer'
+import { Move } from './move'
 
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
@@ -17,7 +18,6 @@ export const isColor = (c: unknown): c is Color => {
   }
   return false
 }
-
 
 export const generateId = (): string => {
   return uuid()
@@ -46,3 +46,4 @@ export type Game = {
   initializeTurn?: (turn: TurnActionPayload) => Turn
   finalizeTurn?: () => void
 }
+

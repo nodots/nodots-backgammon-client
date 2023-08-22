@@ -31,6 +31,19 @@ $blue-accent: #2c486b;
     .checker-box {
       height: 18vw;
     }
+
+    .pip-count {
+      text-align: center;
+      border: 1px solid white;
+      border-radius: 5px;
+      &.black {
+        background-color: #6b000c;
+      }
+      &.white {
+        background-color: #fff;
+        color: #2c486b;
+      }
+    }
   }
 
   .roll-surface {

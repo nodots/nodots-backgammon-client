@@ -74,7 +74,11 @@ const CheckerBox = (props: CheckerBoxProps) => {
     } else if (e.type === 'contextmenu') {
       // Revert move
       // console.warn('[CheckerBox Component] props.checkerBox', props.checkerBox)
+
       const checkers = props.checkerBox.checkers
+      if (checkers.length === 0) {
+        return console.error('No move to revert')
+      }
       const checkerToRevert = checkers[checkers.length - 1] || undefined
       console.log('[Revert]: double-click on checkerbox')
       console.log('[Revert] checkerToRevert:', checkerToRevert)

@@ -2,7 +2,7 @@ import { produce } from 'immer'
 import { Board } from '../components/Board/state'
 import { Game, GameError, isColor } from './game'
 import { Roll } from '../components/Die/state/types'
-import { pointToPoint, hit, off, reenter } from './move'
+import { pointToPoint, hit, off, reenter, isMove } from './move'
 import { reducer as moveReducer } from './move/reducer'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
@@ -11,6 +11,7 @@ import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
 import { initializeTurn } from '../components/Player/state/types'
 import { revert } from './move/revert'
+import { getPipCountForPlayer } from '../components/Board/state/types/board'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -103,6 +104,9 @@ export const reducer = (state: Game, action: any): Game => {
             errorMessage: 'Invalid color'
           })
         }
+        draft.players.black.pipCount = getPipCountForPlayer(state.board, state.players.black)
+        draft.players.white.pipCount = getPipCountForPlayer(state.board, state.players.white)
+
         const activeColor = state.activeColor
         const inActiveColor = activeColor === 'white' ? 'black' : 'white'
 
@@ -133,11 +137,15 @@ export const reducer = (state: Game, action: any): Game => {
           draft.player = state.players[state.activeColor]
         }
       })
-
+      console.error(activeTurn)
+      console.log(payload)
       const newMove = moveReducer(activeTurn, payload.checkerbox)
       console.log('[GAME_REDUCER] newMove:', newMove)
       let finalBoard: Board | undefined = undefined
       let finalMove: Move | undefined = undefined
+      if (!newMove) {
+        console.error('No newMove')
+      }
       switch (newMove.mode) {
         case MoveMode.POINT_TO_POINT:
           finalBoard = pointToPoint(state.board, newMove)
@@ -184,24 +192,29 @@ export const reducer = (state: Game, action: any): Game => {
       }
       const moveToRevert = state.activeTurn.moves.find(m => m.checker?.id === checkerToRevert.id)
       if (!moveToRevert) {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: 'No moveToRevert'
-        })
+        // throw new GameError({
+        //   model: 'Move',
+        //   errorMessage: 'No moveToRevert'
+        // })
+        console.error('Cannot revert')
       }
-      const revertResults = revert(state.board, moveToRevert)
+      if (isMove(moveToRevert)) {
+        const revertResults = revert(state.board, moveToRevert)
 
-      const revertMoveIndex = state.activeTurn.moves.findIndex(m => m.id === moveToRevert.id)
+        const revertMoveIndex = state.activeTurn.moves.findIndex(m => m.id === moveToRevert.id)
 
-      const revertedState = produce(state, draft => {
-        draft.activeTurn.moves[revertMoveIndex] = revertResults.move
-        draft.board = revertResults.board
-      })
+        const revertedState = produce(state, draft => {
+          draft.activeTurn.moves[revertMoveIndex] = revertResults.move
+          draft.board = revertResults.board
+        })
 
-      console.log('[Revert] revertedState:', revertedState)
+        console.log('[Revert] revertedState:', revertedState)
 
 
-      return revertedState
+        return revertedState
+
+      }
+
     }
   }
 

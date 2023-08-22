@@ -2,7 +2,7 @@ import { produce } from 'immer'
 import { isPlayer } from '../../components/Player/state/types/player'
 import { isColor, CHECKERS_PER_PLAYER } from '../game'
 import { GameError } from '../game'
-import { Move, isCheckerInTurn } from '../move'
+import { Move } from '../move'
 import { Turn } from '../turn'
 import { Checker } from '../../components/Checker/state'
 import { MoveMode, POINT_COUNT } from '../../components/Board/state'
@@ -81,10 +81,8 @@ export const reducer = (state: Turn, origin: CheckerBox): Move => {
           : origin.position - activeMove.dieValue
       destination = getCheckerBoxes(state.board).find((cb: CheckerBox) => cb.position === destinationPosition)
       if (!isCheckerBox(destination)) {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: `No destination position from ${origin.position} with ${activeMove.dieValue}`
-        })
+        console.error('Illegal move')
+        return activeMove
       }
       if (
         destination.checkers.length === 0 ||
@@ -145,10 +143,12 @@ export const reducer = (state: Turn, origin: CheckerBox): Move => {
 
     return produce(activeMove, draft => {
       if (moveMode === undefined) {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: 'No moveMode'
-        })
+        // throw new GameError({
+        //   model: 'Move',
+        //   errorMessage: 'No moveMode'
+        // })
+        console.error('No moveMode')
+        return activeMove
       }
       console.log('[Game Reducer] moveMode:', MoveMode[moveMode])
       let moveStatus = MoveStatus.COMPLETED
@@ -176,8 +176,6 @@ export const reducer = (state: Turn, origin: CheckerBox): Move => {
       draft.checker = checkerToMove
       draft.status = moveStatus
     })
-
-
   }
   return activeMove
 }

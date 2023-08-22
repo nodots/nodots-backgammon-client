@@ -2,21 +2,15 @@ import { initCubeState } from '../components/Cube/state'
 import { Player } from '../components/Player/state'
 import { initBoardState } from '../components/Board/state'
 import { initDiceState, roll } from '../components/Die/state'
-import { retrieveState } from './game.reducer'
 import { Game, generateId } from './game'
 
-let gameState: Game | undefined = undefined
-const activeGame = retrieveState()
-
-if (activeGame) {
-  gameState = activeGame
-}
 
 // FIXME: needs to be from user input
 const blackPlayer: Player = {
   id: generateId(),
   color: 'black',
   active: false,
+  pipCount: 167,
   moveDirection: 'clockwise',
   dice: initDiceState.black,
 }
@@ -24,6 +18,7 @@ const whitePlayer: Player = {
   id: generateId(),
   color: 'white',
   active: false,
+  pipCount: 167,
   moveDirection: 'counterclockwise',
   dice: initDiceState.white,
 }
@@ -56,9 +51,7 @@ const defaultGameState: Game = {
   players: {
     black: blackPlayer,
     white: whitePlayer,
-  },
+  }
 }
-
-console.log(gameState)
 
 export const initialGameState = defaultGameState

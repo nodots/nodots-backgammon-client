@@ -35,8 +35,10 @@ const Board = () => {
         {swQuadrant && <Quadrant location={QuadrantLocation.SW} locationString='sw' quadrant={swQuadrant} />}
       </Grid>
       <Grid item className='rail'>
+        <div className='pip-count black'>{game.players.black.pipCount}</div>
         <Rail rail={board.rail.black} />
         <Rail rail={board.rail.white} />
+        <div className='pip-count white'>{game.players.white.pipCount}</div>
       </Grid>
       <Grid item className='col right'>
         {neQuadrant && <Quadrant location={QuadrantLocation.NE} locationString='ne' quadrant={neQuadrant} />}
