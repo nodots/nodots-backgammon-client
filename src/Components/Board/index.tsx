@@ -13,7 +13,7 @@ import Rail from '../Rail'
 import Off from '../Off'
 import RollSurface from '../RollSurface'
 import Cube from '../Cube'
-// import { DiceProvider } from '../Die/state/dice.provider'
+import Die from '../Die'
 
 const Board = () => {
   const { game } = useGame()
@@ -47,6 +47,14 @@ const Board = () => {
       </Grid>
       {/* Cube position changes with ownership, starting un-owned */}
       <Grid item className='off-container'>
+        <div className='dice-container'>
+          {game.activeColor !== 'black' &&
+            <>
+              <Die color='black' order={0} value={1} />
+              <Die color='black' order={1} value={1} />
+            </>
+          }
+        </div>
         <div className='cube-container'>
           {cube.owner === 'black' && <Cube />}
         </div>
@@ -60,6 +68,12 @@ const Board = () => {
         <div className='cube-container'>
           {cube.owner === 'white'
             && <Cube />}
+        </div>
+        <div className='dice-container'>
+          {game.activeColor !== 'white' && <>
+            <Die color='white' order={0} value={1} />
+            <Die color='white' order={1} value={1} />
+          </>}
         </div>
       </Grid>
     </Grid>
