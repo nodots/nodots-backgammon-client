@@ -37,11 +37,13 @@ const RollSurface = (props: RollSurfaceProps) => {
   const swapDiceHandler = (e: React.MouseEvent) => {
     e.preventDefault()
 
+    console.log(isColor(game.activeColor))
+
     if (isColor(game.activeColor)) {
       if (game.dice[game.activeColor].dice[0].value === undefined ||
         game.dice[game.activeColor].dice[1].value === undefined
       ) {
-        e.stopPropagation()
+        // e.stopPropagation()
         return console.error('Dice are not set yet')
       }
     }
