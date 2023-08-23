@@ -1,7 +1,7 @@
 import { GameProvider } from './game/game.provider'
-import { RegistrationPage } from './pages/registration'
+// import { RegistrationPage } from './pages/registration'
 import { BoardPage } from './pages/board'
-import { Debug } from './components/Debug'
+// import { Debug } from './components/Debug'
 
 import './App.scss'
 
