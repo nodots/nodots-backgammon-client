@@ -1,8 +1,9 @@
-import { Paper } from '@mui/material'
+import { Container } from '@mui/material'
+import RegistrationForm from '../../components/Forms'
 
 export const RegistrationPage = () => {
-  return <Paper className='board-frame' elevation={8}>
-    <h1>Registration</h1>
-  </Paper>
+  return <Container>
+    <RegistrationForm />
+  </Container>
 }
 
