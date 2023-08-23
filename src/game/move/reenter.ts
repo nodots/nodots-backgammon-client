@@ -7,7 +7,7 @@ import { isRail } from '../../components/Rail/state/types'
 import { Move, getCheckerboxCoordinates } from '.'
 import { isChecker } from '../../components/Checker/state'
 
-export const reenter = (board: Board, move: Move): Board => {
+export const reenter = (board: Board, move: Move): Board | undefined => {
   if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
     throw new GameError({
       model: 'Move',
@@ -26,8 +26,8 @@ export const reenter = (board: Board, move: Move): Board => {
 
   // Blocked point
   if (oldDestination.checkers.length > 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
-    console.error('Point owned by opponent')
-    return board
+    // console.error('Point owned by opponent')
+    // return board
     // Reenter and hit
   } else if (oldDestination.checkers.length === 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
     console.log('Hitting opponents checker during reenter. move:', move)

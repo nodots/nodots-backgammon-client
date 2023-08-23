@@ -1,9 +1,9 @@
 import { produce } from 'immer'
 import { generateId, GameError } from '.'
-import { Player } from '../components/Player/state/types/player'
+import { Player, isPlayer } from '../components/Player/state/types/player'
 import { Board, Move, MoveStatus } from '../components/Board/state/types'
 import { DieValue, Roll } from '../components/Die/state/types'
-import { POINT_COUNT, getCheckerBoxes } from '../components/Board/state/types/board'
+import { POINT_COUNT, getCheckerBoxes, isBoard } from '../components/Board/state/types/board'
 import { getHomeQuadrantLocation } from '../components/Player/state/types/player'
 
 export const MOVES_PER_TURN = 2
@@ -24,6 +24,41 @@ export type Turn = {
   status: TurnStatus | undefined
   roll: Roll | undefined
   moves: Move[]
+}
+
+export const isTurn = (t: any): t is Turn => {
+  if (typeof t !== 'object') {
+    return false
+  }
+
+  const keys = Object.keys(t)
+  const idIndex = keys.findIndex(k => k === 'id')
+  if (idIndex === -1) {
+    return false
+  }
+
+  const boardIndex = keys.findIndex(k => k === 'board')
+  if (boardIndex === -1) {
+    return false
+  }
+  if (!isBoard(t.board)) {
+    return false
+  }
+
+  const playerIndex = keys.findIndex(k => k === 'player')
+  if (playerIndex === -1) {
+    return false
+  }
+  if (!isPlayer(t.player)) {
+    return false
+  }
+
+  const statusIndex = keys.findIndex(k => k === 'status')
+  if (statusIndex === -1) {
+    return false
+  }
+
+  return true
 }
 
 export const initializeMoves = (board: Board, roll: Roll, player: Player): Move[] => {
@@ -113,7 +148,8 @@ function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
   if (destinationCount > 0) {
     return true
   }
-  return false
+  // return false
+  return true
 }
 
 export const resetTurn = (turn: Turn): Turn => {

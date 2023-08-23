@@ -37,8 +37,6 @@ const RollSurface = (props: RollSurfaceProps) => {
   const swapDiceHandler = (e: React.MouseEvent) => {
     e.preventDefault()
 
-    console.log(isColor(game.activeColor))
-
     if (isColor(game.activeColor)) {
       if (game.dice[game.activeColor].dice[0].value === undefined ||
         game.dice[game.activeColor].dice[1].value === undefined
@@ -96,6 +94,7 @@ const RollSurface = (props: RollSurfaceProps) => {
       // noop
     } else {
       const newRollValues = [roll(), roll()]
+
       console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
       const setDiceValuesPayload: SetDiceValuesPayload = {

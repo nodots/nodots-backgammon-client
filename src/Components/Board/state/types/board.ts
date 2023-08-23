@@ -4,10 +4,9 @@ import { CheckerBox } from '../../../CheckerBox/state/types'
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import DEFAULT_SETUP from '../config/DEFAULT.json'
+import DEFAULT_SETUP from '../config/REENTER-HIT.json'
 import { CHECKERS_PER_PLAYER, generateId } from '../../../../game/game'
 import { GameError } from '../../../../game/game'
-import { constant } from 'lodash'
 
 export const POINT_COUNT = 24
 // For importing setup
@@ -32,7 +31,6 @@ export const isBoard = (b: any): b is Board => {
   if (typeof b !== 'object') {
     return false
   }
-  console.log('[Game Reducer] ', b)
   const keys = Object.keys(b)
 
   const quadrantsIndex = keys.findIndex(k => k === 'quadrants')
@@ -94,6 +92,8 @@ function sanityCheckSetup (setup: CheckerProp[]): boolean {
 
   if (blackCheckerCount !== CHECKERS_PER_PLAYER || whiteCheckerCount !== CHECKERS_PER_PLAYER) {
     return false
+
+
   }
   return isSane
 }
@@ -127,5 +127,4 @@ export const getPipCountForPlayer = (board: Board, player: Player): number => {
     pipCount += board.rail.white.checkers.length * POINT_COUNT
   }
   return pipCount
-
 }

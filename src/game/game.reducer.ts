@@ -146,6 +146,7 @@ export const reducer = (state: Game, action: any): Game => {
       if (!newMove) {
         console.error('No newMove')
       }
+      console.log(newMove)
       switch (newMove.mode) {
         case MoveMode.POINT_TO_POINT:
           finalBoard = pointToPoint(state.board, newMove)
@@ -158,7 +159,7 @@ export const reducer = (state: Game, action: any): Game => {
         case MoveMode.BEAR_OFF:
           finalBoard = off(state.board, newMove)
           break
-        case MoveMode.REENTER:
+        case MoveMode.REENTER || MoveMode.REENTER_HIT:
           finalBoard = reenter(state.board, newMove)
           break
         default:

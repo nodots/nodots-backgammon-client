@@ -1,11 +1,11 @@
 import { GameError } from '../game'
-import { getCheckerBoxes } from '../../components/Board/state/types/board'
+import { getCheckerBoxes, isBoard } from '../../components/Board/state/types/board'
 import { Board, } from '../../components/Board/state'
 import { QuadrantLocation } from '../../components/Quadrant/state/types'
-import { Checker } from '../../components/Checker/state'
-import { CheckerBox } from '../../components/CheckerBox/state/types'
+import { Checker, isChecker } from '../../components/Checker/state'
+import { CheckerBox, isCheckerBox } from '../../components/CheckerBox/state/types'
 import { DieValue } from '../../components/Die/state'
-import { Player } from '../../components/Player/state'
+import { Player, isPlayer } from '../../components/Player/state'
 import { GAME_ACTION_TYPE } from '../game.reducer'
 import { pointToPoint } from './pointToPoint'
 import { hit } from './hit'
@@ -15,10 +15,16 @@ import { revert } from './revert'
 
 export enum MoveMode {
   POINT_TO_POINT,
+  POINT_TO_POINT_FORCED,
   HIT,
+  HIT_FORCED,
   REENTER,
-  NO_MOVE,
+  REENTER_FORCED,
+  REENTER_HIT,
+  REENTER_HIT_FORCED,
   BEAR_OFF,
+  BEAR_OFF_FORCED,
+  NO_MOVE,
   REVERT,
   ERROR
 }
@@ -130,6 +136,7 @@ export const isCheckerInTurn = (origin: CheckerBox, moves: Move[]): boolean => {
   }
   return inTurn
 }
+
 
 // export const getMoveMode = (board: Board, origin: CheckerBox, destination: CheckerBox, activeColor: Color, activePlayer: Player, dieValue: DieValue): MoveMode => {
 

@@ -8,7 +8,26 @@ export type Off = {
   id: string,
   color: Color,
   checkers: Checker[],
-  position: CheckerBoxPosition
+  position: 'off'
+}
+
+export const isOff = (o: any): o is Off => {
+  if (typeof o !== 'object') {
+    return false
+  }
+
+  const keys = Object.keys(o)
+
+  const positionIndex = keys.findIndex(k => k === 'position')
+  if (positionIndex === -1) {
+    return false
+  }
+  if (o.position !== 'off') {
+    return false
+  }
+
+
+  return true
 }
 
 export interface OffContainer {

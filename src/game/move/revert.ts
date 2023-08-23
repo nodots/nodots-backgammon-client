@@ -4,6 +4,7 @@ import { Board } from '../../components/Board/state'
 import { Rail } from '../../components/Rail/state/types'
 import { CheckerBox } from '../../components/CheckerBox/state'
 import { Move, MoveStatus, getCheckerboxCoordinates } from './index'
+import { Point } from '../../components/Point/state/types'
 
 export const revert = (board: Board, move: Move): { board: Board, move: Move } => {
   console.log('[Revert] move', move)
@@ -75,14 +76,14 @@ export const revert = (board: Board, move: Move): { board: Board, move: Move } =
   const finalBoard = produce(board, draft => {
     draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
     if (destinationInfo) {
-      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
+      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination as Point
     } else if (newRail && isColor(newRail.color)) {
       draft.rail[newRail.color] = newRail
     }
     if (newRail && newHitCheckerbox) {
       const hitCheckerboxInfo = getCheckerboxCoordinates(board, newHitCheckerbox.id)
       draft.rail[newRail.color] = newRail
-      draft.quadrants[hitCheckerboxInfo.quadrantIndex].points[hitCheckerboxInfo.pointIndex] = newHitCheckerbox
+      draft.quadrants[hitCheckerboxInfo.quadrantIndex].points[hitCheckerboxInfo.pointIndex] = newHitCheckerbox as Point
     }
   })
 
