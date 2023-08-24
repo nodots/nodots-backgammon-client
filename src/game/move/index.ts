@@ -7,7 +7,7 @@ import { CheckerBox, isCheckerBox } from '../../components/CheckerBox/state/type
 import { DieValue } from '../../components/Die/state'
 import { Player, isPlayer } from '../../components/Player/state'
 import { GAME_ACTION_TYPE } from '../game.reducer'
-import { pointToPoint } from './pointToPoint'
+import { pointToPoint } from './point-to-point'
 import { hit } from './hit'
 import { reenter } from './reenter'
 import { off } from './off'

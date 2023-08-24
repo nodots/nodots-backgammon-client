@@ -70,9 +70,7 @@ export const isPlayer = (v: any): v is Player => {
 }
 
 export const initializeTurn = (action: InitializeTurnAction): Turn => {
-  console.log('initializeTurn')
   const moves: Move[] = initializeMoves(action.board, action.roll, action.player)
-  console.log(moves)
   const turn: Turn = {
     id: generateId(),
     board: action.board,

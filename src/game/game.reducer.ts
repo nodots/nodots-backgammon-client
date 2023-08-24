@@ -12,6 +12,7 @@ import { turnReducer } from '../components/Player/state'
 import { initializeTurn } from '../components/Player/state/types'
 import { revert } from './move/revert'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
+import CheckerBox from '../components/CheckerBox'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -37,9 +38,9 @@ export const retrieveState = (): Game | undefined => {
 
 export const reducer = (state: Game, action: any): Game => {
   const { type, payload } = action
-  console.log('[Game Context] reducer params state', state)
-  console.log('[Game Context] reducer params action.type', GAME_ACTION_TYPE[type])
-  console.log('[Game Context] reducer params action.payload', payload)
+  // console.log('[Game Reducer] reducer params state', state)
+  // console.log('[Game Reducer] reducer params action.type', GAME_ACTION_TYPE[type])
+  // console.log('[Game Reducer] reducer params action.payload', payload)
   switch (type) {
     case GAME_ACTION_TYPE.SET_CUBE_VALUE:
       const newCube = cubeReducer(state.cube, action)
@@ -49,9 +50,9 @@ export const reducer = (state: Game, action: any): Game => {
       return newCubeState
     case GAME_ACTION_TYPE.SET_DICE_VALUES:
       const newDice = diceReducer(state.dice, action)
-      console.log('[Game Reducer]: SET_DICE_VALUES state.dice:', state.dice)
-      console.log('[Game Reducer]: SET_DICE_VALUES type', type)
-      console.log('[Game Reducer]: SET_DICE_VALUES payload.values:', payload.values)
+      // console.log('[Game Reducer]: SET_DICE_VALUES state.dice:', state.dice)
+      // console.log('[Game Reducer]: SET_DICE_VALUES type', type)
+      // console.log('[Game Reducer]: SET_DICE_VALUES payload.values:', payload.values)
       if (state.activeTurn === undefined || state.activeTurn.status === undefined) {
         if (!isColor(state.activeColor)) {
           throw new GameError({
@@ -78,7 +79,6 @@ export const reducer = (state: Game, action: any): Game => {
       const newTurn = turnReducer(state.activeTurn, action)
       const possibleMoves = newTurn.moves.filter(m => m.status !== MoveStatus.NO_MOVE)
       if (possibleMoves.length === 0) {
-        console.error('Resetting activeTurn. No moves.', state)
         return produce(state, draft => {
           draft.activeTurn.id = undefined
           draft.activeTurn.player = undefined
@@ -122,7 +122,6 @@ export const reducer = (state: Game, action: any): Game => {
         draft.activeTurn.moves = []
       })
     case GAME_ACTION_TYPE.MOVE:
-      // FIXME: Move all of this stuff to move reducer
       const activeTurn = produce(state.activeTurn, draft => {
         if (state.activeTurn.board === undefined) {
           draft.board = state.board
@@ -137,8 +136,6 @@ export const reducer = (state: Game, action: any): Game => {
           draft.player = state.players[state.activeColor]
         }
       })
-      console.error(activeTurn)
-      console.log(payload)
       const newMove = moveReducer(activeTurn, payload.checkerbox)
       console.log('[GAME_REDUCER] newMove:', newMove)
       let finalBoard: Board | undefined = undefined
@@ -146,7 +143,6 @@ export const reducer = (state: Game, action: any): Game => {
       if (!newMove) {
         console.error('No newMove')
       }
-      console.log(newMove)
       switch (newMove.mode) {
         case MoveMode.POINT_TO_POINT:
           finalBoard = pointToPoint(state.board, newMove)
@@ -159,8 +155,19 @@ export const reducer = (state: Game, action: any): Game => {
         case MoveMode.BEAR_OFF:
           finalBoard = off(state.board, newMove)
           break
-        case MoveMode.REENTER || MoveMode.REENTER_HIT:
+        case MoveMode.REENTER:
           finalBoard = reenter(state.board, newMove)
+          break
+        case MoveMode.REENTER_HIT:
+          // FIXME
+          finalBoard = state.board
+          break
+        case MoveMode.NO_MOVE:
+          finalBoard = state.board
+          finalMove = produce(newMove, draft => {
+            draft.mode = MoveMode.NO_MOVE
+            draft.status = MoveStatus.NO_MOVE
+          })
           break
         default:
           return state
@@ -179,7 +186,6 @@ export const reducer = (state: Game, action: any): Game => {
         draft.activeTurn.moves[activeMoveIndex] = finalMove || newMove
       })
 
-
       saveState(newState)
       return newState
 
@@ -193,15 +199,10 @@ export const reducer = (state: Game, action: any): Game => {
       }
       const moveToRevert = state.activeTurn.moves.find(m => m.checker?.id === checkerToRevert.id)
       if (!moveToRevert) {
-        // throw new GameError({
-        //   model: 'Move',
-        //   errorMessage: 'No moveToRevert'
-        // })
         console.error('Cannot revert')
       }
       if (isMove(moveToRevert)) {
         const revertResults = revert(state.board, moveToRevert)
-
         const revertMoveIndex = state.activeTurn.moves.findIndex(m => m.id === moveToRevert.id)
 
         const revertedState = produce(state, draft => {
@@ -210,15 +211,11 @@ export const reducer = (state: Game, action: any): Game => {
         })
 
         console.log('[Revert] revertedState:', revertedState)
-
-
         return revertedState
-
       }
 
     }
   }
-
 
   saveState(state)
   return state

@@ -91,7 +91,6 @@ function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
   let destinationCount = 0
   const originPoints = checkerboxes.filter(cb => cb.checkers.length > 0 && cb.checkers[0].color === player.color && cb.position !== 'off')
   const railCheckers = board.rail[player.color].checkers
-  console.log(railCheckers)
 
   if (railCheckers.length > 0) {
     // Player is on the rail and must move from there before doing anything else
@@ -111,7 +110,6 @@ function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
       if (player.moveDirection === 'counterclockwise') {
         possibleDestinationPosition = POINT_COUNT - dieValue + 1
       }
-      console.error(`possibleDestinationPosition = ${possibleDestinationPosition} for dieValue ${dieValue}`)
       const possibleDestination = checkerboxes.find(cb => cb.position === possibleDestinationPosition)
       if (
         (
@@ -148,8 +146,7 @@ function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
   if (destinationCount > 0) {
     return true
   }
-  // return false
-  return true
+  return false
 }
 
 export const resetTurn = (turn: Turn): Turn => {

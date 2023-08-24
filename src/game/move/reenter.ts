@@ -8,12 +8,15 @@ import { Move, getCheckerboxCoordinates } from '.'
 import { isChecker } from '../../components/Checker/state'
 
 export const reenter = (board: Board, move: Move): Board | undefined => {
+  console.log('reenter')
+  console.log(move)
   if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
     throw new GameError({
       model: 'Move',
       errorMessage: 'Missing origin or destination'
     })
   }
+
   const destinationInfo = getCheckerboxCoordinates(board, move.destination.id)
   const checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
   if (!isColor(checkerToMove.color)) {
@@ -97,9 +100,7 @@ export const reenter = (board: Board, move: Move): Board | undefined => {
           })
         }
         // Player has checkers on the rail and must move them first
-        // const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number]
         const oldOrigin = board.rail[checkerToMove.color]
-        console.log(oldOrigin)
         const newOrigin = produce(oldOrigin, draft => {
           draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
         })

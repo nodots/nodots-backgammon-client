@@ -4,7 +4,7 @@ import { CheckerBox } from '../../../CheckerBox/state/types'
 import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
 import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import DEFAULT_SETUP from '../config/REENTER-HIT.json'
+import DEFAULT_SETUP from '../config/DEFAULT.json'
 import { CHECKERS_PER_PLAYER, generateId } from '../../../../game/game'
 import { GameError } from '../../../../game/game'
 
@@ -109,14 +109,11 @@ export const getPipCountForPlayer = (board: Board, player: Player): number => {
   let pipCount = 0
   checkerboxes.forEach(cb => {
     if (typeof cb.position === 'number' && cb.checkers.length > 0 && cb.checkers[0].color === player.color) {
-      console.log(`counting pips for ${cb.position} ${player.color}`)
       let distance = cb.position
       if (player.moveDirection === 'clockwise') {
         distance = POINT_COUNT - distance
       }
-      console.log('distance:', distance)
       pipCount += distance * cb.checkers.length
-      console.log('pipCount:', pipCount)
     }
   })
   // FIXME

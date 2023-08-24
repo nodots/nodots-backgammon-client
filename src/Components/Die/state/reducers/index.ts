@@ -13,8 +13,6 @@ export interface DiceAction {
 }
 
 export const reducer = (state: Dice, action: DiceAction): Dice => {
-  console.log(`[Dice Reducer]: state`, state)
-  console.log(`[Dice Reducer]: action`, action)
   const { payload } = action
   const color = payload.color
   const newState = produce(state, draft => {
