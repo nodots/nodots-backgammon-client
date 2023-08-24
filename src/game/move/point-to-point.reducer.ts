@@ -57,6 +57,10 @@ export function pointToPointReducer (turn: Turn, origin: CheckerBox, dieValue: D
     )
 
   if (!isPoint(destinationPoint)) {
+    console.log(turn)
+    console.log(origin)
+    console.log(dieValue)
+    console.error(destinationPoint)
     throw new GameError({
       model: 'Game',
       errorMessage: 'Invalid destinationPoint'

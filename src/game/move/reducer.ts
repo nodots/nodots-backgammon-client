@@ -63,94 +63,7 @@ export const reducer = (state: Turn, origin: CheckerBox): Move => {
     draft.status = MoveStatus.COMPLETED
     draft.destination = moveResults.destination
   })
-
 }
-
-// if (!activeMove) {
-//   console.error('[TRACE] No more moves')
-// } else {
-//   console.log('[TRACE] moveResults', moveResults)
-//   if (!isCheckerBox(origin)) {
-//     throw new GameError({
-//       model: 'Move',
-//       errorMessage: 'No origin checkerbox'
-//     })
-//   }
-//   console.log('[TRACE] preparing to update activeMove and return:', activeMove)
-//   const newState = produce(activeMove, draft => {
-//     if (!activeMove.mode) {
-//       throw Error('[TRACE] no move mode')
-//     }
-//     console.log('[TRACE] moveMode:', MoveMode[activeMove.mode])
-//     let moveStatus = MoveStatus.COMPLETED
-//     // if (moveMode === MoveMode.REVERT) {
-//     //   console.log('[TRACE] reverting activeMove:', activeMove)
-//     //   moveStatus = MoveStatus.REVERTED
-//     //   if (!revertOrigin) {
-//     //     throw new GameError({
-//     //       model: 'Move',
-//     //       errorMessage: 'No revertOrigin'
-//     //     })
-//     //   }
-//     //   if (!revertDestination) {
-//     //     throw new GameError({
-//     //       model: 'Move',
-//     //       errorMessage: 'No revertDestination'
-//     //     })
-//     //   }
-//     //   origin = revertOrigin
-//     //   destination = revertDestination
-//     // }
-//     console.log('[TRACE] in produce method')
-//     draft.origin = origin
-//     draft.destination = destination
-//     draft.mode = moveMode
-//     draft.checker = checkerToMove
-//     draft.status = moveStatus
-//   })
-//   console.log('[TRACE] newState:', newState)
-// }
-//   checkerToMove = origin.checkers[origin.checkers.length - 1]
-//   if (origin.checkers.length > 0 && origin.checkers[0].color !== activePlayer.color) {
-//     // noop
-//     console.error('Not your checker')
-//   }
-//   console.log('[TRACE] preparing to update activeMove and return:', activeMove)
-//   const newState = produce(activeMove, draft => {
-//     if (!activeMove.mode) {
-//       throw Error('[TRACE] no move mode')
-//     }
-//     console.log('[TRACE] moveMode:', MoveMode[activeMove.mode])
-//     let moveStatus = MoveStatus.COMPLETED
-//     // if (moveMode === MoveMode.REVERT) {
-//     //   console.log('[TRACE] reverting activeMove:', activeMove)
-//     //   moveStatus = MoveStatus.REVERTED
-//     //   if (!revertOrigin) {
-//     //     throw new GameError({
-//     //       model: 'Move',
-//     //       errorMessage: 'No revertOrigin'
-//     //     })
-//     //   }
-//     //   if (!revertDestination) {
-//     //     throw new GameError({
-//     //       model: 'Move',
-//     //       errorMessage: 'No revertDestination'
-//     //     })
-//     //   }
-//     //   origin = revertOrigin
-//     //   destination = revertDestination
-//     // }
-//     console.log('[TRACE] in produce method')
-//     draft.origin = origin
-//     draft.destination = destination
-//     draft.mode = moveMode
-//     draft.checker = checkerToMove
-//     draft.status = moveStatus
-//   })
-//   console.log('[TRACE] newState:', newState)
-// }
-//   return activeMove
-// }
 
 function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveResults {
   let moveResults: MoveResults = { mode: MoveMode.ERROR, destination: undefined }
@@ -207,7 +120,8 @@ function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveR
   if (origin.position === 'rail') {
     moveResults = reenterReducer(turn, dieValue)
   } else if (totalBearOffCheckers === CHECKERS_PER_PLAYER) {
-    moveResults = bearOffReducer(bearOffQuadrant, dieValue)
+    moveResults = bearOffReducer(turn, origin, dieValue)
+    console.log(moveResults)
   } else {
     moveResults = pointToPointReducer(turn, origin, dieValue)
   }

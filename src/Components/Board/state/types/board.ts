@@ -91,9 +91,10 @@ function sanityCheckSetup (setup: CheckerProp[]): boolean {
   })
 
   if (blackCheckerCount !== CHECKERS_PER_PLAYER || whiteCheckerCount !== CHECKERS_PER_PLAYER) {
+    // return false
+    console.log(blackCheckerCount)
+    console.log(whiteCheckerCount)
     return false
-
-
   }
   return isSane
 }
