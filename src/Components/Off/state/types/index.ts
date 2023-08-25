@@ -1,6 +1,4 @@
-import { CheckerBoxPosition } from '../../../../game/game'
-import { Color } from '../../../../game'
-import { generateId } from '../../../../game'
+import { Color, CheckerBoxPosition, generateId, isColor } from '../../../../game'
 import { Checker } from '../../../Checker/state/types'
 import { CheckerProp } from '../../../Board/state/types/board'
 
@@ -8,35 +6,31 @@ export type Off = {
   id: string,
   color: Color,
   checkers: Checker[],
-  position: 'off'
+  position: CheckerBoxPosition
 }
 
-export const isOff = (o: any): o is Off => {
-  if (typeof o !== 'object') {
+export const isOff = (v: any): v is Off => {
+  if (typeof v !== 'object') {
     return false
   }
-
-  const keys = Object.keys(o)
-
+  const keys = Object.keys(v)
+  const idIndex = keys.findIndex(k => k === 'id')
+  const checkersIndex = keys.findIndex(k => k === 'checkers')
   const positionIndex = keys.findIndex(k => k === 'position')
-  if (positionIndex === -1) {
-    return false
-  }
-  if (o.position !== 'off') {
+  const colorIndex = keys.findIndex(k => k === 'color')
+  if (idIndex === -1 || checkersIndex === -1 || positionIndex === -1 || colorIndex === -1) {
     return false
   }
 
+  if (!isColor(v.color)) {
+    return false
+  }
 
   return true
 }
 
-export interface OffContainer {
-  white: Off,
-  black: Off
-}
-
-export const initialize = (setup: CheckerProp[]): OffContainer => {
-  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'off')
+export const initialize = (setup: CheckerProp[]): { white: Rail, black: Rail } => {
+  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'rail')
   const whiteCheckers: Checker[] = []
   if (whiteCheckerSetup) {
     for (let i = 0; i < whiteCheckerSetup.checkerCount; i++) {
@@ -52,20 +46,20 @@ export const initialize = (setup: CheckerProp[]): OffContainer => {
     }
   }
 
-  const offContainer: OffContainer = {
-    white: {
-      id: generateId(),
-      color: 'white',
-      position: 'off',
-      checkers: whiteCheckers
-    },
-    black: {
-      id: generateId(),
-      color: 'black',
-      position: 'off',
-      checkers: blackCheckers
-    },
-
+  const white: Off = {
+    id: generateId(),
+    color: 'white',
+    position: 'off',
+    checkers: whiteCheckers
   }
-  return offContainer
+
+  const black: Off = {
+    id: generateId(),
+    color: 'black',
+    position: 'off',
+    checkers: blackCheckers
+  }
+
+  return { white, black }
+
 }

@@ -12,7 +12,6 @@ export type CheckerBox = {
   id: string,
   checkers: Checker[]
   position: CheckerBoxPosition
-  color?: Color | undefined
 }
 
 export const isCheckerBox = (v: any): v is CheckerBox => {

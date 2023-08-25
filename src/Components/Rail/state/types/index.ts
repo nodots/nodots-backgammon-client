@@ -29,13 +29,7 @@ export const isRail = (v: any): v is Rail => {
   return true
 }
 
-
-export interface RailContainer {
-  white: Rail,
-  black: Rail
-}
-
-export const initialize = (setup: CheckerProp[]): RailContainer => {
+export const initialize = (setup: CheckerProp[]): { white: Rail, black: Rail } => {
   const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'rail')
   const whiteCheckers: Checker[] = []
   if (whiteCheckerSetup) {
@@ -52,20 +46,20 @@ export const initialize = (setup: CheckerProp[]): RailContainer => {
     }
   }
 
-  const railContainer: RailContainer = {
-    white: {
-      id: generateId(),
-      color: 'white',
-      position: 'rail',
-      checkers: whiteCheckers
-    },
-    black: {
-      id: generateId(),
-      color: 'black',
-      position: 'rail',
-      checkers: blackCheckers
-    },
-
+  const white: Rail = {
+    id: generateId(),
+    color: 'white',
+    position: 'rail',
+    checkers: whiteCheckers
   }
-  return railContainer
+
+  const black: Rail = {
+    id: generateId(),
+    color: 'black',
+    position: 'rail',
+    checkers: blackCheckers
+  }
+
+  return { white, black }
+
 }

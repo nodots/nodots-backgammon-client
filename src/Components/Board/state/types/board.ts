@@ -1,10 +1,10 @@
 import { isColor } from '../../../../game/'
 import { Player, isPlayer } from '../../../Player/state'
 import { CheckerBox } from '../../../CheckerBox/state/types'
-import { OffContainer, initialize as initializeOff } from '../../../Off/state/types'
-import { RailContainer, initialize as initializeRail } from '../../../Rail/state/types'
+import { Off, initialize as initializeOff } from '../../../Off/state/types'
+import { Rail, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import DEFAULT_SETUP from '../config/DEFAULT.json'
+import DEFAULT_SETUP from '../config/REENTER-WHITE.json'
 import { CHECKERS_PER_PLAYER, generateId } from '../../../../game/game'
 import { GameError } from '../../../../game/game'
 
@@ -23,8 +23,14 @@ export enum BOARD_ACTION_TYPE {
 export type Board = {
   id: string,
   quadrants: Quadrant[]
-  off: OffContainer
-  rail: RailContainer
+  off: {
+    white: Off,
+    black: Off,
+  }
+  rail: {
+    white: Rail,
+    black: Rail
+  }
 }
 
 export const isBoard = (b: any): b is Board => {
@@ -53,11 +59,15 @@ export const initialize = (setup?: CheckerProp[]): Board => {
       errorMessage: 'Board initialization failed'
     })
   }
+
+  const off = initializeOff(DEFAULT_SETUP)
+  const rail = initializeRail(DEFAULT_SETUP)
+
   const board: Board = {
     id: generateId(),
     quadrants: initializeQuadrants(DEFAULT_SETUP),
-    off: initializeOff(DEFAULT_SETUP),
-    rail: initializeRail(DEFAULT_SETUP),
+    off,
+    rail
   }
   return board
 }
