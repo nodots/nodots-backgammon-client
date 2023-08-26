@@ -9,15 +9,15 @@ import { Player } from '../../components/Player/state/types/player'
 import { MoveMode, POINT_COUNT } from '../../components/Board/state'
 import { QuadrantLocation } from '../../components/Quadrant/state'
 import { CheckerBox } from '../../components/CheckerBox/state'
-import { MoveResults } from './reducer'
+import { MoveResult } from './reducer'
 import { pointToPointReducer } from './point-to-point.reducer'
 import { getCheckerBoxes } from '../../components/Board/state/types/board'
 
-export function bearOffReducer (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveResults {
+export function bearOffReducer (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveResult | undefined {
   let moveMode: MoveMode | undefined = undefined
   let destination: CheckerBox | undefined = undefined
 
-  console.log('[TRACE] turn.moves:', turn.moves)
+  console.log('[BEAR OFF TRACE] turn.moves:', turn.moves)
   if (!isTurn(turn)) {
     throw Error('Invalid turn')
   }

@@ -8,9 +8,10 @@ import { getCheckerBoxes } from '../../components/Board/state'
 import { isBoard } from '../../components/Board/state/types/board'
 import { isDieValue } from '../../components/Die/state/types'
 import { isPoint } from '../../components/Point/state/types'
+import { MoveResult } from './reducer'
 
-export function pointToPointReducer (turn: Turn, origin: CheckerBox, dieValue: DieValue): { mode: MoveMode, destination: CheckerBox | undefined } {
-  console.log('[Point-to-Point reducer]: Start')
+export function pointToPointReducer (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveResult | undefined {
+  console.warn('[TRACE]: Start')
   let moveMode: MoveMode | undefined = undefined
   let destination: CheckerBox | undefined = undefined
   if (!isTurn) {
@@ -68,6 +69,11 @@ export function pointToPointReducer (turn: Turn, origin: CheckerBox, dieValue: D
   }
 
   if (
+    destinationPoint.checkers.length === 1 &&
+    destinationPoint.checkers[0].color !== turn.player.color
+  ) {
+    moveMode = MoveMode.POINT_TO_POINT_HIT
+  } else if (
     destinationPoint.checkers.length === 0 ||
     (
       destinationPoint.checkers.length > 0 &&
@@ -75,11 +81,6 @@ export function pointToPointReducer (turn: Turn, origin: CheckerBox, dieValue: D
     )
   ) {
     moveMode = MoveMode.POINT_TO_POINT
-  } else if (
-    destinationPoint.checkers.length === 1 &&
-    destinationPoint.checkers[0].color !== turn.player.color
-  ) {
-    moveMode = MoveMode.HIT
   } else if (
     destinationPoint.checkers.length > 1 &&
     destinationPoint.checkers[0].color !== turn.player.color
@@ -90,6 +91,6 @@ export function pointToPointReducer (turn: Turn, origin: CheckerBox, dieValue: D
     moveMode = MoveMode.ERROR
   }
 
-  console.log('[Point-to-Point reducer]: End. moveMode:', MoveMode[moveMode])
+  console.warn('[TRACE]: End. moveMode:', MoveMode[moveMode])
   return { mode: moveMode, destination: destinationPoint }
 }

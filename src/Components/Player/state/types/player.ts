@@ -1,8 +1,6 @@
 import { Color, isColor, generateId, MoveDirection } from '../../../../game'
-import { Move } from '../../../Board/state/types'
 import { Roll, DiePair } from '../../../Die/state/types'
 import { Board } from '../../../Board/state/types'
-import { Turn, TurnStatus, initializeMoves } from '../../../../game/turn'
 import { isDiePair } from '../../../Die/state/types/die-pair'
 import { QuadrantLocation } from '../../../Quadrant/state'
 
@@ -22,7 +20,6 @@ export type Player = {
   homeQuadrantLocation?: QuadrantLocation
   bearOffQuadrantLocation?: QuadrantLocation
 }
-
 
 export const isPlayer = (v: any): v is Player => {
   if (typeof v !== 'object') {
@@ -67,19 +64,6 @@ export const isPlayer = (v: any): v is Player => {
   }
 
   return true
-}
-
-export const initializeTurn = (action: InitializeTurnAction): Turn => {
-  const moves: Move[] = initializeMoves(action.board, action.roll, action.player)
-  const turn: Turn = {
-    id: generateId(),
-    board: action.board,
-    player: action.player,
-    roll: action.roll,
-    status: TurnStatus.INITIALIZED,
-    moves: moves
-  }
-  return turn
 }
 
 export const getBearOffQuadrantLocation = (moveDirection: MoveDirection) => {

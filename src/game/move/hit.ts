@@ -1,57 +1,19 @@
 import { produce } from 'immer'
 import { GameError } from '../game'
-import { Board } from '../../components/Board/state'
-import { isCheckerBox } from '../../components/CheckerBox/state/types'
-import { Move, getCheckerboxCoordinates } from '.'
+import { Checker, isChecker } from '../../components/Checker/state'
+import { Rail } from '../../components/Rail/state/types'
 
-export const hit = (board: Board, move: Move): { board: Board, move: Move } => {
-  if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
+export const hit = (rail: Rail, checker: Checker): Rail => {
+  if (!isChecker(checker)) {
     throw new GameError({
       model: 'Move',
-      errorMessage: 'Missing origin or destination'
-    })
-  }
-  const originInfo = getCheckerboxCoordinates(board, move.origin.id)
-  const destinationInfo = getCheckerboxCoordinates(board, move.destination.id)
-
-  // FIXME: Write propper typeguard
-  if (typeof originInfo.quadrantIndex !== 'number' || typeof originInfo.pointIndex !== 'number') {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'Quadrant or point index invalid'
+      errorMessage: 'Invalid Checker'
     })
   }
 
-  const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex]
-  const checkerToMove = oldOrigin.checkers[oldOrigin.checkers.length - 1]
-  const newOrigin = produce(oldOrigin, draft => {
-    draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
+  const newRail = produce(rail, draft => {
+    draft.checkers.push(checker)
   })
 
-  const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
-  const hitChecker = oldDestination.checkers[0]
-  const newDestination = produce(oldDestination, draft => {
-    draft.checkers = [checkerToMove]
-  })
-
-  const oldRail = board.rail[hitChecker.color]
-  const newRail = produce(oldRail, draft => {
-    draft.checkers.push(hitChecker)
-  })
-
-  const newBoard = produce(board, draft => {
-    draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
-    draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
-    draft.rail[hitChecker.color] = newRail
-  })
-
-  const newMove = produce(move, draft => {
-    const hit = {
-      checker: hitChecker,
-      checkerbox: oldDestination
-    }
-    draft.hit = hit
-  })
-
-  return { board: newBoard, move: newMove }
+  return newRail
 }

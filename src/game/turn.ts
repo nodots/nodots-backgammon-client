@@ -27,18 +27,24 @@ export type Turn = {
 }
 
 export const isTurn = (t: any): t is Turn => {
+  console.warn('[TRACETURN] isTurn t', t)
   if (typeof t !== 'object') {
+    console.warn('[TRACETURN] isTurn t is not an object')
     return false
   }
 
   const keys = Object.keys(t)
   const idIndex = keys.findIndex(k => k === 'id')
   if (idIndex === -1) {
+    console.warn('[TRACETURN] isTurn no id')
+
     return false
   }
 
   const boardIndex = keys.findIndex(k => k === 'board')
   if (boardIndex === -1) {
+    console.warn('[TRACETURN] isTurn no board')
+
     return false
   }
   if (!isBoard(t.board)) {
@@ -61,7 +67,51 @@ export const isTurn = (t: any): t is Turn => {
   return true
 }
 
-export const initializeMoves = (board: Board, roll: Roll, player: Player): Move[] => {
+export interface InitializeTurnAction {
+  board: Board,
+  player: Player,
+  roll: Roll
+}
+
+export const initializeTurn = (action: InitializeTurnAction): Turn => {
+  console.warn('[TRACETURN] initializeTurn action:', action)
+  console.warn('[TRACET] calling initializeMoves with action:', action)
+  const moves: Move[] = initializeMoves(action)
+  console.warn('[TRACETURN] initializingMoves returned moves.length:', moves.length)
+
+  const turn: Turn = {
+    id: generateId(),
+    board: action.board,
+    player: action.player,
+    roll: action.roll,
+    status: TurnStatus.INITIALIZED,
+    moves: moves
+  }
+  console.warn('[TRACETURN] initializeTurn turn:', turn)
+  console.warn('[TRACETURN] initializeTurn turn.moves:', turn.moves)
+  console.warn('[TRACETURN] initializeTurn turn.board:', turn.board)
+
+  return turn
+}
+
+export const resetTurn = (turn: Turn): Turn => {
+  console.warn('[TRACETURN] resetTurn turn:', turn)
+  return produce(turn, draft => {
+    draft.id = undefined
+    draft.player = undefined
+    draft.status = undefined
+    draft.roll = undefined
+    draft.moves = []
+  })
+}
+
+export const initializeMoves = (action: InitializeTurnAction): Move[] => {
+  console.warn('[TRACETURN] initializeMoves')
+  const board = action.board
+  const roll = action.roll
+  console.warn('[TRACETURN] initializeMoves roll', roll)
+  const player = action.player
+
   let moveCount = MOVES_PER_TURN
   const moves: Move[] = []
   // Handle double roll
@@ -70,12 +120,8 @@ export const initializeMoves = (board: Board, roll: Roll, player: Player): Move[
   }
   for (let i = 0; i < moveCount; i++) {
     const dieValue = i % 2 ? roll[1] : roll[0]
-    let canmove = false
+    let canmove = canMove(board, dieValue, player)
 
-    // FIXME: This is wrong because it allows player to "reuse" rolls
-    if (canMove(board, roll[0], player) || canMove(board, roll[1], player)) {
-      canmove = true
-    }
     const move: Move = {
       id: generateId(),
       dieValue,
@@ -87,74 +133,56 @@ export const initializeMoves = (board: Board, roll: Roll, player: Player): Move[
 }
 
 function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
+  console.warn('[CAN MOVE]')
   const checkerboxes = getCheckerBoxes(board)
   let destinationCount = 0
   const originPoints = checkerboxes.filter(cb => cb.checkers.length > 0 && cb.checkers[0].color === player.color && cb.position !== 'off')
-  const railCheckers = board.rail[player.color].checkers
-
-  if (railCheckers.length > 0) {
-    // Player is on the rail and must move from there before doing anything else
-    if (typeof dieValue !== 'number') {
-      throw new GameError({
-        model: 'Move',
-        errorMessage: 'Bad die value'
-      })
-    }
-    if (railCheckers.length > 1) {
-
-    }
-    const homeQuadrantLocation = getHomeQuadrantLocation(player.moveDirection)
-    const homeQuadrant = board.quadrants.find(q => q.location === homeQuadrantLocation)
-    if (homeQuadrant) {
-      let possibleDestinationPosition = dieValue as number
-      if (player.moveDirection === 'counterclockwise') {
-        possibleDestinationPosition = POINT_COUNT - dieValue + 1
-      }
-      const possibleDestination = checkerboxes.find(cb => cb.position === possibleDestinationPosition)
-      if (
-        (
-          possibleDestination &&
-          possibleDestination.checkers.length <= 1 // either open or hittable
-        ) ||
-        (
-          possibleDestination &&
-          possibleDestination.checkers.length > 1 &&
-          possibleDestination.checkers[0].color === player.color // player owns the point
-        )) {
-        destinationCount++
-      }
-    }
-  } else {
-    originPoints.forEach(cb => {
-      const possibleDestinationPosition = cb.position as number + dieValue
-      const possibleDestination = checkerboxes.find(cb => typeof cb.position === 'number' && cb.position === possibleDestinationPosition)
-      if (
-        (
-          possibleDestination &&
-          possibleDestination.checkers.length <= 1 // either open or hittable
-        ) ||
-        (
-          possibleDestination &&
-          possibleDestination.checkers.length > 1 &&
-          possibleDestination.checkers[0].color === player.color // player owns the point
-        )) {
-        destinationCount++
-      }
+  if (typeof dieValue !== 'number') {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'Bad die value'
     })
   }
+  const homeQuadrantLocation = getHomeQuadrantLocation(player.moveDirection)
+  const homeQuadrant = board.quadrants.find(q => q.location === homeQuadrantLocation)
+  if (homeQuadrant) {
+    let possibleDestinationPosition = dieValue as number
+    if (player.moveDirection === 'counterclockwise') {
+      possibleDestinationPosition = POINT_COUNT - dieValue + 1
+    }
+    const possibleDestination = checkerboxes.find(cb => cb.position === possibleDestinationPosition)
+    if (
+      (
+        possibleDestination &&
+        possibleDestination.checkers.length <= 1 // either open or hittable
+      ) ||
+      (
+        possibleDestination &&
+        possibleDestination.checkers.length > 1 &&
+        possibleDestination.checkers[0].color === player.color // player owns the point
+      )) {
+      destinationCount++
+    }
+  }
+  originPoints.forEach(cb => {
+    const possibleDestinationPosition = cb.position as number + dieValue
+    const possibleDestination = checkerboxes.find(cb => typeof cb.position === 'number' && cb.position === possibleDestinationPosition)
+    if (
+      (
+        possibleDestination &&
+        possibleDestination.checkers.length <= 1 // either open or hittable
+      ) ||
+      (
+        possibleDestination &&
+        possibleDestination.checkers.length > 1 &&
+        possibleDestination.checkers[0].color === player.color // player owns the point
+      )) {
+      destinationCount++
+    }
+  })
 
   if (destinationCount > 0) {
     return true
   }
   return false
-}
-
-export const resetTurn = (turn: Turn): Turn => {
-  return produce(turn, draft => {
-    draft.id = undefined
-    draft.player = undefined
-    draft.status = undefined
-    draft.roll = undefined
-    draft.moves = []
-  })
 }

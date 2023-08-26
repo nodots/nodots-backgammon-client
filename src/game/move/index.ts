@@ -15,15 +15,10 @@ import { revert } from './revert'
 
 export enum MoveMode {
   POINT_TO_POINT,
-  POINT_TO_POINT_FORCED,
-  HIT,
-  HIT_FORCED,
+  POINT_TO_POINT_HIT,
   REENTER,
-  REENTER_FORCED,
   REENTER_HIT,
-  REENTER_HIT_FORCED,
   BEAR_OFF,
-  BEAR_OFF_FORCED,
   NO_MOVE,
   REVERT,
   ERROR
@@ -66,18 +61,30 @@ export type Move = {
 }
 
 export const isMove = (m: any): m is Move => {
+  console.warn('[TRACEMOVE] isMove move', m)
   if (typeof m !== 'object') {
+    console.warn('[TRACEMOVE] isMove move is not an object')
     return false
   }
 
   const keys = Object.keys(m)
 
   const idIndex = keys.findIndex(k => k === 'id')
-  if (idIndex === -1) return false
+  if (idIndex === -1) {
+    console.warn('[TRACEMOVE] isMove move has no id')
+    return false
+  }
+
   const dieValueIndex = keys.findIndex(k => k === 'dieValue')
-  if (dieValueIndex === -1) return false
+  if (dieValueIndex === -1) {
+    console.warn('[TRACEMOVE] isMove move has no dieValue')
+    return false
+  }
   const statusIndex = keys.findIndex(k => k === 'status')
-  if (statusIndex === -1) return false
+  if (statusIndex === -1) {
+    console.warn('[TRACEMOVE] isMove move has no status')
+    return false
+  }
 
   return true
 }

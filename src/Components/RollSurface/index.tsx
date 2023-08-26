@@ -7,7 +7,7 @@ import { Color, isColor } from '../../game'
 import { GameError } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
 import { DieValue, roll } from '../Die/state/types'
-import { TurnStatus } from '../Player/state/types'
+import { TurnStatus } from '../../game/turn'
 import { TurnActionPayload } from '../../game/turn.reducer'
 // Components
 import Die from '../Die'
@@ -93,7 +93,8 @@ const RollSurface = (props: RollSurfaceProps) => {
       console.error('Turn in progress')
       // noop
     } else {
-      const newRollValues = [roll(), roll()]
+      // const newRollValues = [roll(), roll()]
+      const newRollValues = [6 as DieValue, 5 as DieValue]
       console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
       const setDiceValuesPayload: SetDiceValuesPayload = {
@@ -114,13 +115,17 @@ const RollSurface = (props: RollSurfaceProps) => {
             errorMessage: `Invalid activeColor ${game.activeColor}`
           })
         }
+
         const turn: TurnActionPayload = {
           board: game.board,
           player: game.players[game.activeColor],
           roll: [newRollValues[0], newRollValues[1]],
           status: TurnStatus.INITIALIZED,
         }
-        initializeTurn(turn)
+        console.warn('[TRACE] calling initializeTurn with TurnActionPayload:', turn)
+        const turnResult = initializeTurn(turn)
+        console.warn('[TRACE] initializingTurn returned turnResult:', turnResult)
+
       }
     }
   }

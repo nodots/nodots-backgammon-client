@@ -5,11 +5,10 @@ import { isColor, generateId } from '../../game/game'
 import { GameError } from '../../game/game'
 import { CheckerBox as CheckerBoxType } from './state/types'
 import { getHomeQuadrantLocation } from '../Player/state/types/player'
-// Components
+import { MoveActionPayload, } from '../../game/move'
+import { TurnStatus } from '../../game/turn'
 import Checker from '../Checker'
 import { Checker as CheckerType } from '../Checker/state/types'
-import { MoveActionPayload, } from '../../game/move'
-import { TurnStatus } from '../Player/state/types'
 import { isPlayer } from '../Player/state/types/player'
 import { isQuadrant } from '../Quadrant/state'
 
@@ -56,17 +55,20 @@ const CheckerBox = (props: CheckerBoxProps) => {
     }
 
     if (e.type === 'click') {
+      console.warn('[TRACEMOVE] CheckerBox component clickHandler (single click)')
       if (props.checkerBox.checkers.length === 0) {
-        return console.error('No checker to move')
+        return console.warn('[TRACEMOVE] No checker to move')
       }
       const payload: MoveActionPayload = {
         player: activePlayer,
         checkerbox: props.checkerBox
       }
-      if (game.activeTurn.status === TurnStatus.AWAITING_FINALIZATION) {
-        alert('You need to finalize the turn by clicking on the dice again')
+      console.warn('[TRACE] game.activeTurn:', game.activeTurn)
+      if (game.activeTurn.roll === undefined) {
+        return alert('Roll the dice first')
       }
       try {
+        console.warn('[TRACEMOVE] calling move method with payload:', payload)
         move(payload)
       } catch (e) {
         console.error(e)

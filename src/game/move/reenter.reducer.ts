@@ -9,9 +9,9 @@ import { Player } from '../../components/Player/state/types/player'
 import { MoveMode, POINT_COUNT } from '../../components/Board/state'
 import { QuadrantLocation } from '../../components/Quadrant/state'
 import { CheckerBox } from '../../components/CheckerBox/state'
-import { MoveResults } from './reducer'
+import { MoveResult } from './reducer'
 
-export const reenterReducer = (turn: Turn, dieValue: DieValue): MoveResults => {
+export const reenterReducer = (turn: Turn, dieValue: DieValue): MoveResult | undefined => {
   let moveMode: MoveMode | undefined = undefined
   console.log('[TRACE] turn.moves:', turn.moves)
   if (!isTurn(turn)) {
@@ -38,17 +38,17 @@ export const reenterReducer = (turn: Turn, dieValue: DieValue): MoveResults => {
   if (!isQuadrant(homeQuadrant)) {
     throw Error('Invalid quadrant')
   }
-  console.log('[TRACE] Reenter Reducer homeQuadrant:', homeQuadrant)
+  console.warn('[TRACE] Reenter Reducer homeQuadrant:', homeQuadrant)
 
   const reenterPosition =
     homeQuadrant.location === QuadrantLocation.SE
       ? dieValue as number
       : POINT_COUNT - dieValue as number + 1
 
-  console.log('[TRACE] dieValue', dieValue)
-  console.log('[TRACE] reenterPosition', reenterPosition)
+  console.warn('[TRACE] dieValue', dieValue)
+  console.warn('[TRACE] reenterPosition', reenterPosition)
   const reenterPoint = homeQuadrant.points.find(p => p.position === reenterPosition)
-  console.log('[TRACE] reenterPoint', reenterPoint)
+  console.warn('[TRACE] reenterPoint', reenterPoint)
 
   if (!reenterPoint) {
     throw Error('no reenterPoint')

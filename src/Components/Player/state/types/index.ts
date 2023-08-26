@@ -1,8 +1,11 @@
-import { Player, initializeTurn, getBearOffQuadrantLocation, isPlayer } from './player'
-import { Turn, TurnStatus, initializeMoves } from '../../../../game/turn'
+import { Player, getHomeQuadrantLocation, getBearOffQuadrantLocation, isPlayer } from './player'
 
-export { TurnStatus, initializeTurn, initializeMoves, getBearOffQuadrantLocation, isPlayer }
+export {
+  getHomeQuadrantLocation,
+  getBearOffQuadrantLocation,
+  isPlayer
+}
+
 export type {
-  Player,
-  Turn
+  Player
 }
