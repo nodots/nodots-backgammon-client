@@ -15,7 +15,6 @@ export const pointToPoint = (board: Board, move: Move): Board => {
     })
   }
 
-
   return produce(board, draft => {
     let checkerToMove: Checker | undefined = undefined
     let hitChecker: Checker | undefined = undefined
@@ -35,7 +34,6 @@ export const pointToPoint = (board: Board, move: Move): Board => {
     const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
     console.log('[TRACE] point-to-point oldDestination:', oldDestination)
 
-
     const originInfo = getCheckerboxCoordinates(board, move.origin.id)
     const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex]
     console.log('[TRACE] point-to-point oldOrigin:', oldOrigin)
@@ -47,6 +45,7 @@ export const pointToPoint = (board: Board, move: Move): Board => {
         throw Error('No checkerToMove')
       }
       checkerToMove = oldOrigin.checkers[oldOrigin.checkers.length - 1]
+      console.warn('[BUG]', move)
       if (move.mode === MoveMode.POINT_TO_POINT_HIT) {
         hitChecker = oldDestination.checkers[0]
         if (!isChecker(hitChecker)) {

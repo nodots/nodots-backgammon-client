@@ -82,19 +82,26 @@ export const reducer = (state: Turn, origin: CheckerBox): Move | undefined => {
   checkerToMove = origin.checkers[origin.checkers.length - 1]
   return produce(activeMove, draft => {
     if (isMoveResult(moveResults)) {
-      draft.origin = origin
-      draft.mode = moveResults.mode
-      draft.checker = checkerToMove
-      draft.status = MoveStatus.COMPLETED
-      draft.destination = moveResults.destination
+      if (moveResults.mode === MoveMode.NO_MOVE) {
+        draft.origin = undefined
+        draft.destination = undefined
+        draft.mode = undefined
+        draft.checker = undefined
+        draft.status = MoveStatus.NO_MOVE
+      } else {
+        draft.origin = origin
+        draft.mode = moveResults.mode
+        draft.checker = checkerToMove
+        draft.status = MoveStatus.COMPLETED
+        draft.destination = moveResults.destination
+      }
     } else {
-      draft.origin = undefined
-      draft.destination = undefined
-      draft.mode = undefined
-      draft.checker = undefined
-      draft.status = MoveStatus.NO_MOVE
-
+      throw new GameError({
+        model: 'Move',
+        errorMessage: `Invalid moveResults`
+      })
     }
+
   })
 }
 
@@ -103,9 +110,9 @@ function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveR
   if (dieValue === undefined) {
     console.error('You need to roll first')
   }
-  // console.warn('[TRACEMOVE] getMoveMode turn', turn)
-  // console.warn('[TRACEMOVE] getMoveMode dieValue', dieValue)
-  // console.warn('[TRACEMOVE] getMoveMode origin', origin)
+  console.warn('[TRACEMOVE] getMoveMode turn', turn)
+  console.warn('[TRACEMOVE] getMoveMode dieValue', dieValue)
+  console.warn('[TRACEMOVE] getMoveMode origin', origin)
 
   if (!isTurn(turn)) {
     throw new GameError({
@@ -170,7 +177,7 @@ function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveR
     console.warn('[TRACEMOVE] moveResults:', moveResults)
     console.warn('[TRACEMOVE] calling pointToPointReducer')
     moveResults = pointToPointReducer(turn, origin, dieValue)
-    console.warn('[TRACEMOVE] back from pointToPointReducer moveResults:', moveResults)
+    console.warn('[TRACEMOVE] back from pointToPointReducer moveResults!!!:', moveResults)
     console.warn('[TRACEMOVE] back from pointToPointReducer moveResults.mode:', MoveMode[moveResults?.mode])
   }
   console.warn('[TRACEMOVE] isMoveResult(moveResults):', isMoveResult(moveResults))
@@ -178,7 +185,6 @@ function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveR
   if (isMoveResult(moveResults)) {
     return { mode: moveResults.mode, destination: moveResults.destination }
   } else {
-
     return moveResults
   }
 }

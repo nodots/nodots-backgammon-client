@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Board } from '../components/Board/state'
+import { Board, isBoard } from '../components/Board/state'
 import { Game, GameError, isColor } from './game'
 import { Roll } from '../components/Die/state/types'
 import { isTurn, Turn } from './turn'
@@ -164,7 +164,10 @@ export const reducer = (game: Game, action: any): Game => {
           case MoveMode.POINT_TO_POINT_HIT:
             finalBoard = pointToPoint(game.board, newMove)
             console.warn('[TRACEMOVE] newMove:', newMove)
-            console.warn('[TRACEMOVE] newMove.mode:', MoveMode[newMove.mode])
+            console.warn('[TRACEMOVE] newMove.status:', MoveMode[newMove.status])
+            if (newMove.status === MoveStatus.NO_MOVE) {
+              console.warn('[TRACEMOVE] NO_MOVE')
+            }
             break
           case MoveMode.BEAR_OFF:
             console.log('[TRACEMOVE] game.reducer newMove:', newMove)
@@ -187,19 +190,26 @@ export const reducer = (game: Game, action: any): Game => {
           default:
             return game
         }
+        let newState: Game | undefined = undefined
+        let activeMoveIndex = game.activeTurn.moves.findIndex(m => m.id === newMove.id)
         if (!finalBoard) {
-          throw new GameError({
-            model: 'Move',
-            errorMessage: `No new board for ${MoveMode[newMove.mode as MoveMode]}`
+          newState = produce(game, draft => {
+            // reset origin and destination for reverted move
+            draft.activeTurn.moves[activeMoveIndex].origin = undefined
+            draft.activeTurn.moves[activeMoveIndex].destination = undefined
+            draft.activeTurn.moves[activeMoveIndex].mode = undefined
+            draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.INITIALIZED
           })
+
+        } else {
+          newState = produce(game, draft => {
+            // reset origin and destination for reverted move
+            draft.board = finalBoard as Board
+            draft.activeTurn.moves[activeMoveIndex] = finalMove || newMove
+          })
+
         }
 
-        let activeMoveIndex = game.activeTurn.moves.findIndex(m => m.id === newMove.id)
-        const newState = produce(game, draft => {
-          // reset origin and destination for reverted move
-          draft.board = finalBoard as Board
-          draft.activeTurn.moves[activeMoveIndex] = finalMove || newMove
-        })
 
         saveState(newState)
         return newState

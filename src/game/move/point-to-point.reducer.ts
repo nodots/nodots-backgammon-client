@@ -67,11 +67,12 @@ export function pointToPointReducer (turn: Turn, origin: CheckerBox, dieValue: D
       errorMessage: 'Invalid destinationPoint'
     })
   }
-
+  console.warn('[TRACE] p2p reducer setting MoveMode')
   if (
     destinationPoint.checkers.length === 1 &&
     destinationPoint.checkers[0].color !== turn.player.color
   ) {
+    console.warn('[TRACE] p2p reducer setting MoveMode: POINT_TO_POINT_HIT')
     moveMode = MoveMode.POINT_TO_POINT_HIT
   } else if (
     destinationPoint.checkers.length === 0 ||
@@ -80,14 +81,18 @@ export function pointToPointReducer (turn: Turn, origin: CheckerBox, dieValue: D
       destinationPoint.checkers[0].color === turn.player.color
     )
   ) {
+    console.warn('[TRACE] p2p reducer setting MoveMode: POINT_TO_POINT')
     moveMode = MoveMode.POINT_TO_POINT
   } else if (
     destinationPoint.checkers.length > 1 &&
     destinationPoint.checkers[0].color !== turn.player.color
 
   ) {
+    console.warn('[TRACE] p2p reducer setting MoveMode: NO_MOVE')
+
     moveMode = MoveMode.NO_MOVE
   } else {
+    console.warn('[TRACE] p2p reducer setting MoveMode: ERROR')
     moveMode = MoveMode.ERROR
   }
 
