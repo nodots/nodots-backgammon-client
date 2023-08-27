@@ -78,6 +78,7 @@ export const reducer = (state: Turn, origin: CheckerBox): Move | undefined => {
     return moveResults
   }
   moveResults = getMoveMode(state, activeMove.dieValue, origin)
+
   console.log('[TRACEMOVE] moveResults:', moveResults)
   checkerToMove = origin.checkers[origin.checkers.length - 1]
   return produce(activeMove, draft => {
@@ -174,6 +175,7 @@ function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveR
     moveResults = bearOffReducer(turn, origin, dieValue)
   } else {
     console.warn('[TRACEMOVE] origin:', origin)
+    console.warn('[TRACEMOVE] dieValue', dieValue)
     console.warn('[TRACEMOVE] moveResults:', moveResults)
     console.warn('[TRACEMOVE] calling pointToPointReducer')
     moveResults = pointToPointReducer(turn, origin, dieValue)

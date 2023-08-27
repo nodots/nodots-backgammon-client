@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Board, isBoard } from '../components/Board/state'
+import { Board } from '../components/Board/state'
 import { Game, GameError, isColor } from './game'
 import { Roll } from '../components/Die/state/types'
 import { isTurn, Turn } from './turn'
@@ -209,7 +209,6 @@ export const reducer = (game: Game, action: any): Game => {
           })
 
         }
-
 
         saveState(newState)
         return newState
