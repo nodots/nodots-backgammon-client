@@ -109,66 +109,6 @@ const Board = () => {
     document.body.removeChild(dummyLink)
   }
 
-  // const makeTextFileLineIterator = async (file: File) => {
-  //   console.log('makeTextFileLineIterator file: ', file)
-  //   const utf8Decoder = new TextDecoder("utf-8")
-
-  //   let response = new ReadableStream(file.stream())
-  //   let reader = response.getReader()
-  //   let charsReceived: number = 0
-  //   reader.read().then(({ done, value }) => {
-  //     // Result objects contain two properties:
-  //     // done  - true if the stream has already given you all its data.
-  //     // value - some data. Always undefined when done is true.
-  //     if (done) {
-  //       console.log('Stream complete')
-  //       return
-  //     }
-
-  //     // value for fetch streams is a Uint8Array
-
-  //     charsReceived += value.length
-  //     const chunk = value
-  //     let listItem = document.createElement("li")
-  //     listItem.textContent = `Received ${charsReceived} characters so far. Current chunk = ${chunk}`
-  //     list2.appendChild(listItem)
-
-  //     result += chunk
-
-  //     // Read some more, and call this function again
-  //     return reader.read().then(processText)
-  //   })
-  //   // let { value: chunk, done: readerDone } = await reader.read()
-  //   // chunk = chunk ? utf8Decoder.decode(chunk, { stream: true }) : ""
-  //   // console.log(chunk)
-
-  //   // let re = /\r\n|\n|\r/gm
-  //   // let startIndex = 0
-
-  //   // for (; ;) {
-  //   //   let result = re.exec(chunk)
-  //   //   if (!result) {
-  //   //     if (readerDone) {
-  //   //       break
-  //   //     }
-  //   //     let remainder = chunk.substr(startIndex);
-  //   //     ({ value: chunk, done: readerDone } = await reader.read())
-  //   //     chunk =
-  //   //       remainder + (chunk ? utf8Decoder.decode(chunk, { stream: true }) : "")
-  //   //     startIndex = re.lastIndex = 0
-  //   //     continue
-  //   //   }
-  //   //   console.log(chunk.substring(startIndex, result.index))
-  //   //   startIndex = re.lastIndex
-  //   // }
-  //   // if (startIndex < chunk.length) {
-  //   //   // last line didn't end in a newline char
-  //   //   // yield chunk.substr(startIndex)
-  //   //   console.log(chunk.substr(startIndex))
-  //   // }
-  // }
-
-
   const pipLoadClickHandler = (e: React.MouseEvent) => {
     console.log('pipLoadClickHandler')
     setIsLoadModalOpen(true)

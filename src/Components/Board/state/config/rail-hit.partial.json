@@ -1,0 +1,22 @@
+[
+  {
+    "position": "rail",
+    "color": "black",
+    "checkerCount": 2
+  },
+  {
+    "position": "rail",
+    "color": "white",
+    "checkerCount": 2
+  },
+  {
+    "position": 1,
+    "checkerCount": 1,
+    "color": "white"
+  },
+  {
+    "position": 24,
+    "checkerCount": 1,
+    "color": "black"
+  }
+]

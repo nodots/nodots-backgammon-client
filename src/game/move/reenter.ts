@@ -2,14 +2,16 @@ import { produce } from 'immer'
 import { GameError } from '../game'
 import { Checker, isChecker } from '../../components/Checker/state'
 import { Board } from '../../components/Board/state'
-import { isRail } from '../../components/Rail/state/types'
+import { Rail, isRail } from '../../components/Rail/state/types'
 import { Move, MoveStatus, getCheckerboxCoordinates } from '.'
 import { isPoint } from '../../components/Point/state/types'
 import { MoveResult } from './reducer'
 import { QuadrantLocation, isQuadrant } from '../../components/Quadrant/state'
-import { isCheckerBox } from '../../components/CheckerBox/state'
+import { canAcceptChecker, isCheckerBox } from '../../components/CheckerBox/state/types'
+
 
 export const reenter = (board: Board, move: Move): MoveResult => {
+  let isHit = false
   let moveResult = { board, move }
   let checkerToMove: Checker | undefined = undefined
 
@@ -18,12 +20,11 @@ export const reenter = (board: Board, move: Move): MoveResult => {
       model: 'Move',
       errorMessage: 'Missing rail'
     })
-
   }
 
-  const oldRail = board.rail[move.origin.color]
-  const newRail = produce(oldRail, draft => {
-    draft.checkers.splice(oldRail.checkers.length - 1, 1)
+  const oldOrigin = board.rail[move.origin.color]
+  const newOrigin = produce(oldOrigin, draft => {
+    draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
   })
 
   checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
@@ -37,23 +38,52 @@ export const reenter = (board: Board, move: Move): MoveResult => {
     const targetPointPosition = move.direction === 'clockwise'
       ? move.dieValue
       : 24 - move.dieValue + 1
-
+    console.warn('targetPointPosition', targetPointPosition)
     const destinationPoint = targetQuadrant.points.find(p => p.position === targetPointPosition)
-    if (isCheckerBox(destinationPoint)) {
+
+    if (isCheckerBox(destinationPoint) && canAcceptChecker(destinationPoint, checkerToMove)) {
+      let opponentCheckers = destinationPoint.checkers.filter(c => c.color !== checkerToMove?.color)
+      let hitChecker: Checker | undefined = undefined
+      if (opponentCheckers.length === 1) {
+        isHit = true
+        hitChecker = opponentCheckers[0]
+      }
+
+      console.warn('destinationPoint', destinationPoint)
+      console.warn('isHit', isHit)
+
+      let oldOpponentRail: Rail | undefined = undefined
+      let newOpponentRail: Rail | undefined = undefined
+
       let newDestination = produce(destinationPoint, draft => {
         if (isChecker(checkerToMove)) {
-          draft.checkers.push(checkerToMove)
+          if (isHit && isChecker(hitChecker)) {
+            draft.checkers = [checkerToMove]
+            oldOpponentRail = board.rail[hitChecker.color]
+            newOpponentRail = produce(oldOpponentRail, opponentRailDraft => {
+              if (isChecker(hitChecker)) {
+                opponentRailDraft.checkers.push(hitChecker)
+              }
+            })
+          } else {
+            draft.checkers.push(checkerToMove)
+          }
         }
       })
       console.warn('newDestination', newDestination)
       const destinationInfo = getCheckerboxCoordinates(board, destinationPoint.id)
 
+
       let newBoard = produce(board, draft => {
-        if (isChecker(checkerToMove)) {
-          draft.rail[checkerToMove.color] = newRail
-          draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
+        draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination as Point
+        if (isChecker(checkerToMove) && isRail(newOrigin)) {
+          draft.rail[checkerToMove.color] = newOrigin
+        }
+        if (isRail(newOpponentRail) && isChecker(hitChecker)) {
+          draft.rail[hitChecker.color] = newOpponentRail
         }
       })
+
 
       let newMove = produce(move, draft => {
         draft.destination = newDestination
@@ -64,10 +94,6 @@ export const reenter = (board: Board, move: Move): MoveResult => {
     }
 
     return moveResult
-  } else {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'Missing targetQuadrant'
-    })
   }
+  return moveResult
 }

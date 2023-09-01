@@ -1,6 +1,7 @@
 import { Color, CheckerBoxPosition, generateId, isColor } from '../../../../game'
 import { Checker } from '../../../Checker/state/types'
 import { CheckerProp } from '../../../Board/state/types/board'
+import { Rail } from '../../../Rail/state/types'
 
 export type Off = {
   id: string,
@@ -18,6 +19,7 @@ export const isOff = (v: any): v is Off => {
   const checkersIndex = keys.findIndex(k => k === 'checkers')
   const positionIndex = keys.findIndex(k => k === 'position')
   const colorIndex = keys.findIndex(k => k === 'color')
+
   if (idIndex === -1 || checkersIndex === -1 || positionIndex === -1 || colorIndex === -1) {
     return false
   }
@@ -30,7 +32,7 @@ export const isOff = (v: any): v is Off => {
 }
 
 export const initialize = (setup: CheckerProp[]): { white: Rail, black: Rail } => {
-  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'rail')
+  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'off')
   const whiteCheckers: Checker[] = []
   if (whiteCheckerSetup) {
     for (let i = 0; i < whiteCheckerSetup.checkerCount; i++) {
