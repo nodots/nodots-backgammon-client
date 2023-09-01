@@ -4,7 +4,7 @@ import { CheckerBox } from '../../../CheckerBox/state/types'
 import { Off, initialize as initializeOff } from '../../../Off/state/types'
 import { Rail, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
-import DEFAULT_SETUP from '../config/OFF.json'
+import DEFAULT_SETUP from '../config/reenter.partial.json'
 import { CHECKERS_PER_PLAYER, generateId } from '../../../../game/game'
 import { GameError } from '../../../../game/game'
 
@@ -53,12 +53,12 @@ export const initialize = (setup?: CheckerProp[]): Board => {
   if (!setup) {
     setup = DEFAULT_SETUP
   }
-  if (!sanityCheckSetup(setup)) {
-    throw new GameError({
-      model: 'Configuration',
-      errorMessage: 'Board initialization failed'
-    })
-  }
+  // if (!sanityCheckSetup(setup)) {
+  //   throw new GameError({
+  //     model: 'Configuration',
+  //     errorMessage: 'Board initialization failed'
+  //   })
+  // }
 
   const off = initializeOff(DEFAULT_SETUP)
   const rail = initializeRail(DEFAULT_SETUP)
@@ -104,7 +104,7 @@ function sanityCheckSetup (setup: CheckerProp[]): boolean {
     // return false
     console.log(blackCheckerCount)
     console.log(whiteCheckerCount)
-    return true
+    isSane = false
   }
   return isSane
 }

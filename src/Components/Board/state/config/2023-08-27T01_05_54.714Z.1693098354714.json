@@ -1,0 +1,14 @@
+[
+  { "color": "white", "checkerCount": 1, "position": 1 },
+  { "color": "white", "checkerCount": 1, "position": 3 },
+  { "color": "white", "checkerCount": 4, "position": 6 },
+  { "color": "black", "checkerCount": 1, "position": 7 },
+  { "color": "white", "checkerCount": 4, "position": 8 },
+  { "color": "black", "checkerCount": 3, "position": 12 },
+  { "color": "white", "checkerCount": 3, "position": 13 },
+  { "color": "black", "checkerCount": 3, "position": 17 },
+  { "color": "white", "checkerCount": 2, "position": 18 },
+  { "color": "black", "checkerCount": 6, "position": 19 },
+  { "color": "black", "checkerCount": 1, "position": 21 },
+  { "color": "black", "checkerCount": 1, "position": "rail" }
+]

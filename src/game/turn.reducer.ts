@@ -24,9 +24,9 @@ export interface TurnAction {
 
 export const reducer = (state: Turn, action: TurnAction): Turn => {
   const { type, payload } = action
-  console.log(`[Turn Reducer]: state`, state)
-  console.log(`[Turn Reducer]: type`, type)
-  console.log(`[Turn Reducer]: payload`, payload)
+  // console.log(`[Turn Reducer]: state`, state)
+  // console.log(`[Turn Reducer]: type`, type)
+  // console.log(`[Turn Reducer]: payload`, payload)
 
   const initializeMovesPayload: InitializeTurnAction = {
     board: payload.board,

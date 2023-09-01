@@ -125,98 +125,21 @@ export const reducer = (game: Game, action: any): Game => {
         draft.activeTurn.moves = []
       })
     case GAME_ACTION_TYPE.MOVE:
-      console.warn('[TRACEMOVE] game.reducer game.activeTurn', game.activeTurn)
-      console.warn('[TRACEMOVE] game.reducer game.board', game.board)
-      if (game.activeTurn.board === undefined) {
-        throw Error('No board')
-      }
-      console.warn('[TRACEMOVE] isTurn(game.activeTurn)', isTurn(game.activeTurn))
-      if (isTurn(game.activeTurn)) {
-        const activeTurn = produce(game.activeTurn as Turn, draft => {
-          // FIXME: Should not have to do this
-          if (game.activeTurn.board === undefined) {
-            draft.board = game.board
-          }
-          if (game.activeTurn.player === undefined) {
-            if (!isColor(game.activeColor)) {
-              throw new GameError({
-                model: 'Move',
-                errorMessage: 'Invalid color'
-              })
-            }
-            draft.player = game.players[game.activeColor]
-          }
+      console.warn('[REENTER DEBUG]: calling moveReducer game.activeTurn', game)
+      console.warn('[REENTER DEBUG]: calling moveReducer payload.checkerbox', payload.checkerbox)
+      const moveResults = moveReducer(game.activeTurn, payload.checkerbox)
+      console.warn('[REENTER DEBUG]: moveResults.board.quadrants[0].points[0].checkers', moveResults?.board.quadrants[0].points[0].checkers)
+      if (moveResults) {
+        return produce(game, draft => {
+          draft.board = moveResults.board
+          draft.activeTurn.moves[moveResults.move.order] = moveResults.move
         })
-        console.warn('[TRACEMOVE] activeTurn', activeTurn)
-        console.warn('[TRACEMOVE] payload.checkerbox', payload)
-        const newMove = moveReducer(activeTurn, payload.checkerbox)
-        console.log('[TRACEMOVE] newMove:', newMove)
-        console.log('[TRACEMOVE] moveMode:', newMove?.mode)
-
-        let finalBoard: Board | undefined = undefined
-        let finalMove: Move | undefined = undefined
-        if (!newMove) {
-          console.error('No newMove')
-          return game
-        }
-        switch (newMove.mode) {
-          case MoveMode.POINT_TO_POINT:
-          case MoveMode.POINT_TO_POINT_HIT:
-            finalBoard = pointToPoint(game.board, newMove)
-            console.warn('[TRACEMOVE] newMove:', newMove)
-            console.warn('[TRACEMOVE] newMove.status:', MoveMode[newMove.status])
-            if (newMove.status === MoveStatus.NO_MOVE) {
-              console.warn('[TRACEMOVE] NO_MOVE')
-            }
-            break
-          case MoveMode.BEAR_OFF:
-            console.log('[TRACEMOVE] game.reducer newMove:', newMove)
-            finalBoard = off(game.board, newMove)
-            break
-          case MoveMode.REENTER:
-            finalBoard = reenter(game.board, newMove)
-            break
-          case MoveMode.REENTER_HIT:
-            // FIXME
-            finalBoard = game.board
-            break
-          case MoveMode.NO_MOVE:
-            finalBoard = game.board
-            finalMove = produce(newMove, draft => {
-              draft.mode = MoveMode.NO_MOVE
-              draft.status = MoveStatus.NO_MOVE
-            })
-            break
-          default:
-            return game
-        }
-        let newState: Game | undefined = undefined
-        let activeMoveIndex = game.activeTurn.moves.findIndex(m => m.id === newMove.id)
-        if (!finalBoard) {
-          newState = produce(game, draft => {
-            // reset origin and destination for reverted move
-            draft.activeTurn.moves[activeMoveIndex].origin = undefined
-            draft.activeTurn.moves[activeMoveIndex].destination = undefined
-            draft.activeTurn.moves[activeMoveIndex].mode = undefined
-            draft.activeTurn.moves[activeMoveIndex].status = MoveStatus.INITIALIZED
-          })
-
-        } else {
-          newState = produce(game, draft => {
-            // reset origin and destination for reverted move
-            draft.board = finalBoard as Board
-            draft.activeTurn.moves[activeMoveIndex] = finalMove || newMove
-          })
-
-        }
-
-        saveState(newState)
-        return newState
-
+      } else {
+        throw new GameError({
+          model: 'Move',
+          errorMessage: 'No moveResults'
+        })
       }
-      return game
-
-
     case GAME_ACTION_TYPE.REVERT_MOVE: {
       const checkerToRevert = payload.checkerbox.checkers[payload.checkerbox.checkers.length - 1]
       if (!checkerToRevert) {

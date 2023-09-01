@@ -7,7 +7,7 @@ import { Board as BoardType } from './state'
 import { QuadrantLocation } from '../Quadrant/state/types'
 
 // UI
-import { Grid, Button, Dialog, Container, Input } from '@mui/material'
+import { Grid, Button, Dialog, DialogTitle, Input, DialogContent, DialogActions } from '@mui/material'
 
 // Components
 import Quadrant from '../Quadrant'
@@ -22,6 +22,12 @@ const Board = () => {
   const [isLoadModalOpen, setIsLoadModalOpen] = useState<boolean>(false)
   const { game } = useGame()
   const { players, cube, board } = game
+
+  type CloseReason = 'backdropClick' | 'escapeKeyDown' | 'closeButtonClick'
+
+  const closeLoadModal = (e: React.MouseEvent) => {
+    setIsLoadModalOpen(false)
+  }
 
   const pipSaveClickHandler = (e: React.MouseEvent) => {
     console.log('[USER NOTICE]: Saving board')
@@ -186,10 +192,6 @@ const Board = () => {
     }
   }
 
-  // for await (let line of makeTextFileLineIterator(urlOfFile)) {
-  //   processLine(line)
-  // })
-
   if (board) {
     const nwQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NW)
     const neQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NE)
@@ -209,12 +211,17 @@ const Board = () => {
         <Rail rail={board.rail.white} />
         <Button className='pip-count white' onClick={pipLoadClickHandler}>{game.players.white.pipCount}</Button>
         <Dialog open={isLoadModalOpen}>
-          <Container>
+          <DialogTitle>Import Board Config</DialogTitle>
+          <DialogContent>
             <Input type='file' onChange={loadBoardHandler} inputProps={{ accept: '*.json' }}></Input>
-          </Container>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeLoadModal}>Upload</Button>
+          </DialogActions>
         </Dialog>
       </Grid>
       <Grid item className='col right'>
+        {/* FIXME: the locationString shouldn't be necessary */}
         {neQuadrant && <Quadrant location={QuadrantLocation.NE} locationString='ne' quadrant={neQuadrant} />}
         <Grid item className='roll-surface'>
           {players.white && <RollSurface color='white' />}
@@ -252,7 +259,7 @@ const Board = () => {
           </>}
         </div>
       </Grid>
-    </Grid>
+    </Grid >
   } else {
     return <h1>No Game Set</h1>
   }

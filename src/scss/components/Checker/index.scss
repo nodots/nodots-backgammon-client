@@ -33,12 +33,18 @@ $accent: #6b000c;
 .off-container {
   .checker-box {
     .checker {
-      border-radius: 1px;
-      width: 3vw;
-      border-radius: none;
+      margin: 3px 0px;
+      height: 5vh;
+      width: 95% !important;
       .checker-overlay {
         display: none;
       }
+      // &:first-of-type {
+      //   border: 1px solid red;
+      // }
+      // &:last-of-type {
+      //   border: 1px solid blue;
+      // }
     }
   }
 }

@@ -1,119 +1,95 @@
-import { produce } from 'immer'
-import { isColor } from '..'
 import { GameError } from '../game'
+import { Checker } from '../../components/Checker/state'
 import { Board } from '../../components/Board/state'
-import { isCheckerBox } from '../../components/CheckerBox/state/types'
-import { isRail } from '../../components/Rail/state/types'
-import { Move, getCheckerboxCoordinates } from '.'
+import { Rail } from '../../components/Rail/state/types'
+import { Move, MoveStatus, getCheckerboxCoordinates } from '.'
 import { isChecker } from '../../components/Checker/state'
+import { isPoint } from '../../components/Point/state/types'
+import { MoveResult } from './reducer'
+import { QuadrantLocation, isQuadrant } from '../../components/Quadrant/state'
 
-export const reenter = (board: Board, move: Move): Board | undefined => {
-  console.log('reenter')
-  console.log(move)
-  if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'Missing origin or destination'
-    })
+export const reenter = (board: Board, move: Move): MoveResult => {
+  let moveResult = { board: board, move }
+  let checkerToMove: Checker | undefined = undefined
+
+  if (move.origin?.checkers && move.origin?.checkers.length > 0) {
+    checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
   }
 
-  const destinationInfo = getCheckerboxCoordinates(board, move.destination.id)
-  const checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
-  if (!isColor(checkerToMove.color)) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'Invalid color'
-    })
-  }
-  const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
+  const targetQuadrant =
+    move.direction === 'clockwise'
+      ? board.quadrants.find(q => q.location === QuadrantLocation.SE)
+      : board.quadrants.find(q => q.location === QuadrantLocation.NE)
 
-  // Blocked point
-  if (oldDestination.checkers.length > 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
-    // console.error('Point owned by opponent')
-    // return board
-    // Reenter and hit
-  } else if (oldDestination.checkers.length === 1 && oldDestination.checkers[0].color !== checkerToMove.color) {
-    console.log('Hitting opponents checker during reenter. move:', move)
-    if (!isCheckerBox(move.origin) || !isCheckerBox(move.destination)) {
-      throw new GameError({
-        model: 'Move',
-        errorMessage: 'Missing origin or destination'
-      })
-    }
-    const oldOrigin = board.rail[checkerToMove.color]
-    const destinationInfo = getCheckerboxCoordinates(board, move.destination.id)
+  if (isQuadrant(targetQuadrant)) {
+    const targetPointPosition = move.direction === 'clockwise'
+      ? move.dieValue
+      : 24 - move.dieValue + 1
 
-    const newOrigin = produce(oldOrigin, draft => {
-      draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
-    })
+    const targetPoint = targetQuadrant.points.find(p => p.position === targetPointPosition)
+    if (isPoint(targetPoint)) {
+      if (targetPoint.checkers.length === 0) {
+        if (move.origin) {
+          // const newOrigin = produce(move.origin, originDraft => {
+          //   originDraft.checkers.splice(originDraft.checkers.length - 1, 1)
+          // })
+          // const destinationInfo = getCheckerboxCoordinates(board, targetPoint.id)
+          // const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
+          // const newDestination = produce(oldDestination, oldDestinationDraft => {
+          //   if (isChecker(checkerToMove)) {
+          //     oldDestinationDraft.checkers.push(checkerToMove)
+          //   } else {
+          //     throw new GameError({
+          //       model: 'Move',
+          //       errorMessage: 'No checkerToMove'
+          //     })
+          //   }
+          // })
 
-    const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
-    const hitChecker = oldDestination.checkers[0]
-    const newDestination = produce(oldDestination, draft => {
-      draft.checkers = [checkerToMove]
-    })
+          // const newBoard: Board = produce(board, draft => {
+          //   if (isChecker(checkerToMove)) {
+          //     // FIXME
+          //     draft.rail[checkerToMove.color] = newOrigin as Rail
+          //     draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
+          //   } else {
+          //     throw new GameError({
+          //       model: 'Move',
+          //       errorMessage: 'No checkerToMove'
+          //     })
+          //   }
+          // })
 
-    const oldRail = board.rail[hitChecker.color]
-    const newRail = produce(oldRail, draft => {
-      draft.checkers.push(hitChecker)
-    })
+          // const newMove = produce(move, draft => {
+          //   draft.destination = newDestination
+          //   draft.status = MoveStatus.COMPLETED
+          // })
 
-    return produce(board, draft => {
-      draft.rail[checkerToMove.color] = newOrigin
-      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
-      draft.rail[hitChecker.color] = newRail
-    })
-  } else {
-    console.log('Plain reenter')
-    return produce(board, draft => {
-      if (!isRail(move.origin)) {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: 'Origin is not a rail'
-        })
-      }
-      if (!move.origin) {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: 'Missing origin'
-        })
-      }
-      if (!move.destination) {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: 'Missing destination'
-        })
-      }
-
-      const destinationInfo = getCheckerboxCoordinates(board, move.destination.id)
-      if (!checkerToMove) {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: 'No checker to move'
-        })
-      } else {
-        const checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
-        if (!isChecker(checkerToMove)) {
+          // return produce(moveResult, draft => {
+          //   draft.board = newBoard
+          //   draft.move = newMove
+          // })
+        } else {
           throw new GameError({
             model: 'Move',
-            errorMessage: 'Invalid checkerToMove'
+            errorMessage: 'No move.origin'
           })
         }
-        // Player has checkers on the rail and must move them first
-        const oldOrigin = board.rail[checkerToMove.color]
-        const newOrigin = produce(oldOrigin, draft => {
-          draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
-        })
-        console.log(newOrigin)
-        const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number]
-        const newDestination = produce(oldDestination, draft => {
-          draft.checkers.push(checkerToMove)
-        })
-        return produce(board, draft => {
-          draft.rail[checkerToMove.color] = newOrigin
-          draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination
-        })
+      } else {
+        throw new Error('More than one checker')
       }
+    } else {
+      throw new GameError({
+        model: 'Move',
+        errorMessage: 'No targetPoint'
+      })
+
+    }
+  } else {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'No targetQuadrant'
     })
   }
+
+  return moveResult
 }

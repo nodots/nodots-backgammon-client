@@ -1,24 +1,26 @@
 import { produce } from 'immer'
-import { isPlayer } from '../../components/Player/state/types/player'
+import { getHomeQuadrantLocation, isPlayer } from '../../components/Player/state/types/player'
 import { DieValue } from '../../components/Die/state'
 import { isColor, generateId, CHECKERS_PER_PLAYER } from '../game'
 import { GameError } from '../game'
-import { Move, isMove } from '../move'
+import { Player } from '../../components/Player/state'
+import { Move, isMove, off, pointToPoint } from '../move'
 import { Turn, isTurn } from '../turn'
 import { Checker } from '../../components/Checker/state'
 import { MoveMode } from '../../components/Board/state'
 import { MoveStatus, isCheckerBox, CheckerBox } from '../../components/CheckerBox/state'
 import { getBearOffQuadrantLocation } from '../../components/Player/state'
-import { getCheckerBoxes } from '../../components/Board/state'
-import { getHomeQuadrantLocation } from '../../components/Player/state/types/player'
-import { isBoard } from '../../components/Board/state/types/board'
+import { Board, getCheckerBoxes } from '../../components/Board/state/types/board'
+import { reenter } from '../move'
 import { reenterReducer } from './reenter.reducer'
 import { bearOffReducer } from './bear-off.reducer'
 import { pointToPointReducer } from './point-to-point.reducer'
+import { isPoint } from '../../components/Point/state/types'
+import { isQuadrant } from '../../components/Quadrant/state'
 
 export interface MoveResult {
-  mode: MoveMode,
-  destination: CheckerBox | undefined
+  move: Move
+  board: Board
 }
 
 export const isMoveResult = (mr: any): mr is MoveResult => {
@@ -28,113 +30,121 @@ export const isMoveResult = (mr: any): mr is MoveResult => {
   return true
 }
 
-export const reducer = (state: Turn, origin: CheckerBox): Move | undefined => {
-  console.warn('[TRACEMOVE] move reducer')
-  let moveResults: MoveResult | undefined = undefined
-  let activeMove = state.moves.find((m: Move) => (m.status === MoveStatus.INITIALIZED)) as Move
-  if (!activeMove) {
-    console.warn('[TRACEMOVE] move reducer noActiveMove')
-    return moveResults
-  }
-  console.warn('[TRACEMOVE] move reducer activeMove', activeMove)
-  if (!isBoard(state.board)) {
-    console.log(state.board)
-    throw new GameError({
-      model: 'Turn',
-      errorMessage: 'Invalid board'
-    })
-  }
-  if (!isPlayer(state.player)) {
-    throw new GameError({
-      model: 'Turn',
-      errorMessage: 'Invalid player'
-    })
-  }
-  const activePlayer = state.player
-  if (!isColor(activePlayer.color)) {
-    throw new GameError({
-      model: 'Turn',
-      errorMessage: 'Invalid color'
-    })
-  }
+export const reducer = (turn: Turn, origin: CheckerBox): MoveResult | undefined => {
+  let moveResult: MoveResult | undefined = undefined
+  const activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
 
-  console.log('[TRACEMOVE] state.moves', state.moves)
-  state.moves.forEach(m => {
-    console.log(m.origin)
-    if (m.mode) {
-      console.log('[TRACEMOVE] ', MoveMode[m.mode])
-    } else {
-      console.log('[TRACEMOVE] no moveMode')
+  if (isMove(activeMove)) {
+    const draftMove = produce(activeMove, draft => {
+      draft.origin = origin
+    })
+
+    const moveMode = getMoveMode(turn, origin, activeMove.dieValue)
+    switch (moveMode) {
+      case MoveMode.REENTER:
+        console.warn('[REENTER DEBUG] move reducer reenter turn.board', turn.board)
+        console.warn('[REENTER DEBUG] move reducer reenter draftMove', draftMove)
+        moveResult = reenter(turn.board, draftMove)
+        console.warn('[REENTER DEBUG] move reducer reenter moveResult.board.quadrants[0].points[0]', moveResult.board.quadrants[0].points[0])
+        break
+      case MoveMode.POINT_TO_POINT:
+        moveResult = pointToPoint(turn.board, activeMove)
+        break
+      case MoveMode.BEAR_OFF:
+        moveResult = off(turn.board, activeMove)
+        break
+      case MoveMode.NO_MOVE:
+      default:
+        moveResult = undefined
     }
-  })
-
-  let checkerToMove: Checker | undefined = undefined
-  let destination: CheckerBox | undefined = undefined
-  let revertOrigin: CheckerBox | undefined = undefined
-  let revertDestination: CheckerBox | undefined = undefined
-  let moveMode: MoveMode | undefined
-  if (!activeMove) {
-    console.error('You must roll first')
-    return moveResults
+  } else {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'No activeMove'
+    })
   }
-  moveResults = getMoveMode(state, activeMove.dieValue, origin)
-
-  console.log('[TRACEMOVE] moveResults:', moveResults)
-  checkerToMove = origin.checkers[origin.checkers.length - 1]
-  return produce(activeMove, draft => {
-    if (isMoveResult(moveResults)) {
-      if (moveResults.mode === MoveMode.NO_MOVE) {
-        draft.origin = undefined
-        draft.destination = undefined
-        draft.mode = undefined
-        draft.checker = undefined
-        draft.status = MoveStatus.NO_MOVE
-      } else {
-        draft.origin = origin
-        draft.mode = moveResults.mode
-        draft.checker = checkerToMove
-        draft.status = MoveStatus.COMPLETED
-        draft.destination = moveResults.destination
-      }
-    } else {
-      throw new GameError({
-        model: 'Move',
-        errorMessage: `Invalid moveResults`
-      })
-    }
-
-  })
+  return moveResult
 }
 
-function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveResult | undefined {
+function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveMode {
+  let moveMode = MoveMode.ERROR
+  if (isReenter(turn.board, turn.player)) {
+    moveMode = MoveMode.REENTER
+  } else if (canBearOff(turn.board, turn.player)) {
+    moveMode = MoveMode.BEAR_OFF
+  } else {
+    // P2P or NO_MOVE
+    if (typeof origin.position === 'number') {
+      const destinationPosition =
+        turn.player.moveDirection === 'clockwise'
+          ? origin.position + dieValue
+          : origin.position - dieValue
+
+      const destinationPoint = getCheckerBoxes(turn.board).find(cb => cb.position === destinationPosition)
+      if (isPoint(destinationPoint)) {
+        if (
+          // No checkers, go for it
+          destinationPoint.checkers.length === 0
+          ||
+          (
+            // One opponent checker, hit it
+            (destinationPoint.checkers.length === 1 && destinationPoint.checkers[0].color !== turn.player.color)
+            ||
+            // Player owns the point
+            (destinationPoint.checkers.length >= 1 && destinationPoint.checkers.filter(c => c.color !== turn.player.color).length === 0)
+          )
+        ) {
+          moveMode = MoveMode.POINT_TO_POINT
+        } else {
+          moveMode = MoveMode.NO_MOVE
+        }
+      } else {
+        moveMode = MoveMode.NO_MOVE
+      }
+    }
+
+  }
+  return moveMode
+}
+
+function canBearOff (board: Board, player: Player): boolean {
+  let bearOff = false
+
+  const bearOffQuadrantLocation = getBearOffQuadrantLocation(player.moveDirection)
+  const bearOffQuadrant = board.quadrants.find(q => q.location === bearOffQuadrantLocation)
+  if (!isQuadrant(bearOffQuadrant)) {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'No bearoff quadrant'
+    })
+  }
+  const playersOff = board.off[player.color]
+  const offCheckerCount = playersOff.checkers.length
+  let bearOffCheckerCount = offCheckerCount
+
+  bearOffQuadrant.points.forEach(p => bearOffCheckerCount += p.checkers.length)
+  if (bearOffCheckerCount === CHECKERS_PER_PLAYER) {
+    bearOff = true
+  }
+
+
+  return bearOff
+}
+
+function isReenter (board: Board, player: Player): boolean {
+  let isReenter = false
+  if (board.rail[player.color].checkers.length > 0) {
+    isReenter = true
+  }
+  return isReenter
+}
+
+function getMoveDestination (board: Board, player: Player, dieValue: DieValue, origin: CheckerBox): MoveResult | undefined {
   let moveResults: MoveResult | undefined = undefined
-  if (dieValue === undefined) {
-    console.error('You need to roll first')
-  }
-  console.warn('[TRACEMOVE] getMoveMode turn', turn)
-  console.warn('[TRACEMOVE] getMoveMode dieValue', dieValue)
-  console.warn('[TRACEMOVE] getMoveMode origin', origin)
 
-  if (!isTurn(turn)) {
-    throw new GameError({
-      model: 'Turn',
-      errorMessage: 'Invalid turn'
-    })
-  }
-
-  if (!isBoard(turn.board)) {
-    throw new GameError({
-      model: 'Turn',
-      errorMessage: 'Invalid board'
-    })
-  }
-
-  if (!isPlayer(turn.player)) {
-    throw new GameError({
-      model: 'Turn',
-      errorMessage: 'Invalid player'
-    })
-  }
+  console.warn('[TRACEMOVE] getMoveDestination turn', turn)
+  console.warn('[TRACEMOVE] getMoveDestination dieValue', dieValue)
+  console.warn('[TRACEMOVE] getMoveDestination origin', origin)
 
   if (!isCheckerBox(origin)) {
     throw new GameError({
@@ -143,9 +153,9 @@ function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveR
     })
   }
 
-  let totalBearOffCheckers = turn.board.off[turn.player.color].checkers.length
-  const bearOffQuadrantLocation = getBearOffQuadrantLocation(turn.player.moveDirection)
-  const bearOffQuadrant = turn.board.quadrants.find(q => q.location === bearOffQuadrantLocation)
+  let totalBearOffCheckers = board.off[player.color].checkers.length
+  const bearOffQuadrantLocation = getBearOffQuadrantLocation(player.moveDirection)
+  const bearOffQuadrant = board.quadrants.find(q => q.location === bearOffQuadrantLocation)
   if (bearOffQuadrant === undefined) {
     throw new GameError({
       model: 'Move',
@@ -153,41 +163,51 @@ function getMoveMode (turn: Turn, dieValue: DieValue, origin: CheckerBox): MoveR
     })
   }
   bearOffQuadrant.points.forEach(p => {
-    if (p.checkers.length > 0 && p.checkers[0].color === turn.player?.color) {
+    if (p.checkers.length > 0 && p.checkers[0].color === player.color) {
       totalBearOffCheckers += p.checkers.length
     }
   })
-  if (turn.board.rail[turn.player.color].checkers.length > 0) {
-    if (origin.position !== 'rail') {
-      console.warn('[TRACEMOVE] You have checkers on the rail and must move those first')
-    } else {
-      console.warn('[TRACEMOVE] calling reenterReducer')
-      moveResults = reenterReducer(turn, dieValue)
-      console.warn('[TRACEMOVE] reenterReducer moveResults', moveResults)
-      if (isMove(moveResults)) {
-        console.warn('[TRACEMOVE] reenter moveMode:', MoveMode[moveResults.mode])
-      } else {
-        console.warn('[TRACEMOVE] COULD NOT REENTER')
-      }
-    }
-  } else if (totalBearOffCheckers === CHECKERS_PER_PLAYER) {
-    console.warn('[TRACEMOVE] calling bearOffReducer')
-    moveResults = bearOffReducer(turn, origin, dieValue)
-  } else {
-    console.warn('[TRACEMOVE] origin:', origin)
-    console.warn('[TRACEMOVE] dieValue', dieValue)
-    console.warn('[TRACEMOVE] moveResults:', moveResults)
-    console.warn('[TRACEMOVE] calling pointToPointReducer')
-    moveResults = pointToPointReducer(turn, origin, dieValue)
-    console.warn('[TRACEMOVE] back from pointToPointReducer moveResults!!!:', moveResults)
-    console.warn('[TRACEMOVE] back from pointToPointReducer moveResults.mode:', MoveMode[moveResults?.mode])
-  }
-  console.warn('[TRACEMOVE] isMoveResult(moveResults):', isMoveResult(moveResults))
 
-  if (isMoveResult(moveResults)) {
-    return { mode: moveResults.mode, destination: moveResults.destination }
-  } else {
-    return moveResults
+  if (board.rail[player.color].checkers.length > 0) {
+    {
+      console.warn('REENTERING dieValue', dieValue)
+      const checkerToMove = board.rail[player.color].checkers[board.rail[player.color].checkers.length - 1]
+      // Where can we move? Back to our home quadrant.
+      if (player !== undefined) {
+
+        const homeQuadrant = board.quadrants.find(q => q.location === getHomeQuadrantLocation(player.moveDirection))
+        console.warn('REENTERING to homeQuadrant:', homeQuadrant)
+
+      }
+
+      // console.warn('[FUCKED TRACEMOVE] calling reenterReducer turn', turn)
+      // moveResults = reenterReducer(turn, dieValue)
+      // console.warn('[FUCKED TRACEMOVE] reenterReducer moveResults', moveResults)
+      // if (isMove(moveResults)) {
+      //   console.warn('[FUCKED TRACEMOVE] reenter moveMode:', MoveMode[moveResults.mode])
+      // } else {
+      //   console.warn('[FUCKED TRACEMOVE] COULD NOT REENTER')
+      // }
+    }
   }
+  //  else if (totalBearOffCheckers === CHECKERS_PER_PLAYER) {
+  //   console.warn('[TRACEMOVE] calling bearOffReducer')
+  //   moveResults = bearOffReducer(turn, origin, dieValue)
+  // } else {
+  //   console.log('[FUCKED HERE]')
+  //   console.warn('[TRACEMOVE] origin:', origin)
+  //   console.warn('[TRACEMOVE] dieValue', dieValue)
+  //   console.warn('[TRACEMOVE] moveResults:', moveResults)
+  //   console.warn('[TRACEMOVE] calling pointToPointReducer')
+  //   moveResults = pointToPointReducer(turn, origin, dieValue)
+  //   console.warn('[TRACEMOVE] back from pointToPointReducer moveResults!!!:', moveResults)
+  //   console.warn('[TRACEMOVE] back from pointToPointReducer moveResults.mode:', MoveMode[moveResults?.mode])
+  // }
+  // if (isMoveResult(moveResults)) {
+  //   return { mode: moveResults.mode, destination: moveResults.destination }
+  // } else {
+  //   return moveResults
+  // }
+  return undefined
 }
 

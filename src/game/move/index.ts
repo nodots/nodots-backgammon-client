@@ -1,4 +1,4 @@
-import { GameError } from '../game'
+import { GameError, MoveDirection } from '../game'
 import { getCheckerBoxes, isBoard } from '../../components/Board/state/types/board'
 import { Board, } from '../../components/Board/state'
 import { QuadrantLocation } from '../../components/Quadrant/state/types'
@@ -50,6 +50,8 @@ export type Move = {
   id: string
   dieValue: DieValue
   status: MoveStatus
+  direction: MoveDirection
+  order: number
   mode?: MoveMode
   checker?: Checker
   origin?: CheckerBox
