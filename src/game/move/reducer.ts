@@ -30,32 +30,36 @@ export const isMoveResult = (mr: any): mr is MoveResult => {
   return true
 }
 
-export const reducer = (turn: Turn, origin: CheckerBox): MoveResult | undefined => {
+export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
   let moveResult: MoveResult | undefined = undefined
   const activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
 
   if (isMove(activeMove)) {
-    const draftMove = produce(activeMove, draft => {
+    const newMove = produce(activeMove, draft => {
       draft.origin = origin
     })
-
     const moveMode = getMoveMode(turn, origin, activeMove.dieValue)
     switch (moveMode) {
       case MoveMode.REENTER:
-        console.warn('[REENTER DEBUG] move reducer reenter turn.board', turn.board)
-        console.warn('[REENTER DEBUG] move reducer reenter draftMove', draftMove)
-        moveResult = reenter(turn.board, draftMove)
-        console.warn('[REENTER DEBUG] move reducer reenter moveResult.board.quadrants[0].points[0]', moveResult.board.quadrants[0].points[0])
-        break
+        moveResult = reenter(turn.board, newMove)
+        return produce(turn, draft => {
+          if (isMoveResult(moveResult)) {
+            draft.board = moveResult.board
+            draft.moves[activeMove.order] = moveResult.move
+          }
+        })
+
       case MoveMode.POINT_TO_POINT:
-        moveResult = pointToPoint(turn.board, activeMove)
-        break
-      case MoveMode.BEAR_OFF:
-        moveResult = off(turn.board, activeMove)
-        break
+        moveResult = pointToPoint(turn.board, newMove)
+        return produce(turn, draft => {
+          if (isMoveResult(moveResult)) {
+            draft.board = moveResult.board
+            draft.moves[activeMove.order] = moveResult.move
+          }
+        })
       case MoveMode.NO_MOVE:
       default:
-        moveResult = undefined
+        return turn
     }
   } else {
     throw new GameError({
@@ -63,7 +67,7 @@ export const reducer = (turn: Turn, origin: CheckerBox): MoveResult | undefined 
       errorMessage: 'No activeMove'
     })
   }
-  return moveResult
+  return turn
 }
 
 function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveMode {

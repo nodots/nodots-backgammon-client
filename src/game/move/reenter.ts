@@ -1,20 +1,32 @@
+import { produce } from 'immer'
 import { GameError } from '../game'
-import { Checker } from '../../components/Checker/state'
+import { Checker, isChecker } from '../../components/Checker/state'
 import { Board } from '../../components/Board/state'
-import { Rail } from '../../components/Rail/state/types'
+import { isRail } from '../../components/Rail/state/types'
 import { Move, MoveStatus, getCheckerboxCoordinates } from '.'
-import { isChecker } from '../../components/Checker/state'
 import { isPoint } from '../../components/Point/state/types'
 import { MoveResult } from './reducer'
 import { QuadrantLocation, isQuadrant } from '../../components/Quadrant/state'
+import { isCheckerBox } from '../../components/CheckerBox/state'
 
 export const reenter = (board: Board, move: Move): MoveResult => {
-  let moveResult = { board: board, move }
+  let moveResult = { board, move }
   let checkerToMove: Checker | undefined = undefined
 
-  if (move.origin?.checkers && move.origin?.checkers.length > 0) {
-    checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
+  if (!isRail(move.origin)) {
+    throw new GameError({
+      model: 'Move',
+      errorMessage: 'Missing rail'
+    })
+
   }
+
+  const oldRail = board.rail[move.origin.color]
+  const newRail = produce(oldRail, draft => {
+    draft.checkers.splice(oldRail.checkers.length - 1, 1)
+  })
+
+  checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
 
   const targetQuadrant =
     move.direction === 'clockwise'
@@ -26,70 +38,36 @@ export const reenter = (board: Board, move: Move): MoveResult => {
       ? move.dieValue
       : 24 - move.dieValue + 1
 
-    const targetPoint = targetQuadrant.points.find(p => p.position === targetPointPosition)
-    if (isPoint(targetPoint)) {
-      if (targetPoint.checkers.length === 0) {
-        if (move.origin) {
-          // const newOrigin = produce(move.origin, originDraft => {
-          //   originDraft.checkers.splice(originDraft.checkers.length - 1, 1)
-          // })
-          // const destinationInfo = getCheckerboxCoordinates(board, targetPoint.id)
-          // const oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
-          // const newDestination = produce(oldDestination, oldDestinationDraft => {
-          //   if (isChecker(checkerToMove)) {
-          //     oldDestinationDraft.checkers.push(checkerToMove)
-          //   } else {
-          //     throw new GameError({
-          //       model: 'Move',
-          //       errorMessage: 'No checkerToMove'
-          //     })
-          //   }
-          // })
-
-          // const newBoard: Board = produce(board, draft => {
-          //   if (isChecker(checkerToMove)) {
-          //     // FIXME
-          //     draft.rail[checkerToMove.color] = newOrigin as Rail
-          //     draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
-          //   } else {
-          //     throw new GameError({
-          //       model: 'Move',
-          //       errorMessage: 'No checkerToMove'
-          //     })
-          //   }
-          // })
-
-          // const newMove = produce(move, draft => {
-          //   draft.destination = newDestination
-          //   draft.status = MoveStatus.COMPLETED
-          // })
-
-          // return produce(moveResult, draft => {
-          //   draft.board = newBoard
-          //   draft.move = newMove
-          // })
-        } else {
-          throw new GameError({
-            model: 'Move',
-            errorMessage: 'No move.origin'
-          })
+    const destinationPoint = targetQuadrant.points.find(p => p.position === targetPointPosition)
+    if (isCheckerBox(destinationPoint)) {
+      let newDestination = produce(destinationPoint, draft => {
+        if (isChecker(checkerToMove)) {
+          draft.checkers.push(checkerToMove)
         }
-      } else {
-        throw new Error('More than one checker')
-      }
-    } else {
-      throw new GameError({
-        model: 'Move',
-        errorMessage: 'No targetPoint'
+      })
+      console.warn('newDestination', newDestination)
+      const destinationInfo = getCheckerboxCoordinates(board, destinationPoint.id)
+
+      let newBoard = produce(board, draft => {
+        if (isChecker(checkerToMove)) {
+          draft.rail[checkerToMove.color] = newRail
+          draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
+        }
       })
 
+      let newMove = produce(move, draft => {
+        draft.destination = newDestination
+        draft.status = MoveStatus.COMPLETED
+      })
+      moveResult.board = newBoard
+      moveResult.move = newMove
     }
+
+    return moveResult
   } else {
     throw new GameError({
       model: 'Move',
-      errorMessage: 'No targetQuadrant'
+      errorMessage: 'Missing targetQuadrant'
     })
   }
-
-  return moveResult
 }

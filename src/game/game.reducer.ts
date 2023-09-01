@@ -128,11 +128,12 @@ export const reducer = (game: Game, action: any): Game => {
       console.warn('[REENTER DEBUG]: calling moveReducer game.activeTurn', game)
       console.warn('[REENTER DEBUG]: calling moveReducer payload.checkerbox', payload.checkerbox)
       const moveResults = moveReducer(game.activeTurn, payload.checkerbox)
-      console.warn('[REENTER DEBUG]: moveResults.board.quadrants[0].points[0].checkers', moveResults?.board.quadrants[0].points[0].checkers)
+      console.warn(moveResults.board.quadrants[0].points[0].checkers)
+      console.warn(moveResults.board.quadrants[0].points[1].checkers)
       if (moveResults) {
         return produce(game, draft => {
+          draft.activeTurn = moveResults
           draft.board = moveResults.board
-          draft.activeTurn.moves[moveResults.move.order] = moveResults.move
         })
       } else {
         throw new GameError({
