@@ -15,9 +15,7 @@ import { revert } from './revert'
 
 export enum MoveMode {
   POINT_TO_POINT,
-  POINT_TO_POINT_HIT,
   REENTER,
-  REENTER_HIT,
   BEAR_OFF,
   NO_MOVE,
   REVERT,

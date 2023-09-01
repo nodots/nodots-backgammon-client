@@ -4,17 +4,13 @@ import { DieValue } from '../../components/Die/state'
 import { isColor, generateId, CHECKERS_PER_PLAYER } from '../game'
 import { GameError } from '../game'
 import { Player } from '../../components/Player/state'
-import { Move, isMove, off, pointToPoint } from '../move'
+import { Move, isMove, off, pointToPoint, reenter, hit } from '../move'
 import { Turn, isTurn } from '../turn'
 import { Checker } from '../../components/Checker/state'
 import { MoveMode } from '../../components/Board/state'
 import { MoveStatus, isCheckerBox, CheckerBox } from '../../components/CheckerBox/state'
 import { getBearOffQuadrantLocation } from '../../components/Player/state'
 import { Board, getCheckerBoxes } from '../../components/Board/state/types/board'
-import { reenter } from '../move'
-import { reenterReducer } from './reenter.reducer'
-import { bearOffReducer } from './bear-off.reducer'
-import { pointToPointReducer } from './point-to-point.reducer'
 import { isPoint } from '../../components/Point/state/types'
 import { isQuadrant } from '../../components/Quadrant/state'
 
@@ -51,12 +47,22 @@ export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
 
       case MoveMode.POINT_TO_POINT:
         moveResult = pointToPoint(turn.board, newMove)
+
         return produce(turn, draft => {
           if (isMoveResult(moveResult)) {
             draft.board = moveResult.board
             draft.moves[activeMove.order] = moveResult.move
           }
         })
+      case MoveMode.POINT_TO_POINT_HIT:
+        moveResult = pointToPoint(turn.board, newMove)
+
+        const finalResult = produce(moveResult, draft => {
+
+        })
+
+
+        return turn
       case MoveMode.NO_MOVE:
       default:
         return turn
@@ -67,7 +73,6 @@ export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
       errorMessage: 'No activeMove'
     })
   }
-  return turn
 }
 
 function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveMode {
@@ -88,16 +93,11 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
       if (isPoint(destinationPoint)) {
         if (
           // No checkers, go for it
-          destinationPoint.checkers.length === 0
-          ||
-          (
-            // One opponent checker, hit it
-            (destinationPoint.checkers.length === 1 && destinationPoint.checkers[0].color !== turn.player.color)
-            ||
-            // Player owns the point
-            (destinationPoint.checkers.length >= 1 && destinationPoint.checkers.filter(c => c.color !== turn.player.color).length === 0)
-          )
-        ) {
+          destinationPoint.checkers.length === 0 ||
+          // Player owns the point
+          (destinationPoint.checkers.length >= 1 && destinationPoint.checkers.filter(c => c.color !== turn.player.color).length === 0) ||
+          // Can hit an opponent's checker
+          (destinationPoint.checkers.length === 1 && destinationPoint.checkers[0].color !== turn.player.color)) {
           moveMode = MoveMode.POINT_TO_POINT
         } else {
           moveMode = MoveMode.NO_MOVE

@@ -28,3 +28,14 @@ export const isCheckerBox = (v: any): v is CheckerBox => {
 
   return true
 }
+
+export const canAcceptChecker = (checkerbox: CheckerBox, checker: Checker) => {
+  let canAcceptChecker = false
+  if (checkerbox.checkers.length <= 1) {
+    canAcceptChecker = true
+  }
+  if (checkerbox.checkers.length >= 1 && checkerbox.checkers.filter(c => c.color !== checker.color).length === 0) {
+    canAcceptChecker = true
+  }
+  return canAcceptChecker
+}
