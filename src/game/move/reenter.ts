@@ -3,7 +3,7 @@ import { GameError } from '../game'
 import { Checker, isChecker } from '../../components/Checker/state'
 import { Board } from '../../components/Board/state'
 import { Rail, isRail } from '../../components/Rail/state/types'
-import { Move, MoveStatus, getCheckerboxCoordinates } from '.'
+import { Move, MoveStatus, MoveMode, getCheckerboxCoordinates } from '.'
 import { isPoint } from '../../components/Point/state/types'
 import { MoveResult } from './reducer'
 import { QuadrantLocation, isQuadrant } from '../../components/Quadrant/state'
@@ -91,7 +91,15 @@ export const reenter = (board: Board, move: Move): MoveResult => {
       })
       moveResult.board = newBoard
       moveResult.move = newMove
+    } else {
+      const newMove = produce(move, draft => {
+        draft.status = MoveStatus.NO_MOVE
+        draft.mode = MoveMode.NO_MOVE
+      })
+      moveResult = { board, move: newMove }
     }
+
+
 
     return moveResult
   }

@@ -1,18 +1,16 @@
 import { produce } from 'immer'
 import { getHomeQuadrantLocation, isPlayer } from '../../components/Player/state/types/player'
 import { DieValue } from '../../components/Die/state'
-import { isColor, generateId, CHECKERS_PER_PLAYER } from '../game'
 import { GameError } from '../game'
 import { Player } from '../../components/Player/state'
 import { Move, isMove, off, pointToPoint, reenter, hit } from '../move'
 import { Turn, isTurn } from '../turn'
-import { Checker } from '../../components/Checker/state'
 import { MoveMode } from '../../components/Board/state'
 import { MoveStatus, isCheckerBox, CheckerBox } from '../../components/CheckerBox/state'
 import { getBearOffQuadrantLocation } from '../../components/Player/state'
 import { Board, getCheckerBoxes } from '../../components/Board/state/types/board'
 import { isPoint } from '../../components/Point/state/types'
-import { isQuadrant } from '../../components/Quadrant/state'
+import { bearOff, canBearOff } from './bear-off'
 
 export interface MoveResult {
   move: Move
@@ -28,7 +26,12 @@ export const isMoveResult = (mr: any): mr is MoveResult => {
 
 export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
   let moveResult: MoveResult | undefined = undefined
-  const activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
+  let activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
+  const retriableMove = turn.moves.find(m => m.status === MoveStatus.NO_MOVE && m.mode === MoveMode.NO_MOVE)
+
+  if (retriableMove) {
+    activeMove = retriableMove
+  }
 
   if (isMove(activeMove)) {
     const newMove = produce(activeMove, draft => {
@@ -41,37 +44,44 @@ export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
         return produce(turn, draft => {
           if (isMoveResult(moveResult)) {
             draft.board = moveResult.board
-            draft.moves[activeMove.order] = moveResult.move
+            if (isMove(activeMove)) {
+              draft.moves[activeMove.order] = moveResult.move
+            }
           }
         })
-
-      case MoveMode.POINT_TO_POINT:
-        moveResult = pointToPoint(turn.board, newMove)
-
+      case MoveMode.BEAR_OFF:
+        console.warn('[BEAR_OFF] MoveMode.BEAR_OFF')
+        moveResult = bearOff(turn.board, newMove)
         return produce(turn, draft => {
           if (isMoveResult(moveResult)) {
             draft.board = moveResult.board
-            draft.moves[activeMove.order] = moveResult.move
+            if (isMove(activeMove)) {
+              draft.moves[activeMove.order] = moveResult.move
+            }
           }
         })
-      case MoveMode.POINT_TO_POINT_HIT:
+      case MoveMode.POINT_TO_POINT:
         moveResult = pointToPoint(turn.board, newMove)
-
-        const finalResult = produce(moveResult, draft => {
-
+        return produce(turn, draft => {
+          if (isMoveResult(moveResult)) {
+            draft.board = moveResult.board
+            if (isMove(activeMove)) {
+              draft.moves[activeMove.order] = moveResult.move
+            }
+          }
         })
-
-
-        return turn
       case MoveMode.NO_MOVE:
+        return produce(turn, draft => {
+          if (isMove(activeMove)) {
+            draft.moves[activeMove.order].status = MoveStatus.NO_MOVE
+            draft.moves[activeMove.order].mode = MoveMode.NO_MOVE
+          }
+        })
       default:
         return turn
     }
   } else {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'No activeMove'
-    })
+    console.error('Move completed.')
   }
 }
 
@@ -79,7 +89,7 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
   let moveMode = MoveMode.ERROR
   if (isReenter(turn.board, turn.player)) {
     moveMode = MoveMode.REENTER
-  } else if (canBearOff(turn.board, turn.player)) {
+  } else if (canBearOff(turn.board, dieValue, turn.player)) {
     moveMode = MoveMode.BEAR_OFF
   } else {
     // P2P or NO_MOVE
@@ -111,29 +121,29 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
   return moveMode
 }
 
-function canBearOff (board: Board, player: Player): boolean {
-  let bearOff = false
+// export function canBearOff (board: Board, player: Player): boolean {
+//   let bearOff = false
 
-  const bearOffQuadrantLocation = getBearOffQuadrantLocation(player.moveDirection)
-  const bearOffQuadrant = board.quadrants.find(q => q.location === bearOffQuadrantLocation)
-  if (!isQuadrant(bearOffQuadrant)) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'No bearoff quadrant'
-    })
-  }
-  const playersOff = board.off[player.color]
-  const offCheckerCount = playersOff.checkers.length
-  let bearOffCheckerCount = offCheckerCount
+//   const bearOffQuadrantLocation = getBearOffQuadrantLocation(player.moveDirection)
+//   const bearOffQuadrant = board.quadrants.find(q => q.location === bearOffQuadrantLocation)
+//   if (!isQuadrant(bearOffQuadrant)) {
+//     throw new GameError({
+//       model: 'Move',
+//       errorMessage: 'No bearoff quadrant'
+//     })
+//   }
+//   const playersOff = board.off[player.color]
+//   const offCheckerCount = playersOff.checkers.length
+//   let bearOffCheckerCount = offCheckerCount
 
-  bearOffQuadrant.points.forEach(p => bearOffCheckerCount += p.checkers.length)
-  if (bearOffCheckerCount === CHECKERS_PER_PLAYER) {
-    bearOff = true
-  }
+//   bearOffQuadrant.points.forEach(p => bearOffCheckerCount += p.checkers.length)
+//   if (bearOffCheckerCount === CHECKERS_PER_PLAYER) {
+//     bearOff = true
+//   }
 
 
-  return bearOff
-}
+//   return bearOff
+// }
 
 function isReenter (board: Board, player: Player): boolean {
   let isReenter = false

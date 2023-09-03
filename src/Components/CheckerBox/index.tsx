@@ -58,6 +58,10 @@ const CheckerBox = (props: CheckerBoxProps) => {
       console.warn('[TRACEMOVE] CheckerBox component clickHandler (single click)')
       if (props.checkerBox.checkers.length === 0) {
         return console.warn('[TRACEMOVE] No checker to move')
+      } else {
+        if (props.checkerBox.checkers[0].color !== game.activeColor) {
+          return alert('Not your checker')
+        }
       }
       const payload: MoveActionPayload = {
         player: activePlayer,
@@ -67,6 +71,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
       if (game.activeTurn.roll === undefined) {
         return alert('Roll the dice first')
       }
+
       try {
         console.warn('[TRACEMOVE] calling move method with payload:', payload)
         move(payload)

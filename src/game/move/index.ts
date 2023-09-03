@@ -10,7 +10,7 @@ import { GAME_ACTION_TYPE } from '../game.reducer'
 import { pointToPoint } from './point-to-point'
 import { hit } from './hit'
 import { reenter } from './reenter'
-import { off } from './off'
+import { bearOff } from './bear-off'
 import { revert } from './revert'
 
 export enum MoveMode {
@@ -144,55 +144,10 @@ export const isCheckerInTurn = (origin: CheckerBox, moves: Move[]): boolean => {
   return inTurn
 }
 
-
-// export const getMoveMode = (board: Board, origin: CheckerBox, destination: CheckerBox, activeColor: Color, activePlayer: Player, dieValue: DieValue): MoveMode => {
-
-//   if (board.rail[activeColor].checkers.length > 0) {
-//     return MoveMode.REENTER
-//   }
-//   if (origin.position === 'off') {
-//     throw new GameError({ model: 'Move', errorMessage: 'Cannot move from off' })
-//   }
-//   if (destination.position === 'rail') {
-//     throw new GameError({ model: 'Move', errorMessage: 'Cannot move to rail' })
-//   }
-//   if (typeof origin.position === 'number' && typeof destination.position === 'number') {
-//     if (!activePlayer || !activePlayer.active) {
-//       throw new GameError({ model: 'Move', errorMessage: 'No active player' })
-//     }
-//     if (destination.checkers && destination.checkers.length > 1 && destination.checkers[0].color !== activeColor) {
-//       throw new GameError({ model: 'Move', errorMessage: 'Destination is owned by opponent' })
-//     }
-
-//     if (destination.position === origin.position) {
-//       throw new GameError({ model: 'Move', errorMessage: 'Origin and destination cannot be the same' })
-//     }
-//     if (activePlayer.moveDirection === 'clockwise' && destination.position < origin.position) {
-//       // throw new GameError({ model: 'Move', errorMessage: 'Player moves clockwise' })
-//       // console.error('Player moves clockwise')
-//       return MoveMode.ERROR
-//     }
-//     if (activePlayer.moveDirection === 'counterclockwise' && destination.position > origin.position) {
-//       throw new GameError({ model: 'Move', errorMessage: 'Player moves counterclockwise' })
-//     }
-//     if (destination.checkers && destination.checkers.length === 1 && destination.checkers[0].color !== activeColor) {
-//       return MoveMode.HIT
-//     } else {
-//       return MoveMode.POINT_TO_POINT
-//     }
-//   } else if (typeof origin.position === 'number' && destination.position === 'off') {
-//     return MoveMode.BEAR_OFF
-//   } else if (origin.position === 'rail' && typeof destination.position === 'number') {
-//     return MoveMode.REENTER
-//   } else {
-//     throw new GameError({ model: 'Move', errorMessage: 'Unknown MoveMode' })
-//   }
-// }
-
 export {
   pointToPoint,
   reenter,
   revert,
   hit,
-  off
+  bearOff
 }
