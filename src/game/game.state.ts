@@ -33,7 +33,7 @@ function rollForStart (white: Player, black: Player): Player {
   return blackRoll > whiteRoll ? black : white
 }
 // const winner = rollForStart(whitePlayer, blackPlayer)
-const winner = blackPlayer
+const winner = whitePlayer
 winner.color === 'black' ? blackPlayer.active = true : whitePlayer.active = true
 
 const defaultGameState: Game = {

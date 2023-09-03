@@ -94,7 +94,7 @@ const RollSurface = (props: RollSurfaceProps) => {
       // noop
     } else {
       // const newRollValues = [roll(), roll()]
-      const newRollValues = [1 as DieValue, 1 as DieValue]
+      const newRollValues = [6 as DieValue, 6 as DieValue]
       console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
       const setDiceValuesPayload: SetDiceValuesPayload = {

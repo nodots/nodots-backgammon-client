@@ -27,11 +27,6 @@ export const isMoveResult = (mr: any): mr is MoveResult => {
 export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
   let moveResult: MoveResult | undefined = undefined
   let activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
-  const retriableMove = turn.moves.find(m => m.status === MoveStatus.NO_MOVE && m.mode === MoveMode.NO_MOVE)
-
-  if (retriableMove) {
-    activeMove = retriableMove
-  }
 
   if (isMove(activeMove)) {
     const newMove = produce(activeMove, draft => {
@@ -90,9 +85,11 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
   if (isReenter(turn.board, turn.player)) {
     moveMode = MoveMode.REENTER
   } else if (canBearOff(turn.board, dieValue, turn.player)) {
+    console.warn('[BEAR_OFF] reducer: canBearOff')
     moveMode = MoveMode.BEAR_OFF
   } else {
     // P2P or NO_MOVE
+    console.warn('[BEAR_OFF] reducer: cannot bear off')
     if (typeof origin.position === 'number') {
       const destinationPosition =
         turn.player.moveDirection === 'clockwise'

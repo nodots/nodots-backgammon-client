@@ -5,24 +5,38 @@
     "checkerCount": 4
   },
   {
-    "position": 23,
-    "color": "white",
-    "checkerCount": 1
-  },
-  {
     "position": 22,
     "color": "black",
-    "checkerCount": 5
+    "checkerCount": 4
+  },
+  {
+    "position": 21,
+    "color": "black",
+    "checkerCount": 4
+  },
+  {
+    "position": 20,
+    "color": "black",
+    "checkerCount": 3
   },
   {
     "position": 1,
     "color": "white",
     "checkerCount": 4
   },
-
   {
     "position": 3,
     "color": "white",
-    "checkerCount": 2
+    "checkerCount": 4
+  },
+  {
+    "position": 4,
+    "color": "white",
+    "checkerCount": 4
+  },
+  {
+    "position": 5,
+    "color": "white",
+    "checkerCount": 3
   }
 ]

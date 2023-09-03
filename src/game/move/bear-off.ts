@@ -1,20 +1,18 @@
 import { produce } from 'immer'
-import { isColor } from '..'
-import { Color, GameError } from '../game'
-import { Board, getCheckerBoxes } from '../../components/Board/state'
+import { CHECKERS_PER_PLAYER, GameError, MoveDirection } from '../game'
+import { Board } from '../../components/Board/state'
 import { Checker, isChecker } from '../../components/Checker/state'
 import { Player, isPlayer } from '../../components/Player/state'
-import { isCheckerBox } from '../../components/CheckerBox/state/types'
 import { Move, MoveStatus, getCheckerboxCoordinates, pointToPoint } from '.'
 import { MoveResult } from './reducer'
+import { Off } from '../../components/Off/state/types'
 import { Point, isPoint } from '../../components/Point/state/types'
-import { Off, isOff } from '../../components/Off/state/types'
-import { QuadrantLocation, Quadrant, isQuadrant } from '../../components/Quadrant/state'
+import { Quadrant, isQuadrant } from '../../components/Quadrant/state'
 import { DieValue } from '../../components/Die/state'
 import { getBearOffQuadrantLocation } from '../../components/Player/state'
 
 export const bearOff = (board: Board, move: Move): MoveResult => {
-  console.log('[BEAR_OFF] bear-off')
+  console.warn('[BEAR_OFF] bear-off')
   let moveResult = { board, move }
   let checkerToMove: Checker | undefined = undefined
 
@@ -38,8 +36,9 @@ export const bearOff = (board: Board, move: Move): MoveResult => {
       : newOrigin.position - move.dieValue
 
   console.warn('[BEAR_OFF] destinationPosition:', destinationPosition)
-  if (destinationPosition > 24 || destinationPosition < 0) {
+  if (destinationPosition > 24 || destinationPosition < 1) {
     console.warn('[BEAR_OFF] bearing off')
+
     const oldDestination = board.off[checkerToMove.color]
     const newDestination = produce(oldDestination, draft => {
       if (isChecker(checkerToMove)) {
@@ -67,26 +66,41 @@ export const bearOff = (board: Board, move: Move): MoveResult => {
 }
 
 export function canBearOff (board: Board, dieValue: DieValue, player: Player): boolean {
-  let bearOff = false
   let bearOffQuadrant: Quadrant | undefined = undefined
+  let bearOffCheckerbox: Off | undefined = undefined
   let bearOffPoint: Point | undefined = undefined
+  let bearOffPointsWithCheckers: Point[] = []
+  let totalBearOffCheckers = 0
 
   console.warn('[BEAR_OFF][canBearOff]')
 
   if (isPlayer(player)) {
     const bearOffQuadrantLocation = getBearOffQuadrantLocation(player.moveDirection)
     bearOffQuadrant = board.quadrants.find(q => q.location === bearOffQuadrantLocation)
+    bearOffCheckerbox = board.off[player.color]
+    totalBearOffCheckers = bearOffCheckerbox.checkers.length
+    if (isQuadrant(bearOffQuadrant)) {
+      bearOffQuadrant.points.forEach(p => {
+        const checkerCount = p.checkers.filter(c => c.color === player.color).length
+        totalBearOffCheckers += checkerCount
+      })
+      bearOffPoint = bearOffQuadrant.points.find(p => bearOffPointPositionToDieValue(p.position, player.moveDirection) <= dieValue)
+    }
     console.warn('[BEAR_OFF][canBearOff] bearOffQuadrant:', bearOffQuadrant)
-  }
-  const bearOffPointPosition =
-    player.moveDirection === 'clockwise'
-      ? 24 - dieValue + 1
-      : dieValue
+    console.warn('[BEAR_OFF][canBearOff] totalBearOffCheckers:', totalBearOffCheckers)
+    console.warn('[BEAR_OFF][canBearOff] bearOffPointsWithCheckers:', bearOffPointsWithCheckers)
+    console.warn('[BEAR_OFF][canBearOff] bearOffPoint:', bearOffPoint)
+    console.warn('[BEAR_OFF] dieValue:', dieValue)
 
-  if (isQuadrant(bearOffQuadrant)) {
-    bearOffPoint = bearOffQuadrant.points.find(p => p.position === bearOffPointPosition && p.checkers.length > 0 && p.checkers[0].color === player.color)
-  }
+    if (totalBearOffCheckers < CHECKERS_PER_PLAYER) {
+      return false
+    }
 
+
+  }
   return isPoint(bearOffPoint)
+}
 
+export function bearOffPointPositionToDieValue (position: number, direction: MoveDirection) {
+  return direction === 'counterclockwise' ? position : 25 - position
 }
