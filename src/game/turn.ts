@@ -127,7 +127,8 @@ export const initializeMoves = (action: InitializeTurnAction): Move[] => {
       dieValue,
       order: i,
       direction: moveDirection,
-      status: canmove ? MoveStatus.INITIALIZED : MoveStatus.NO_MOVE
+      status: canmove ? MoveStatus.INITIALIZED : MoveStatus.NO_MOVE,
+      hit: undefined
     }
     moves.push(move)
   }

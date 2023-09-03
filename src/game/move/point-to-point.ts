@@ -78,11 +78,14 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
     let newMove = produce(move, draft => {
       draft.destination = newDestination
       draft.status = MoveStatus.COMPLETED
+      if (draft.hit && isHit && isChecker(hitChecker)) {
+        draft.hit.checker = hitChecker
+      }
     })
 
     moveResult.board = newBoard
     moveResult.move = newMove
-  }
 
-  return moveResult
+    return moveResult
+  }
 }

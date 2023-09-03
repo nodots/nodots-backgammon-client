@@ -54,10 +54,10 @@ export type Move = {
   checker?: Checker
   origin?: CheckerBox
   destination?: CheckerBox
-  hit?: {
+  hit: {
     checker: Checker
     checkerbox: CheckerBox
-  }
+  } | undefined
 }
 
 export const isMove = (m: any): m is Move => {
