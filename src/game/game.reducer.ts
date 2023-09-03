@@ -51,9 +51,10 @@ export const reducer = (game: Game, action: any): Game => {
       return newCubeState
     case GAME_ACTION_TYPE.SET_DICE_VALUES:
       const newDice = diceReducer(game.dice, action)
-      // console.log('[Game Reducer]: SET_DICE_VALUES state.dice:', state.dice)
-      // console.log('[Game Reducer]: SET_DICE_VALUES type', type)
-      // console.log('[Game Reducer]: SET_DICE_VALUES payload.values:', payload.values)
+      const roll: Roll = [action.payload.values.die1, action.payload.values.die2]
+      console.warn('[SET_DICE_VALUES]: SET_DICE_VALUES state.dice:', game.dice)
+      console.warn('[SET_DICE_VALUES]: SET_DICE_VALUES type', type)
+      console.warn('[SET_DICE_VALUES]: SET_DICE_VALUES payload.values:', payload.values)
       if (game.activeTurn === undefined || game.activeTurn.status === undefined) {
         if (!isColor(game.activeColor)) {
           throw new GameError({
@@ -68,14 +69,21 @@ export const reducer = (game: Game, action: any): Game => {
             errorMessage: `No activePlayer`
           })
         }
-        const roll: Roll = [action.payload.values.die1, action.payload.values.die2]
+
         if (game.activeTurn.player === undefined) {
           initializeTurn({ board: game.board, player: activePlayer, roll })
         }
       }
-      return produce(game, draft => {
+      const newGame = produce(game, draft => {
         draft.dice = newDice
+        game.activeTurn.moves.forEach((m: Move, i: number) => {
+          console.warn(`[SET_DICE_VALUES] m:`, roll)
+          const dieValue = i % 2 ? roll[1] : roll[0]
+          draft.activeTurn.moves[i].dieValue = dieValue
+        })
       })
+      console.warn('[SET_DICE_VALUES] newGame:', newGame)
+      return newGame
     case GAME_ACTION_TYPE.INITIALIZE_TURN:
       const newTurn = turnReducer(game.activeTurn, action)
       console.warn('[TRACE] GAME_ACTION_TYPE.INITIALIZE_TURN newTurn:', newTurn)

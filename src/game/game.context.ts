@@ -10,8 +10,10 @@ import { MoveActionPayload } from './move'
 export const useGameContext = (initialState: Game) => {
   const [game, dispatch] = useReducer(reducer, initialGameState)
 
-  const setDiceValues = (payload: SetDiceValuesPayload) =>
+  const setDiceValues = (payload: SetDiceValuesPayload) => {
+    console.warn('[SET_DICE_VALUES] payload:', payload)
     dispatch({ type: GAME_ACTION_TYPE.SET_DICE_VALUES, payload })
+  }
   const setCubeValue = (payload: SetCubeValuePayload) =>
     dispatch({ type: GAME_ACTION_TYPE.SET_CUBE_VALUE, payload })
   const initializeTurn = (payload: InitializeTurnAction) =>
