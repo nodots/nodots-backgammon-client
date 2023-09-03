@@ -74,7 +74,8 @@ const CheckerBox = (props: CheckerBoxProps) => {
 
       try {
         console.warn('[TRACEMOVE] calling move method with payload:', payload)
-        move(payload)
+        const result = move(payload)
+        console.warn('[TRACEMOVE] result:', result)
       } catch (e) {
         console.error(e)
       }

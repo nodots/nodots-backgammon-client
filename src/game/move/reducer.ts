@@ -118,29 +118,6 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
   return moveMode
 }
 
-// export function canBearOff (board: Board, player: Player): boolean {
-//   let bearOff = false
-
-//   const bearOffQuadrantLocation = getBearOffQuadrantLocation(player.moveDirection)
-//   const bearOffQuadrant = board.quadrants.find(q => q.location === bearOffQuadrantLocation)
-//   if (!isQuadrant(bearOffQuadrant)) {
-//     throw new GameError({
-//       model: 'Move',
-//       errorMessage: 'No bearoff quadrant'
-//     })
-//   }
-//   const playersOff = board.off[player.color]
-//   const offCheckerCount = playersOff.checkers.length
-//   let bearOffCheckerCount = offCheckerCount
-
-//   bearOffQuadrant.points.forEach(p => bearOffCheckerCount += p.checkers.length)
-//   if (bearOffCheckerCount === CHECKERS_PER_PLAYER) {
-//     bearOff = true
-//   }
-
-
-//   return bearOff
-// }
 
 function isReenter (board: Board, player: Player): boolean {
   let isReenter = false

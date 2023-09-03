@@ -125,22 +125,20 @@ export const reducer = (game: Game, action: any): Game => {
         draft.activeTurn.moves = []
       })
     case GAME_ACTION_TYPE.MOVE:
-      console.warn('[REENTER DEBUG]: calling moveReducer game.activeTurn', game)
-      console.warn('[REENTER DEBUG]: calling moveReducer payload.checkerbox', payload.checkerbox)
       const moveResults = moveReducer(game.activeTurn, payload.checkerbox)
-      console.warn(moveResults.board.quadrants[0].points[0].checkers)
-      console.warn(moveResults.board.quadrants[0].points[1].checkers)
       if (moveResults) {
         return produce(game, draft => {
           draft.activeTurn = moveResults
           draft.board = moveResults.board
         })
       } else {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: 'No moveResults'
-        })
+        // throw new GameError({
+        //   model: 'Move',
+        //   errorMessage: 'No moveResults'
+        // })
+        console.error('[User Message]: no more moves. Click dice again to finalize move or double-click to revert.')
       }
+      return game
     case GAME_ACTION_TYPE.REVERT_MOVE: {
       const checkerToRevert = payload.checkerbox.checkers[payload.checkerbox.checkers.length - 1]
       if (!checkerToRevert) {
