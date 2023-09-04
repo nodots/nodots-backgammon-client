@@ -2,7 +2,7 @@
 import { useGame } from '../../game/useGame'
 import { useState } from 'react'
 // Types
-import { Die as DieType } from '../Die/state/types'
+import { roll, Die as DieType } from '../Die/state/types'
 import { Color, isColor } from '../../game'
 import { GameError } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
@@ -94,8 +94,8 @@ const RollSurface = (props: RollSurfaceProps) => {
       console.error('Turn in progress')
       // noop
     } else {
-      // const newRollValues = [roll(), roll()]
-      const newRollValues = [5 as DieValue, 6 as DieValue]
+      const newRollValues = [roll(), roll()]
+      // const newRollValues = [5 as DieValue, 6 as DieValue]
       console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
       const setDiceValuesPayload: SetDiceValuesPayload = {

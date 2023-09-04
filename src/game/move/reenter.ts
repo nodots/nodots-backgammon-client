@@ -16,10 +16,11 @@ export const reenter = (board: Board, move: Move): MoveResult => {
   let checkerToMove: Checker | undefined = undefined
 
   if (!isRail(move.origin)) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'Missing rail'
-    })
+    // throw new GameError({
+    //   model: 'Move',
+    //   errorMessage: 'Missing rail'
+    // })
+    console.error('[User Message]: you must move checkers on the rail first')
   }
 
   const oldOrigin = board.rail[move.origin.color]
