@@ -6,12 +6,13 @@ import { Die as DieType } from '../Die/state/types'
 import { Color, isColor } from '../../game'
 import { GameError } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
-import { DieValue, roll } from '../Die/state/types'
+import { DieValue } from '../Die/state/types'
 import { TurnStatus } from '../../game/turn'
 import { TurnActionPayload } from '../../game/turn.reducer'
+import { MoveStatus } from '../CheckerBox/state'
+
 // Components
 import Die from '../Die'
-import { MoveStatus } from '../CheckerBox/state'
 
 // MUI
 import SyncAltIcon from '@mui/icons-material/SyncAlt'

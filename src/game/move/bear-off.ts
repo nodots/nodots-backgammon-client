@@ -12,7 +12,6 @@ import { DieValue } from '../../components/Die/state'
 import { getBearOffQuadrantLocation } from '../../components/Player/state'
 
 export const bearOff = (board: Board, move: Move): MoveResult => {
-  console.warn('[BEAR_OFF] bear-off')
   let moveResult = { board, move }
   let checkerToMove: Checker | undefined = undefined
 
@@ -35,10 +34,7 @@ export const bearOff = (board: Board, move: Move): MoveResult => {
       ? newOrigin.position + move.dieValue
       : newOrigin.position - move.dieValue
 
-  console.warn('[BEAR_OFF] destinationPosition:', destinationPosition)
   if (destinationPosition > 24 || destinationPosition < 1) {
-    console.warn('[BEAR_OFF] bearing off')
-
     const oldDestination = board.off[checkerToMove.color]
     const newDestination = produce(oldDestination, draft => {
       if (isChecker(checkerToMove)) {
@@ -72,8 +68,6 @@ export function canBearOff (board: Board, dieValue: DieValue, player: Player): b
   let bearOffPointsWithCheckers: Point[] = []
   let totalBearOffCheckers = 0
 
-  console.warn('[BEAR_OFF][canBearOff]')
-
   if (isPlayer(player)) {
     const bearOffQuadrantLocation = getBearOffQuadrantLocation(player.moveDirection)
     bearOffQuadrant = board.quadrants.find(q => q.location === bearOffQuadrantLocation)
@@ -86,17 +80,9 @@ export function canBearOff (board: Board, dieValue: DieValue, player: Player): b
       })
       bearOffPoint = bearOffQuadrant.points.find(p => bearOffPointPositionToDieValue(p.position, player.moveDirection) <= dieValue)
     }
-    console.warn('[BEAR_OFF][canBearOff] bearOffQuadrant:', bearOffQuadrant)
-    console.warn('[BEAR_OFF][canBearOff] totalBearOffCheckers:', totalBearOffCheckers)
-    console.warn('[BEAR_OFF][canBearOff] bearOffPointsWithCheckers:', bearOffPointsWithCheckers)
-    console.warn('[BEAR_OFF][canBearOff] bearOffPoint:', bearOffPoint)
-    console.warn('[BEAR_OFF] dieValue:', dieValue)
-
     if (totalBearOffCheckers < CHECKERS_PER_PLAYER) {
       return false
     }
-
-
   }
   return isPoint(bearOffPoint)
 }

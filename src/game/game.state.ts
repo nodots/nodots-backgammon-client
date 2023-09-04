@@ -4,7 +4,6 @@ import { initBoardState } from '../components/Board/state'
 import { initDiceState, roll } from '../components/Die/state'
 import { Game, generateId } from './game'
 
-
 // FIXME: needs to be from user input
 const blackPlayer: Player = {
   id: generateId(),

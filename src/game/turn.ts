@@ -27,23 +27,18 @@ export type Turn = {
 }
 
 export const isTurn = (t: any): t is Turn => {
-  // console.warn('[TRACETURN] isTurn t', t)
   if (typeof t !== 'object') {
-    // console.warn('[TRACETURN] isTurn t is not an object')
     return false
   }
 
   const keys = Object.keys(t)
   const idIndex = keys.findIndex(k => k === 'id')
   if (idIndex === -1) {
-    console.warn('[TRACETURN] isTurn no id')
     return false
   }
 
   const boardIndex = keys.findIndex(k => k === 'board')
   if (boardIndex === -1) {
-    console.warn('[TRACETURN] isTurn no board')
-
     return false
   }
   if (!isBoard(t.board)) {
@@ -73,10 +68,7 @@ export interface InitializeTurnAction {
 }
 
 export const initializeTurn = (action: InitializeTurnAction): Turn => {
-  // console.warn('[TRACETURN] initializeTurn action:', action)
-  // console.warn('[TRACET] calling initializeMoves with action:', action)
   const moves: Move[] = initializeMoves(action)
-  // console.warn('[TRACETURN] initializingMoves returned moves.length:', moves.length)
 
   const turn: Turn = {
     id: generateId(),
@@ -86,15 +78,10 @@ export const initializeTurn = (action: InitializeTurnAction): Turn => {
     status: TurnStatus.INITIALIZED,
     moves: moves
   }
-  // console.warn('[TRACETURN] initializeTurn turn:', turn)
-  // console.warn('[TRACETURN] initializeTurn turn.moves:', turn.moves)
-  // console.warn('[TRACETURN] initializeTurn turn.board:', turn.board)
-
   return turn
 }
 
 export const resetTurn = (turn: Turn): Turn => {
-  // console.warn('[TRACETURN] resetTurn turn:', turn)
   return produce(turn, draft => {
     draft.id = undefined
     draft.player = undefined
@@ -105,15 +92,14 @@ export const resetTurn = (turn: Turn): Turn => {
 }
 
 export const initializeMoves = (action: InitializeTurnAction): Move[] => {
-  // console.warn('[TRACETURN] initializeMoves')
   const board = action.board
   const roll = action.roll
-  // console.warn('[TRACETURN] initializeMoves roll', roll)
   const player = action.player
   const moveDirection = player.moveDirection
 
   let moveCount = MOVES_PER_TURN
   const moves: Move[] = []
+
   // Handle double roll
   if (roll[0] === roll[1]) {
     moveCount = moveCount * 2
@@ -136,7 +122,6 @@ export const initializeMoves = (action: InitializeTurnAction): Move[] => {
 }
 
 function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
-  // console.warn('[CAN MOVE]')
   const checkerboxes = getCheckerBoxes(board)
   let destinationCount = 0
   const originPoints = checkerboxes.filter(cb => cb.checkers.length > 0 && cb.checkers[0].color === player.color && cb.position !== 'off')

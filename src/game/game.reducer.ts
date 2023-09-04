@@ -1,19 +1,16 @@
 import { produce } from 'immer'
-import { Board } from '../components/Board/state'
 import { Game, GameError, isColor } from './game'
 import { Roll } from '../components/Die/state/types'
-import { isTurn, Turn } from './turn'
-import { pointToPoint, hit, off, reenter, isMove } from './move'
+import { isMove } from './move'
 import { reducer as moveReducer } from './move/reducer'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { Move } from './move'
-import { MoveStatus, MoveMode } from '../components/CheckerBox/state/'
+import { MoveStatus } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
 import { initializeTurn } from './turn'
 import { revert } from './move/revert'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
-import CheckerBox from '../components/CheckerBox'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -52,9 +49,6 @@ export const reducer = (game: Game, action: any): Game => {
     case GAME_ACTION_TYPE.SET_DICE_VALUES:
       const newDice = diceReducer(game.dice, action)
       const roll: Roll = [action.payload.values.die1, action.payload.values.die2]
-      console.warn('[SET_DICE_VALUES]: SET_DICE_VALUES state.dice:', game.dice)
-      console.warn('[SET_DICE_VALUES]: SET_DICE_VALUES type', type)
-      console.warn('[SET_DICE_VALUES]: SET_DICE_VALUES payload.values:', payload.values)
       if (game.activeTurn === undefined || game.activeTurn.status === undefined) {
         if (!isColor(game.activeColor)) {
           throw new GameError({
@@ -77,18 +71,14 @@ export const reducer = (game: Game, action: any): Game => {
       const newGame = produce(game, draft => {
         draft.dice = newDice
         game.activeTurn.moves.forEach((m: Move, i: number) => {
-          console.warn(`[SET_DICE_VALUES] m:`, roll)
           const dieValue = i % 2 ? roll[1] : roll[0]
           draft.activeTurn.moves[i].dieValue = dieValue
         })
       })
-      console.warn('[SET_DICE_VALUES] newGame:', newGame)
       return newGame
     case GAME_ACTION_TYPE.INITIALIZE_TURN:
       const newTurn = turnReducer(game.activeTurn, action)
-      console.warn('[TRACE] GAME_ACTION_TYPE.INITIALIZE_TURN newTurn:', newTurn)
       const possibleMoves = newTurn.moves.filter(m => m.status === MoveStatus.INITIALIZED)
-      console.warn('[TRACE] GAME_ACTION_TYPE.INITIALIZE_TURN possibleMoves:', newTurn.moves)
       if (possibleMoves.length === 0) {
         return produce(game, draft => {
           draft.activeTurn.id = undefined
@@ -106,7 +96,6 @@ export const reducer = (game: Game, action: any): Game => {
           draft.activeTurn = newTurn
         })
       }
-
     case GAME_ACTION_TYPE.FINALIZE_TURN:
       return produce(game, draft => {
         if (!isColor(game.activeColor)) {

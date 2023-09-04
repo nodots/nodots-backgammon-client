@@ -3,7 +3,7 @@ import { getHomeQuadrantLocation, isPlayer } from '../../components/Player/state
 import { DieValue } from '../../components/Die/state'
 import { GameError } from '../game'
 import { Player } from '../../components/Player/state'
-import { Move, isMove, off, pointToPoint, reenter, hit } from '../move'
+import { Move, isMove, pointToPoint, reenter } from '../move'
 import { Turn, isTurn } from '../turn'
 import { MoveMode } from '../../components/Board/state'
 import { MoveStatus, isCheckerBox, CheckerBox } from '../../components/CheckerBox/state'
@@ -45,7 +45,6 @@ export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
           }
         })
       case MoveMode.BEAR_OFF:
-        console.warn('[BEAR_OFF] MoveMode.BEAR_OFF')
         moveResult = bearOff(turn.board, newMove)
         return produce(turn, draft => {
           if (isMoveResult(moveResult)) {
@@ -85,11 +84,9 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
   if (isReenter(turn.board, turn.player)) {
     moveMode = MoveMode.REENTER
   } else if (canBearOff(turn.board, dieValue, turn.player)) {
-    console.warn('[BEAR_OFF] reducer: canBearOff')
     moveMode = MoveMode.BEAR_OFF
   } else {
     // P2P or NO_MOVE
-    console.warn('[BEAR_OFF] reducer: cannot bear off')
     if (typeof origin.position === 'number') {
       const destinationPosition =
         turn.player.moveDirection === 'clockwise'
@@ -130,10 +127,6 @@ function isReenter (board: Board, player: Player): boolean {
 function getMoveDestination (board: Board, player: Player, dieValue: DieValue, origin: CheckerBox): MoveResult | undefined {
   let moveResults: MoveResult | undefined = undefined
 
-  console.warn('[TRACEMOVE] getMoveDestination turn', turn)
-  console.warn('[TRACEMOVE] getMoveDestination dieValue', dieValue)
-  console.warn('[TRACEMOVE] getMoveDestination origin', origin)
-
   if (!isCheckerBox(origin)) {
     throw new GameError({
       model: 'Move',
@@ -158,44 +151,13 @@ function getMoveDestination (board: Board, player: Player, dieValue: DieValue, o
 
   if (board.rail[player.color].checkers.length > 0) {
     {
-      console.warn('REENTERING dieValue', dieValue)
       const checkerToMove = board.rail[player.color].checkers[board.rail[player.color].checkers.length - 1]
       // Where can we move? Back to our home quadrant.
       if (player !== undefined) {
-
         const homeQuadrant = board.quadrants.find(q => q.location === getHomeQuadrantLocation(player.moveDirection))
-        console.warn('REENTERING to homeQuadrant:', homeQuadrant)
-
       }
-
-      // console.warn('[FUCKED TRACEMOVE] calling reenterReducer turn', turn)
-      // moveResults = reenterReducer(turn, dieValue)
-      // console.warn('[FUCKED TRACEMOVE] reenterReducer moveResults', moveResults)
-      // if (isMove(moveResults)) {
-      //   console.warn('[FUCKED TRACEMOVE] reenter moveMode:', MoveMode[moveResults.mode])
-      // } else {
-      //   console.warn('[FUCKED TRACEMOVE] COULD NOT REENTER')
-      // }
     }
   }
-  //  else if (totalBearOffCheckers === CHECKERS_PER_PLAYER) {
-  //   console.warn('[TRACEMOVE] calling bearOffReducer')
-  //   moveResults = bearOffReducer(turn, origin, dieValue)
-  // } else {
-  //   console.log('[FUCKED HERE]')
-  //   console.warn('[TRACEMOVE] origin:', origin)
-  //   console.warn('[TRACEMOVE] dieValue', dieValue)
-  //   console.warn('[TRACEMOVE] moveResults:', moveResults)
-  //   console.warn('[TRACEMOVE] calling pointToPointReducer')
-  //   moveResults = pointToPointReducer(turn, origin, dieValue)
-  //   console.warn('[TRACEMOVE] back from pointToPointReducer moveResults!!!:', moveResults)
-  //   console.warn('[TRACEMOVE] back from pointToPointReducer moveResults.mode:', MoveMode[moveResults?.mode])
-  // }
-  // if (isMoveResult(moveResults)) {
-  //   return { mode: moveResults.mode, destination: moveResults.destination }
-  // } else {
-  //   return moveResults
-  // }
   return undefined
 }
 

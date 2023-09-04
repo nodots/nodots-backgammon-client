@@ -93,6 +93,7 @@ export const revert = (board: Board, move: Move): { board: Board, move: Move } =
     draft.status = MoveStatus.INITIALIZED
     draft.mode = undefined
   })
+
   console.log('[Revert] finalMove', finalMove)
   return { board: finalBoard, move: finalMove }
 }

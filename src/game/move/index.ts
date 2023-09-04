@@ -1,11 +1,11 @@
 import { GameError, MoveDirection } from '../game'
-import { getCheckerBoxes, isBoard } from '../../components/Board/state/types/board'
+import { getCheckerBoxes } from '../../components/Board/state/types/board'
 import { Board, } from '../../components/Board/state'
 import { QuadrantLocation } from '../../components/Quadrant/state/types'
-import { Checker, isChecker } from '../../components/Checker/state'
-import { CheckerBox, isCheckerBox } from '../../components/CheckerBox/state/types'
+import { Checker } from '../../components/Checker/state'
+import { CheckerBox } from '../../components/CheckerBox/state/types'
 import { DieValue } from '../../components/Die/state'
-import { Player, isPlayer } from '../../components/Player/state'
+import { Player } from '../../components/Player/state'
 import { GAME_ACTION_TYPE } from '../game.reducer'
 import { pointToPoint } from './point-to-point'
 import { hit } from './hit'
@@ -61,9 +61,7 @@ export type Move = {
 }
 
 export const isMove = (m: any): m is Move => {
-  console.warn('[TRACEMOVE] isMove move', m)
   if (typeof m !== 'object') {
-    console.warn('[TRACEMOVE] isMove move is not an object')
     return false
   }
 
@@ -71,18 +69,16 @@ export const isMove = (m: any): m is Move => {
 
   const idIndex = keys.findIndex(k => k === 'id')
   if (idIndex === -1) {
-    console.warn('[TRACEMOVE] isMove move has no id')
     return false
   }
 
   const dieValueIndex = keys.findIndex(k => k === 'dieValue')
   if (dieValueIndex === -1) {
-    console.warn('[TRACEMOVE] isMove move has no dieValue')
     return false
   }
+
   const statusIndex = keys.findIndex(k => k === 'status')
   if (statusIndex === -1) {
-    console.warn('[TRACEMOVE] isMove move has no status')
     return false
   }
 

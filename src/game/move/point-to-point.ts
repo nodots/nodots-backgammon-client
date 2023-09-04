@@ -3,7 +3,7 @@ import { GameError } from '../game'
 import { getCheckerBoxes } from '../../components/Board/state'
 import { Board } from '../../components/Board/state'
 import { Checker, isChecker } from '../../components/Checker/state'
-import { CheckerBox, canAcceptChecker, isCheckerBox } from '../../components/CheckerBox/state/types'
+import { canAcceptChecker, isCheckerBox } from '../../components/CheckerBox/state/types'
 import { Move, MoveStatus, getCheckerboxCoordinates, hit } from '.'
 import { isRail, Rail } from '../../components/Rail/state/types'
 import { Point } from '../../components/Point/state/types'
@@ -32,7 +32,6 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
     move.direction === 'clockwise'
       ? newOrigin.position + move.dieValue
       : newOrigin.position - move.dieValue
-  console.warn('destinationPosition', destinationPosition)
   const destinationPoint = getCheckerBoxes(board).find(cb => typeof cb.position === 'number' && cb.position === destinationPosition)
 
   if (isCheckerBox(destinationPoint) && canAcceptChecker(destinationPoint, checkerToMove)) {
@@ -42,9 +41,6 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
       isHit = true
       hitChecker = opponentCheckers[0]
     }
-
-    console.warn('destinationPoint', destinationPoint)
-    console.warn('isHit', isHit)
 
     let oldRail: Rail | undefined = undefined
     let newRail: Rail | undefined = undefined
@@ -64,7 +60,6 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
         }
       }
     })
-    console.warn('newDestination', newDestination)
     const destinationInfo = getCheckerboxCoordinates(board, destinationPoint.id)
 
     let newBoard = produce(board, draft => {
@@ -88,4 +83,5 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
 
     return moveResult
   }
+  return moveResult
 }

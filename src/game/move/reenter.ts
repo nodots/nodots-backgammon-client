@@ -38,7 +38,6 @@ export const reenter = (board: Board, move: Move): MoveResult => {
     const targetPointPosition = move.direction === 'clockwise'
       ? move.dieValue
       : 24 - move.dieValue + 1
-    console.warn('targetPointPosition', targetPointPosition)
     const destinationPoint = targetQuadrant.points.find(p => p.position === targetPointPosition)
 
     if (isCheckerBox(destinationPoint) && canAcceptChecker(destinationPoint, checkerToMove)) {
@@ -48,9 +47,6 @@ export const reenter = (board: Board, move: Move): MoveResult => {
         isHit = true
         hitChecker = opponentCheckers[0]
       }
-
-      console.warn('destinationPoint', destinationPoint)
-      console.warn('isHit', isHit)
 
       let oldOpponentRail: Rail | undefined = undefined
       let newOpponentRail: Rail | undefined = undefined
@@ -70,9 +66,8 @@ export const reenter = (board: Board, move: Move): MoveResult => {
           }
         }
       })
-      console.warn('newDestination', newDestination)
-      const destinationInfo = getCheckerboxCoordinates(board, destinationPoint.id)
 
+      const destinationInfo = getCheckerboxCoordinates(board, destinationPoint.id)
 
       let newBoard = produce(board, draft => {
         draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination as Point
