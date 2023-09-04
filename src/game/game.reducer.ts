@@ -8,7 +8,7 @@ import { reducer as cubeReducer } from '../components/Cube/state/'
 import { Move } from './move'
 import { MoveStatus } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
-import { initializeTurn } from './turn'
+import { Turn, initializeTurn } from './turn'
 import { revert } from './move/revert'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
 
@@ -122,8 +122,29 @@ export const reducer = (game: Game, action: any): Game => {
         draft.activeTurn.moves = []
       })
     case GAME_ACTION_TYPE.MOVE:
-      const moveResults = moveReducer(game.activeTurn, payload.checkerbox)
+      let moveResults = moveReducer(game.activeTurn, payload.checkerbox)
       if (moveResults) {
+        const failedMove = moveResults.moves.find(m => m.status === MoveStatus.NO_MOVE)
+        console.log(failedMove)
+        console.log(moveResults)
+        // Check is we have different die values in roll then test with other die value if we have another move
+        if (isMove(failedMove) && game.activeTurn.roll[0] !== game.activeTurn.roll[1]) {
+          const nextMoveOrder = failedMove.order + 1
+          if (isMove(moveResults.moves[nextMoveOrder])) {
+            const die1Value = moveResults.moves[failedMove.order].dieValue
+            const die2Value = moveResults.moves[nextMoveOrder].dieValue
+            const turnDraft = produce(game.activeTurn as Turn, draft => {
+              draft.moves[failedMove.order].dieValue = die2Value
+              draft.moves[nextMoveOrder].dieValue = die1Value
+            })
+            console.log(turnDraft)
+            moveResults = moveReducer(turnDraft, payload.checkerbox)
+            return produce(game, draft => {
+              draft.activeTurn = moveResults
+              draft.board = moveResults.board
+            })
+          }
+        }
         return produce(game, draft => {
           draft.activeTurn = moveResults
           draft.board = moveResults.board

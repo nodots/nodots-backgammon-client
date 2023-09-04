@@ -1,14 +1,10 @@
 import { produce } from 'immer'
-import { generateId } from '.'
-import { GameError } from '.'
-import { Board } from '../components/Board/state'
-import { Player } from '../components/Player/state/types'
 import { InitializeTurnAction, Turn, TurnStatus, initializeMoves } from './turn'
-import { Roll } from '../components/Die/state/types'
+import { GameError, generateId } from '.'
+import { Board } from '../components/Board/state'
+import { Player } from '../components/Player/state'
+import { Roll } from '../components/Die/state'
 import { GAME_ACTION_TYPE } from './game.reducer'
-
-// import { CUBE_ACTION_TYPE } from '../cube.state'
-// import { SetCubeValuePayload } from '../cube.context'
 
 export interface TurnActionPayload {
   board: Board,
@@ -24,9 +20,6 @@ export interface TurnAction {
 
 export const reducer = (state: Turn, action: TurnAction): Turn => {
   const { type, payload } = action
-  // console.log(`[Turn Reducer]: state`, state)
-  // console.log(`[Turn Reducer]: type`, type)
-  // console.log(`[Turn Reducer]: payload`, payload)
 
   const initializeMovesPayload: InitializeTurnAction = {
     board: payload.board,
