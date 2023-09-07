@@ -1,99 +1,66 @@
 import { produce } from 'immer'
-import { GameError, isColor } from '../game'
+import { GameError } from '../game'
+import { getCheckerBoxes } from '../../components/Board/state'
 import { Board } from '../../components/Board/state'
-import { Rail } from '../../components/Rail/state/types'
-import { CheckerBox } from '../../components/CheckerBox/state'
-import { Move, MoveStatus, getCheckerboxCoordinates } from './index'
-import { Point } from '../../components/Point/state/types'
+import { Checker, isChecker } from '../../components/Checker/state'
+import { Move, MoveStatus, getCheckerboxCoordinates, hit } from '.'
+import { isRail, Rail } from '../../components/Rail/state/types'
+import { Point, isPoint } from '../../components/Point/state/types'
+import { MoveResult } from './reducer'
+import { sanityCheckBoard } from '../../components/Board/state/types'
 
-export const revert = (board: Board, move: Move): { board: Board, move: Move } => {
-  console.log('[Revert] move', move)
+export const revert = (board: Board, move: Move): MoveResult => {
+  let moveResult = { board, move }
 
-  if (!move.origin) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'No Move origin'
+  let isHit = false
+  let checkerToMove: Checker
+  let hitChecker: Checker
+  let origin: Point
+  let newOrigin: Point
+  let destination: Point
+  let newDestination: Point
+  let opponentRail: Rail
+  let newOpponentRail: Rail
+  let finalMove: Move
+  let finalBoard: Board
+
+  if (move.destination && isPoint(move.destination) && move.origin && isPoint(move.origin) && isChecker(move.checker)) {
+    origin = move.destination
+    destination = move.origin
+    checkerToMove = move.checker
+
+    const newOriginCheckers = origin.checkers.filter(c => c.id !== checkerToMove.id)
+    newOrigin = produce(origin, draft => {
+      draft.checkers = newOriginCheckers
     })
+    newDestination = produce(destination, draft => {
+      draft.checkers.push(checkerToMove)
+    })
+
+    finalMove = produce(move, draft => {
+      draft.origin = undefined
+      draft.destination = undefined
+      draft.checker = undefined
+      draft.status = MoveStatus.INITIALIZED
+    })
+
+    const originInfo = getCheckerboxCoordinates(board, origin.id)
+    const destinationInfo = getCheckerboxCoordinates(board, destination.id)
+
+    finalBoard = produce(board, draft => {
+      draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex] = newOrigin
+      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
+    })
+
+    sanityCheckBoard(finalBoard)
+
+    moveResult.move = finalMove
+    moveResult.board = finalBoard
+
   }
 
-  if (!move.destination) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'No Move destination'
-    })
-  }
 
-  if (!move.checker) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'No Checker'
-    })
-  }
 
-  const revertedOrigin = move.destination
-  const revertedDestination = move.origin
-
-  const originInfo = getCheckerboxCoordinates(board, revertedOrigin.id)
-  const oldOrigin = board.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex]
-  const newOrigin = produce(oldOrigin, draft => {
-    draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
-  })
-  let destinationInfo: { quadrantIndex: number, pointIndex: number } | undefined = undefined
-  let oldDestination: CheckerBox | undefined = undefined
-  if (typeof revertedDestination.position === 'number') {
-    destinationInfo = getCheckerboxCoordinates(board, revertedDestination.id)
-    oldDestination = board.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex]
-  } else if (revertedDestination.position === 'rail') {
-    oldDestination = board.rail[move.checker.color]
-  }
-
-  if (!oldDestination) {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'No oldDestination'
-    })
-  }
-
-  const newDestination = produce(oldDestination, draft => {
-    const checkerToMove = oldOrigin.checkers[oldOrigin.checkers.length - 1]
-    draft.checkers.push(checkerToMove)
-  })
-
-  let newRail: Rail | undefined = undefined
-  let newHitCheckerbox: CheckerBox | undefined = undefined
-  if (move.hit?.checker && move.hit?.checker) {
-    const hitChecker = move.hit.checker
-    const hitCheckerbox = move.hit.checkerbox
-    const oldRail = board.rail[hitChecker.color]
-    newRail = produce(oldRail, draft => {
-      draft.checkers.splice(oldRail.checkers.length - 1, 1)
-    })
-    newHitCheckerbox = produce(hitCheckerbox, draft => {
-      draft.checkers = [hitChecker]
-    })
-  }
-
-  const finalBoard = produce(board, draft => {
-    draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex as number] = newOrigin
-    if (destinationInfo) {
-      draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex as number] = newDestination as Point
-    } else if (newRail && isColor(newRail.color)) {
-      draft.rail[newRail.color] = newRail
-    }
-    if (newRail && newHitCheckerbox) {
-      const hitCheckerboxInfo = getCheckerboxCoordinates(board, newHitCheckerbox.id)
-      draft.rail[newRail.color] = newRail
-      draft.quadrants[hitCheckerboxInfo.quadrantIndex].points[hitCheckerboxInfo.pointIndex] = newHitCheckerbox as Point
-    }
-  })
-
-  const finalMove = produce(move, draft => {
-    draft.origin = undefined
-    draft.destination = undefined
-    draft.status = MoveStatus.INITIALIZED
-    draft.mode = undefined
-  })
-
-  console.log('[Revert] finalMove', finalMove)
-  return { board: finalBoard, move: finalMove }
+  return moveResult
 }
+

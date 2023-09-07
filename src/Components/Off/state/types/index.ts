@@ -1,7 +1,6 @@
 import { Color, CheckerBoxPosition, generateId, isColor } from '../../../../game'
 import { Checker } from '../../../Checker/state/types'
 import { CheckerProp } from '../../../Board/state/types/board'
-import { Rail } from '../../../Rail/state/types'
 
 export type Off = {
   id: string,
@@ -31,12 +30,12 @@ export const isOff = (v: any): v is Off => {
   return true
 }
 
-export const initialize = (setup: CheckerProp[]): { white: Rail, black: Rail } => {
+export const initialize = (setup: CheckerProp[]): { white: Off, black: Off } => {
   const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'off')
   const whiteCheckers: Checker[] = []
   if (whiteCheckerSetup) {
     for (let i = 0; i < whiteCheckerSetup.checkerCount; i++) {
-      whiteCheckers.push({ id: generateId(), color: 'white' })
+      whiteCheckers.push({ id: Math.random().toString(), color: 'white' })
     }
   }
 
@@ -44,19 +43,19 @@ export const initialize = (setup: CheckerProp[]): { white: Rail, black: Rail } =
   const blackCheckers: Checker[] = []
   if (blackCheckerSetup) {
     for (let i = 0; i < blackCheckerSetup.checkerCount; i++) {
-      blackCheckers.push({ id: generateId(), color: 'black' })
+      blackCheckers.push({ id: Math.random().toString(), color: 'black' })
     }
   }
 
   const white: Off = {
-    id: generateId(),
+    id: Math.random().toString(),
     color: 'white',
     position: 'off',
     checkers: whiteCheckers
   }
 
   const black: Off = {
-    id: generateId(),
+    id: Math.random().toString(),
     color: 'black',
     position: 'off',
     checkers: blackCheckers

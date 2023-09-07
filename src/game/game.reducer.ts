@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Game, GameError, isColor } from './game'
+import { Game, GameError, isColor, sanityCheck } from './game'
 import { Roll } from '../components/Die/state/types'
 import { isMove } from './move'
 import { reducer as moveReducer } from './move/reducer'
@@ -137,7 +137,6 @@ export const reducer = (game: Game, action: any): Game => {
               draft.moves[failedMove.order].dieValue = die2Value
               draft.moves[nextMoveOrder].dieValue = die1Value
             })
-            console.log(turnDraft)
             moveResults = moveReducer(turnDraft, payload.checkerbox)
             return produce(game, draft => {
               draft.activeTurn = moveResults
@@ -145,10 +144,16 @@ export const reducer = (game: Game, action: any): Game => {
             })
           }
         }
-        return produce(game, draft => {
+        const newGame = produce(game, draft => {
           draft.activeTurn = moveResults
           draft.board = moveResults.board
         })
+        if (sanityCheck(newGame)) {
+          return newGame
+        } else {
+          console.error('Invalid game')
+        }
+
       } else {
         // throw new GameError({
         //   model: 'Move',
@@ -165,7 +170,10 @@ export const reducer = (game: Game, action: any): Game => {
           errorMessage: 'No checkerToRevert'
         })
       }
-      const moveToRevert = game.activeTurn.moves.find(m => m.checker?.id === checkerToRevert.id)
+      console.log(checkerToRevert.id)
+      console.log(game.activeTurn.moves)
+      const moveToRevert = game.activeTurn.moves.find((m: Move) => m.checker?.id === checkerToRevert.id)
+
       if (!moveToRevert) {
         console.error('Cannot revert')
       }
@@ -179,6 +187,9 @@ export const reducer = (game: Game, action: any): Game => {
         })
 
         console.log('[Revert] revertedState:', revertedState)
+
+        sanityCheck(revertedState)
+
         return revertedState
       }
 

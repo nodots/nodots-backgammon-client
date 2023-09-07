@@ -1,5 +1,6 @@
 import { isColor } from '../../../../game/'
 import { Player, isPlayer } from '../../../Player/state'
+import { Checker } from '../../../Checker/state'
 import { CheckerBox } from '../../../CheckerBox/state/types'
 import { Off, initialize as initializeOff } from '../../../Off/state/types'
 import { Rail, initialize as initializeRail } from '../../../Rail/state/types'
@@ -64,7 +65,7 @@ export const initialize = (setup?: CheckerProp[]): Board => {
   const rail = initializeRail(DEFAULT_SETUP)
 
   const board: Board = {
-    id: generateId(),
+    id: Math.random.toString(), // Math.random().toString(),
     quadrants: initializeQuadrants(DEFAULT_SETUP),
     off,
     rail
@@ -135,4 +136,37 @@ export const getPipCountForPlayer = (board: Board, player: Player): number => {
     pipCount += board.rail.white.checkers.length * POINT_COUNT
   }
   return pipCount
+}
+
+export const sanityCheckBoard = (board: Board) => {
+  let isSane = true
+  const whiteCheckers: Checker[] = []
+  const blackCheckers: Checker[] = []
+
+  whiteCheckers.push(...board.rail.white.checkers)
+  whiteCheckers.push(...board.off.white.checkers)
+
+  blackCheckers.push(...board.rail.black.checkers)
+  blackCheckers.push(...board.off.black.checkers)
+
+  board.quadrants.forEach(q => {
+    q.points.forEach(p => {
+      whiteCheckers.push(...p.checkers.filter(c => c.color === 'white'))
+      blackCheckers.push(...p.checkers.filter(c => c.color === 'black'))
+    })
+  })
+
+
+  if (whiteCheckers.length !== CHECKERS_PER_PLAYER || blackCheckers.length !== CHECKERS_PER_PLAYER) {
+    isSane = false
+  }
+
+  const whiteCheckerSet = new Set(whiteCheckers)
+  const blackCheckerSet = new Set(blackCheckers)
+
+  if (whiteCheckerSet.size < whiteCheckers.length || blackCheckerSet.size < blackCheckers.length) {
+    console.error('Duplicate checker')
+    isSane = false
+  }
+
 }
