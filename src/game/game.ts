@@ -4,8 +4,7 @@ import { Player, Turn } from '../components/Player/state'
 import { Board, POINT_COUNT, getCheckerBoxes } from '../components/Board/state'
 import { Dice } from '../components/Die/state'
 import { TurnActionPayload } from './turn.reducer'
-import { Move } from './move'
-
+import { sanityCheckBoard } from '../components/Board/state'
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 export type CheckerBoxPosition = number | 'rail' | 'off'
@@ -19,7 +18,7 @@ export const isColor = (c: unknown): c is Color => {
   return false
 }
 
-export const generateId = (): string => {
+const generateId = (): string => {
   return uuid()
 }
 
@@ -32,7 +31,8 @@ export class GameError extends Error {
 }
 
 export type Game = {
-  board: Board
+  board: Bo
+  export coard
   dice: Dice
   cube: Cube
   players: {
@@ -47,3 +47,11 @@ export type Game = {
   finalizeTurn?: () => void
 }
 
+
+export const sanityCheck = (game: Game): boolean => {
+  let isSane = true
+
+  isSane = sanityCheckBoard(game.board)
+
+  return isSane
+}

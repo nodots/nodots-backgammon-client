@@ -52,10 +52,12 @@ export const revert = (board: Board, move: Move): MoveResult => {
       draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
     })
 
-    sanityCheckBoard(finalBoard)
+    // sanityCheckBoard(finalBoard)
 
     moveResult.move = finalMove
     moveResult.board = finalBoard
+
+    return moveResult
 
   }
 

@@ -1,5 +1,5 @@
 import { GameError, MoveDirection } from '../game'
-import { getCheckerBoxes } from '../../components/Board/state/types/board'
+import { getCheckerBoxes, sanityCheckBoard } from '../../components/Board/state/types/board'
 import { Board, } from '../../components/Board/state'
 import { QuadrantLocation } from '../../components/Quadrant/state/types'
 import { Checker } from '../../components/Checker/state'

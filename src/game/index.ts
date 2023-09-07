@@ -3,7 +3,6 @@ import {
   GameError,
   GameErrorType,
   Color,
-  generateId,
   CheckerBoxPosition,
   MoveDirection,
   isColor
@@ -11,7 +10,6 @@ import {
 
 export {
   GameError,
-  generateId,
   isColor
 }
 export type {

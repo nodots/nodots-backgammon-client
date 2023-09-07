@@ -2,11 +2,12 @@ import { isColor } from '../../../../game/'
 import { Player, isPlayer } from '../../../Player/state'
 import { Checker } from '../../../Checker/state'
 import { CheckerBox } from '../../../CheckerBox/state/types'
+import { Point } from '../../../Point/state/types'
 import { Off, initialize as initializeOff } from '../../../Off/state/types'
 import { Rail, initialize as initializeRail } from '../../../Rail/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
 import DEFAULT_SETUP from '../config/DEFAULT.json'
-import { CHECKERS_PER_PLAYER, generateId } from '../../../../game/game'
+import { CHECKERS_PER_PLAYER } from '../../../../game/game'
 import { GameError } from '../../../../game/game'
 
 export const POINT_COUNT = 24
@@ -138,8 +139,8 @@ export const getPipCountForPlayer = (board: Board, player: Player): number => {
   return pipCount
 }
 
-export const sanityCheckBoard = (board: Board) => {
-  let isSane = true
+
+export const getCheckers = (board: Board): { white: Checker[], black: Checker[] } => {
   const whiteCheckers: Checker[] = []
   const blackCheckers: Checker[] = []
 
@@ -156,17 +157,54 @@ export const sanityCheckBoard = (board: Board) => {
     })
   })
 
+  return { white: whiteCheckers, black: blackCheckers }
+}
+
+interface CheckerLocation {
+  checkerId: string,
+  location: Point | Rail | Off | undefined
+}
+
+export const findChecker = (board: Board, checkerId: string): Point | Rail | Off | void => {
+  let checkerLocation: Point | Rail | Off | void
+
+  checkerLocation = board.quadrants.forEach(q => {
+    q.points.forEach((p) => {
+      if (p.checkers.find(c => c.id === checkerId)) {
+        return p
+      }
+    })
+  })
+
+  console.log(checkerLocation)
+
+  return checkerLocation
+}
+
+export const sanityCheckBoard = (board: Board): boolean => {
+  let isSane = true
+
+  const checkers = getCheckers(board)
+  const whiteCheckers = checkers.white
+  const blackCheckers = checkers.black
 
   if (whiteCheckers.length !== CHECKERS_PER_PLAYER || blackCheckers.length !== CHECKERS_PER_PLAYER) {
-    isSane = false
+    return false
   }
 
   const whiteCheckerSet = new Set(whiteCheckers)
   const blackCheckerSet = new Set(blackCheckers)
 
-  if (whiteCheckerSet.size < whiteCheckers.length || blackCheckerSet.size < blackCheckers.length) {
-    console.error('Duplicate checker')
-    isSane = false
+  if (whiteCheckerSet.size !== whiteCheckers.length) {
+    return false
   }
+
+  if (blackCheckerSet.size !== blackCheckers.length) {
+    return false
+
+  }
+
+
+  return isSane
 
 }

@@ -1,5 +1,7 @@
 import { produce } from 'immer'
-import { Game, GameError, isColor, sanityCheck } from './game'
+import { Quadrant, QuadrantLocation } from '../components/Quadrant/state'
+import { findChecker, getCheckers } from '../components/Board/state/types/board'
+import { CHECKERS_PER_PLAYER, Game, GameError, isColor, sanityCheck } from './game'
 import { Roll } from '../components/Die/state/types'
 import { isMove } from './move'
 import { reducer as moveReducer } from './move/reducer'
@@ -11,6 +13,8 @@ import { turnReducer } from '../components/Player/state'
 import { Turn, initializeTurn } from './turn'
 import { revert } from './move/revert'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
+import { Point, isPoint } from '../components/Point/state/types'
+import { Checker } from '../components/Checker/state'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -128,22 +132,22 @@ export const reducer = (game: Game, action: any): Game => {
         console.log(failedMove)
         console.log(moveResults)
         // Check is we have different die values in roll then test with other die value if we have another move
-        if (isMove(failedMove) && game.activeTurn.roll[0] !== game.activeTurn.roll[1]) {
-          const nextMoveOrder = failedMove.order + 1
-          if (isMove(moveResults.moves[nextMoveOrder])) {
-            const die1Value = moveResults.moves[failedMove.order].dieValue
-            const die2Value = moveResults.moves[nextMoveOrder].dieValue
-            const turnDraft = produce(game.activeTurn as Turn, draft => {
-              draft.moves[failedMove.order].dieValue = die2Value
-              draft.moves[nextMoveOrder].dieValue = die1Value
-            })
-            moveResults = moveReducer(turnDraft, payload.checkerbox)
-            return produce(game, draft => {
-              draft.activeTurn = moveResults
-              draft.board = moveResults.board
-            })
-          }
-        }
+        // if (isMove(failedMove) && game.activeTurn.roll[0] !== game.activeTurn.roll[1]) {
+        //   const nextMoveOrder = failedMove.order + 1
+        //   if (isMove(moveResults.moves[nextMoveOrder])) {
+        //     const die1Value = moveResults.moves[failedMove.order].dieValue
+        //     const die2Value = moveResults.moves[nextMoveOrder].dieValue
+        //     const turnDraft = produce(game.activeTurn as Turn, draft => {
+        //       draft.moves[failedMove.order].dieValue = die2Value
+        //       draft.moves[nextMoveOrder].dieValue = die1Value
+        //     })
+        //     moveResults = moveReducer(turnDraft, payload.checkerbox)
+        //     return produce(game, draft => {
+        //       draft.activeTurn = moveResults
+        //       draft.board = moveResults.board
+        //     })
+        //   }
+        // }
         const newGame = produce(game, draft => {
           draft.activeTurn = moveResults
           draft.board = moveResults.board
@@ -151,6 +155,19 @@ export const reducer = (game: Game, action: any): Game => {
         if (sanityCheck(newGame)) {
           return newGame
         } else {
+          const activeTurnCopy = Object.assign(newGame.activeTurn)
+          console.log('Active Turn:', activeTurnCopy)
+          const boardCopy = Object.assign(newGame.board)
+          boardCopy.quadrants.forEach((q: Quadrant) => {
+            console.log('Quadrant location:', q.location)
+            console.log('-----------------------------')
+            q.points.forEach((p: Point) => {
+              p.checkers.forEach((c: Checker) => {
+                console.log(`${p.position} ${c.color} ${c.id}`)
+
+              })
+            })
+          })
           console.error('Invalid game')
         }
 
@@ -188,9 +205,16 @@ export const reducer = (game: Game, action: any): Game => {
 
         console.log('[Revert] revertedState:', revertedState)
 
-        sanityCheck(revertedState)
+        if (sanityCheck(revertedState)) {
+          return revertedState
 
-        return revertedState
+        } else {
+          throw new GameError({
+            model: 'Move',
+            errorMessage: 'Insane board'
+          })
+        }
+
       }
 
     }

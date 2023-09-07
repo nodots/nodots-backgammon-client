@@ -1,8 +1,9 @@
+import { v4 as generateId } from 'uuid'
 import { initCubeState } from '../components/Cube/state'
 import { Player } from '../components/Player/state'
 import { initBoardState } from '../components/Board/state'
 import { initDiceState, roll } from '../components/Die/state'
-import { Game, generateId } from './game'
+import { Game } from './game'
 
 // FIXME: needs to be from user input
 const blackPlayer: Player = {

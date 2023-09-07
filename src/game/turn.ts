@@ -1,5 +1,6 @@
+import { v4 as generateId } from 'uuid'
 import { produce } from 'immer'
-import { generateId, GameError } from '.'
+import { GameError } from '.'
 import { Player, isPlayer } from '../components/Player/state/types/player'
 import { Board, Move, MoveStatus } from '../components/Board/state/types'
 import { DieValue, Roll } from '../components/Die/state/types'

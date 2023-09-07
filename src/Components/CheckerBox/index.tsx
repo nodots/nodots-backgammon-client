@@ -1,12 +1,12 @@
+import { v4 as generateId } from 'uuid'
 // Hooks
 import { useGame } from '../../game/useGame'
 // Types
-import { isColor, generateId } from '../../game/game'
+import { isColor } from '../../game/game'
 import { GameError } from '../../game/game'
 import { CheckerBox as CheckerBoxType } from './state/types'
 import { getHomeQuadrantLocation } from '../Player/state/types/player'
 import { MoveActionPayload, } from '../../game/move'
-import { TurnStatus } from '../../game/turn'
 import Checker from '../Checker'
 import { Checker as CheckerType } from '../Checker/state/types'
 import { isPlayer } from '../Player/state/types/player'

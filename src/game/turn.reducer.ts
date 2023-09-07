@@ -1,6 +1,7 @@
+import { v4 as generateId } from 'uuid'
 import { produce } from 'immer'
 import { InitializeTurnAction, Turn, TurnStatus, initializeMoves } from './turn'
-import { GameError, generateId } from '.'
+import { GameError } from '.'
 import { Board } from '../components/Board/state'
 import { Player } from '../components/Player/state'
 import { Roll } from '../components/Die/state'
