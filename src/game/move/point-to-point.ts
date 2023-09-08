@@ -10,6 +10,7 @@ import { Point, isPoint } from '../../components/Point/state/types'
 import { MoveResult } from './reducer'
 
 export const pointToPoint = (board: Board, move: Move): MoveResult => {
+  console.log(move.origin?.checkers)
   let isHit = false
   let checkerToMove: Checker
   let hitChecker: Checker
@@ -30,11 +31,14 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
   }
 
   newOrigin = produce(move.origin, draft => {
+
     if (move.origin && move.origin.checkers) {
       draft.checkers.splice(move.origin.checkers.length - 1, 1)
+    } else {
+      throw Error('No origin')
     }
   })
-
+  console.log(newOrigin)
   checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
 
   const destinationPosition =
@@ -49,11 +53,16 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
         isChecker(checkerToMove) &&
         destination.checkers.filter(c => c.color !== checkerToMove?.color).length === 0)
     ) {
+      // FIXME: this is a massive hack to fix a problem with reverting moves.
+      const dupeChecker = destination.checkers.find(c => c.id === checkerToMove.id)
+
       newDestination = produce(destination, draft => {
-        if (isChecker(checkerToMove)) {
+        if (isChecker(checkerToMove) && !isChecker(dupeChecker)) {
           draft.checkers.push(checkerToMove)
         }
       })
+
+      console.log(newDestination)
 
       finalMove = produce(move, draft => {
         draft.checker = checkerToMove
