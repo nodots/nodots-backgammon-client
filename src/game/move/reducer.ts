@@ -25,6 +25,8 @@ export const isMoveResult = (mr: any): mr is MoveResult => {
 }
 
 export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
+  console.log(origin.checkers)
+
   let moveResult: MoveResult | undefined = undefined
   let activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
 

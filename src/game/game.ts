@@ -31,8 +31,7 @@ export class GameError extends Error {
 }
 
 export type Game = {
-  board: Bo
-  export coard
+  board: Board
   dice: Dice
   cube: Cube
   players: {

@@ -189,6 +189,7 @@ export const sanityCheckBoard = (board: Board): boolean => {
   const blackCheckers = checkers.black
 
   if (whiteCheckers.length !== CHECKERS_PER_PLAYER || blackCheckers.length !== CHECKERS_PER_PLAYER) {
+    console.log(whiteCheckers)
     return false
   }
 
@@ -196,6 +197,7 @@ export const sanityCheckBoard = (board: Board): boolean => {
   const blackCheckerSet = new Set(blackCheckers)
 
   if (whiteCheckerSet.size !== whiteCheckers.length) {
+    console.log(whiteCheckers)
     return false
   }
 
