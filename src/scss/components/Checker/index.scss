@@ -16,57 +16,6 @@ $accent: #6b000c;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  .checker-count {
-    font-size: 1rem;
-    color: $accent;
-  }
-
-  &.black {
-    background-color: $accent;
-  }
-
-  &.white {
-    background-color: #fff;
-  }
-}
-
-.off-container {
-  .checker-box {
-    .checker {
-      margin: 3px 0px;
-      height: 5vh;
-      width: 95% !important;
-      .checker-overlay {
-        display: none;
-      }
-      // &:first-of-type {
-      //   border: 1px solid red;
-      // }
-      // &:last-of-type {
-      //   border: 1px solid blue;
-      // }
-    }
-  }
-}
-
-$border: #212121;
-$border-light: #ccc;
-$dark: #006b5f;
-$background: #26a89d;
-$accent: #6b000c;
-
-.checker {
-  border: 2px solid $border;
-  border-radius: 50%;
-  width: 2.8vw;
-  height: 2.8vw;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
 
   &.black {
     background-color: $accent;

@@ -1,3 +1,4 @@
+import { Paper } from '@mui/material'
 import { useState } from 'react'
 // Hooks
 import { useGame } from '../../game/useGame'
@@ -17,6 +18,7 @@ import RollSurface from '../RollSurface'
 import Cube from '../Cube'
 import Die from '../Die'
 import { CheckerProp } from './state/types/board'
+import { light } from '@mui/material/styles/createPalette'
 
 const Board = () => {
   const [isLoadModalOpen, setIsLoadModalOpen] = useState<boolean>(false)
@@ -100,7 +102,6 @@ const Board = () => {
       config.push(blackOff)
     }
 
-    console.log(config)
     const dummyLink = document.createElement('a')
     dummyLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(config)))
     dummyLink.setAttribute('download', filename)
@@ -137,6 +138,7 @@ const Board = () => {
     const neQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NE)
     const swQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SW)
     const seQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SE)
+
     return <Grid container id='NodotsBgBoard'>
       <Grid item className='col left'>
         {nwQuadrant && <Quadrant location={QuadrantLocation.NW} locationString='nw' quadrant={nwQuadrant} />}
@@ -146,10 +148,10 @@ const Board = () => {
         {swQuadrant && <Quadrant location={QuadrantLocation.SW} locationString='sw' quadrant={swQuadrant} />}
       </Grid>
       <Grid item className='rail'>
-        <Button className='pip-count black' onClick={pipSaveClickHandler}>{game.players.black.pipCount}</Button>
+        <Button onClick={pipSaveClickHandler}>{game.players.black.pipCount}</Button>
         <Rail rail={board.rail.black} />
         <Rail rail={board.rail.white} />
-        <Button className='pip-count white' onClick={pipLoadClickHandler}>{game.players.white.pipCount}</Button>
+        <Button onClick={pipLoadClickHandler}>{game.players.white.pipCount}</Button>
         <Dialog open={isLoadModalOpen}>
           <DialogTitle>Import Board Config</DialogTitle>
           <DialogContent>
@@ -170,36 +172,36 @@ const Board = () => {
       </Grid>
       {/* Cube position changes with ownership, starting un-owned */}
       <Grid item className='off-container'>
-        <div className='dice-container'>
+        <Paper className='dice-container'>
           {game.activeColor !== 'black' &&
             <>
               <Die color='black' order={0} value={1} />
               <Die color='black' order={1} value={1} />
             </>
           }
-        </div>
-        <div className='cube-container'>
+        </Paper>
+        <Paper className='cube-container'>
           {cube.owner === 'black' && <Cube />}
-        </div>
+        </Paper>
         <Off off={board.off.black} />
-        <div className='cube-container'>
+        <Paper className='cube-container'>
           {!cube.owner &&
             <Cube />
           }
-        </div>
+        </Paper>
         <Off off={board.off.white} />
-        <div className='cube-container'>
+        <Paper className='cube-container'>
           {cube.owner === 'white'
             && <Cube />}
-        </div>
-        <div className='dice-container'>
+        </Paper>
+        <Paper className='dice-container'>
           {game.activeColor !== 'white' && <>
             <Die color='white' order={0} value={1} />
             <Die color='white' order={1} value={1} />
           </>}
-        </div>
+        </Paper>
       </Grid>
-    </Grid >
+    </Grid>
   } else {
     return <h1>No Game Set</h1>
   }

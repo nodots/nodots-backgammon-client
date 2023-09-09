@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import { useGame } from '../../game/useGame'
 import { SetCubeValuePayload } from './state'
 import { CubeValue, isCubeValue } from './state/types'
@@ -42,7 +43,7 @@ const Cube = () => {
     setCubeValue(payload)
   }
 
-  return <div className='cube' onClick={clickHandler}>{cube.value ? cube.value : 2}</div>
+  return <Button className='cube' onClick={clickHandler}>{cube.value ? cube.value : 2}</Button>
 }
 
 export default Cube

@@ -1,4 +1,5 @@
 import { v4 as generateId } from 'uuid'
+import { Paper } from '@mui/material'
 // Hooks
 import { useGame } from '../../game/useGame'
 // Types
@@ -118,9 +119,9 @@ const CheckerBox = (props: CheckerBoxProps) => {
     }
   })
 
-  return <div className='checker-box' onClick={handleClick} onContextMenu={handleClick}>
+  return <Paper className='checker-box' onClick={handleClick} onContextMenu={handleClick} elevation={0}>
     {checkers}
-  </ div>
+  </Paper>
 }
 
 export default CheckerBox

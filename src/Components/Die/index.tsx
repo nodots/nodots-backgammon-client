@@ -47,31 +47,3 @@ const Die = (props: DieProps) => {
 }
 
 export default Die
-
-
-
-
-// switch (newValue) {
-//   case 1:
-//     setValueClass('one')
-//     break
-//   case 2:
-//     setValueClass('two')
-//     break
-//   case 3:
-//     setValueClass('three')
-//     break
-//   case 4:
-//     setValueClass('four')
-//     break
-//   case 5:
-//     setValueClass('five')
-//     break
-//   case 6:
-//     setValueClass('six')
-//     break
-//   default:
-//     throw new GameError({ model: 'Die', errorMessage: `Invalid pips for die ${dieValue}` })
-// }
-
-// return newValue

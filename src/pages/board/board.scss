@@ -1,0 +1,29 @@
+.board-grid {
+  display: flex;
+  flex-direction: row;
+}
+.board-half {
+  width: 22vw;
+}
+
+.board-half-inner {
+  width: 100%;
+  background-color: #00988b !important;
+}
+
+.board-quadrant {
+  display: flex;
+  justify-content: space-between;
+
+  &.sw,
+  &.se {
+    flex-direction: row-reverse;
+  }
+}
+
+.board-point {
+  display: flex;
+  width: 3vw;
+  height: 18vw;
+  background-color: #00988b !important;
+}

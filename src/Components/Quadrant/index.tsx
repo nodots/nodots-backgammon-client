@@ -2,7 +2,7 @@ import { Quadrant as QuadrantType, QuadrantLocation } from './state/types'
 // Components
 import Point from '../Point'
 // UI
-import { Grid } from '@mui/material'
+import { Grid, Paper } from '@mui/material'
 
 interface QuadrantProps {
   location: QuadrantLocation
@@ -17,7 +17,9 @@ const Quadrant = (props: QuadrantProps) => {
     points.push(<Point point={p} location={props.location} locationString={props.locationString} key={p.id} />)
   })
   return <Grid item className={classes}>
-    {points}
+    <Paper className='point-container'>
+      {points}
+    </Paper>
   </Grid>
 }
 
