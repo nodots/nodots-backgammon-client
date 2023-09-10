@@ -11,21 +11,23 @@ interface PointBackgroundProps {
 
 const PointBackground = (props: PointBackgroundProps) => {
   let points: [number, number, number, number, number, number] = [
-    10, 0,
+    30, 0,
     0, 400,
-    20, 400
+    60, 400
   ]
   console.log(props.orientation)
-  // if (props.orientation === 'N') {
-  //   points = [
-  //     5, 0,
-  //     60, 0,
-  //     30, 400
-  //   ]
-  // }
-  const fillColor = props.position % 2 === 0 ? '#ff0000' : '#0000ff'
+  if (props.orientation === 'N') {
+    points = [
+      30, 400, //30, 0,
+      0, 0, // 0, 400,
+      60, 0// 60, 400
+    ]
+  }
+  const fillColor = props.position % 2 === 0 ? '#333355' : '#004f42'
+  const className = props.orientation === 'N' ? 'point-background north' : 'point-background south'
+
   return (
-    <svg>
+    <svg className={className} >
       <polygon points={points.join(',')} fill={fillColor} />
       Sorry, your browser does not support inline SVG.
     </svg>

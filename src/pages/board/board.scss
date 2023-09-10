@@ -19,11 +19,18 @@
   &.se {
     flex-direction: row-reverse;
   }
-}
 
-.board-point {
-  display: flex;
-  width: 3vw;
-  height: 18vw;
-  background-color: #00988b !important;
+  .board-point {
+    width: 3vw;
+    height: 18vw;
+    background-color: #00988b !important;
+
+    .point-background {
+      height: 100%;
+
+      // &.north {
+      //   transform: rotate(180deg);
+      // }
+    }
+  }
 }
