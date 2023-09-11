@@ -12,55 +12,55 @@ $secondary-light: #004f42;
 $secondary-main: #00988b;
 $secondary-dark: #004f42;
 
-.test-board {
+.board {
   display: flex;
   flex-direction: row;
   background-color: $primary-dark;
   padding: 2vw 1vw 2vw 2vw;
 
-  .test-roll-surface {
+  .roll-surface {
     background-color: $board-color;
     min-height: $checker-width;
   }
 
-  .test-rail,
-  .test-off {
+  .rail,
+  .off {
     padding: 5px;
     display: flex;
     justify-content: space-around;
     min-width: $checker-width * 1.1;
     flex-direction: column;
     align-items: center;
-    .test-rail-checker-box {
+    .rail-checker-box {
       height: 15vw;
       width: $checker-width;
       border: 1px solid gray;
     }
-    .test-off-checker-box {
+    .off-checker-box {
       height: 8vw;
       width: $checker-width;
       border: 1px solid gray;
     }
-    .test-cube-container {
+    .cube-container {
       height: $checker-width;
       width: $checker-width;
       border: 1px solid gray;
     }
-    .test-dice-container {
+    .dice-container {
       height: $checker-width * 1.5;
       width: $checker-width;
       border: 1px solid gray;
     }
   }
 
-  .test-quadrant {
+  .quadrant {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     background-color: $board-color;
     min-width: $point-width * 7;
 
-    .test-point {
+    .point {
       position: relative;
       display: flex;
       background-color: $board-color;
@@ -94,7 +94,7 @@ $secondary-dark: #004f42;
         }
       }
 
-      .test-checker-box {
+      .checker-box {
         display: flex;
 
         &.north {
@@ -107,19 +107,18 @@ $secondary-dark: #004f42;
       }
     }
   }
-}
+  .point-labels {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 
-.point-labels {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+    &.SW,
+    &.SE {
+      flex-direction: row-reverse;
+    }
 
-  &.SW,
-  &.SE {
-    flex-direction: row-reverse;
-  }
-
-  .point-label {
-    font-size: 0.6rem;
+    .point-label {
+      font-size: 0.6rem;
+    }
   }
 }

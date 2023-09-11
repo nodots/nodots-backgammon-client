@@ -32,7 +32,7 @@ const Checker = (props: CheckerProps) => {
 }
 
 const Point = (props: PointProps) => {
-  let className = props.orientation === 'N' ? 'test-point north' : 'test-point south'
+  let className = props.orientation === 'N' ? 'point north' : 'point south'
   className = props.position % 2 === 0 ?
     className += ` even` :
     className += ` odd`
@@ -64,14 +64,13 @@ const PointLabelContainer = (props: QuadrantProps) => {
 
 const Quadrant = (props: QuadrantProps) => {
   const points: React.JSX.Element[] = []
-
   const orientation = QuadrantLocation[props.quadrantLocation].substring(0, 1) as 'N' | 'S'
 
   for (let i = props.startingPosition; i < props.startingPosition + 6; i++) {
     points.push(<Point orientation={orientation} position={i} />)
   }
 
-  return <Box className='test-quadrant NW'>
+  return <Box className='quadrant NW'>
     {points}
   </Box>
 }
@@ -90,38 +89,36 @@ const Cube = () => {
   )
 }
 
-
 export const PointPage = (): JSX.Element => {
   return (
-    <Paper className='test-board' elevation={8}>
-      <Paper className='test-board-half' elevation={4}>
+    <Paper className='board' elevation={8}>
+      <Paper className='board-half' elevation={4}>
         <PointLabelContainer startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
         <Quadrant startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
-        <Box className='test-roll-surface'></Box>
+        <Box className='roll-surface'></Box>
         <Quadrant startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
         <PointLabelContainer startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
       </Paper>
-      <Box className='test-rail'>
-        <Paper className='test-rail-checker-box white'></Paper>
-        <Paper className='test-rail-checker-box black'></Paper>
+      <Box className='rail'>
+        <Paper className='rail-checker-box white'></Paper>
+        <Paper className='rail-checker-box black'></Paper>
       </Box>
-      <Paper className='test-board-half'>
+      <Paper className='board-half'>
         <PointLabelContainer startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
         <Quadrant startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
-        <Box className='test-roll-surface'></Box>
+        <Box className='roll-surface'></Box>
         <Quadrant startingPosition={1} quadrantLocation={QuadrantLocation.SW} />
         <PointLabelContainer startingPosition={1} quadrantLocation={QuadrantLocation.SW} />
       </Paper>
 
-      <Box className='test-off'>
-        <Paper className='test-cube-container'></Paper>
-        <Paper className='test-dice-container'></Paper>
-        <Paper className='test-off-checker-box black'></Paper>
-        <Paper className='test-cube-container'><Cube /></Paper>
-        <Paper className='test-off-checker-box white'></Paper>
-        <Paper className='test-dice-container'></Paper>
-        <Paper className='test-cube-container'></Paper>
-
+      <Box className='off'>
+        <Paper className='cube-container'></Paper>
+        <Paper className='dice-container'></Paper>
+        <Paper className='off-checker-box black'></Paper>
+        <Paper className='cube-container'><Cube /></Paper>
+        <Paper className='off-checker-box white'></Paper>
+        <Paper className='dice-container'></Paper>
+        <Paper className='cube-container'></Paper>
       </Box>
     </Paper>
   )
