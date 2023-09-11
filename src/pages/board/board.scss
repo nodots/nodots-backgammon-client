@@ -13,7 +13,7 @@
 
 .board-quadrant {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 
   &.sw,
   &.se {

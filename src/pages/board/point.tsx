@@ -1,0 +1,130 @@
+import { Box, Paper, IconButton } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+import './point.scss'
+import { QuadrantLocation } from '../../components/Quadrant/state'
+import { Color } from '../../game'
+import React from 'react'
+
+interface PointProps {
+  orientation: 'N' | 'S'
+  position: number
+}
+
+interface CheckerProps {
+  color: Color
+}
+const Checker = (props: CheckerProps) => {
+  const theme = useTheme()
+  console.log(theme.palette)
+  const fillColor =
+    props.color === 'white' ?
+      '#fff' :
+      '#ca1b22'
+
+  return (
+    <IconButton sx={{ margin: 0, padding: 0 }}>
+      <svg fill={fillColor} stroke='black' strokeWidth={1} height="3vw" width="3vw">
+        <circle cx="1.5vw" cy="1.5vw" r="1.5vw" />
+        Sorry, your browser does not support inline SVG.
+      </svg>
+    </IconButton>
+  )
+}
+
+const Point = (props: PointProps) => {
+  let className = props.orientation === 'N' ? 'test-point north' : 'test-point south'
+  className = props.position % 2 === 0 ?
+    className += ` even` :
+    className += ` odd`
+
+  return <Box className={className}>
+    <Checker color='black' />
+    <Checker color='black' />
+  </Box>
+}
+
+interface QuadrantProps {
+  startingPosition: number,
+  quadrantLocation: QuadrantLocation
+}
+
+
+const PointLabelContainer = (props: QuadrantProps) => {
+  const labels: React.JSX.Element[] = []
+
+  for (let i = props.startingPosition; i < props.startingPosition + 6; i++) {
+    labels.push(<Box className='point-label'>{i}</Box>)
+  }
+
+  return <Box className={`point-labels ${QuadrantLocation[props.quadrantLocation]}`}>
+    {labels}
+  </Box>
+
+}
+
+const Quadrant = (props: QuadrantProps) => {
+  const points: React.JSX.Element[] = []
+
+  const orientation = QuadrantLocation[props.quadrantLocation].substring(0, 1) as 'N' | 'S'
+
+  for (let i = props.startingPosition; i < props.startingPosition + 6; i++) {
+    points.push(<Point orientation={orientation} position={i} />)
+  }
+
+  return <Box className='test-quadrant NW'>
+    {points}
+  </Box>
+}
+
+const Cube = () => {
+  const theme = useTheme()
+  console.log(theme.palette)
+  const fillColor = '#ca1b22'
+
+  return (
+    <IconButton sx={{ margin: 0, padding: 0 }}>
+      <svg fill={fillColor} stroke='black' strokeWidth={1} height="3vw" width="3vw">
+        <rect height='2.8vw' width='2.8vw' />
+      </svg>
+    </IconButton>
+  )
+}
+
+
+export const PointPage = (): JSX.Element => {
+  return (
+    <Paper className='test-board' elevation={8}>
+      <Paper className='test-board-half' elevation={4}>
+        <PointLabelContainer startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
+        <Quadrant startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
+        <Box className='test-roll-surface'></Box>
+        <Quadrant startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
+        <PointLabelContainer startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
+      </Paper>
+      <Box className='test-rail'>
+        <Paper className='test-rail-checker-box white'></Paper>
+        <Paper className='test-rail-checker-box black'></Paper>
+      </Box>
+      <Paper className='test-board-half'>
+        <PointLabelContainer startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
+        <Quadrant startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
+        <Box className='test-roll-surface'></Box>
+        <Quadrant startingPosition={1} quadrantLocation={QuadrantLocation.SW} />
+        <PointLabelContainer startingPosition={1} quadrantLocation={QuadrantLocation.SW} />
+      </Paper>
+
+      <Box className='test-off'>
+        <Paper className='test-cube-container'></Paper>
+        <Paper className='test-dice-container'></Paper>
+        <Paper className='test-off-checker-box black'></Paper>
+        <Paper className='test-cube-container'><Cube /></Paper>
+        <Paper className='test-off-checker-box white'></Paper>
+        <Paper className='test-dice-container'></Paper>
+        <Paper className='test-cube-container'></Paper>
+
+      </Box>
+    </Paper>
+  )
+
+
+}

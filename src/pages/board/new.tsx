@@ -1,6 +1,7 @@
 import { Container, Grid, Paper } from '@mui/material'
 import './board.scss'
 import { QuadrantLocation } from '../../components/Quadrant/state'
+import { ResponsiveSVG } from '@cutting/svg'
 import { Color } from '../../game'
 import React from 'react'
 
@@ -11,30 +12,30 @@ interface PointBackgroundProps {
 
 const PointBackground = (props: PointBackgroundProps) => {
   let points: [number, number, number, number, number, number] = [
-    30, 0,
-    0, 400,
-    60, 400
+    40, 0,
+    0, 600,
+    80, 600
   ]
-  console.log(props.orientation)
-  if (props.orientation === 'N') {
-    points = [
-      30, 400, //30, 0,
-      0, 0, // 0, 400,
-      60, 0// 60, 400
-    ]
-  }
   const fillColor = props.position % 2 === 0 ? '#333355' : '#004f42'
   const className = props.orientation === 'N' ? 'point-background north' : 'point-background south'
 
+  const svgStyle = {
+    height: '100%',
+    width: '100%',
+    transform: ''
+  }
+
+  if (props.orientation === 'N') {
+    svgStyle.transform = 'rotate(180deg)'
+  }
+
   return (
-    <svg className={className} >
+    <svg className={className} style={svgStyle}>
       <polygon points={points.join(',')} fill={fillColor} />
       Sorry, your browser does not support inline SVG.
     </svg>
-
   )
 }
-
 
 interface CheckerProps {
   color: Color
@@ -54,9 +55,11 @@ interface PointProps {
 }
 
 const Point = (props: PointProps) => {
+  const orientation = QuadrantLocation[props.quadrantLocation].toLowerCase().substring(0, 1) as 'N' | 'S'
+
   return (
     <Paper elevation={0} className={`board-point ${QuadrantLocation[props.quadrantLocation].toLowerCase()}`}>
-      <PointBackground position={props.position} orientation={QuadrantLocation[props.quadrantLocation].substring(0, 1) as 'N' | 'S'} />
+      <PointBackground orientation={orientation} position={props.position} />
     </Paper>
   )
 }
