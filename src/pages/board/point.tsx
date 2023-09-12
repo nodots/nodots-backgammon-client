@@ -25,7 +25,6 @@ const Checker = (props: CheckerProps) => {
     <IconButton sx={{ margin: 0, padding: 0 }}>
       <svg fill={fillColor} stroke='black' strokeWidth={1} height="3vw" width="3vw">
         <circle cx="1.5vw" cy="1.5vw" r="1.5vw" />
-        Sorry, your browser does not support inline SVG.
       </svg>
     </IconButton>
   )
@@ -47,7 +46,6 @@ interface QuadrantProps {
   startingPosition: number,
   quadrantLocation: QuadrantLocation
 }
-
 
 const PointLabelContainer = (props: QuadrantProps) => {
   const labels: React.JSX.Element[] = []

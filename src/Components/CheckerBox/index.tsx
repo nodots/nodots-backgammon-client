@@ -119,9 +119,9 @@ const CheckerBox = (props: CheckerBoxProps) => {
     }
   })
 
-  return <Paper className='checker-box' onClick={handleClick} onContextMenu={handleClick} elevation={0}>
+  return <div onClick={handleClick} onContextMenu={handleClick}>
     {checkers}
-  </Paper>
+  </div>
 }
 
 export default CheckerBox

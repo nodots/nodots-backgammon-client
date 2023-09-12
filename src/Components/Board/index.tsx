@@ -1,10 +1,11 @@
-import { Paper } from '@mui/material'
+import { Paper, Box } from '@mui/material'
 import { useState } from 'react'
 // Hooks
 import { useGame } from '../../game/useGame'
 
 // Types
 import { Board as BoardType } from './state'
+import { Quadrant as QuadrantType } from '../Quadrant/state/types'
 import { QuadrantLocation } from '../Quadrant/state/types'
 
 // UI
@@ -12,6 +13,7 @@ import { Grid, Button, Dialog, DialogTitle, Input, DialogContent, DialogActions 
 
 // Components
 import Quadrant from '../Quadrant'
+import { PointLabelContainer } from '../Quadrant'
 import Rail from '../Rail'
 import Off from '../Off'
 import RollSurface from '../RollSurface'
@@ -134,74 +136,48 @@ const Board = () => {
   }
 
   if (board) {
-    const nwQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NW)
-    const neQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NE)
-    const swQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SW)
-    const seQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SE)
+    const nwQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NW) as QuadrantType
+    const neQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NE) as QuadrantType
+    const swQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SW) as QuadrantType
+    const seQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SE) as QuadrantType
+    return (
+      <Paper className='board' elevation={8}>
+        <Paper className='board-half' elevation={4}>
+          <PointLabelContainer quadrant={nwQuadrant} startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
+          <Quadrant quadrant={nwQuadrant} startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
+          <Box className='roll-surface'>
+            {players.black && <RollSurface color='black' />}
+          </Box>
+          <Quadrant quadrant={swQuadrant} startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
+          <PointLabelContainer quadrant={swQuadrant} startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
+        </Paper>
+        <Box className='rail'>
+          <Paper className='rail-checker-box white'><Rail rail={game.board.rail.black} /></Paper>
+          <Paper className='rail-checker-box black'><Rail rail={game.board.rail.white} /></Paper>
+        </Box>
+        <Paper className='board-half' elevation={4}>
+          <PointLabelContainer quadrant={neQuadrant} startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
+          <Quadrant quadrant={neQuadrant} startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
+          <Box className='roll-surface'>
+            {players.white && <RollSurface color='white' />}
 
-    return <Grid container id='NodotsBgBoard'>
-      <Grid item className='col left'>
-        {nwQuadrant && <Quadrant location={QuadrantLocation.NW} locationString='nw' quadrant={nwQuadrant} />}
-        <Grid item className='roll-surface'>
-          {players.black && <RollSurface color='black' />}
-        </Grid>
-        {swQuadrant && <Quadrant location={QuadrantLocation.SW} locationString='sw' quadrant={swQuadrant} />}
-      </Grid>
-      <Grid item className='rail'>
-        <Button onClick={pipSaveClickHandler}>{game.players.black.pipCount}</Button>
-        <Rail rail={board.rail.black} />
-        <Rail rail={board.rail.white} />
-        <Button onClick={pipLoadClickHandler}>{game.players.white.pipCount}</Button>
-        <Dialog open={isLoadModalOpen}>
-          <DialogTitle>Import Board Config</DialogTitle>
-          <DialogContent>
-            <Input type='file' onChange={loadBoardHandler} inputProps={{ accept: '*.json' }}></Input>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={closeLoadModal}>Upload</Button>
-          </DialogActions>
-        </Dialog>
-      </Grid>
-      <Grid item className='col right'>
-        {/* FIXME: the locationString shouldn't be necessary */}
-        {neQuadrant && <Quadrant location={QuadrantLocation.NE} locationString='ne' quadrant={neQuadrant} />}
-        <Grid item className='roll-surface'>
-          {players.white && <RollSurface color='white' />}
-        </Grid>
-        {seQuadrant && <Quadrant location={QuadrantLocation.SE} locationString='sw' quadrant={seQuadrant} />}
-      </Grid>
-      {/* Cube position changes with ownership, starting un-owned */}
-      <Grid item className='off-container'>
-        <Paper className='dice-container'>
-          {game.activeColor !== 'black' &&
-            <>
-              <Die color='black' order={0} value={1} />
-              <Die color='black' order={1} value={1} />
-            </>
-          }
+          </Box>
+          <Quadrant quadrant={seQuadrant} startingPosition={1} quadrantLocation={QuadrantLocation.SW} />
+          <PointLabelContainer quadrant={seQuadrant} startingPosition={1} quadrantLocation={QuadrantLocation.SW} />
         </Paper>
-        <Paper className='cube-container'>
-          {cube.owner === 'black' && <Cube />}
-        </Paper>
-        <Off off={board.off.black} />
-        <Paper className='cube-container'>
-          {!cube.owner &&
-            <Cube />
-          }
-        </Paper>
-        <Off off={board.off.white} />
-        <Paper className='cube-container'>
-          {cube.owner === 'white'
-            && <Cube />}
-        </Paper>
-        <Paper className='dice-container'>
-          {game.activeColor !== 'white' && <>
-            <Die color='white' order={0} value={1} />
-            <Die color='white' order={1} value={1} />
-          </>}
-        </Paper>
-      </Grid>
-    </Grid>
+
+        <Box className='off'>
+          <Paper className='cube-container'></Paper>
+          <Paper className='dice-container'></Paper>
+          <Paper className='off-checker-box black'><Off off={game.board.off.black} /></Paper>
+          <Paper className='cube-container'><Cube /></Paper>
+          <Paper className='off-checker-box white'><Off off={game.board.off.white} /></Paper>
+          <Paper className='dice-container'></Paper>
+          <Paper className='cube-container'></Paper>
+        </Box>
+      </Paper>
+    )
+
   } else {
     return <h1>No Game Set</h1>
   }

@@ -7,8 +7,7 @@ import reportHandler from './reportHandler'
 
 import NavBar from './components/Core/NavBar'
 // import { RegistrationPage } from './pages/registration'
-import { NewBoardPage } from './pages/board/new'
-import { PointPage } from './pages/board/point'
+import { BoardPage } from './pages/board'
 // import { Debug } from './components/Debug'
 
 import './App.scss'
@@ -24,13 +23,12 @@ const App = () => {
         <div className="App">
           <GameProvider>
             <Routes>
-              <Route path='/' element={<PointPage />} />
-              <Route path='/game' element={<NewBoardPage />} />
+              <Route path='/' element={<HomePage />} />
+              <Route path='/game' element={<BoardPage />} />
               <Route path='/sign-up' element={<RegistrationPage />} />
               <Route path='/sign-in' element={<RegistrationPage />} />
             </Routes>
           </GameProvider>
-
         </div>
       </Router>
     </ThemeProvider>
