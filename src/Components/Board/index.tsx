@@ -130,8 +130,6 @@ const Board = () => {
       let gameString: string = ''
 
       const result = await reader.read()
-      console.log(result)
-
     }
   }
 
@@ -141,7 +139,7 @@ const Board = () => {
     const swQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SW) as QuadrantType
     const seQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SE) as QuadrantType
     return (
-      <Paper className='board' elevation={8}>
+      <div className='board'>
         <Paper className='board-half' elevation={4}>
           <PointLabelContainer quadrant={nwQuadrant} startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
           <Quadrant quadrant={nwQuadrant} startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
@@ -160,13 +158,11 @@ const Board = () => {
           <Quadrant quadrant={neQuadrant} startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
           <Box className='roll-surface'>
             {players.white && <RollSurface color='white' />}
-
           </Box>
           <Quadrant quadrant={seQuadrant} startingPosition={1} quadrantLocation={QuadrantLocation.SW} />
           <PointLabelContainer quadrant={seQuadrant} startingPosition={1} quadrantLocation={QuadrantLocation.SW} />
         </Paper>
-
-        <Box className='off'>
+        <Box className='off-container'>
           <Paper className='cube-container'></Paper>
           <Paper className='dice-container'></Paper>
           <Paper className='off-checker-box black'><Off off={game.board.off.black} /></Paper>
@@ -175,7 +171,7 @@ const Board = () => {
           <Paper className='dice-container'></Paper>
           <Paper className='cube-container'></Paper>
         </Box>
-      </Paper>
+      </div>
     )
 
   } else {

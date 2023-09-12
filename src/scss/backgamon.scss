@@ -2,8 +2,9 @@
 @import url('./components/Board/index.scss');
 @import url('./components/Checker/index.scss');
 @import url('./components/CheckerBox/index.scss');
-@import url('./components/Cube/index.scss');
 @import url('./components/Die/index.scss');
+@import url('./components/Cube/index.scss');
+
 @import url('./components/Quadrant/index.scss');
 @import url('./components/Point/index.scss');
 @import url('./components/Info/index.scss');
@@ -17,19 +18,24 @@ $quadrant-width: $point-width * 7;
 
 $board-color: #00988b;
 
-$primary-dark: #333355;
+$primary-dark: rgba(20, 20, 33, 0.4);
 $primary-light: #a8afc7;
 $primary-main: #575f90;
 $secondary-light: #004f42;
 $secondary-main: #00988b;
 $secondary-dark: #004f42;
 
+.board-frame {
+  margin-top: 100px;
+  padding: 20px;
+  background-color: #212121;
+}
+
 .board {
   display: flex;
   flex-direction: row;
+  padding: 40px;
   background-color: $primary-dark;
-  padding: 2vw 1vw 2vw 2vw;
-
   .roll-surface {
     display: flex;
     flex-direction: row;
@@ -41,33 +47,54 @@ $secondary-dark: #004f42;
     cursor: pointer;
   }
 
-  .rail,
-  .off {
+  .rail {
     padding: 5px;
     display: flex;
     justify-content: space-around;
-    min-width: $checker-width * 1.1;
     flex-direction: column;
     align-items: center;
     .rail-checker-box {
       height: 15vw;
       width: $checker-width;
-      border: 1px solid gray;
+      border: 1px solid $primary-dark;
     }
     .off-checker-box {
       height: 8vw;
       width: $checker-width;
-      border: 1px solid gray;
+      border: 1px solid $primary-main;
     }
     .cube-container {
       height: $checker-width;
       width: $checker-width;
-      border: 1px solid gray;
+      border: 1px solid $primary-main;
     }
     .dice-container {
       height: $checker-width * 1.5;
       width: $checker-width;
-      border: 1px solid gray;
+      border: 1px solid $primary-main;
+    }
+  }
+
+  .off-container {
+    padding: 12px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    .off-checker-box {
+      height: 8vw;
+      width: $checker-width;
+      border: 1px solid $primary-main;
+    }
+    .cube-container {
+      height: $checker-width;
+      width: $checker-width;
+      border: 1px solid $primary-main;
+    }
+    .dice-container {
+      height: $checker-width * 1.5;
+      width: $checker-width;
+      border: 1px solid $primary-main;
     }
   }
 
@@ -139,4 +166,10 @@ $secondary-dark: #004f42;
       font-size: 0.6rem;
     }
   }
+}
+.cube {
+  background-color: $primary-main !important;
+  color: #fff !important;
+  height: $checker-width - 0.1;
+  width: $checker-width - 0.1;
 }

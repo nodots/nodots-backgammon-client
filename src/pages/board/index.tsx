@@ -1,11 +1,12 @@
 import Board from '../../components/Board'
-import { Container, Paper } from '@mui/material'
+import { Container, Paper, Box } from '@mui/material'
 import NavBar from '../../components/Core/NavBar'
 
 export const BoardPage = () => {
-  return <Container>
-    <Board />
-  </Container>
-
+  return <Box >
+    <Container className='board-frame'>
+      <Board />
+    </Container>
+  </Box>
 }
 
