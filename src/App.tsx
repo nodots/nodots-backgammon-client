@@ -23,8 +23,7 @@ const App = () => {
         <div className="App">
           <GameProvider>
             <Routes>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/game' element={<BoardPage />} />
+              <Route path='/' element={<BoardPage />} />
               <Route path='/sign-up' element={<RegistrationPage />} />
               <Route path='/sign-in' element={<RegistrationPage />} />
             </Routes>
