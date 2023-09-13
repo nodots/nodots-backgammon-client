@@ -25,17 +25,21 @@ $secondary-light: #004f42;
 $secondary-main: #00988b;
 $secondary-dark: #004f42;
 
-.board-frame {
-  margin-top: 100px;
-  padding: 20px;
-  background-color: #212121;
-}
-
 .board {
   display: flex;
   flex-direction: row;
-  padding: 20px 20px 20px 20px;
-  background-color: $primary-dark;
+  justify-content: center;
+  margin-top: 100px;
+
+  .board-half {
+    border-top: 25px solid #222;
+    border-bottom: 25px solid #222;
+
+    &.west {
+      border-left: 25px solid #222;
+    }
+  }
+
   .roll-surface {
     display: flex;
     flex-direction: row;
@@ -48,11 +52,15 @@ $secondary-dark: #004f42;
   }
 
   .rail {
+    border-radius: 0px !important;
     padding: 5px;
     display: flex;
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
+    border-top: 25px solid #222;
+    border-bottom: 25px solid #222;
+
     .rail-checker-box {
       height: 15vw;
       width: $checker-width;
@@ -76,26 +84,46 @@ $secondary-dark: #004f42;
   }
 
   .off-container {
+    border-radius: 0px !important;
+
     display: flex;
-    justify-content: space-around;
     flex-direction: column;
     align-items: center;
-    margin-left: 10px;
+    border-top: 25px solid #222;
+    border-bottom: 25px solid #222;
+    border-right: 25px solid #222;
 
     .off-checker-box {
       height: 8vw;
       width: $checker-width;
       border: 1px solid $primary-main;
+      margin: 20px;
     }
     .cube-container {
       height: $checker-width;
       width: $checker-width;
       border: 1px solid $primary-main;
+      margin: 20px;
+
+      .cube {
+        padding: 0px !important;
+        font-size: 2rem;
+        font-weight: bold;
+        display: grid;
+        place-items: center;
+        background-color: $primary-main !important;
+        color: #fff !important;
+        height: 95%;
+        width: 95%;
+        margin: 2px;
+        text-align: center;
+      }
     }
     .dice-container {
       height: $checker-width * 1.5;
       width: $checker-width;
       border: 1px solid $primary-main;
+      margin: 20px;
     }
   }
 
@@ -171,10 +199,4 @@ $secondary-dark: #004f42;
       font-size: 0.6rem;
     }
   }
-}
-.cube {
-  background-color: $primary-main !important;
-  color: #fff !important;
-  height: $checker-width - 0.1;
-  width: $checker-width - 0.1;
 }
