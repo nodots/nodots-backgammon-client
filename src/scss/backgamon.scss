@@ -34,7 +34,7 @@ $secondary-dark: #004f42;
 .board {
   display: flex;
   flex-direction: row;
-  padding: 40px;
+  padding: 20px 20px 20px 20px;
   background-color: $primary-dark;
   .roll-surface {
     display: flex;
@@ -76,11 +76,12 @@ $secondary-dark: #004f42;
   }
 
   .off-container {
-    padding: 12px;
     display: flex;
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
+    margin-left: 10px;
+
     .off-checker-box {
       height: 8vw;
       width: $checker-width;
@@ -104,6 +105,10 @@ $secondary-dark: #004f42;
     justify-content: space-around;
     background-color: $board-color;
     min-width: $point-width * 7;
+
+    &.S {
+      flex-direction: row-reverse;
+    }
 
     .point {
       position: relative;

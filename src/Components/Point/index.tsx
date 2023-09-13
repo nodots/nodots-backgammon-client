@@ -16,7 +16,6 @@ const Point = (props: PointProps) => {
     className += ' north' :
     className += ' south'
 
-
   className = props.position % 2 === 0 ?
     className += ' even' :
     className += ' odd'

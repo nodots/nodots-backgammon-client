@@ -13,12 +13,11 @@ interface QuadrantProps {
 const Quadrant = (props: QuadrantProps) => {
   const points: React.JSX.Element[] = []
   const orientation = QuadrantLocation[props.quadrantLocation].substring(0, 1) as 'N' | 'S'
-
   props.quadrant.points.forEach(p => {
     points.push(<Point point={p} quadrantLocation={props.quadrantLocation} position={p.position} key={p.id} />)
   })
 
-  return <Box className='quadrant NW'>
+  return <Box className={`quadrant ${orientation}`}>
     {points}
   </Box>
 }
