@@ -119,7 +119,6 @@ const CheckerBox = (props: CheckerBoxProps) => {
     }
   })
 
-
   return <div onClick={handleClick} onContextMenu={handleClick}>
     {checkers}
   </div>

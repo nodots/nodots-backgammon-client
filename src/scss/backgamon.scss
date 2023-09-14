@@ -4,11 +4,9 @@
 @import url('./components/CheckerBox/index.scss');
 @import url('./components/Die/index.scss');
 @import url('./components/Cube/index.scss');
-
 @import url('./components/Quadrant/index.scss');
 @import url('./components/Point/index.scss');
 @import url('./components/Info/index.scss');
-
 @import url('./forms/index.scss');
 
 $checker-width: 3vw;
@@ -85,10 +83,10 @@ $secondary-dark: #004f42;
 
   .off-container {
     border-radius: 0px !important;
-
     display: flex;
-    flex-direction: column;
     align-items: center;
+    padding: 10px;
+
     border-top: 25px solid #222;
     border-bottom: 25px solid #222;
     border-right: 25px solid #222;
@@ -97,33 +95,23 @@ $secondary-dark: #004f42;
       height: 8vw;
       width: $checker-width;
       border: 1px solid $primary-main;
-      margin: 20px;
     }
     .cube-container {
-      height: $checker-width;
-      width: $checker-width;
+      width: 2vw;
+      height: 2vw;
       border: 1px solid $primary-main;
-      margin: 20px;
+      margin: 1vw auto;
 
       .cube {
-        padding: 0px !important;
-        font-size: 2rem;
-        font-weight: bold;
-        display: grid;
-        place-items: center;
-        background-color: $primary-main !important;
-        color: #fff !important;
-        height: 95%;
-        width: 95%;
-        margin: 2px;
-        text-align: center;
+        width: 2vw;
+        height: 2vw;
       }
     }
     .dice-container {
       height: $checker-width * 1.5;
       width: $checker-width;
       border: 1px solid $primary-main;
-      margin: 20px;
+      margin: auto auto;
     }
   }
 
@@ -142,7 +130,6 @@ $secondary-dark: #004f42;
       position: relative;
       display: flex;
       background-color: $board-color;
-
       background-repeat: no-repeat;
       background-size: 100% 100%;
       min-width: $checker-width;
@@ -197,6 +184,19 @@ $secondary-dark: #004f42;
 
     .point-label {
       font-size: 0.6rem;
+    }
+  }
+}
+
+// FIXME: This rule handles an iOS (yes, iOS) bug that prevents
+// proper scaling of background svgs. Find a better solution.
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */
+  .point {
+    background-image: none !important;
+    background-color: $primary-main !important;
+    &.even {
+      background-color: $primary-light !important;
     }
   }
 }

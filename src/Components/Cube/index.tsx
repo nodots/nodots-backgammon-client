@@ -43,7 +43,7 @@ const Cube = () => {
     setCubeValue(payload)
   }
 
-  return <Button className='cube' onClick={clickHandler}>{cube.value ? cube.value : 2}</Button>
+  return <div className='cube' onClick={clickHandler}>{cube.value ? cube.value : 2}</div>
 }
 
 export default Cube

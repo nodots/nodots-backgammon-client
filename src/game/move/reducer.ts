@@ -117,7 +117,6 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
   return moveMode
 }
 
-
 function isReenter (board: Board, player: Player): boolean {
   let isReenter = false
   if (board.rail[player.color].checkers.length > 0) {

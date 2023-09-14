@@ -164,9 +164,6 @@ const Board = () => {
         </Paper>
         <Paper className='off-container' elevation={0}>
           <Box className='off-container-inner'>
-            <Paper className='cube-container'>
-              {game.cube.owner === 'black' && <Cube />}
-            </Paper>
             <Paper className='dice-container black'>
               {
                 game.players.white.active && <>
@@ -175,11 +172,18 @@ const Board = () => {
                 </>
               }
             </Paper>
+            <Paper className='cube-container'>
+              {game.cube.owner === 'black' && <Cube />}
+            </Paper>
             <Paper className='off-checker-box black'><Off off={game.board.off.black} /></Paper>
             <Paper className='cube-container'>
               {game.cube.owner === undefined && <Cube />}
             </Paper>
             <Paper className='off-checker-box white'><Off off={game.board.off.white} /></Paper>
+
+            <Paper className='cube-container'>
+              {game.cube.owner === 'white' && <Cube />}
+            </Paper>
             <Paper className='dice-container white'>
               {
                 game.players.black.active && <>
@@ -187,9 +191,6 @@ const Board = () => {
                   <Die order={1} value={1} color='white' />
                 </>
               }
-            </Paper>
-            <Paper className='cube-container'>
-              {game.cube.owner === 'white' && <Cube />}
             </Paper>
           </Box>
         </Paper>
