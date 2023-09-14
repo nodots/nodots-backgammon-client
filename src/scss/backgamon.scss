@@ -23,6 +23,8 @@ $secondary-light: #004f42;
 $secondary-main: #00988b;
 $secondary-dark: #004f42;
 
+$accent: #6b000c;
+
 .board {
   display: flex;
   flex-direction: row;
@@ -105,6 +107,11 @@ $secondary-dark: #004f42;
       .cube {
         width: 2vw;
         height: 2vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $accent;
+        cursor: pointer;
       }
     }
     .dice-container {
