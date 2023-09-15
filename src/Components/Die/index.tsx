@@ -4,6 +4,8 @@ import { Color } from '../../game'
 import { GameError } from '../../game/game'
 import { DieOrder, DieValue } from './state/types'
 
+import './die.scss'
+
 interface DieProps {
   order: DieOrder
   color: Color

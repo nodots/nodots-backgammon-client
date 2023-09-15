@@ -6,12 +6,12 @@ import { isCheckerInTurn } from '../../game/move'
 // UI
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 
+import './checker.scss'
+
 export interface CheckerProps {
   checker: CheckerType
   count: number | undefined
 }
-
-
 
 const Checker = (props: CheckerProps) => {
   const { game } = useGame()

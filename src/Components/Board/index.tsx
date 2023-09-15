@@ -20,7 +20,8 @@ import RollSurface from '../RollSurface'
 import Cube from '../Cube'
 import Die from '../Die'
 import { CheckerProp } from './state/types/board'
-import { light } from '@mui/material/styles/createPalette'
+
+import './board.scss'
 
 const Board = () => {
   const [isLoadModalOpen, setIsLoadModalOpen] = useState<boolean>(false)
