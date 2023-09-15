@@ -1,7 +1,5 @@
 import { produce } from 'immer'
-import { Quadrant, QuadrantLocation } from '../components/Quadrant/state'
-import { findChecker, getCheckers } from '../components/Board/state/types/board'
-import { CHECKERS_PER_PLAYER, Game, GameError, isColor, sanityCheck } from './game'
+import { Game, GameError, isColor } from './game'
 import { Roll } from '../components/Die/state/types'
 import { getCheckerboxCoordinates, isMove } from './move'
 import { reducer as moveReducer } from './move/reducer'
@@ -11,10 +9,8 @@ import { Move } from './move'
 import { CheckerBox, MoveStatus } from '../components/CheckerBox/state/'
 import { turnReducer } from '../components/Player/state'
 import { Turn, initializeTurn } from './turn'
-import { revert } from './move/revert'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
-import { Point, isPoint } from '../components/Point/state/types'
-import { Checker } from '../components/Checker/state'
+import { Point } from '../components/Point/state/types'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -156,33 +152,6 @@ export const reducer = (game: Game, action: any): Game => {
         return newGame
       }
       return game
-    // if (sanityCheck(newGame)) {
-    //   return newGame
-    // } else {
-    //   const activeTurnCopy = Object.assign(newGame.activeTurn)
-    //   console.log('Active Turn:', activeTurnCopy)
-    //   const boardCopy = Object.assign(newGame.board)
-    //   boardCopy.quadrants.forEach((q: Quadrant) => {
-    //     console.log('Quadrant location:', q.location)
-    //     console.log('-----------------------------')
-    //     q.points.forEach((p: Point) => {
-    //       p.checkers.forEach((c: Checker) => {
-    //         console.log(`${p.position} ${c.color} ${c.id}`)
-
-    //       })
-    //     })
-    //   })
-    //   console.error('Invalid game')
-    // }
-
-    // // } else {
-    // //   // throw new GameError({
-    // //   //   model: 'Move',
-    // //   //   errorMessage: 'No moveResults'
-    // //   // })
-    // //   console.error('[User Message]: no more moves. Click dice again to finalize move or double-click to revert.')
-    // // }
-    // return game
     case GAME_ACTION_TYPE.REVERT_MOVE: {
       const checkerbox = payload.checkerbox
       const moves = game.activeTurn.moves
@@ -226,7 +195,6 @@ export const reducer = (game: Game, action: any): Game => {
         draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex] = newOrigin as Point
         draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination as Point
       })
-
 
       return produce(game, draft => {
         draft.board = newBoard

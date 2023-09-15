@@ -61,8 +61,6 @@ export const revert = (board: Board, move: Move): MoveResult => {
 
   }
 
-
-
   return moveResult
 }
 
