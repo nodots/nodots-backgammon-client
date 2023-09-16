@@ -1,7 +1,10 @@
-$border: #212121;
-$border-light: #ccc;
-$dark: #006b5f;
-$background: #26a89d;
+$primary-dark: rgba(20, 20, 33, 0.4);
+$primary-light: #a8afc7;
+$primary-main: #575f90;
+$secondary-light: #004f42;
+$secondary-main: #00988b;
+$secondary-dark: #004f42;
+
 $accent: #6b000c;
 
 .die {
@@ -9,59 +12,58 @@ $accent: #6b000c;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 2vw;
-  width: 2vw;
+  height: 1.5vw;
+  width: 1.5vw;
   margin: 0 2px;
-  border-radius: 2px;
-  border: 1px solid black;
+  background-repeat: no-repeat;
 
   &.black {
-    color: black;
+    color: $accent;
+
     &.one {
-      background-image: url('./images/black/dice-six-faces-one.svg');
+      background-image: url('./images/black/one.svg');
     }
     &.two {
-      background-image: url('./images/black/dice-six-faces-two.svg');
+      background-image: url('./images/black/two.svg');
     }
     &.three {
-      background-image: url('./images/black/dice-six-faces-three.svg');
+      background-image: url('./images/black/three.svg');
     }
     &.four {
-      background-image: url('./images/black/dice-six-faces-four.svg');
+      background-image: url('./images/black/four.svg');
     }
     &.five {
-      background-image: url('./images/black/dice-six-faces-five.svg');
+      background-image: url('./images/black/five.svg');
     }
     &.six {
-      background-image: url('./images/black/dice-six-faces-six.svg');
+      background-image: url('./images/black/six.svg');
     }
   }
 
   &.white {
-    color: white;
     &.one {
-      background-image: url('./images/white/dice-six-faces-one.svg');
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path d="M98.46,0H1.54A1.54,1.54,0,0,0,0,1.54V98.46A1.54,1.54,0,0,0,1.54,100H98.46A1.54,1.54,0,0,0,100,98.46V1.54A1.54,1.54,0,0,0,98.46,0ZM96.93,96.93H3.07V3.07H96.93ZM50,62.61A12.61,12.61,0,1,0,37.39,50,12.63,12.63,0,0,0,50,62.61Zm0-22.15A9.54,9.54,0,1,1,40.46,50,9.55,9.55,0,0,1,50,40.46Z"/></g></g></svg>');
     }
     &.two {
-      background-image: url('./images/white/dice-six-faces-two.svg');
+      background-image: url('./images/white/two.svg');
     }
     &.three {
-      background-image: url('./images/white/dice-six-faces-three.svg');
+      background-image: url('./images/white/three.svg');
     }
     &.four {
-      background-image: url('./images/white/dice-six-faces-four.svg');
+      background-image: url('./images/white/four.svg');
     }
     &.five {
-      background-image: url('./images/white/dice-six-faces-five.svg');
+      background-image: url('./images/white/five.svg');
     }
     &.six {
-      background-image: url('./images/white/dice-six-faces-six.svg');
+      background-image: url('./images/white/six.svg');
     }
   }
 }
 
 .dice-container {
-  border: 0.5px solid $border-light;
+  border: 0.5px solid $primary-light;
   border-radius: 5px;
   height: 4.5vw;
   width: 2.5vw;
@@ -69,5 +71,4 @@ $accent: #6b000c;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  background-color: $background;
 }

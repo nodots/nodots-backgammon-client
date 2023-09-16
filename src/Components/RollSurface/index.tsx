@@ -1,4 +1,5 @@
 // Hooks
+import { useTheme } from '@mui/material'
 import { useGame } from '../../game/useGame'
 import { useState } from 'react'
 // Types
@@ -22,6 +23,8 @@ interface RollSurfaceProps {
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
+  const theme = useTheme()
+  console.log(theme)
   const { game, initializeTurn, finalizeTurn, setDiceValues } = useGame()
   const activeTurn = game.activeTurn
   let die1: DieType | undefined = undefined

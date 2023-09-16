@@ -59,16 +59,6 @@ $accent: #6b000c;
       width: $checker-width;
       border: 1px solid $primary-main;
     }
-    .cube-container {
-      height: $checker-width;
-      width: $checker-width;
-      border: 1px solid $primary-main;
-    }
-    .dice-container {
-      height: $checker-width * 1.5;
-      width: $checker-width;
-      border: 1px solid $primary-main;
-    }
   }
 
   .off-container {
@@ -82,23 +72,25 @@ $accent: #6b000c;
     border-right: 25px solid #222;
 
     .off-checker-box {
-      height: 8vw;
+      height: 9vw;
       width: $checker-width;
       border: 1px solid $primary-main;
     }
     .cube-container {
-      width: 2vw;
-      height: 2vw;
+      width: $checker-width;
+      height: $checker-width;
       border: 1px solid $primary-main;
-      margin: 1vw auto;
+      margin: 0.5vw auto;
+      padding: 5px;
 
       .cube {
-        width: 2vw;
-        height: 2vw;
+        width: 100%;
+        height: 100%;
+        font-size: 2rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: $accent;
+        background-color: $primary-main;
         cursor: pointer;
       }
     }
@@ -113,7 +105,6 @@ $accent: #6b000c;
     flex-direction: row;
     justify-content: space-around;
     background-color: $board-color;
-    min-width: $point-width * 7;
 
     &.S {
       flex-direction: row-reverse;
@@ -124,44 +115,30 @@ $accent: #6b000c;
       display: flex;
       background-color: $board-color;
       background-repeat: no-repeat;
-      background-size: 100% 100%;
+      background-size: $point-width $point-height;
       min-width: $checker-width;
       max-width: $checker-width;
       min-height: $point-height;
+      &.even {
+        background-color: rgb(48, 65, 114);
+      }
+      &.odd {
+        background-color: rgb(106, 125, 181);
+      }
 
       &.north {
+        background-image: url('../Point/images/point-north-mask.svg');
         flex-direction: column;
-
-        &.even {
-          background-image: url('../Point/images/point-north-even.svg');
-        }
-
-        &.odd {
-          background-image: url('../Point/images/point-north.svg');
-        }
+        justify-content: flex-start;
       }
 
       &.south {
+        background-image: url('../Point/images/point-south-mask.svg');
         flex-direction: column-reverse;
-        &.even {
-          background-image: url('../Point/images/point-south-even.svg');
-        }
-
-        &.odd {
-          background-image: url('../Point/images/point-south.svg');
-        }
       }
 
       .checker-box {
         display: flex;
-
-        &.north {
-          flex-direction: column;
-        }
-
-        &.south {
-          flex-direction: column-reverse;
-        }
       }
     }
   }
