@@ -2,15 +2,10 @@ $checker-width: 3vw;
 $point-width: $checker-width;
 $point-height: $point-width * 6;
 $quadrant-width: $point-width * 7;
-$board-color: #00988b;
 
-$primary-dark: rgba(20, 20, 33, 0.4);
+$board-color: #2f732f;
 $primary-light: #a8afc7;
 $primary-main: #575f90;
-$secondary-light: #004f42;
-$secondary-main: #00988b;
-$secondary-dark: #004f42;
-
 $accent: #6b000c;
 
 .board {
@@ -18,15 +13,6 @@ $accent: #6b000c;
   flex-direction: row;
   justify-content: center;
   margin-top: 100px;
-
-  .board-half {
-    border-top: 25px solid #222;
-    border-bottom: 25px solid #222;
-
-    &.west {
-      border-left: 25px solid #222;
-    }
-  }
 
   .roll-surface {
     display: flex;
@@ -46,56 +32,39 @@ $accent: #6b000c;
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
-    border-top: 25px solid #222;
-    border-bottom: 25px solid #222;
 
     .rail-checker-box {
-      height: 15vw;
+      height: 12vw;
       width: $checker-width;
-      border: 1px solid $primary-dark;
-    }
-    .off-checker-box {
-      height: 8vw;
-      width: $checker-width;
-      border: 1px solid $primary-main;
     }
   }
 
   .off-container {
-    border-radius: 0px !important;
     display: flex;
     align-items: center;
     padding: 10px;
 
-    border-top: 25px solid #222;
-    border-bottom: 25px solid #222;
-    border-right: 25px solid #222;
-
     .off-checker-box {
       height: 9vw;
       width: $checker-width;
-      border: 1px solid $primary-main;
     }
     .cube-container {
       width: $checker-width;
       height: $checker-width;
-      border: 1px solid $primary-main;
       margin: 0.5vw auto;
       padding: 5px;
 
       .cube {
         width: 100%;
         height: 100%;
-        font-size: 2rem;
+        font-size: 1.5rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: $primary-main;
         cursor: pointer;
       }
     }
     .dice-container {
-      border: 1px solid $primary-main;
       margin: auto auto;
     }
   }
@@ -116,14 +85,16 @@ $accent: #6b000c;
       background-color: $board-color;
       background-repeat: no-repeat;
       background-size: $point-width $point-height;
+      margin-left: 5px;
+      margin-right: 5px;
       min-width: $checker-width;
       max-width: $checker-width;
       min-height: $point-height;
       &.even {
-        background-color: rgb(48, 65, 114);
+        background-color: rgba(48, 65, 114, 0.5);
       }
       &.odd {
-        background-color: rgb(106, 125, 181);
+        background-color: rgba(106, 125, 181, 0.5);
       }
 
       &.north {

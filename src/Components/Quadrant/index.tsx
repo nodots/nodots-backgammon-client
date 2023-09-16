@@ -14,7 +14,9 @@ const Quadrant = (props: QuadrantProps) => {
   const points: React.JSX.Element[] = []
   const orientation = QuadrantLocation[props.quadrantLocation].substring(0, 1) as 'N' | 'S'
   props.quadrant.points.forEach(p => {
-    points.push(<Point point={p} quadrantLocation={props.quadrantLocation} position={p.position} key={p.id} />)
+    const backgroundColor = p.position as number % 2 === 0 ? 'red' : 'black'
+
+    points.push(<Point point={p} quadrantLocation={props.quadrantLocation} position={p.position} key={p.id} backgroundColor={backgroundColor} />)
   })
 
   return <Box className={`quadrant ${orientation}`}>

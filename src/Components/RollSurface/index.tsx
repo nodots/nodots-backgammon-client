@@ -92,6 +92,16 @@ const RollSurface = (props: RollSurfaceProps) => {
         a nice-to-have (maybe) here.
     */
     if (isTurnComplete) {
+      setDie1Value(1)
+      setDie2Value(1)
+      const setDiceValuesPayload: SetDiceValuesPayload = {
+        color: props.color,
+        values: {
+          die1: die2Value,
+          die2: die1Value
+        }
+      }
+      setDiceValues(setDiceValuesPayload)
       finalizeTurn()
     } else if (isTurnInProgress) {
       console.error('Turn in progress')

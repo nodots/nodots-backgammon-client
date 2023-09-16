@@ -140,8 +140,8 @@ const Board = () => {
     const swQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SW) as QuadrantType
     const seQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SE) as QuadrantType
     return (
-      <Box className='board'>
-        <Paper className='board-half west' elevation={0}>
+      <span className='board'>
+        <Paper className='board-half west'>
           <PointLabelContainer quadrant={nwQuadrant} startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
           <Quadrant quadrant={nwQuadrant} startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
           <Box className='roll-surface'>
@@ -150,11 +150,11 @@ const Board = () => {
           <Quadrant quadrant={swQuadrant} startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
           <PointLabelContainer quadrant={swQuadrant} startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
         </Paper>
-        <Paper className='rail'>
+        <Paper className='rail' elevation={0}>
           <Paper className='rail-checker-box white'><Rail rail={game.board.rail.black} /></Paper>
           <Paper className='rail-checker-box black'><Rail rail={game.board.rail.white} /></Paper>
         </Paper>
-        <Paper className='board-half east' elevation={0}>
+        <Paper className='board-half east'>
           <PointLabelContainer quadrant={neQuadrant} startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
           <Quadrant quadrant={neQuadrant} startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
           <Box className='roll-surface'>
@@ -195,7 +195,7 @@ const Board = () => {
             </Paper>
           </Box>
         </Paper>
-      </Box>
+      </span>
     )
 
   } else {

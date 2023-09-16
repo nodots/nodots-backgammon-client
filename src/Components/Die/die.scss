@@ -16,6 +16,8 @@ $accent: #6b000c;
   width: 1.5vw;
   margin: 0 2px;
   background-repeat: no-repeat;
+  border: 1px solid gray;
+  border-radius: 5px;
 
   &.black {
     background-color: white;
@@ -65,7 +67,6 @@ $accent: #6b000c;
 }
 
 .dice-container {
-  border: 0.5px solid $primary-light;
   border-radius: 5px;
   height: 4.5vw;
   width: 2.5vw;
