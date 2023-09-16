@@ -97,8 +97,8 @@ const RollSurface = (props: RollSurfaceProps) => {
       const setDiceValuesPayload: SetDiceValuesPayload = {
         color: props.color,
         values: {
-          die1: die2Value,
-          die2: die1Value
+          die1: die1Value,
+          die2: die2Value
         }
       }
       setDiceValues(setDiceValuesPayload)
