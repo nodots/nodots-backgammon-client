@@ -1,2 +1,11 @@
 @import url('./typography/index.scss');
 @import url('./forms/index.scss');
+
+a,
+a:visited {
+  display: block;
+  text-align: right;
+  color: white;
+  text-decoration: none;
+  margin: 5px;
+}

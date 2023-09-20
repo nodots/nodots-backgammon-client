@@ -5,13 +5,9 @@ import { appTheme } from './theme/theme'
 import reportWebVitals from './reportWebVitals'
 import reportHandler from './reportHandler'
 
-import NavBar from './components/Core/NavBar'
-// import { RegistrationPage } from './pages/registration'
-import { BoardPage } from './pages/board'
-// import { Debug } from './components/Debug'
 
 import './App.scss'
-import Board from './components/Board'
+import { GamePage } from './pages/game'
 import { HomePage } from './pages/home'
 import { RegistrationPage } from './pages/registration'
 
@@ -23,7 +19,8 @@ const App = () => {
         <div className="App">
           <GameProvider>
             <Routes>
-              <Route path='/' element={<BoardPage />} />
+              <Route path='/' element={<HomePage />} />
+              <Route path='/game' element={<GamePage />} />
               <Route path='/sign-up' element={<RegistrationPage />} />
               <Route path='/sign-in' element={<RegistrationPage />} />
             </Routes>

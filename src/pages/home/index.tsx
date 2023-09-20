@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Button, Container, Paper } from '@mui/material'
+import { Button, CardContent, Container, Paper, Card, CardHeader } from '@mui/material'
 
 export const HomePage = () => {
   const navigate = useNavigate()
@@ -12,11 +12,16 @@ export const HomePage = () => {
     navigate('/sign-in')
   }
 
-  return <div className='Board'>
-    <Container>
-      <Button variant='contained' onClick={handleSignUp}>Sign Up</Button>
-      <Button variant='contained' color='secondary' onClick={handleSignIn}>Sign In</Button>
-    </Container>
-  </div>
+  return <Container>
+    <Card className='form'>
+      <CardHeader title='Nodots Backgammon' />
+      <CardContent>
+        <p>You've tried the rest. Now you've found the best.</p>
+        <Button variant='contained' onClick={handleSignUp}>Sign Up</Button>
+        <Button variant='contained' color='secondary' onClick={handleSignIn}>Sign In</Button>
+
+      </CardContent>
+    </Card>
+  </Container>
 
 }
