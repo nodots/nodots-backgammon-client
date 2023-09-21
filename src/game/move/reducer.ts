@@ -25,10 +25,10 @@ export const isMoveResult = (mr: any): mr is MoveResult => {
 }
 
 export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
-  console.log(origin.checkers)
 
   let moveResult: MoveResult | undefined = undefined
   let activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
+  console.log(activeMove)
 
   if (isMove(activeMove)) {
     const newMove = produce(activeMove, draft => {
@@ -79,6 +79,7 @@ export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
   } else {
     console.error('Move completed.')
   }
+  return turn
 }
 
 function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveMode {

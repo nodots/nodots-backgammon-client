@@ -123,11 +123,8 @@ export const reducer = (game: Game, action: any): Game => {
       })
     case GAME_ACTION_TYPE.MOVE:
       let moveResults = moveReducer(game.activeTurn, payload.checkerbox)
-      console.log(payload.checkerbox.checkers)
       if (moveResults) {
         const failedMove = moveResults.moves.find(m => m.status === MoveStatus.NO_MOVE)
-        console.log(failedMove)
-        console.log(moveResults)
         //Check if we have different die values in roll then test with other die value if we have another move
         if (isMove(failedMove) && game.activeTurn.roll[0] !== game.activeTurn.roll[1]) {
           const nextMoveOrder = failedMove.order + 1
@@ -143,6 +140,8 @@ export const reducer = (game: Game, action: any): Game => {
               draft.activeTurn = moveResults
               draft.board = moveResults.board
             })
+          } else {
+            return game
           }
         }
         const newGame = produce(game, draft => {
