@@ -125,10 +125,11 @@ export const reducer = (game: Game, action: any): Game => {
       let moveResults = moveReducer(game.activeTurn, payload.checkerbox)
       if (moveResults) {
         const failedMove = moveResults.moves.find(m => m.status === MoveStatus.NO_MOVE)
-        //Check if we have different die values in roll then test with other die value if we have another move
-        if (isMove(failedMove) && game.activeTurn.roll[0] !== game.activeTurn.roll[1]) {
+        if (isMove(failedMove)) {
           const nextMoveOrder = failedMove.order + 1
-          if (isMove(moveResults.moves[nextMoveOrder])) {
+
+          //Check if we have different die values in roll then test with other die value if we have another move
+          if (isMove(moveResults.moves[nextMoveOrder]) && game.activeTurn.roll[0] !== game.activeTurn.roll[1]) {
             const die1Value = moveResults.moves[failedMove.order].dieValue
             const die2Value = moveResults.moves[nextMoveOrder].dieValue
             const turnDraft = produce(game.activeTurn as Turn, draft => {
@@ -140,6 +141,7 @@ export const reducer = (game: Game, action: any): Game => {
               draft.activeTurn = moveResults
               draft.board = moveResults.board
             })
+
           } else {
             // TODO: Need to check here if there are any available moves. If not, turn is over.
             if (isColor(game.activeColor)) {

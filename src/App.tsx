@@ -31,6 +31,6 @@ const App = () => {
   )
 }
 
-reportWebVitals(reportHandler)
+// reportWebVitals(reportHandler)
 
 export default App
