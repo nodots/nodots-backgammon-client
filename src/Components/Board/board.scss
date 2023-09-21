@@ -28,7 +28,7 @@ $accent: #6b000c;
   .rail {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 
     border-radius: 0px !important;
@@ -37,6 +37,20 @@ $accent: #6b000c;
     .rail-checker-box {
       height: 12vw;
       width: $checker-width;
+    }
+
+    .pip-count {
+      font-size: 0.8rem;
+      width: 100%;
+      text-align: center;
+      &.black {
+        background-color: $accent;
+        color: white;
+      }
+      &.white {
+        background-color: white;
+        color: black;
+      }
     }
   }
 

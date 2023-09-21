@@ -4,12 +4,8 @@ import { useState } from 'react'
 import { useGame } from '../../game/useGame'
 
 // Types
-import { Board as BoardType } from './state'
 import { Quadrant as QuadrantType } from '../Quadrant/state/types'
 import { QuadrantLocation } from '../Quadrant/state/types'
-
-// UI
-import { Grid, Button, Dialog, DialogTitle, Input, DialogContent, DialogActions } from '@mui/material'
 
 // Components
 import Quadrant from '../Quadrant'
@@ -151,8 +147,10 @@ const Board = () => {
           <PointLabelContainer quadrant={swQuadrant} startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
         </Paper>
         <Paper className='rail' elevation={0}>
+          <Paper className='pip-count black'>{players.black.pipCount}</Paper>
           <Paper className='rail-checker-box white'><Rail rail={game.board.rail.black} /></Paper>
           <Paper className='rail-checker-box black'><Rail rail={game.board.rail.white} /></Paper>
+          <Paper className='pip-count white'>{players.black.pipCount}</Paper>
         </Paper>
         <Paper className='board-half east'>
           <PointLabelContainer quadrant={neQuadrant} startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
