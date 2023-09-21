@@ -1,4 +1,5 @@
-import { Color, CheckerBoxPosition, generateId, isColor } from '../../../../game'
+import { Color, CheckerBoxPosition, isColor } from '../../../../game'
+import { generateId } from '../../../../game/game'
 import { Checker } from '../../../Checker/state/types'
 import { CheckerProp } from '../../../Board/state/types/board'
 
@@ -35,7 +36,7 @@ export const initialize = (setup: CheckerProp[]): { white: Off, black: Off } => 
   const whiteCheckers: Checker[] = []
   if (whiteCheckerSetup) {
     for (let i = 0; i < whiteCheckerSetup.checkerCount; i++) {
-      whiteCheckers.push({ id: Math.random().toString(), color: 'white' })
+      whiteCheckers.push({ id: generateId(), color: 'white' })
     }
   }
 
@@ -43,19 +44,19 @@ export const initialize = (setup: CheckerProp[]): { white: Off, black: Off } => 
   const blackCheckers: Checker[] = []
   if (blackCheckerSetup) {
     for (let i = 0; i < blackCheckerSetup.checkerCount; i++) {
-      blackCheckers.push({ id: Math.random().toString(), color: 'black' })
+      blackCheckers.push({ id: generateId(), color: 'black' })
     }
   }
 
   const white: Off = {
-    id: Math.random().toString(),
+    id: generateId(),
     color: 'white',
     position: 'off',
     checkers: whiteCheckers
   }
 
   const black: Off = {
-    id: Math.random().toString(),
+    id: generateId(),
     color: 'black',
     position: 'off',
     checkers: blackCheckers

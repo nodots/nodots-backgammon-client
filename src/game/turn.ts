@@ -84,10 +84,7 @@ export const initializeTurn = (action: InitializeTurnAction): Turn => {
 
 export const resetTurn = (turn: Turn): Turn => {
   return produce(turn, draft => {
-    draft.id = undefined
-    draft.player = undefined
     draft.status = undefined
-    draft.roll = undefined
     draft.moves = []
   })
 }

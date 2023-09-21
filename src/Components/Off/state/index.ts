@@ -1,9 +1,5 @@
-import { initialize, OffContainer } from './types'
+import { initialize } from './types'
 
 export {
   initialize
-}
-
-export type {
-  OffContainer
 }

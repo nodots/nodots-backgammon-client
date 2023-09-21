@@ -40,14 +40,6 @@ const defaultGameState: Game = {
   board: initBoardState,
   dice: initDiceState,
   cube: initCubeState,
-  activeTurn: {
-    id: undefined,
-    board: undefined,
-    player: undefined,
-    status: undefined,
-    roll: undefined,
-    moves: []
-  },
   activeColor: winner.color,
   players: {
     black: blackPlayer,

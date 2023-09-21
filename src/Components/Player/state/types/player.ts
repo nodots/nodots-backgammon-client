@@ -1,4 +1,4 @@
-import { Color, isColor, generateId, MoveDirection } from '../../../../game'
+import { Color, isColor, MoveDirection } from '../../../../game'
 import { Roll, DiePair } from '../../../Die/state/types'
 import { Board } from '../../../Board/state/types'
 import { isDiePair } from '../../../Die/state/types/die-pair'

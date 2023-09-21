@@ -1,4 +1,5 @@
 import { produce } from 'immer'
+import { Point } from '../../components/Point/state/types'
 import { Checker, isChecker } from '../../components/Checker/state'
 import { Board } from '../../components/Board/state'
 import { Rail, isRail } from '../../components/Rail/state/types'

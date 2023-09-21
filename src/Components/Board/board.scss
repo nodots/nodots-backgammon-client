@@ -2,6 +2,8 @@ $checker-width: 3vw;
 $point-width: $checker-width;
 $point-height: $point-width * 6;
 $quadrant-width: $point-width * 7;
+$board-width: ($quadrant-width * 2) + ($checker-width * 2) + 1.5vw;
+$board-height: $point-height * 3;
 
 $board-color: #2f732f;
 $primary-light: #a8afc7;
@@ -13,7 +15,8 @@ $accent: #6b000c;
   flex-direction: row;
   justify-content: center;
   margin-top: 100px;
-
+  padding-top: $checker-width;
+  padding-bottom: $checker-width;
   .roll-surface {
     display: flex;
     flex-direction: row;
@@ -58,7 +61,6 @@ $accent: #6b000c;
     display: flex;
     align-items: center;
     padding: 10px;
-
     .off-checker-box {
       height: 9vw;
       width: $checker-width;
@@ -74,7 +76,8 @@ $accent: #6b000c;
         height: 100%;
         border: 2px solid $primary-main;
         border-radius: 5px;
-        font-size: 1.5rem;
+        font-size: 1rem;
+        font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -87,6 +90,11 @@ $accent: #6b000c;
       margin: auto auto;
       padding: 2px;
     }
+  }
+
+  .board-half {
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
   .quadrant {

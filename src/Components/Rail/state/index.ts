@@ -1,7 +1,3 @@
-import { initialize, RailContainer } from './types'
-
-export type {
-  RailContainer
-}
+import { initialize } from './types'
 
 export { initialize }

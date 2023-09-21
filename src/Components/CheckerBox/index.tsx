@@ -7,7 +7,7 @@ import { isColor } from '../../game/game'
 import { GameError } from '../../game/game'
 import { CheckerBox as CheckerBoxType } from './state/types'
 import { getHomeQuadrantLocation } from '../Player/state/types/player'
-import { MoveActionPayload, } from '../../game/move'
+import { Move, MoveActionPayload, } from '../../game/move'
 import Checker from '../Checker'
 import { Checker as CheckerType } from '../Checker/state/types'
 import { isPlayer } from '../Player/state/types/player'
@@ -67,7 +67,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
         player: activePlayer,
         checkerbox: props.checkerBox
       }
-      if (game.activeTurn.roll === undefined) {
+      if (game.activeTurn?.roll === undefined) {
         return alert('Roll the dice first')
       }
 
@@ -85,16 +85,19 @@ const CheckerBox = (props: CheckerBoxProps) => {
         return console.error('No move to revert')
       }
       const checkerToRevert = checkers[checkers.length - 1] || undefined
-      const moveToRevert = game.activeTurn.moves.find(m => m.checker?.id === checkerToRevert.id)
-      const payload: MoveActionPayload = {
-        player: activePlayer,
-        checkerbox: props.checkerBox
+      if (game.activeTurn?.moves) {
+        const moveToRevert = game.activeTurn.moves.find((m: Move) => m.checker?.id === checkerToRevert.id)
+        const payload: MoveActionPayload = {
+          player: activePlayer,
+          checkerbox: props.checkerBox
+        }
+        try {
+          revert(payload)
+        } catch (e) {
+          console.error(e)
+        }
       }
-      try {
-        revert(payload)
-      } catch (e) {
-        console.error(e)
-      }
+
     }
   }
 

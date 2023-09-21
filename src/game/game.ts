@@ -18,7 +18,7 @@ export const isColor = (c: unknown): c is Color => {
   return false
 }
 
-const generateId = (): string => {
+export const generateId = (): string => {
   return uuid()
 }
 
@@ -38,7 +38,7 @@ export type Game = {
     black: Player
     white: Player
   }
-  activeTurn: Turn
+  activeTurn?: Turn
   activeColor?: Color
   error?: GameError
   setCubeValue?: (value: CubeValue) => CubeValue

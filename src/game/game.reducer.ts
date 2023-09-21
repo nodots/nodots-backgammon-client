@@ -64,38 +64,43 @@ export const reducer = (game: Game, action: any): Game => {
           })
         }
 
-        if (game.activeTurn.player === undefined) {
+        if (game.activeTurn?.player === undefined) {
           initializeTurn({ board: game.board, player: activePlayer, roll })
         }
       }
       const newGame = produce(game, draft => {
         draft.dice = newDice
-        game.activeTurn.moves.forEach((m: Move, i: number) => {
-          const dieValue = i % 2 ? roll[1] : roll[0]
-          draft.activeTurn.moves[i].dieValue = dieValue
-        })
+        if (game.activeTurn) {
+          game.activeTurn.moves.forEach((m: Move, i: number) => {
+            const dieValue = i % 2 ? roll[1] : roll[0]
+            if (draft.activeTurn) {
+              draft.activeTurn.moves[i].dieValue = dieValue
+            }
+          })
+
+        }
       })
       return newGame
     case GAME_ACTION_TYPE.INITIALIZE_TURN:
-      const newTurn = turnReducer(game.activeTurn, action)
-      const possibleMoves = newTurn.moves.filter(m => m.status === MoveStatus.INITIALIZED)
-      if (possibleMoves.length === 0) {
-        return produce(game, draft => {
-          draft.activeTurn.id = undefined
-          draft.activeTurn.player = undefined
-          draft.activeTurn.status = undefined
-          draft.activeTurn.board = undefined
-          draft.activeTurn.moves = []
-          draft.activeColor = game.activeColor === 'black' ? 'white' : 'black'
-          draft.players.white.active = false
-          draft.players.black.active = false
-          draft.players[draft.activeColor].active = true
-        })
-      } else {
-        return produce(game, draft => {
-          draft.activeTurn = newTurn
-        })
+      if (game.activeTurn) {
+        const newTurn = turnReducer(game.activeTurn, action)
+        const possibleMoves = newTurn.moves.filter(m => m.status === MoveStatus.INITIALIZED)
+        if (possibleMoves.length === 0) {
+          return produce(game, draft => {
+            draft.activeTurn = undefined
+            draft.activeColor = game.activeColor === 'black' ? 'white' : 'black'
+            draft.players.white.active = false
+            draft.players.black.active = false
+            draft.players[draft.activeColor].active = true
+          })
+        } else {
+          return produce(game, draft => {
+            draft.activeTurn = newTurn
+          })
+        }
+
       }
+      return game
     case GAME_ACTION_TYPE.FINALIZE_TURN:
       return produce(game, draft => {
         if (!isColor(game.activeColor)) {
@@ -116,102 +121,111 @@ export const reducer = (game: Game, action: any): Game => {
         draft.dice[activeColor].dice[0].value = undefined
         draft.dice[activeColor].dice[1].value = undefined
 
-        draft.activeTurn.status = undefined
-        draft.activeTurn.id = undefined
-        draft.activeTurn.roll = undefined
-        draft.activeTurn.moves = []
+        draft.activeTurn = undefined
       })
     case GAME_ACTION_TYPE.MOVE:
-      let moveResults = moveReducer(game.activeTurn, payload.checkerbox)
-      if (moveResults) {
-        const failedMove = moveResults.moves.find(m => m.status === MoveStatus.NO_MOVE)
-        if (isMove(failedMove)) {
-          const nextMoveOrder = failedMove.order + 1
+      if (game.activeTurn) {
+        let moveResults = moveReducer(game.activeTurn, payload.checkerbox)
+        if (moveResults) {
+          const failedMove = moveResults.moves.find(m => m.status === MoveStatus.NO_MOVE)
+          if (isMove(failedMove)) {
+            const nextMoveOrder = failedMove.order + 1
 
-          //Check if we have different die values in roll then test with other die value if we have another move
-          if (isMove(moveResults.moves[nextMoveOrder]) && game.activeTurn.roll[0] !== game.activeTurn.roll[1]) {
-            const die1Value = moveResults.moves[failedMove.order].dieValue
-            const die2Value = moveResults.moves[nextMoveOrder].dieValue
-            const turnDraft = produce(game.activeTurn as Turn, draft => {
-              draft.moves[failedMove.order].dieValue = die2Value
-              draft.moves[nextMoveOrder].dieValue = die1Value
-            })
-            moveResults = moveReducer(turnDraft, payload.checkerbox)
-            return produce(game, draft => {
-              draft.activeTurn = moveResults
-              draft.board = moveResults.board
-            })
+            //Check if we have different die values in roll then test with other die value if we have another move
+            if (isMove(moveResults.moves[nextMoveOrder]) && game.activeTurn.roll[0] !== game.activeTurn.roll[1]) {
+              const die1Value = moveResults.moves[failedMove.order].dieValue
+              const die2Value = moveResults.moves[nextMoveOrder].dieValue
+              const turnDraft = produce(game.activeTurn as Turn, draft => {
+                draft.moves[failedMove.order].dieValue = die2Value
+                draft.moves[nextMoveOrder].dieValue = die1Value
+              })
+              moveResults = moveReducer(turnDraft, payload.checkerbox)
+              return produce(game, draft => {
+                draft.activeTurn = moveResults
+                draft.board = moveResults.board
+              })
 
-          } else {
-            // TODO: Need to check here if there are any available moves. If not, turn is over.
-            if (isColor(game.activeColor)) {
-              const activeColor: Color = game.activeColor
-              const activePlayer = game.players[activeColor]
-              const dieValue = game.activeTurn.roll[failedMove.order]
-              const areMoves = areValidMoves(game.activeTurn, activePlayer, dieValue)
-              if (areMoves) {
-                return game
-              } else {
-                return produce(game, draft => {
-                  draft.activeTurn = moveResults
-                  draft.board = moveResults.board
-                })
+            } else {
+              // TODO: Need to check here if there are any available moves. If not, turn is over.
+              if (isColor(game.activeColor)) {
+                const activeColor: Color = game.activeColor
+                const activePlayer = game.players[activeColor]
+                const dieValue = game.activeTurn.roll[failedMove.order]
+                const areMoves = areValidMoves(game.activeTurn, activePlayer, dieValue)
+                if (areMoves) {
+                  return game
+                } else {
+                  return produce(game, draft => {
+                    draft.activeTurn = moveResults
+                    draft.board = moveResults.board
+                  })
+                }
               }
+              return game
             }
-            return game
           }
+          const newGame = produce(game, draft => {
+            draft.activeTurn = moveResults
+            draft.board = moveResults.board
+          })
+          return newGame
         }
-        const newGame = produce(game, draft => {
-          draft.activeTurn = moveResults
-          draft.board = moveResults.board
-        })
-        return newGame
       }
+
       return game
     case GAME_ACTION_TYPE.REVERT_MOVE: {
       const checkerbox = payload.checkerbox
-      const moves = game.activeTurn.moves
-      const checkerToRevert = checkerbox.checkers[checkerbox.checkers.length - 1]
-      const moveIndexToRevert = moves.findIndex((m: Move) => m.checker?.id === checkerToRevert.id)
-      const moveToRevert = moves[moveIndexToRevert]
+      if (game.activeTurn && game.activeTurn.moves) {
+        const moves = game.activeTurn.moves
+        const checkerToRevert = checkerbox.checkers[checkerbox.checkers.length - 1]
+        const moveIndexToRevert = moves.findIndex((m: Move) => m.checker?.id === checkerToRevert.id)
+        const moveToRevert = moves[moveIndexToRevert]
 
-      const newMove = produce(moveToRevert as Move, draft => {
-        draft.origin = undefined
-        draft.destination = undefined
-        draft.checker = undefined
-        draft.status = MoveStatus.INITIALIZED
-        draft.mode = undefined
-        draft.hit = undefined
-      })
+        const newMove = produce(moveToRevert as Move, draft => {
+          draft.origin = undefined
+          draft.destination = undefined
+          draft.checker = undefined
+          draft.status = MoveStatus.INITIALIZED
+          draft.mode = undefined
+          draft.hit = undefined
+        })
 
-      const origin: CheckerBox = Object.assign(moveToRevert.destination)
-      const destination: CheckerBox = Object.assign(moveToRevert.origin)
+        if (moveToRevert && moveToRevert.destination && moveToRevert.origin) {
 
-      const originInfo = getCheckerboxCoordinates(game.board, origin.id)
-      const destinationInfo = getCheckerboxCoordinates(game.board, destination.id)
+          const origin: CheckerBox = Object.assign(moveToRevert.destination)
+          const destination: CheckerBox = Object.assign(moveToRevert.origin)
 
-      const newOriginCheckers = origin.checkers.filter(c => c.id !== checkerToRevert.id)
-      const newDestinationCheckers = destination.checkers.concat(checkerToRevert)
+          const originInfo = getCheckerboxCoordinates(game.board, origin.id)
+          const destinationInfo = getCheckerboxCoordinates(game.board, destination.id)
 
-      const newOrigin = produce(origin, draft => {
-        draft.checkers = newOriginCheckers
-      })
+          const newOriginCheckers = origin.checkers.filter(c => c.id !== checkerToRevert.id)
+          const newDestinationCheckers = destination.checkers.concat(checkerToRevert)
 
-      const newDestination = produce(destination, draft => {
-        draft.checkers = newDestinationCheckers
-      })
+          const newOrigin = produce(origin, draft => {
+            draft.checkers = newOriginCheckers
+          })
 
-      const newBoard = produce(game.board, draft => {
-        draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex] = newOrigin as Point
-        draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination as Point
-      })
+          const newDestination = produce(destination, draft => {
+            draft.checkers = newDestinationCheckers
+          })
 
-      return produce(game, draft => {
-        draft.board = newBoard
-        draft.activeTurn.moves[moveIndexToRevert] = newMove
-      })
+          const newBoard = produce(game.board, draft => {
+            draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex] = newOrigin as Point
+            draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination as Point
+          })
 
+          return produce(game, draft => {
+            if (draft.activeTurn) {
+              draft.board = newBoard
+              draft.activeTurn.moves[moveIndexToRevert] = newMove
+
+            }
+          })
+        }
+
+      }
     }
+
   }
 
   saveState(game)

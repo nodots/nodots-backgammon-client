@@ -69,73 +69,84 @@ const RollSurface = (props: RollSurfaceProps) => {
       console.error('Not your turn')
     }
 
-    let isTurnComplete = false
-    const lastMove = activeTurn.moves[activeTurn.moves.length - 1]
-
-    if ((lastMove && lastMove.origin && lastMove.destination) || (lastMove && lastMove.status === MoveStatus.NO_MOVE)) {
-      isTurnComplete = true
-    }
-
-    let isTurnInProgress = false
-    if (activeTurn.moves.length > 0) {
-      isTurnInProgress = true
-    }
-
-    /* TODO: Think about whether we want this logic here.
-      PROS:
-        - Easy check that prevents waiting for response 
-        from reducer. Probably not that big a deal.
-      CONS:
-        - Logic in two places. It has to be in the reducer, it's
-        a nice-to-have (maybe) here.
-    */
-    if (isTurnComplete) {
-      setDie1Value(1)
-      setDie2Value(1)
-      const setDiceValuesPayload: SetDiceValuesPayload = {
-        color: props.color,
-        values: {
-          die1: die1Value,
-          die2: die2Value
-        }
-      }
-      setDiceValues(setDiceValuesPayload)
-      finalizeTurn()
-    } else if (isTurnInProgress) {
-      console.error('Turn in progress')
-      // noop
+    if (!game.activeTurn) {
+      throw new GameError({
+        model: 'Turn',
+        errorMessage: 'No activeTurn'
+      })
     } else {
-      const newRollValues = [roll(), roll()]
-      // const newRollValues = [5 as DieValue, 5 as DieValue]
-      console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
+      const activeTurn = game.activeTurn
 
-      const setDiceValuesPayload: SetDiceValuesPayload = {
-        color: props.color,
-        values: {
-          die1: newRollValues[0],
-          die2: newRollValues[1]
-        }
+      let isTurnComplete = false
+
+      const lastMove = activeTurn.moves[activeTurn.moves.length - 1]
+
+      if ((lastMove && lastMove.origin && lastMove.destination) || (lastMove && lastMove.status === MoveStatus.NO_MOVE)) {
+        isTurnComplete = true
       }
-      setDie1Value(newRollValues[0])
-      setDie2Value(newRollValues[1])
-      setDiceValues(setDiceValuesPayload)
-      if (!activeTurn.status) {
-        if (!isColor(game.activeColor)) {
-          throw new GameError({
-            model: 'Game',
-            errorMessage: `Invalid activeColor ${game.activeColor}`
-          })
-        }
 
-        const turn: TurnActionPayload = {
-          board: game.board,
-          player: game.players[game.activeColor],
-          roll: [newRollValues[0], newRollValues[1]],
-          status: TurnStatus.INITIALIZED,
+      let isTurnInProgress = false
+      if (activeTurn.moves.length > 0) {
+        isTurnInProgress = true
+      }
+
+      /* TODO: Think about whether we want this logic here.
+        PROS:
+          - Easy check that prevents waiting for response 
+          from reducer. Probably not that big a deal.
+        CONS:
+          - Logic in two places. It has to be in the reducer, it's
+          a nice-to-have (maybe) here.
+      */
+      if (isTurnComplete) {
+        setDie1Value(1)
+        setDie2Value(1)
+        const setDiceValuesPayload: SetDiceValuesPayload = {
+          color: props.color,
+          values: {
+            die1: die1Value,
+            die2: die2Value
+          }
         }
-        const turnResult = initializeTurn(turn)
+        setDiceValues(setDiceValuesPayload)
+        finalizeTurn()
+      } else if (isTurnInProgress) {
+        console.error('Turn in progress')
+        // noop
+      } else {
+        const newRollValues = [roll(), roll()]
+        // const newRollValues = [5 as DieValue, 5 as DieValue]
+        console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
+
+        const setDiceValuesPayload: SetDiceValuesPayload = {
+          color: props.color,
+          values: {
+            die1: newRollValues[0],
+            die2: newRollValues[1]
+          }
+        }
+        setDie1Value(newRollValues[0])
+        setDie2Value(newRollValues[1])
+        setDiceValues(setDiceValuesPayload)
+        if (!activeTurn.status) {
+          if (!isColor(game.activeColor)) {
+            throw new GameError({
+              model: 'Game',
+              errorMessage: `Invalid activeColor ${game.activeColor}`
+            })
+          }
+
+          const turn: TurnActionPayload = {
+            board: game.board,
+            player: game.players[game.activeColor],
+            roll: [newRollValues[0], newRollValues[1]],
+            status: TurnStatus.INITIALIZED,
+          }
+          const turnResult = initializeTurn(turn)
+        }
       }
     }
+
   }
 
   return (
