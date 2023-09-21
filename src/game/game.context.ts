@@ -28,6 +28,7 @@ export const useGameContext = (initialState: Game) => {
   return { game, setCubeValue, setDiceValues, move, revert, initializeTurn, finalizeTurn }
 }
 
+// Adding comment for commit
 type UseGameContextType = ReturnType<typeof useGameContext>
 
 const initGameContextState: UseGameContextType = {
