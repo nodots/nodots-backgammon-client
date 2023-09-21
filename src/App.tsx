@@ -9,8 +9,8 @@ import reportHandler from './reportHandler'
 import './App.scss'
 import { GamePage } from './pages/game'
 import { HomePage } from './pages/home'
-import { RegistrationPage } from './pages/registration'
-
+import { SignIn } from './pages/registration/sign-in'
+import { SignUp } from './pages/registration/sign-up'
 const App = () => {
   return (
     <ThemeProvider theme={appTheme}>
@@ -21,7 +21,8 @@ const App = () => {
             <Routes>
               <Route path='/' element={<HomePage />} />
               <Route path='/game' element={<GamePage />} />
-              <Route path='/sign-up' element={<RegistrationPage />} />
+              <Route path='/sign-up' element={<SignUp />} />
+              <Route path='/sign-in' element={<SignIn />} />
             </Routes>
           </GameProvider>
         </div>

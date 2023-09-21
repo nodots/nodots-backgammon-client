@@ -25,22 +25,17 @@ export default function NavBar () {
     setAnchorEl(null)
   }
 
+  const handleSignOut = (e: React.MouseEvent<HTMLElement>) => {
+    const location: Location = window.location
+    location.href = '/'
+
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='fixed'>
-        <Toolbar>
-          <IconButton
-            size='large'
-            edge='start'
-            color='inherit'
-            aria-label='menu'
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-            Nodots Backgammon
-          </Typography>
+        <Toolbar sx={{ justifyContent: 'flex-end' }}>
+
           {auth && (
             <div>
               <IconButton
@@ -69,7 +64,7 @@ export default function NavBar () {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
               </Menu>
             </div>
           )}
