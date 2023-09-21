@@ -26,12 +26,13 @@ $accent: #6b000c;
   }
 
   .rail {
-    border-radius: 0px !important;
-    padding: 5px;
     display: flex;
-    justify-content: space-around;
     flex-direction: column;
+    justify-content: space-around;
     align-items: center;
+
+    border-radius: 0px !important;
+    padding: 10px;
 
     .rail-checker-box {
       height: 12vw;
@@ -57,6 +58,8 @@ $accent: #6b000c;
       .cube {
         width: 100%;
         height: 100%;
+        border: 2px solid $primary-main;
+        border-radius: 5px;
         font-size: 1.5rem;
         display: flex;
         align-items: center;

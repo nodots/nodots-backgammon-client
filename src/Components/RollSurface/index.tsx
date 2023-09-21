@@ -35,7 +35,7 @@ const RollSurface = (props: RollSurfaceProps) => {
     die2 = game.dice[game.activeColor].dice[1]
   }
 
-  const [die1Value, setDie1Value] = useState<DieValue>(die1?.value ? die1.value : 3)
+  const [die1Value, setDie1Value] = useState<DieValue>(die1?.value ? die1.value : 1)
   const [die2Value, setDie2Value] = useState<DieValue>(die2?.value ? die2.value : 1)
 
   const swapDiceHandler = (e: React.MouseEvent) => {

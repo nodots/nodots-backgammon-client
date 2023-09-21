@@ -22,7 +22,6 @@ const App = () => {
               <Route path='/' element={<HomePage />} />
               <Route path='/game' element={<GamePage />} />
               <Route path='/sign-up' element={<RegistrationPage />} />
-              <Route path='/sign-in' element={<RegistrationPage />} />
             </Routes>
           </GameProvider>
         </div>
