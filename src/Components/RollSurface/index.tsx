@@ -23,8 +23,6 @@ interface RollSurfaceProps {
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
-  const theme = useTheme()
-  console.log(theme)
   const { game, initializeTurn, finalizeTurn, setDiceValues } = useGame()
   const activeTurn = game.activeTurn
   let die1: DieType | undefined = undefined
@@ -108,7 +106,7 @@ const RollSurface = (props: RollSurfaceProps) => {
       // noop
     } else {
       const newRollValues = [roll(), roll()]
-      // const newRollValues = [5 as DieValue, 6 as DieValue]
+      // const newRollValues = [4 as DieValue, 5 as DieValue]
       console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
       const setDiceValuesPayload: SetDiceValuesPayload = {
@@ -122,7 +120,6 @@ const RollSurface = (props: RollSurfaceProps) => {
       setDie2Value(newRollValues[1])
       setDiceValues(setDiceValuesPayload)
       if (!activeTurn.status) {
-        console.log('RollSurface Component] clickHandler Preparing to initialize turn')
         if (!isColor(game.activeColor)) {
           throw new GameError({
             model: 'Game',
@@ -136,10 +133,7 @@ const RollSurface = (props: RollSurfaceProps) => {
           roll: [newRollValues[0], newRollValues[1]],
           status: TurnStatus.INITIALIZED,
         }
-        console.warn('[TRACE] calling initializeTurn with TurnActionPayload:', turn)
         const turnResult = initializeTurn(turn)
-        console.warn('[TRACE] initializingTurn returned turnResult:', turnResult)
-
       }
     }
   }

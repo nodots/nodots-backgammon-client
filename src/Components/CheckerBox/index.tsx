@@ -56,7 +56,6 @@ const CheckerBox = (props: CheckerBoxProps) => {
     }
 
     if (e.type === 'click') {
-      console.warn('[TRACEMOVE] CheckerBox component clickHandler (single click)')
       if (props.checkerBox.checkers.length === 0) {
         return console.warn('[TRACEMOVE] No checker to move')
       } else {
@@ -68,15 +67,12 @@ const CheckerBox = (props: CheckerBoxProps) => {
         player: activePlayer,
         checkerbox: props.checkerBox
       }
-      console.warn('[TRACE] game.activeTurn:', game.activeTurn)
       if (game.activeTurn.roll === undefined) {
         return alert('Roll the dice first')
       }
 
       try {
-        console.warn('[TRACEMOVE] calling move method with payload:', payload)
         const result = move(payload)
-        console.warn('[TRACEMOVE] result:', result)
       } catch (e) {
         console.error(e)
       }
@@ -89,11 +85,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
         return console.error('No move to revert')
       }
       const checkerToRevert = checkers[checkers.length - 1] || undefined
-      console.log('[Revert]: double-click on checkerbox')
-      console.log('[Revert] checkerToRevert:', checkerToRevert)
-      console.log('[Revert] activeTurn.moves', game.activeTurn.moves)
       const moveToRevert = game.activeTurn.moves.find(m => m.checker?.id === checkerToRevert.id)
-      console.log('[Revert] moveToRevert', moveToRevert)
       const payload: MoveActionPayload = {
         player: activePlayer,
         checkerbox: props.checkerBox

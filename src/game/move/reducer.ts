@@ -1,14 +1,14 @@
 import { produce } from 'immer'
 import { getHomeQuadrantLocation, isPlayer } from '../../components/Player/state/types/player'
 import { DieValue } from '../../components/Die/state'
-import { GameError } from '../game'
+import { GameError, MoveDirection } from '../game'
 import { Player } from '../../components/Player/state'
 import { Move, isMove, pointToPoint, reenter } from '../move'
 import { Turn, isTurn } from '../turn'
 import { MoveMode } from '../../components/Board/state'
 import { MoveStatus, isCheckerBox, CheckerBox } from '../../components/CheckerBox/state'
 import { getBearOffQuadrantLocation } from '../../components/Player/state'
-import { Board, getCheckerBoxes } from '../../components/Board/state/types/board'
+import { Board, getCheckerBoxes, getCheckers } from '../../components/Board/state/types/board'
 import { isPoint } from '../../components/Point/state/types'
 import { bearOff, canBearOff } from './bear-off'
 
@@ -17,6 +17,7 @@ export interface MoveResult {
   board: Board
 }
 
+// TODO: Improve typeguard
 export const isMoveResult = (mr: any): mr is MoveResult => {
   if (typeof mr !== 'object') {
     return false
@@ -28,7 +29,6 @@ export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
 
   let moveResult: MoveResult | undefined = undefined
   let activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
-  console.log(activeMove)
 
   if (isMove(activeMove)) {
     const newMove = produce(activeMove, draft => {
@@ -82,7 +82,22 @@ export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
   return turn
 }
 
-function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveMode {
+export function areValidMoves (turn: Turn, player: Player, dieValue: DieValue): boolean {
+  let areValidMoves = false
+
+  const checkerboxes = getCheckerBoxes(turn.board)
+  const availableCheckerboxes = checkerboxes.filter(cb => cb.checkers.length > 0 && cb.checkers[0].color === player.color)
+  availableCheckerboxes.forEach(cb => {
+    const moveMode = getMoveMode(turn, cb, dieValue)
+    if (moveMode !== MoveMode.NO_MOVE) {
+      areValidMoves = true
+      return
+    }
+  })
+  return areValidMoves
+}
+
+export function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveMode {
   let moveMode = MoveMode.ERROR
   if (isReenter(turn.board, turn.player)) {
     moveMode = MoveMode.REENTER
@@ -91,12 +106,11 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
   } else {
     // P2P or NO_MOVE
     if (typeof origin.position === 'number') {
-      const destinationPosition =
-        turn.player.moveDirection === 'clockwise'
-          ? origin.position + dieValue
-          : origin.position - dieValue
+      const destinationPosition = getNextPointPosition(origin.position, dieValue, turn.player.moveDirection)
 
-      const destinationPoint = getCheckerBoxes(turn.board).find(cb => cb.position === destinationPosition)
+      const checkerboxes = getCheckerBoxes(turn.board)
+      const destinationPoint = checkerboxes.find(cb => cb.position === destinationPosition)
+
       if (isPoint(destinationPoint)) {
         if (
           // No checkers, go for it
@@ -113,7 +127,6 @@ function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue): MoveM
         moveMode = MoveMode.NO_MOVE
       }
     }
-
   }
   return moveMode
 }
@@ -124,6 +137,11 @@ function isReenter (board: Board, player: Player): boolean {
     isReenter = true
   }
   return isReenter
+}
+
+export function getNextPointPosition (position: number, dieValue: DieValue, moveDirection: MoveDirection) {
+  const nextPosition = moveDirection === 'clockwise' ? position + dieValue : position - dieValue
+  return nextPosition
 }
 
 function getMoveDestination (board: Board, player: Player, dieValue: DieValue, origin: CheckerBox): MoveResult | undefined {

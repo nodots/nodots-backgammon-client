@@ -16,12 +16,10 @@ export const isPoint = (p: any): p is Point => {
   if (typeof p !== 'object') {
     return false
   }
-  console.log(p)
 
   const keys = Object.keys(p)
 
   const idIndex = keys.findIndex(k => k === 'id')
-  console.log(idIndex)
   if (idIndex === -1) {
     console.error(`No idIndex ${idIndex}`)
     return false

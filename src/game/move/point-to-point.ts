@@ -7,10 +7,9 @@ import { canAcceptChecker, isCheckerBox } from '../../components/CheckerBox/stat
 import { Move, MoveStatus, getCheckerboxCoordinates, hit } from '.'
 import { isRail, Rail } from '../../components/Rail/state/types'
 import { Point, isPoint } from '../../components/Point/state/types'
-import { MoveResult } from './reducer'
+import { MoveResult, getNextPointPosition } from './reducer'
 
 export const pointToPoint = (board: Board, move: Move): MoveResult => {
-  console.log(move.origin?.checkers)
   let isHit = false
   let checkerToMove: Checker
   let hitChecker: Checker
@@ -31,20 +30,15 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
   }
 
   newOrigin = produce(move.origin, draft => {
-
     if (move.origin && move.origin.checkers) {
       draft.checkers.splice(move.origin.checkers.length - 1, 1)
     } else {
       throw Error('No origin')
     }
   })
-  console.log(newOrigin)
   checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
 
-  const destinationPosition =
-    move.direction === 'clockwise'
-      ? newOrigin.position + move.dieValue
-      : newOrigin.position - move.dieValue
+  const destinationPosition = getNextPointPosition(newOrigin.position, move.dieValue, move.direction)
   const destination = getCheckerBoxes(board).find(cb => typeof cb.position === 'number' && cb.position === destinationPosition)
 
   if (isPoint(destination)) {
@@ -61,8 +55,6 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
           draft.checkers.push(checkerToMove)
         }
       })
-
-      console.log(newDestination)
 
       finalMove = produce(move, draft => {
         draft.checker = checkerToMove

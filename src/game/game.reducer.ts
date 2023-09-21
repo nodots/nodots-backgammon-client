@@ -1,8 +1,8 @@
 import { produce } from 'immer'
-import { Game, GameError, isColor } from './game'
+import { Game, GameError, Color, isColor } from './game'
 import { Roll } from '../components/Die/state/types'
 import { getCheckerboxCoordinates, isMove } from './move'
-import { reducer as moveReducer } from './move/reducer'
+import { areValidMoves, reducer as moveReducer } from './move/reducer'
 import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { Move } from './move'
@@ -141,6 +141,21 @@ export const reducer = (game: Game, action: any): Game => {
               draft.board = moveResults.board
             })
           } else {
+            // TODO: Need to check here if there are any available moves. If not, turn is over.
+            if (isColor(game.activeColor)) {
+              const activeColor: Color = game.activeColor
+              const activePlayer = game.players[activeColor]
+              const dieValue = game.activeTurn.roll[failedMove.order]
+              const areMoves = areValidMoves(game.activeTurn, activePlayer, dieValue)
+              if (areMoves) {
+                return game
+              } else {
+                return produce(game, draft => {
+                  draft.activeTurn = moveResults
+                  draft.board = moveResults.board
+                })
+              }
+            }
             return game
           }
         }
@@ -173,14 +188,8 @@ export const reducer = (game: Game, action: any): Game => {
       const originInfo = getCheckerboxCoordinates(game.board, origin.id)
       const destinationInfo = getCheckerboxCoordinates(game.board, destination.id)
 
-      console.log(checkerToRevert)
-      console.log(origin.checkers)
-      console.log(destination.checkers)
-
       const newOriginCheckers = origin.checkers.filter(c => c.id !== checkerToRevert.id)
-      console.log(newOriginCheckers)
       const newDestinationCheckers = destination.checkers.concat(checkerToRevert)
-      console.log(newDestinationCheckers)
 
       const newOrigin = produce(origin, draft => {
         draft.checkers = newOriginCheckers

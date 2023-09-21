@@ -44,7 +44,7 @@ export const SignIn = () => {
         <Typography component='h1' variant='h5'>
           Sign in
         </Typography>
-        <Box component='form' action='/game' noValidate sx={{ mt: 1 }}>
+        <Box component='form' action='/game' sx={{ mt: 1 }}>
           <TextField
             margin='normal'
             required
