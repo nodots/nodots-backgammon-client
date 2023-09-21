@@ -1,5 +1,4 @@
 // Hooks
-import { useTheme } from '@mui/material'
 import { useGame } from '../../game/useGame'
 import { useState } from 'react'
 // Types
@@ -8,7 +7,7 @@ import { Color, isColor } from '../../game'
 import { GameError } from '../../game'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
 import { DieValue } from '../Die/state/types'
-import { TurnStatus } from '../../game/turn'
+import { Turn, TurnStatus } from '../../game/turn'
 import { TurnActionPayload } from '../../game/turn.reducer'
 import { MoveStatus } from '../CheckerBox/state'
 
@@ -65,18 +64,14 @@ const RollSurface = (props: RollSurfaceProps) => {
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
 
+
     if (game.activeColor !== props.color) {
       console.error('Not your turn')
     }
 
-    if (!game.activeTurn) {
-      throw new GameError({
-        model: 'Turn',
-        errorMessage: 'No activeTurn'
-      })
-    } else {
-      const activeTurn = game.activeTurn
-
+    if (game.activeTurn) {
+      console.log('ACTIVE TURN')
+      const activeTurn: Turn = game.activeTurn
       let isTurnComplete = false
 
       const lastMove = activeTurn.moves[activeTurn.moves.length - 1]
@@ -92,7 +87,7 @@ const RollSurface = (props: RollSurfaceProps) => {
 
       /* TODO: Think about whether we want this logic here.
         PROS:
-          - Easy check that prevents waiting for response 
+          - Easy check that prevents waiting for response
           from reducer. Probably not that big a deal.
         CONS:
           - Logic in two places. It has to be in the reducer, it's
@@ -112,41 +107,37 @@ const RollSurface = (props: RollSurfaceProps) => {
         finalizeTurn()
       } else if (isTurnInProgress) {
         console.error('Turn in progress')
-        // noop
-      } else {
-        const newRollValues = [roll(), roll()]
-        // const newRollValues = [5 as DieValue, 5 as DieValue]
-        console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
+      }
+    } else {
+      const newRollValues = [roll(), roll()]
+      // const newRollValues = [5 as DieValue, 5 as DieValue]
+      console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
-        const setDiceValuesPayload: SetDiceValuesPayload = {
-          color: props.color,
-          values: {
-            die1: newRollValues[0],
-            die2: newRollValues[1]
-          }
-        }
-        setDie1Value(newRollValues[0])
-        setDie2Value(newRollValues[1])
-        setDiceValues(setDiceValuesPayload)
-        if (!activeTurn.status) {
-          if (!isColor(game.activeColor)) {
-            throw new GameError({
-              model: 'Game',
-              errorMessage: `Invalid activeColor ${game.activeColor}`
-            })
-          }
-
-          const turn: TurnActionPayload = {
-            board: game.board,
-            player: game.players[game.activeColor],
-            roll: [newRollValues[0], newRollValues[1]],
-            status: TurnStatus.INITIALIZED,
-          }
-          const turnResult = initializeTurn(turn)
+      const setDiceValuesPayload: SetDiceValuesPayload = {
+        color: props.color,
+        values: {
+          die1: newRollValues[0],
+          die2: newRollValues[1]
         }
       }
-    }
+      setDie1Value(newRollValues[0])
+      setDie2Value(newRollValues[1])
+      setDiceValues(setDiceValuesPayload)
+      if (!isColor(game.activeColor)) {
+        throw new GameError({
+          model: 'Game',
+          errorMessage: `Invalid activeColor ${game.activeColor}`
+        })
+      }
 
+      const turn: TurnActionPayload = {
+        board: game.board,
+        player: game.players[game.activeColor],
+        roll: [newRollValues[0], newRollValues[1]],
+        status: TurnStatus.INITIALIZED,
+      }
+      initializeTurn(turn)
+    }
   }
 
   return (

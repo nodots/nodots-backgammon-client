@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Game, GameError, Color, isColor } from './game'
+import { Game, GameError, Color, isColor, generateId } from './game'
 import { Roll } from '../components/Die/state/types'
 import { getCheckerboxCoordinates, isMove } from './move'
 import { areValidMoves, reducer as moveReducer } from './move/reducer'
@@ -7,7 +7,7 @@ import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { Move } from './move'
 import { CheckerBox, MoveStatus } from '../components/CheckerBox/state/'
-import { turnReducer } from '../components/Player/state'
+import { InitializeTurnAction, TurnStatus, initializeMoves } from './turn'
 import { Turn, initializeTurn } from './turn'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
 import { Point } from '../components/Point/state/types'
@@ -82,23 +82,27 @@ export const reducer = (game: Game, action: any): Game => {
       })
       return newGame
     case GAME_ACTION_TYPE.INITIALIZE_TURN:
-      if (game.activeTurn) {
-        const newTurn = turnReducer(game.activeTurn, action)
-        const possibleMoves = newTurn.moves.filter(m => m.status === MoveStatus.INITIALIZED)
-        if (possibleMoves.length === 0) {
-          return produce(game, draft => {
-            draft.activeTurn = undefined
-            draft.activeColor = game.activeColor === 'black' ? 'white' : 'black'
-            draft.players.white.active = false
-            draft.players.black.active = false
-            draft.players[draft.activeColor].active = true
-          })
-        } else {
-          return produce(game, draft => {
-            draft.activeTurn = newTurn
-          })
+      if (isColor(game.activeColor)) {
+        const initializeMovesPayload: InitializeTurnAction = {
+          board: payload.board,
+          player: payload.player,
+          roll: payload.roll
         }
 
+        const moves = initializeMoves(initializeMovesPayload)
+        const activeColor: Color = game.activeColor
+        const newTurn = produce(game, draft => {
+          draft.activeTurn = {
+            id: generateId(),
+            board: game.board,
+            player: game.players[activeColor],
+            roll: payload.roll,
+            status: TurnStatus.INITIALIZED,
+            moves
+          }
+        })
+
+        return newTurn
       }
       return game
     case GAME_ACTION_TYPE.FINALIZE_TURN:

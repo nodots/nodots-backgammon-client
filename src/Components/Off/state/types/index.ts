@@ -2,6 +2,7 @@ import { Color, CheckerBoxPosition, isColor } from '../../../../game'
 import { generateId } from '../../../../game/game'
 import { Checker } from '../../../Checker/state/types'
 import { CheckerProp } from '../../../Board/state/types/board'
+import { v4 as uuid } from 'uuid'
 
 export type Off = {
   id: string,
@@ -11,6 +12,7 @@ export type Off = {
 }
 
 export const isOff = (v: any): v is Off => {
+
   if (typeof v !== 'object') {
     return false
   }
@@ -49,14 +51,14 @@ export const initialize = (setup: CheckerProp[]): { white: Off, black: Off } => 
   }
 
   const white: Off = {
-    id: generateId(),
+    id: uuid(),
     color: 'white',
     position: 'off',
     checkers: whiteCheckers
   }
 
   const black: Off = {
-    id: generateId(),
+    id: uuid(),
     color: 'black',
     position: 'off',
     checkers: blackCheckers

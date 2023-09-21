@@ -179,7 +179,6 @@ const Board = () => {
               {game.cube.owner === undefined && <Cube />}
             </Paper>
             <Paper className='off-checker-box white'><Off off={game.board.off.white} /></Paper>
-
             <Paper className='cube-container'>
               {game.cube.owner === 'white' && <Cube />}
             </Paper>

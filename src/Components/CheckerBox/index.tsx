@@ -72,7 +72,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
       }
 
       try {
-        const result = move(payload)
+        move(payload)
       } catch (e) {
         console.error(e)
       }
