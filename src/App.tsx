@@ -2,8 +2,6 @@ import { ThemeProvider, CssBaseline } from '@mui/material'
 import { GameProvider } from './game/game.provider'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { appTheme } from './theme/theme'
-import reportWebVitals from './reportWebVitals'
-import reportHandler from './reportHandler'
 
 
 import './App.scss'
@@ -11,6 +9,7 @@ import { GamePage } from './pages/game'
 import { HomePage } from './pages/home'
 import { SignIn } from './pages/registration/sign-in'
 import { SignUp } from './pages/registration/sign-up'
+import ProfilePage from './pages/profile'
 const App = () => {
   return (
     <ThemeProvider theme={appTheme}>
@@ -21,7 +20,7 @@ const App = () => {
             <Routes>
               <Route path='/' element={<HomePage />} />
               <Route path='/game' element={<GamePage />} />
-              <Route path='/sign-up' element={<SignUp />} />
+              <Route path='/profile' element={<ProfilePage />} />
               <Route path='/sign-in' element={<SignIn />} />
             </Routes>
           </GameProvider>

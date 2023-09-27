@@ -44,31 +44,7 @@ export const SignIn = () => {
         <Typography component='h1' variant='h5'>
           Sign in
         </Typography>
-        <Box component='form' action='/game' noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin='normal'
-            required
-            fullWidth
-            id='email'
-            label='Email Address'
-            name='email'
-            autoComplete='email'
-            autoFocus
-          />
-          <TextField
-            margin='normal'
-            required
-            fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            autoComplete='current-password'
-          />
-          <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
-          />
+        <Box component='form' action='http://localhost:3300/login/federated/google' noValidate sx={{ mt: 1 }}>
           <Button
             type='submit'
             fullWidth
@@ -77,18 +53,7 @@ export const SignIn = () => {
           >
             Sign In
           </Button>
-          <Grid container className='formAlternates'>
-            <Grid item xs>
-              <Link href='#' variant='body2'>
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href='/sign-up' variant='body2'>
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
+
         </Box>
       </Box>
     </Container>

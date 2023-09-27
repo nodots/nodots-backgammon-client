@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -8,8 +9,10 @@ import MenuIcon from '@mui/icons-material/Menu'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
+import { Avatar } from '@mui/material'
 
 export default function NavBar () {
+  const { user, logout } = useAuth0()
   const [auth, setAuth] = React.useState(true)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
@@ -25,10 +28,13 @@ export default function NavBar () {
     setAnchorEl(null)
   }
 
-  const handleSignOut = (e: React.MouseEvent<HTMLElement>) => {
-    const location: Location = window.location
-    location.href = '/'
+  const handleSignOut = async (e: React.MouseEvent<HTMLElement>) => {
+    const date = new Date()
+    logout({ logoutParams: { returnTo: 'http://127.0.0.1:5173' } })
+  }
 
+  const handleProfile = (e: React.MouseEvent<HTMLElement>) => {
+    window.location.href = '/profile'
   }
 
   return (
@@ -36,7 +42,7 @@ export default function NavBar () {
       <AppBar position='fixed'>
         <Toolbar sx={{ justifyContent: 'flex-end' }}>
 
-          {auth && (
+          {user && (
             <div>
               <IconButton
                 size='large'
@@ -46,7 +52,7 @@ export default function NavBar () {
                 onClick={handleMenu}
                 color='inherit'
               >
-                <AccountCircle />
+                <Avatar alt={user.name?.substring(0, 1)} src={user.picture} />
               </IconButton>
               <Menu
                 id='menu-appbar'
@@ -63,7 +69,7 @@ export default function NavBar () {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
               </Menu>
             </div>

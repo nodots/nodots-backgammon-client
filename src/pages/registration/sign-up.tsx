@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 
 import './registration.scss'
+import { Icon } from '@mui/material'
 
 export const SignUp = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -97,15 +98,18 @@ export const SignUp = () => {
           >
             Sign Up
           </Button>
-          <Grid container>
+          <hr />
+          <h4 style={{ textAlign: 'center' }}>OR</h4>
+          <a href="http://localhost:3300/login/federated/google">Sign In with Google</a>
+          {/* <Grid container>
             <Grid item>
               <Link href="/sign-in" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </Container>
+          </Grid> */}
+        </Box >
+      </Box >
+    </Container >
   )
 }

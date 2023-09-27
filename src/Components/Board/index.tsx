@@ -136,7 +136,7 @@ const Board = () => {
     const swQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SW) as QuadrantType
     const seQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.SE) as QuadrantType
     return (
-      <Paper className='board' elevation={2}>
+      <span className='board'>
         <Paper className='board-half west' elevation={4}>
           <PointLabelContainer quadrant={nwQuadrant} startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
           <Quadrant quadrant={nwQuadrant} startingPosition={13} quadrantLocation={QuadrantLocation.NW} />
@@ -192,7 +192,7 @@ const Board = () => {
             </Paper>
           </Box>
         </Paper>
-      </Paper>
+      </span>
     )
 
   } else {

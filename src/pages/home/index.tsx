@@ -1,13 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import { Button, Box, Container, Paper, Card, CardHeader } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { useAuth0 } from "@auth0/auth0-react"
+import { Button, Box, Container } from '@mui/material'
+import GoogleIcon from '@mui/icons-material/Google'
 
 export const HomePage = () => {
+  const { loginWithRedirect } = useAuth0()
   const navigate = useNavigate()
-
-  const handleSignUp = (e: React.MouseEvent) => {
-    navigate('/sign-up')
-  }
 
   const handleSignIn = (e: React.MouseEvent) => {
     navigate('/sign-in')
@@ -16,9 +14,8 @@ export const HomePage = () => {
   return <Container component='main' maxWidth='xs'>
     <h1>Nodots Backgammon</h1>
 
-    <Box>
-      <Button onClick={handleSignUp} color='secondary'>Sign Up</Button>
-      <Button variant='contained' onClick={handleSignIn} color='primary'>Sign In</Button>
+    <Box component='form' action='http://localhost:3300/login/federated/google' noValidate sx={{ mt: 1 }}>
+      <Button variant='contained' onClick={() => loginWithRedirect()}>Sign In</Button>
     </Box>
   </Container >
 
