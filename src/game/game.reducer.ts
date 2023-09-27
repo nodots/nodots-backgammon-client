@@ -11,6 +11,7 @@ import { InitializeTurnAction, TurnStatus, initializeMoves } from './turn'
 import { Turn, initializeTurn } from './turn'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
 import { Point } from '../components/Point/state/types'
+import { start } from 'repl'
 
 interface BgWebApiPlay {
   from: string,
@@ -155,7 +156,8 @@ export const reducer = (game: Game, action: any): Game => {
     case GAME_ACTION_TYPE.MOVE:
       if (game.activeTurn) {
         const bgApiPayload = buildBgApiPayload(game)
-        console.log(JSON.stringify(bgApiPayload))
+        console.log(bgApiPayload.board.o)
+        console.log(bgApiPayload.board.x)
 
         const getMoves = async (bgApiPayload: JSON) => {
           const moves = await fetch('http://localhost:8080/api/v1/getmoves', {
@@ -166,23 +168,21 @@ export const reducer = (game: Game, action: any): Game => {
             method: 'POST',
             body: JSON.stringify(bgApiPayload)
           })
-
-
-
           return moves
         }
 
         getMoves(bgApiPayload as any as JSON).then(async (m) => {
           const analysis: BgWebApiResponse[] = await m.json()
           const startingPosition = action.payload.checkerbox.position
-          analysis.forEach(a => {
-            a.play.forEach(p => {
-              if (p.from === startingPosition.toString()) {
-                console.log('possible move p:', p)
-              }
-
+          if (game.activeTurn?.moves) {
+            analysis.forEach(a => {
+              console.log(a)
+              a.play.forEach(p => {
+                console.log(p)
+              })
             })
-          })
+          }
+
         })
 
         let moveResults = moveReducer(game.activeTurn, payload.checkerbox)
