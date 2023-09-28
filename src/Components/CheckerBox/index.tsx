@@ -109,12 +109,10 @@ const CheckerBox = (props: CheckerBoxProps) => {
       countDisplay = checkerCount
     }
     if (((typeof props.checkerBox.position === 'number' || props.checkerBox.position === 'rail') && i < 6) || props.checkerBox.position === 'off') {
-      // FIXME: losing checker id in some revert situations
       checkers.push(<Checker checker={c} key={c.id ? c.id : generateId()} count={countDisplay} />)
     }
   })
-
-  return <div onClick={handleClick} onContextMenu={handleClick}>
+  return <div data-counter-clockwise={props.checkerBox.positionCounterClockwise} onClick={handleClick} onContextMenu={handleClick}>
     {checkers}
   </div>
 }

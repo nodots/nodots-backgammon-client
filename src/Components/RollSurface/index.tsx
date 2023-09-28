@@ -64,13 +64,11 @@ const RollSurface = (props: RollSurfaceProps) => {
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
 
-
     if (game.activeColor !== props.color) {
       console.error('Not your turn')
     }
 
     if (game.activeTurn) {
-      console.log('ACTIVE TURN')
       const activeTurn: Turn = game.activeTurn
       let isTurnComplete = false
 
@@ -110,7 +108,6 @@ const RollSurface = (props: RollSurfaceProps) => {
       }
     } else {
       const newRollValues = [roll(), roll()]
-      // const newRollValues = [5 as DieValue, 5 as DieValue]
       console.log('[RollSurface Component] clickHandler newValues:', newRollValues)
 
       const setDiceValuesPayload: SetDiceValuesPayload = {

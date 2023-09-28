@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { useGame } from '../../game/useGame'
 
 // Types
-import { Quadrant as QuadrantType } from '../Quadrant/state/types'
-import { QuadrantLocation } from '../Quadrant/state/types'
+import { Quadrant as QuadrantType, QuadrantLocation } from '../Quadrant/state/types'
 
 // Components
 import Quadrant from '../Quadrant'
@@ -15,120 +14,12 @@ import Off from '../Off'
 import RollSurface from '../RollSurface'
 import Cube from '../Cube'
 import Die from '../Die'
-import { CheckerProp } from './state/types/board'
 
 import './board.scss'
 
 const Board = () => {
-  const [isLoadModalOpen, setIsLoadModalOpen] = useState<boolean>(false)
   const { game } = useGame()
   const { players, cube, board } = game
-
-  type CloseReason = 'backdropClick' | 'escapeKeyDown' | 'closeButtonClick'
-
-  const closeLoadModal = (e: React.MouseEvent) => {
-    setIsLoadModalOpen(false)
-  }
-
-  const pipSaveClickHandler = (e: React.MouseEvent) => {
-    console.log('[USER NOTICE]: Saving board')
-    const date = new Date()
-    const filename = `${date.toISOString()}.${date.getTime()}.json`
-
-    let config: CheckerProp[] = []
-
-    game.board.quadrants.forEach(q => {
-      q.points.forEach(p => {
-        console.log(p)
-        if (p.checkers.length > 0) {
-          const cp: CheckerProp = {
-            color: p.checkers[0].color,
-            checkerCount: p.checkers.length,
-            position: p.position,
-          }
-          config.push(cp)
-        }
-      })
-    })
-
-    let whiteRail: CheckerProp | undefined
-    if (game.board.rail.white.checkers.length > 0) {
-      whiteRail = {
-        color: 'white',
-        checkerCount: game.board.rail.white.checkers.length,
-        position: 'rail'
-      }
-    }
-    if (whiteRail) {
-      config.push(whiteRail)
-    }
-
-    let blackRail: CheckerProp | undefined
-    if (game.board.rail.black.checkers.length > 0) {
-      blackRail = {
-        color: 'black',
-        checkerCount: game.board.rail.black.checkers.length,
-        position: 'rail'
-      }
-    }
-
-    if (blackRail) {
-      config.push(blackRail)
-    }
-
-    let whiteOff: CheckerProp | undefined
-    if (game.board.off.white.checkers.length > 0) {
-      whiteRail = {
-        color: 'white',
-        checkerCount: game.board.off.white.checkers.length,
-        position: 'off'
-      }
-    }
-    if (whiteOff) {
-      config.push(whiteOff)
-    }
-
-    let blackOff: CheckerProp | undefined
-    if (game.board.off.black.checkers.length > 0) {
-      blackOff = {
-        color: 'black',
-        checkerCount: game.board.off.black.checkers.length,
-        position: 'off'
-      }
-    }
-
-    if (blackOff) {
-      config.push(blackOff)
-    }
-
-    const dummyLink = document.createElement('a')
-    dummyLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(config)))
-    dummyLink.setAttribute('download', filename)
-    document.body.appendChild(dummyLink)
-    dummyLink.click()
-    document.body.removeChild(dummyLink)
-  }
-
-  const pipLoadClickHandler = (e: React.MouseEvent) => {
-    console.log('pipLoadClickHandler')
-    setIsLoadModalOpen(true)
-  }
-
-  const loadBoardHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target
-      && e.target.files
-      && e.target.files[0]
-    ) {
-      const boardFile = e.target.files[0]
-      const stream = boardFile.stream()
-      const boardReader = new ReadableStream(stream)
-      const reader = await boardReader.getReader()
-      let charsReceived: number = 0
-      let gameString: string = ''
-
-      const result = await reader.read()
-    }
-  }
 
   if (board) {
     const nwQuadrant = board.quadrants.find(q => q.location === QuadrantLocation.NW) as QuadrantType
@@ -150,7 +41,7 @@ const Board = () => {
           <Paper className='pip-count black'>{players.black.pipCount}</Paper>
           <Paper className='rail-checker-box white'><Rail rail={game.board.rail.black} /></Paper>
           <Paper className='rail-checker-box black'><Rail rail={game.board.rail.white} /></Paper>
-          <Paper className='pip-count white'>{players.black.pipCount}</Paper>
+          <Paper className='pip-count white'>{players.white.pipCount}</Paper>
         </Paper>
         <Paper className='board-half east' elevation={4}>
           <PointLabelContainer quadrant={neQuadrant} startingPosition={19} quadrantLocation={QuadrantLocation.NE} />
@@ -194,7 +85,6 @@ const Board = () => {
         </Paper>
       </span>
     )
-
   } else {
     return <h1>No Game Set</h1>
   }

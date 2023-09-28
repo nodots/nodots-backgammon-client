@@ -12,6 +12,8 @@ export type CheckerBox = {
   id: string,
   checkers: Checker[]
   position: CheckerBoxPosition
+  positionClockwise: CheckerBoxPosition
+  positionCounterClockwise: CheckerBoxPosition
 }
 
 export const isCheckerBox = (v: any): v is CheckerBox => {

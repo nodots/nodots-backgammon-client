@@ -7,36 +7,12 @@ import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { Move } from './move'
 import { CheckerBox, MoveStatus } from '../components/CheckerBox/state/'
-import { InitializeTurnAction, TurnStatus, initializeMoves } from './turn'
+import { InitializeTurnAction, MoveCoords, TurnStatus, initializeMoves } from './turn'
 import { Turn, initializeTurn } from './turn'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
 import { Point } from '../components/Point/state/types'
-import { start } from 'repl'
-
-interface BgWebApiPlay {
-  from: string,
-  to: string
-}
-
-interface BgWebApiResponse {
-  "evaluation": {
-    "diff": number,
-    "eq": number,
-    "info": {
-      "cubeful": boolean,
-      "plies": number
-    },
-    "probability": {
-      "lose": number,
-      "loseBG": number,
-      "loseG": number,
-      "win": number,
-      "winBG": number,
-      "winG": number
-    }
-  },
-  "play": BgWebApiPlay[]
-}
+import { buildBgApiPayload, BgWebApiResponse, BgWebApiPlay } from './integrations/bgweb-api/'
+import { Play } from './turn'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -116,7 +92,36 @@ export const reducer = (game: Game, action: any): Game => {
         }
 
         const moves = initializeMoves(initializeMovesPayload)
+        const gnuBgBestMoves: MoveCoords[] = []
         const activeColor: Color = game.activeColor
+
+        const bgApiPayload = buildBgApiPayload(game.board, game.activeColor, payload.roll, game.players)
+        let bestPlays: Play[] = []
+        const getMoves = async (bgApiPayload: JSON) => {
+          const moves = await fetch('http://localhost:8080/api/v1/getmoves', {
+            headers: {
+              'content-type': 'application/json',
+              'cross-domain': 'true'
+            },
+            method: 'POST',
+            body: JSON.stringify(bgApiPayload)
+          })
+          return moves
+        }
+        getMoves(bgApiPayload as any as JSON).then(async (m) => {
+          const analysis: BgWebApiResponse[] = await m.json()
+          const bestPlay = analysis[0]
+          console.log(`Player ${bgApiPayload.player} ${game.activeColor}`)
+          bestPlay.play.forEach((p, i) => {
+            const from = parseInt(p.from)
+            const to = parseInt(p.to)
+
+
+            console.log(`BgAPI Move ${i} ${from} => ${to}`)
+          })
+
+        })
+
         const newTurn = produce(game, draft => {
           draft.activeTurn = {
             id: generateId(),
@@ -155,36 +160,6 @@ export const reducer = (game: Game, action: any): Game => {
       })
     case GAME_ACTION_TYPE.MOVE:
       if (game.activeTurn) {
-        const bgApiPayload = buildBgApiPayload(game)
-        console.log(bgApiPayload.board.o)
-        console.log(bgApiPayload.board.x)
-
-        const getMoves = async (bgApiPayload: JSON) => {
-          const moves = await fetch('http://localhost:8080/api/v1/getmoves', {
-            headers: {
-              'content-type': 'application/json',
-              'cross-domain': 'true'
-            },
-            method: 'POST',
-            body: JSON.stringify(bgApiPayload)
-          })
-          return moves
-        }
-
-        getMoves(bgApiPayload as any as JSON).then(async (m) => {
-          const analysis: BgWebApiResponse[] = await m.json()
-          const startingPosition = action.payload.checkerbox.position
-          if (game.activeTurn?.moves) {
-            analysis.forEach(a => {
-              console.log(a)
-              a.play.forEach(p => {
-                console.log(p)
-              })
-            })
-          }
-
-        })
-
         let moveResults = moveReducer(game.activeTurn, payload.checkerbox)
         if (moveResults) {
           const failedMove = moveResults.moves.find(m => m.status === MoveStatus.NO_MOVE)
@@ -287,173 +262,6 @@ export const reducer = (game: Game, action: any): Game => {
 
   saveState(game)
   return game
-}
-
-interface BgApiPayload {
-  board: {
-    'o': {
-      '1': number,
-      '2': number,
-      '3': number,
-      '4': number,
-      '5': number,
-      '6': number,
-      '7': number,
-      '8': number,
-      '9': number,
-      '10': number,
-      '11': number,
-      '12': number,
-      '13': number,
-      '14': number,
-      '15': number,
-      '16': number,
-      '17': number,
-      '18': number,
-      '19': number,
-      '20': number,
-      '21': number,
-      '22': number,
-      '23': number,
-      '24': number,
-      'bar': number,
-    },
-    'x': {
-      '1': number,
-      '2': number,
-      '3': number,
-      '4': number,
-      '5': number,
-      '6': number,
-      '7': number,
-      '8': number,
-      '9': number,
-      '10': number,
-      '11': number,
-      '12': number,
-      '13': number,
-      '14': number,
-      '15': number,
-      '16': number,
-      '17': number,
-      '18': number,
-      '19': number,
-      '20': number,
-      '21': number,
-      '22': number,
-      '23': number,
-      '24': number,
-      'bar': number
-    },
-
-  },
-  cubeful: boolean,
-  dice: Roll,
-  'max-moves': number,
-  player: 'x' | 'o',
-  'score-moves': boolean
-}
-
-type PointLabel = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19' | '20' | '21' | '22' | '23' | '24' | 'bar'
-
-function buildBgApiPayload (game: Game): BgApiPayload {
-  const black = 'o'
-  const white = 'x'
-
-  if (game.activeTurn) {
-    const payload: BgApiPayload = {
-      board: {
-        'x': {
-          '1': 0,
-          '2': 0,
-          '3': 0,
-          '4': 0,
-          '5': 0,
-          '6': 0,
-          '7': 0,
-          '8': 0,
-          '9': 0,
-          '10': 0,
-          '11': 0,
-          '12': 0,
-          '13': 0,
-          '14': 0,
-          '15': 0,
-          '16': 0,
-          '17': 0,
-          '18': 0,
-          '19': 0,
-          '20': 0,
-          '21': 0,
-          '22': 0,
-          '23': 0,
-          '24': 0,
-          'bar': 0
-        },
-        'o': {
-          '1': 0,
-          '2': 0,
-          '3': 0,
-          '4': 0,
-          '5': 0,
-          '6': 0,
-          '7': 0,
-          '8': 0,
-          '9': 0,
-          '10': 0,
-          '11': 0,
-          '12': 0,
-          '13': 0,
-          '14': 0,
-          '15': 0,
-          '16': 0,
-          '17': 0,
-          '18': 0,
-          '19': 0,
-          '20': 0,
-          '21': 0,
-          '22': 0,
-          '23': 0,
-          '24': 0,
-          'bar': 0
-        }
-      },
-      cubeful: true,
-      dice: game.activeTurn.roll,
-      'max-moves': 4,
-      player: game.activeTurn.player.color === 'black' ? black : white,
-      'score-moves': true
-    }
-
-    game.board.quadrants.forEach(q => {
-      q.points.forEach(p => {
-        if (p.checkers.length > 0) {
-          const pString = p.position.toString() as PointLabel
-
-          const blackCheckerCount = p.checkers.filter(c => c.color === 'black').length
-          const whiteCheckerCount = p.checkers.filter(c => c.color === 'white').length
-
-          if (blackCheckerCount > 0) {
-            payload.board[black][pString] = blackCheckerCount
-          }
-          if (whiteCheckerCount > 0) {
-            payload.board[white][pString] = whiteCheckerCount
-          }
-        }
-      })
-      if (game.board.off.black.checkers.length > 0) {
-        payload.board.x.bar = game.board.off.black.checkers.length
-      }
-      if (game.board.off.white.checkers.length > 0) {
-        payload.board.x.bar = game.board.off.white.checkers.length
-      }
-    })
-    return payload
-  }
-  throw new GameError({
-    model: 'Move',
-    errorMessage: 'Could not get BgApiPayload'
-  })
 }
 
 

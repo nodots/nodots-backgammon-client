@@ -14,7 +14,7 @@ root.render(
     domain="dev-8ykjldydiqcf2hqu.us.auth0.com"
     clientId="qdkexB56guy3NFhWL3hH1vqB2zqDMwtk"
     authorizationParams={{
-      redirect_uri: 'http://127.0.0.1:5173/game'
+      redirect_uri: 'http://127.0.0.1:5173/sign-in'
     }}
   >
     <App />

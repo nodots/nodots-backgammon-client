@@ -26,7 +26,6 @@ export const isMoveResult = (mr: any): mr is MoveResult => {
 }
 
 export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
-  console.log('MOVE REDUCER')
   let moveResult: MoveResult | undefined = undefined
   let activeMove = turn.moves.find(m => m.status === MoveStatus.INITIALIZED)
 
@@ -34,9 +33,7 @@ export const reducer = (turn: Turn, origin: CheckerBox): Turn => {
     const newMove = produce(activeMove, draft => {
       draft.origin = origin
     })
-    console.log(newMove)
     const moveMode = getMoveMode(turn, origin, activeMove.dieValue)
-    console.log(MoveMode[moveMode])
     switch (moveMode) {
       case MoveMode.REENTER:
         moveResult = reenter(turn.board, newMove)

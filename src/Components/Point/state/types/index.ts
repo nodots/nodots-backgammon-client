@@ -9,6 +9,8 @@ export type Point = {
   id: string,
   checkers: Checker[]
   position: number
+  positionClockwise: number
+  positionCounterClockwise: number
   color?: Color
 }
 
@@ -55,6 +57,8 @@ export const initialize = (setup: CheckerProp[]): Point[] => {
     const point: Point = {
       id: generateId(),
       position,
+      positionClockwise: 25 - position,
+      positionCounterClockwise: position,
       checkers: []
     }
     const config = setup.find(p => p.position === position)
