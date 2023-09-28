@@ -1,6 +1,6 @@
 import { v4 as generateId } from 'uuid'
 import { produce } from 'immer'
-import { InitializeTurnAction, Turn, TurnStatus, initializeMoves } from './turn'
+import { Analytics, InitializeTurnAction, Turn, TurnStatus, initializeMoves } from './turn'
 import { GameError } from '.'
 import { Board } from '../components/Board/state'
 import { Player } from '../components/Player/state'
@@ -11,7 +11,8 @@ export interface TurnActionPayload {
   board: Board,
   player: Player,
   roll: Roll,
-  status: TurnStatus
+  status: TurnStatus,
+  analytics: Analytics[]
 }
 
 export interface TurnAction {

@@ -2,9 +2,10 @@
 import { useGame } from '../../game/useGame'
 import { useState } from 'react'
 // Types
-import { roll, Die as DieType } from '../Die/state/types'
+import { roll, Roll, Die as DieType } from '../Die/state/types'
 import { Color, isColor } from '../../game'
 import { GameError } from '../../game'
+import { Analytics } from '../../game/turn'
 import { SetDiceValuesPayload } from '../Die/state/dice.context'
 import { DieValue } from '../Die/state/types'
 import { Turn, TurnStatus } from '../../game/turn'
@@ -16,14 +17,16 @@ import Die from '../Die'
 
 // MUI
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
+import { BgWebApi_getTurnAnalytics } from '../../game/integrations/bgweb-api'
 
 interface RollSurfaceProps {
   color: Color
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
-  const { game, initializeTurn, finalizeTurn, setDiceValues } = useGame()
+  const { game, initializeTurn, finalizeTurn, getTurnAnalytics, setDiceValues } = useGame()
   const activeTurn = game.activeTurn
+  console.log(activeTurn)
   let die1: DieType | undefined = undefined
   let die2: DieType | undefined = undefined
 
@@ -61,7 +64,7 @@ const RollSurface = (props: RollSurfaceProps) => {
     e.stopPropagation()
   }
 
-  const clickHandler = (e: React.MouseEvent) => {
+  const clickHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
 
     if (game.activeColor !== props.color) {
@@ -127,13 +130,26 @@ const RollSurface = (props: RollSurfaceProps) => {
         })
       }
 
+      const bgWebAnalytics = await BgWebApi_getTurnAnalytics(game.board, newRollValues as Roll, game.players)
+      const bgWebAnalyticsPayload = {
+        api: 'bgwebapi',
+        analysis: bgWebAnalytics
+      }
+      const analytics: Analytics[] = [bgWebAnalyticsPayload]
+
       const turn: TurnActionPayload = {
         board: game.board,
         player: game.players[game.activeColor],
         roll: [newRollValues[0], newRollValues[1]],
         status: TurnStatus.INITIALIZED,
+        analytics
+
       }
+
+
       initializeTurn(turn)
+
+
     }
   }
 

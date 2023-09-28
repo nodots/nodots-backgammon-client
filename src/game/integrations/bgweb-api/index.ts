@@ -1,3 +1,4 @@
+import { Turn } from '../../turn'
 import { Color } from '../../game'
 import { Player } from '../../../components/Player/state'
 import { Roll } from '../../../components/Die/state/types'
@@ -6,11 +7,12 @@ import { Board } from '../../../components/Board/state/types/board'
 const black = 'o'
 const white = 'x'
 const analysisMoves = 5
+
 export interface BgWebApiPlay {
   from: string
   to: string
 }
-export interface BgWebApiResponse {
+export interface BgWebApi_TurnAnalysis {
   "evaluation": {
     "diff": number
     "eq": number
@@ -29,6 +31,7 @@ export interface BgWebApiResponse {
   }
   "play": BgWebApiPlay[]
 }
+
 interface BgApiPayload {
   board: {
     'o': {
@@ -89,13 +92,39 @@ interface BgApiPayload {
   }
   cubeful: boolean
   dice: Roll
-  'max-moves': number
-  player: 'x' | 'o'
+  player: string
   'score-moves': boolean
+  'max-moves'?: number
 }
 
 type PointLabel = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16' | '17' | '18' | '19' | '20' | '21' | '22' | '23' | '24' | 'bar'
-export function buildBgApiPayload (board: Board, activeColor: Color, roll: Roll, players: { white: Player, black: Player }): BgApiPayload {
+
+const getMoves = async (bgApiPayload: JSON) => {
+  const moves = await fetch('http://localhost:8080/api/v1/getmoves', {
+    headers: {
+      'content-type': 'application/json',
+      'cross-domain': 'true'
+    },
+    method: 'POST',
+    body: JSON.stringify(bgApiPayload)
+  })
+  return moves
+}
+
+export const BgWebApi_getTurnAnalytics = async (board: Board, roll: Roll, players: { white: Player, black: Player }): Promise<BgWebApi_TurnAnalysis[] | void> => {
+  let turnAnalysis: BgWebApi_TurnAnalysis[] | undefined = undefined
+  const payload = buildTurnAnalysisPayload(board, roll, players)
+
+  await getMoves(payload as any as JSON).then(async (m) => {
+    turnAnalysis = await m.json() as BgWebApi_TurnAnalysis[]
+  })
+  return turnAnalysis
+}
+
+function buildTurnAnalysisPayload (board: Board, roll: Roll, players: { white: Player, black: Player }): BgApiPayload {
+  const activePlayer = players.white.active ? players.white : players.black
+  const activeColor = activePlayer.color
+
   const payload: BgApiPayload = {
     board: {
       'x': {
@@ -155,7 +184,6 @@ export function buildBgApiPayload (board: Board, activeColor: Color, roll: Roll,
     },
     cubeful: true,
     dice: roll,
-    'max-moves': analysisMoves,
     player: activeColor === 'black' ? black : white,
     'score-moves': true
   }

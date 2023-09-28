@@ -5,12 +5,14 @@ import { CubeValue, SetCubeValuePayload, double } from '../components/Cube/state
 import { SetDiceValuesPayload } from '../components/Die/state'
 import { TurnActionPayload } from './turn.reducer'
 import { MoveActionPayload } from './move'
+import { BgWebApi_TurnAnalysis } from './integrations/bgweb-api'
 
 type UseGameHookType = {
   game: Game
   setDiceValues: (payload: SetDiceValuesPayload) => void
   setCubeValue: (payload: SetCubeValuePayload) => void
   initializeTurn: (payload: TurnActionPayload) => void
+  getTurnAnalytics: () => BgWebApi_TurnAnalysis[]
   finalizeTurn: () => void
   double: (value: CubeValue) => CubeValue
   move: (payload: MoveActionPayload) => void
@@ -18,6 +20,6 @@ type UseGameHookType = {
 }
 
 export const useGame = (): UseGameHookType => {
-  const { game, initializeTurn, finalizeTurn, setDiceValues, setCubeValue, move, revert } = useContext(GameContext)
-  return { game, initializeTurn, finalizeTurn, setDiceValues, setCubeValue, move, revert, double }
+  const { game, initializeTurn, finalizeTurn, getTurnAnalytics, setDiceValues, setCubeValue, move, revert } = useContext(GameContext)
+  return { game, initializeTurn, finalizeTurn, getTurnAnalytics, setDiceValues, setCubeValue, move, revert, double }
 }

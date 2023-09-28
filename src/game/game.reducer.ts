@@ -7,18 +7,19 @@ import { reducer as diceReducer } from '../components/Die/state/'
 import { reducer as cubeReducer } from '../components/Cube/state/'
 import { Move } from './move'
 import { CheckerBox, MoveStatus } from '../components/CheckerBox/state/'
-import { InitializeTurnAction, MoveCoords, TurnStatus, initializeMoves } from './turn'
+import { Analytics, InitializeTurnAction, MoveCoords, TurnStatus, initializeMoves } from './turn'
 import { Turn, initializeTurn } from './turn'
 import { getPipCountForPlayer } from '../components/Board/state/types/board'
 import { Point } from '../components/Point/state/types'
-import { buildBgApiPayload, BgWebApiResponse, BgWebApiPlay } from './integrations/bgweb-api/'
 import { Play } from './turn'
+import { BgWebApi_TurnAnalysis, BgWebApi_getTurnAnalytics } from './integrations/bgweb-api'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
   SET_CUBE_VALUE,
   INITIALIZE_TURN,
   FINALIZE_TURN,
+  GET_TURN_ANALYTICS,
   MOVE,
   REVERT_MOVE
 }
@@ -38,9 +39,8 @@ export const retrieveState = (): Game | undefined => {
 
 export const reducer = (game: Game, action: any): Game => {
   const { type, payload } = action
-  // console.log('[Game Reducer] reducer params state', state)
-  // console.log('[Game Reducer] reducer params action.type', GAME_ACTION_TYPE[type])
-  // console.log('[Game Reducer] reducer params action.payload', payload)
+  console.log('[Game Reducer] reducer params action.type', GAME_ACTION_TYPE[type])
+  console.log('[Game Reducer] reducer params action.payload', payload)
   switch (type) {
     case GAME_ACTION_TYPE.SET_CUBE_VALUE:
       const newCube = cubeReducer(game.cube, action)
@@ -92,48 +92,43 @@ export const reducer = (game: Game, action: any): Game => {
         }
 
         const moves = initializeMoves(initializeMovesPayload)
-        const gnuBgBestMoves: MoveCoords[] = []
         const activeColor: Color = game.activeColor
 
-        const bgApiPayload = buildBgApiPayload(game.board, game.activeColor, payload.roll, game.players)
-        let bestPlays: Play[] = []
-        const getMoves = async (bgApiPayload: JSON) => {
-          const moves = await fetch('http://localhost:8080/api/v1/getmoves', {
-            headers: {
-              'content-type': 'application/json',
-              'cross-domain': 'true'
-            },
-            method: 'POST',
-            body: JSON.stringify(bgApiPayload)
-          })
-          return moves
-        }
-        getMoves(bgApiPayload as any as JSON).then(async (m) => {
-          const analysis: BgWebApiResponse[] = await m.json()
-          const bestPlay = analysis[0]
-          console.log(`Player ${bgApiPayload.player} ${game.activeColor}`)
-          bestPlay.play.forEach((p, i) => {
-            const from = parseInt(p.from)
-            const to = parseInt(p.to)
+        console.log(payload)
 
-
-            console.log(`BgAPI Move ${i} ${from} => ${to}`)
-          })
-
-        })
-
-        const newTurn = produce(game, draft => {
+        return produce(game, draft => {
           draft.activeTurn = {
             id: generateId(),
             board: game.board,
             player: game.players[activeColor],
             roll: payload.roll,
             status: TurnStatus.INITIALIZED,
-            moves
+            moves,
+            analytics: payload.analytics
           }
         })
+      }
+      return game
+    case GAME_ACTION_TYPE.GET_TURN_ANALYTICS:
+      if (!game.activeTurn) {
+        throw Error('No game.activeTurn')
+      } else {
+        BgWebApi_getTurnAnalytics(game.board, game.activeTurn.roll, game.players)
+          .then(a => {
+            const gameWAnalytics = produce(game, draft => {
+              if (draft.activeTurn) {
+                const analytics: Analytics = {
+                  api: 'bgwebapi',
+                  analysis: a
+                }
+                console.log(analytics)
+                draft.activeTurn.analytics.push(analytics)
+              }
+            })
+            console.log(gameWAnalytics)
+            return gameWAnalytics
 
-        return newTurn
+          })
       }
       return game
     case GAME_ACTION_TYPE.FINALIZE_TURN:

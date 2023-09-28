@@ -3,11 +3,13 @@ import { Roll, DiePair } from '../../../Die/state/types'
 import { Board } from '../../../Board/state/types'
 import { isDiePair } from '../../../Die/state/types/die-pair'
 import { QuadrantLocation } from '../../../Quadrant/state'
+import { Analytics } from '../../../../game/turn'
 
 export interface InitializeTurnAction {
   board: Board,
   player: Player,
-  roll: Roll
+  roll: Roll,
+  analytics: Analytics[]
 }
 
 export type Player = {

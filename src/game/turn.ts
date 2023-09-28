@@ -6,9 +6,13 @@ import { Board, Move, MoveStatus } from '../components/Board/state/types'
 import { DieValue, Roll } from '../components/Die/state/types'
 import { POINT_COUNT, getCheckerBoxes, isBoard } from '../components/Board/state/types/board'
 import { getHomeQuadrantLocation } from '../components/Player/state/types/player'
-import { BgWebApiPlay } from './integrations/bgweb-api'
 
 export const MOVES_PER_TURN = 2
+
+export type Analytics = {
+  api: string,
+  analysis: any
+}
 
 export enum TurnStatus {
   INITIALIZED,
@@ -30,7 +34,8 @@ export type Turn = {
   player: Player
   roll: Roll
   status: TurnStatus | undefined
-  moves: Move[]
+  moves: Move[],
+  analytics: Analytics[]
 }
 
 export const isTurn = (t: any): t is Turn => {
@@ -84,7 +89,7 @@ export const initializeTurn = (action: InitializeTurnAction): Turn => {
     roll: action.roll,
     status: TurnStatus.INITIALIZED,
     moves: moves,
-    gnuBgBestMoves: []
+    analytics: []
   }
   return turn
 }
