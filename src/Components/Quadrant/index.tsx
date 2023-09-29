@@ -32,7 +32,9 @@ export const PointLabelContainer = (props: QuadrantProps) => {
   const labels: React.JSX.Element[] = []
 
   for (let i = props.startingPosition; i < props.startingPosition + 6; i++) {
-    labels.push(<Box className='point-label' key={i}>{i}</Box>)
+    const clockwisePosition = 25 - i
+
+    labels.push(<Box className='point-label' key={i}>{i}/{clockwisePosition}</Box>)
   }
 
   return <Box className={`point-labels ${QuadrantLocation[props.quadrantLocation]}`}>

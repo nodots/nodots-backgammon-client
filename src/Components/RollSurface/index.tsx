@@ -75,15 +75,22 @@ const RollSurface = (props: RollSurfaceProps) => {
       console.log(play)
 
       play.forEach(p => {
-        const originPosition = p.from
+        console.log(p)
         let originPoint: CheckerBox | undefined = undefined
         const checkerboxes = getCheckerBoxes(game.board)
-        console.log(checkerboxes)
         console.log(activePlayer.moveDirection)
+
+        let relativePosition: number | undefined = undefined
         originPoint = checkerboxes.find(cb => {
-          let relativePosition = cb.position
           if (activePlayer.moveDirection === 'counterclockwise') {
-            relativePosition = cb.positionCounterClockwise
+            if (typeof cb.position === 'number') {
+              relativePosition = cb.positionCounterClockwise as number
+            }
+          } else {
+            if (typeof cb.position === 'number') {
+
+              relativePosition = cb.position as number
+            }
           }
           return cb.position == relativePosition
         })
@@ -93,7 +100,6 @@ const RollSurface = (props: RollSurfaceProps) => {
             player: activePlayer,
             checkerbox: originPoint
           }
-          console.log(game.activeTurn)
           console.log(payload)
           try {
             move(payload)
@@ -101,7 +107,8 @@ const RollSurface = (props: RollSurfaceProps) => {
             console.error(e)
           }
         } else {
-          throw Error('No origin point')
+          console.log(relativePosition)
+          console.error('No origin point')
         }
 
       })
