@@ -19,6 +19,7 @@ export type Player = {
   dice: DiePair
   moveDirection: MoveDirection
   pipCount: number
+  isRobot: boolean
   homeQuadrantLocation?: QuadrantLocation
   bearOffQuadrantLocation?: QuadrantLocation
 }
