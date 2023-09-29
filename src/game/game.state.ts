@@ -13,7 +13,7 @@ const blackPlayer: Player = {
   pipCount: 167,
   moveDirection: 'clockwise',
   dice: initDiceState.black,
-  isRobot: true
+  isRobot: false
 }
 const whitePlayer: Player = {
   id: generateId(),

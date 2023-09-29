@@ -39,8 +39,8 @@ export const retrieveState = (): Game | undefined => {
 
 export const reducer = (game: Game, action: any): Game => {
   const { type, payload } = action
-  console.log('[Game Reducer] reducer params action.type', GAME_ACTION_TYPE[type])
-  console.log('[Game Reducer] reducer params action.payload', payload)
+  // console.log('[Game Reducer] reducer params action.type', GAME_ACTION_TYPE[type])
+  // console.log('[Game Reducer] reducer params action.payload', payload)
   switch (type) {
     case GAME_ACTION_TYPE.SET_CUBE_VALUE:
       const newCube = cubeReducer(game.cube, action)
