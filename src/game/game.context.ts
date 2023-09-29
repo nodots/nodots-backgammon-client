@@ -1,10 +1,10 @@
 import { createContext, useReducer } from 'react'
-import { SetDiceValuesPayload } from '../components/Die/state'
-import { SetCubeValuePayload } from '../components/Cube/state'
+import { SetDiceValuesPayload } from '../components/die/state'
+import { SetCubeValuePayload } from '../components/cube/state'
 import { reducer, GAME_ACTION_TYPE } from './game.reducer'
 import { Game } from './game'
 import { initialGameState } from './game.state'
-import { InitializeTurnAction } from '../components/Player/state/types/player'
+import { InitializeTurnAction } from '../components/player/state/types/player'
 import { MoveActionPayload } from './move'
 
 export const useGameContext = (initialState: Game) => {

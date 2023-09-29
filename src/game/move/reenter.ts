@@ -1,19 +1,19 @@
 import { produce } from 'immer'
-import { Point } from '../../components/Point/state/types'
-import { Checker, isChecker } from '../../components/Checker/state'
-import { Board } from '../../components/Board/state'
-import { Rail, isRail } from '../../components/Rail/state/types'
+import { Point } from '../../components/point/state/types'
+import { Checker, isChecker } from '../../components/checker/state'
+import { Board } from '../../components/board/state'
+import { Bar, isBar } from '../../components/bar/state/types'
 import { Move, MoveStatus, MoveMode, getCheckerboxCoordinates } from '.'
 import { MoveResult } from './reducer'
-import { QuadrantLocation, isQuadrant } from '../../components/Quadrant/state'
-import { canAcceptChecker, isCheckerBox } from '../../components/CheckerBox/state/types'
+import { QuadrantLocation, isQuadrant } from '../../components/quadrant/state'
+import { canAcceptChecker, isCheckerBox } from '../../components/checkerbox/state/types'
 
 export const reenter = (board: Board, move: Move): MoveResult => {
   let isHit = false
   let moveResult = { board, move }
   let checkerToMove: Checker | undefined = undefined
 
-  if (!isRail(move.origin)) {
+  if (!isBar(move.origin)) {
     console.error('[User Message]: you must move checkers on the rail first')
   } else {
     const oldOrigin = board.rail[move.origin.color]
@@ -41,8 +41,8 @@ export const reenter = (board: Board, move: Move): MoveResult => {
           hitChecker = opponentCheckers[0]
         }
 
-        let oldOpponentRail: Rail | undefined = undefined
-        let newOpponentRail: Rail | undefined = undefined
+        let oldOpponentRail: Bar | undefined = undefined
+        let newOpponentRail: Bar | undefined = undefined
 
         let newDestination = produce(destinationPoint, draft => {
           if (isChecker(checkerToMove)) {
@@ -64,10 +64,10 @@ export const reenter = (board: Board, move: Move): MoveResult => {
 
         let newBoard = produce(board, draft => {
           draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination as Point
-          if (isChecker(checkerToMove) && isRail(newOrigin)) {
+          if (isChecker(checkerToMove) && isBar(newOrigin)) {
             draft.rail[checkerToMove.color] = newOrigin
           }
-          if (isRail(newOpponentRail) && isChecker(hitChecker)) {
+          if (isBar(newOpponentRail) && isChecker(hitChecker)) {
             draft.rail[hitChecker.color] = newOpponentRail
           }
         })

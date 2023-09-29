@@ -3,7 +3,7 @@ import {
   Card, CardHeader, CardContent, Box,
   Table, TableBody, TableCell, TableRow
 } from '@mui/material'
-import { Move, MoveStatus, MoveMode } from '../CheckerBox/state'
+import { Move, MoveStatus, MoveMode } from '../checkerbox/state'
 import { TurnStatus } from '../../game/turn'
 
 export interface DebugProps {

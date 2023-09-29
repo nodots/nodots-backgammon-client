@@ -1,11 +1,11 @@
 import { v4 as generateId } from 'uuid'
 import { produce } from 'immer'
 import { GameError } from '.'
-import { Player, isPlayer } from '../components/Player/state/types/player'
-import { Board, Move, MoveStatus } from '../components/Board/state/types'
-import { DieValue, Roll } from '../components/Die/state/types'
-import { POINT_COUNT, getCheckerBoxes, isBoard } from '../components/Board/state/types/board'
-import { getHomeQuadrantLocation } from '../components/Player/state/types/player'
+import { Player, isPlayer } from '../components/player/state/types/player'
+import { Board, Move, MoveStatus } from '../components/board/state/types'
+import { DieValue, Roll } from '../components/die/state/types'
+import { POINT_COUNT, getCheckerBoxes, isBoard } from '../components/board/state/types/board'
+import { getHomeQuadrantLocation } from '../components/player/state/types/player'
 
 export const MOVES_PER_TURN = 2
 

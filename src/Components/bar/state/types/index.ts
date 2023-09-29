@@ -1,16 +1,16 @@
 import { v4 as generateId } from 'uuid'
 import { Color, CheckerBoxPosition, isColor } from '../../../../game'
-import { Checker } from '../../../Checker/state/types'
-import { CheckerProp } from '../../../Board/state/types/board'
+import { Checker } from '../../../checker/state/types'
+import { CheckerProp } from '../../../board/state/types/board'
 
-export type Rail = {
+export type Bar = {
   id: string,
   color: Color,
   checkers: Checker[],
   position: CheckerBoxPosition
 }
 
-export const isRail = (v: any): v is Rail => {
+export const isBar = (v: any): v is Bar => {
   if (typeof v !== 'object') {
     return false
   }
@@ -30,7 +30,7 @@ export const isRail = (v: any): v is Rail => {
   return true
 }
 
-export function initialize (setup: CheckerProp[]): { white: Rail, black: Rail } {
+export function initialize (setup: CheckerProp[]): { white: Bar, black: Bar } {
   const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'rail')
   const whiteCheckers: Checker[] = []
   if (whiteCheckerSetup) {
@@ -47,14 +47,14 @@ export function initialize (setup: CheckerProp[]): { white: Rail, black: Rail } 
     }
   }
 
-  const white: Rail = {
+  const white: Bar = {
     id: generateId(),
     color: 'white',
     position: 'rail',
     checkers: whiteCheckers
   }
 
-  const black: Rail = {
+  const black: Bar = {
     id: generateId(),
     color: 'black',
     position: 'rail',

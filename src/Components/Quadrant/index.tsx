@@ -1,6 +1,6 @@
 import { Quadrant as QuadrantType, QuadrantLocation } from './state/types'
 // Components
-import Point from '../Point'
+import Point from '../point'
 // UI
 import { Box } from '@mui/material'
 

@@ -1,7 +1,7 @@
 // Types
-import { Rail as RailType } from './state/types'
+import { Bar as RailType } from './state/types'
 // Components
-import CheckerBox from '../CheckerBox'
+import CheckerBox from '../checkerbox'
 
 interface RailProps {
   rail: RailType

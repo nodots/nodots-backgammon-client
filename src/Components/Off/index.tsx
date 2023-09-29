@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material'
-import CheckerBox from '../CheckerBox'
+import CheckerBox from '../checkerbox'
 import { Off as OffType } from './state/types'
 
 interface OffProps {

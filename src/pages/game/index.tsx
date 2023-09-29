@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import Board from '../../Components/Board'
-import NavBar from '../../Components/Core/NavBar'
+import Board from '../../components/board'
+import NavBar from '../../components/core/core'
 
 const API_SERVER = 'http://127.0.0.1:3300'
 const USER_END_POINT = `${API_SERVER}/user`

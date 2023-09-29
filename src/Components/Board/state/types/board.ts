@@ -1,11 +1,11 @@
-import { isColor } from '../../../../game/'
-import { Player, isPlayer } from '../../../Player/state'
-import { Checker } from '../../../Checker/state'
-import { CheckerBox } from '../../../CheckerBox/state/types'
-import { Point } from '../../../Point/state/types'
-import { Off, initialize as initializeOff } from '../../../Off/state/types'
-import { Rail, initialize as initializeRail } from '../../../Rail/state/types'
-import { Quadrant, initialize as initializeQuadrants } from '../../../Quadrant/state/types'
+import { isColor } from '../../../../game'
+import { Player, isPlayer } from '../../../player/state'
+import { Checker } from '../../../checker/state'
+import { CheckerBox } from '../../../checkerbox/state/types'
+import { Point } from '../../../point/state/types'
+import { Off, initialize as initializeOff } from '../../../off/state/types'
+import { Bar, initialize as initializeRail } from '../../../bar/state/types'
+import { Quadrant, initialize as initializeQuadrants } from '../../../quadrant/state/types'
 import DEFAULT_SETUP from '../config/DEFAULT.json'
 import { CHECKERS_PER_PLAYER } from '../../../../game/game'
 import { GameError } from '../../../../game/game'
@@ -30,8 +30,8 @@ export type Board = {
     black: Off,
   }
   rail: {
-    white: Rail,
-    black: Rail
+    white: Bar,
+    black: Bar
   }
 }
 
@@ -162,11 +162,11 @@ export const getCheckers = (board: Board): { white: Checker[], black: Checker[] 
 
 interface CheckerLocation {
   checkerId: string,
-  location: Point | Rail | Off | undefined
+  location: Point | Bar | Off | undefined
 }
 
-export const findChecker = (board: Board, checkerId: string): Point | Rail | Off | void => {
-  let checkerLocation: Point | Rail | Off | void
+export const findChecker = (board: Board, checkerId: string): Point | Bar | Off | void => {
+  let checkerLocation: Point | Bar | Off | void
 
   checkerLocation = board.quadrants.forEach(q => {
     q.points.forEach((p) => {

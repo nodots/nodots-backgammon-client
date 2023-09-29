@@ -1,9 +1,9 @@
 import { produce } from 'immer'
 import { GameError } from '../game'
-import { Checker, isChecker } from '../../components/Checker/state'
-import { Rail } from '../../components/Rail/state/types'
+import { Checker, isChecker } from '../../components/checker/state'
+import { Bar } from '../../components/bar/state/types'
 
-export const hit = (rail: Rail, checker: Checker): Rail => {
+export const hit = (rail: Bar, checker: Checker): Bar => {
   if (!isChecker(checker)) {
     throw new GameError({
       model: 'Move',

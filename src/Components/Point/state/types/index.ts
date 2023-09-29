@@ -1,7 +1,7 @@
 import { v4 as generateId } from 'uuid'
 import { Color } from '../../../../game'
-import { POINT_COUNT, CheckerProp } from '../../../Board/state/types/board'
-import { Checker } from '../../../Checker/state/types'
+import { POINT_COUNT, CheckerProp } from '../../../board/state/types/board'
+import { Checker } from '../../../checker/state/types'
 
 
 // FIXME: Either use the color attribute throughout the app or abandon

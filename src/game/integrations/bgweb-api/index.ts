@@ -1,8 +1,8 @@
 import { Turn } from '../../turn'
 import { Color } from '../../game'
-import { Player } from '../../../components/Player/state'
-import { Roll } from '../../../components/Die/state/types'
-import { Board } from '../../../components/Board/state/types/board'
+import { Player } from '../../../components/player/state'
+import { Roll } from '../../../components/die/state/types'
+import { Board } from '../../../components/board/state/types/board'
 
 const black = 'o'
 const white = 'x'

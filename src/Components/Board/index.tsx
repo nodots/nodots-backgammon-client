@@ -4,16 +4,16 @@ import { useState } from 'react'
 import { useGame } from '../../game/useGame'
 
 // Types
-import { Quadrant as QuadrantType, QuadrantLocation } from '../Quadrant/state/types'
+import { Quadrant as QuadrantType, QuadrantLocation } from '../quadrant/state/types'
 
 // Components
-import Quadrant from '../Quadrant'
-import { PointLabelContainer } from '../Quadrant'
-import Rail from '../Rail'
-import Off from '../Off'
-import RollSurface from '../RollSurface'
-import Cube from '../Cube'
-import Die from '../Die'
+import Quadrant from '../quadrant'
+import { PointLabelContainer } from '../quadrant'
+import Rail from '../bar'
+import Off from '../off'
+import RollSurface from '../roll-surface'
+import Cube from '../cube'
+import Die from '../die'
 
 import './board.scss'
 

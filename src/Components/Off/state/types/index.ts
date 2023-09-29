@@ -1,7 +1,7 @@
 import { Color, CheckerBoxPosition, isColor } from '../../../../game'
 import { generateId } from '../../../../game/game'
-import { Checker } from '../../../Checker/state/types'
-import { CheckerProp } from '../../../Board/state/types/board'
+import { Checker } from '../../../checker/state/types'
+import { CheckerProp } from '../../../board/state/types/board'
 import { v4 as uuid } from 'uuid'
 
 export type Off = {

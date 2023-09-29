@@ -2,9 +2,9 @@ import { v4 as generateId } from 'uuid'
 import { produce } from 'immer'
 import { Analytics, InitializeTurnAction, Turn, TurnStatus, initializeMoves } from './turn'
 import { GameError } from '.'
-import { Board } from '../components/Board/state'
-import { Player } from '../components/Player/state'
-import { Roll } from '../components/Die/state'
+import { Board } from '../components/board/state'
+import { Player } from '../components/player/state'
+import { Roll } from '../components/die/state'
 import { GAME_ACTION_TYPE } from './game.reducer'
 
 export interface TurnActionPayload {

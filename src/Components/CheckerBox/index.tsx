@@ -6,12 +6,12 @@ import { useGame } from '../../game/useGame'
 import { isColor } from '../../game/game'
 import { GameError } from '../../game/game'
 import { CheckerBox as CheckerBoxType } from './state/types'
-import { getHomeQuadrantLocation } from '../Player/state/types/player'
+import { getHomeQuadrantLocation } from '../player/state/types/player'
 import { Move, MoveActionPayload, } from '../../game/move'
-import Checker from '../Checker'
-import { Checker as CheckerType } from '../Checker/state/types'
-import { isPlayer } from '../Player/state/types/player'
-import { isQuadrant } from '../Quadrant/state'
+import Checker from '../checker'
+import { Checker as CheckerType } from '../checker/state/types'
+import { isPlayer } from '../player/state/types/player'
+import { isQuadrant } from '../quadrant/state'
 
 interface CheckerBoxProps {
   checkerBox: CheckerBoxType

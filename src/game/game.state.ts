@@ -1,8 +1,8 @@
 import { v4 as generateId } from 'uuid'
-import { initCubeState } from '../components/Cube/state'
-import { Player } from '../components/Player/state'
-import { initBoardState } from '../components/Board/state'
-import { initDiceState, roll } from '../components/Die/state'
+import { initCubeState } from '../components/cube/state'
+import { Player } from '../components/player/state'
+import { initBoardState } from '../components/board/state'
+import { initDiceState, roll } from '../components/die/state'
 import { Game } from './game'
 
 // FIXME: needs to be from user input
@@ -13,7 +13,7 @@ const blackPlayer: Player = {
   pipCount: 167,
   moveDirection: 'clockwise',
   dice: initDiceState.black,
-  isRobot: false
+  isRobot: true
 }
 const whitePlayer: Player = {
   id: generateId(),

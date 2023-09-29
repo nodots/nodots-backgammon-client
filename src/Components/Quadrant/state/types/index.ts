@@ -1,6 +1,6 @@
 import { v4 as generateId } from 'uuid'
-import { CheckerProp } from '../../../Board/state/types/board'
-import { Point, initialize as initializePoints } from '../../../Point/state/types'
+import { CheckerProp } from '../../../board/state/types/board'
+import { Point, initialize as initializePoints } from '../../../point/state/types'
 
 export enum QuadrantLocation {
   SE,

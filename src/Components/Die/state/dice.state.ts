@@ -1,4 +1,4 @@
-import { DiePair } from './types/'
+import { DiePair } from './types'
 
 export const initDiceState: Dice = initializeDice()
 

@@ -2,26 +2,26 @@
 import { useGame } from '../../game/useGame'
 import { useState, useEffect } from 'react'
 // Types
-import { roll, Roll, Die as DieType } from '../Die/state/types'
+import { roll, Roll, Die as DieType } from '../die/state/types'
 import { CheckerBoxPosition, Color, isColor } from '../../game'
 import { GameError } from '../../game'
 import { Analytics } from '../../game/turn'
-import { SetDiceValuesPayload } from '../Die/state/dice.context'
-import { DieValue } from '../Die/state/types'
+import { SetDiceValuesPayload } from '../die/state/dice.context'
+import { DieValue } from '../die/state/types'
 import { Turn, TurnStatus } from '../../game/turn'
 import { TurnActionPayload } from '../../game/turn.reducer'
-import { MoveStatus } from '../CheckerBox/state'
-import { Player } from '../Player/state'
-import { CheckerBox } from '../CheckerBox/state'
+import { MoveStatus } from '../checkerbox/state'
+import { Player } from '../player/state'
+import { CheckerBox } from '../checkerbox/state'
 import { MoveActionPayload } from '../../game/move'
 
 // Components
-import Die from '../Die'
+import Die from '../die'
 
 // MUI
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
 import { BgWebApi_getTurnAnalytics } from '../../game/integrations/bgweb-api'
-import { getCheckerBoxes } from '../Board/state'
+import { getCheckerBoxes } from '../board/state'
 
 interface RollSurfaceProps {
   color: Color

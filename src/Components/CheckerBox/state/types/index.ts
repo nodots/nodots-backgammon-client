@@ -1,5 +1,5 @@
 import { CheckerBoxPosition } from '../../../../game'
-import { Checker } from '../../../Checker/state/types'
+import { Checker } from '../../../checker/state/types'
 import { Color } from '../../../../game'
 
 /**
