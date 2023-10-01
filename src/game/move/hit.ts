@@ -3,7 +3,7 @@ import { GameError } from '../game'
 import { Checker, isChecker } from '../../components/checker/state'
 import { Bar } from '../../components/bar/state/types'
 
-export const hit = (rail: Bar, checker: Checker): Bar => {
+export const hit = (bar: Bar, checker: Checker): Bar => {
   if (!isChecker(checker)) {
     throw new GameError({
       model: 'Move',
@@ -11,7 +11,7 @@ export const hit = (rail: Bar, checker: Checker): Bar => {
     })
   }
 
-  const newRail = produce(rail, draft => {
+  const newRail = produce(bar, draft => {
     draft.checkers.push(checker)
   })
 

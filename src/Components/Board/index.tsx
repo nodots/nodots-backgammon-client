@@ -11,7 +11,7 @@ import Quadrant from '../quadrant'
 import { PointLabelContainer } from '../quadrant'
 import Rail from '../bar'
 import Off from '../off'
-import RollSurface from '../roll-surface'
+import RollSurface from '../rollsurface'
 import Cube from '../cube'
 import Die from '../die'
 
@@ -37,10 +37,10 @@ const Board = () => {
           <Quadrant quadrant={swQuadrant} startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
           <PointLabelContainer quadrant={swQuadrant} startingPosition={7} quadrantLocation={QuadrantLocation.SW} />
         </Paper>
-        <Paper className='rail' elevation={4}>
+        <Paper className='bar' elevation={4}>
           <Paper className='pip-count black'>{players.black.pipCount}</Paper>
-          <Paper className='rail-checker-box white'><Rail rail={game.board.rail.black} /></Paper>
-          <Paper className='rail-checker-box black'><Rail rail={game.board.rail.white} /></Paper>
+          <Paper className='bar-checker-box white'><Rail bar={game.board.bar.black} /></Paper>
+          <Paper className='bar-checker-box black'><Rail bar={game.board.bar.white} /></Paper>
           <Paper className='pip-count white'>{players.white.pipCount}</Paper>
         </Paper>
         <Paper className='board-half east' elevation={4}>

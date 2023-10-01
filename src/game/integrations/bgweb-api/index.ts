@@ -2,93 +2,74 @@ import { Turn } from '../../turn'
 import { Color } from '../../game'
 import { Player } from '../../../components/player/state'
 import { Roll } from '../../../components/die/state/types'
-import { Board } from '../../../components/board/state/types/board'
+import { Board, getCheckerBoxes } from '../../../components/board/state/types/board'
 
 const black = 'o'
 const white = 'x'
+const o = 'black'
+const x = 'white'
 const analysisMoves = 5
+
+export interface BgWebApiEvaluation {
+  diff: number,
+  eq: number,
+  info: {
+    cubeful: boolean,
+    plies: number
+  }
+}
+
+export interface BgWebApiProbability {
+  lose: number
+  loseBG: number
+  loseG: number
+  win: number
+  winBG: number
+  winG: number
+}
 
 export interface BgWebApiPlay {
   from: string
   to: string
 }
 export interface BgWebApi_TurnAnalysis {
-  "evaluation": {
-    "diff": number
-    "eq": number
-    "info": {
-      "cubeful": boolean
-      "plies": number
-    }
-    "probability": {
-      "lose": number
-      "loseBG": number
-      "loseG": number
-      "win": number
-      "winBG": number
-      "winG": number
-    }
-  }
-  "play": BgWebApiPlay[]
+  evaluation: BgWebApiEvaluation,
+  probability: BgWebApiProbability,
+  play: BgWebApiPlay[]
+}
+
+interface BgApiPlayerBoard {
+  '1': number
+  '2': number
+  '3': number
+  '4': number
+  '5': number
+  '6': number
+  '7': number
+  '8': number
+  '9': number
+  '10': number
+  '11': number
+  '12': number
+  '13': number
+  '14': number
+  '15': number
+  '16': number
+  '17': number
+  '18': number
+  '19': number
+  '20': number
+  '21': number
+  '22': number
+  '23': number
+  '24': number
+  'bar': number
 }
 
 interface BgApiPayload {
   board: {
-    'o': {
-      '1': number
-      '2': number
-      '3': number
-      '4': number
-      '5': number
-      '6': number
-      '7': number
-      '8': number
-      '9': number
-      '10': number
-      '11': number
-      '12': number
-      '13': number
-      '14': number
-      '15': number
-      '16': number
-      '17': number
-      '18': number
-      '19': number
-      '20': number
-      '21': number
-      '22': number
-      '23': number
-      '24': number
-      'bar': number
-    }
-    'x': {
-      '1': number
-      '2': number
-      '3': number
-      '4': number
-      '5': number
-      '6': number
-      '7': number
-      '8': number
-      '9': number
-      '10': number
-      '11': number
-      '12': number
-      '13': number
-      '14': number
-      '15': number
-      '16': number
-      '17': number
-      '18': number
-      '19': number
-      '20': number
-      '21': number
-      '22': number
-      '23': number
-      '24': number
-      'bar': number
-    }
-
+    'o': BgApiPlayerBoard,
+    'x': BgApiPlayerBoard
   }
   cubeful: boolean
   dice: Roll
@@ -108,17 +89,29 @@ const getMoves = async (bgApiPayload: JSON) => {
     method: 'POST',
     body: JSON.stringify(bgApiPayload)
   })
-  return moves
+  return moves.json()
+}
+
+const printPlayerBoard = (player: string, board: BgApiPlayerBoard) => {
+  console.log(`Player ${player} ${eval(player)}`)
+
+  for (const [position, checkerCount] of Object.entries(board)) {
+    if (checkerCount > 0) {
+      console.log(`\t${position}: ${checkerCount} `)
+    }
+  }
 }
 
 export const BgWebApi_getTurnAnalytics = async (board: Board, roll: Roll, players: { white: Player, black: Player }): Promise<BgWebApi_TurnAnalysis[] | void> => {
+  console.log('[BgWebApi_getTurnAnalytics] BgWebApi_getTurnAnalytics roll:', roll)
   let turnAnalysis: BgWebApi_TurnAnalysis[] | undefined = undefined
   const payload = buildTurnAnalysisPayload(board, roll, players)
-
-  await getMoves(payload as any as JSON).then(async (m) => {
-    turnAnalysis = await m.json() as BgWebApi_TurnAnalysis[]
-  })
-  return turnAnalysis
+  console.log('[BgWebApi_getTurnAnalytics] payload:', payload)
+  printPlayerBoard(black, payload.board[black])
+  printPlayerBoard(white, payload.board[white])
+  const moves = await getMoves(payload as any as JSON)
+  console.log('[BgWebApi_getTurnAnalytics] moves:', moves)
+  return moves
 }
 
 function buildTurnAnalysisPayload (board: Board, roll: Roll, players: { white: Player, black: Player }): BgApiPayload {
@@ -182,29 +175,34 @@ function buildTurnAnalysisPayload (board: Board, roll: Roll, players: { white: P
         'bar': 0
       }
     },
-    cubeful: true,
+    cubeful: false,
     dice: roll,
     player: activeColor === 'black' ? black : white,
     'score-moves': true
   }
 
-  board.quadrants.forEach(q => {
-    q.points.forEach(p => {
-      if (p.checkers.length > 0) {
-        const counterClockwisePosition = p.positionCounterClockwise
-        const clockwisePosition = p.positionClockwise
+  const checkerboxes = getCheckerBoxes(board)
 
-        let clockwisePlayer: Player | undefined = undefined
-        let counterClockwisePlayer: Player | undefined = undefined
-        clockwisePlayer = players.white.moveDirection === 'clockwise' ? players.white : players.black
-        counterClockwisePlayer = players.white.moveDirection === 'counterclockwise' ? players.white : players.black
+  checkerboxes.forEach(p => {
+    if (p.checkers.length > 0) {
+      const position = p.position
+      const counterClockwisePosition = p.positionCounterClockwise
+      const clockwisePosition = p.positionClockwise
 
-        const blackCheckerCount = p.checkers.filter(c => c.color === 'black').length
-        const whiteCheckerCount = p.checkers.filter(c => c.color === 'white').length
+      let clockwisePlayer: Player | undefined = undefined
+      let counterClockwisePlayer: Player | undefined = undefined
+      clockwisePlayer = players.white.moveDirection === 'clockwise' ? players.white : players.black
+      counterClockwisePlayer = players.white.moveDirection === 'counterclockwise' ? players.white : players.black
 
-        let relativePosition: number | undefined
+      const blackCheckerCount = p.checkers.filter(c => c.color === 'black').length
+      const whiteCheckerCount = p.checkers.filter(c => c.color === 'white').length
 
-        if (blackCheckerCount > 0) {
+      let relativePosition: number | string | undefined
+
+      if (blackCheckerCount > 0) {
+        if (position === 'bar') {
+          payload.board[black]['bar'] = blackCheckerCount
+        } else {
           if (clockwisePlayer.color === 'black') {
             relativePosition = clockwisePosition
           } else {
@@ -213,7 +211,11 @@ function buildTurnAnalysisPayload (board: Board, roll: Roll, players: { white: P
           const pString = relativePosition.toString() as PointLabel
           payload.board[black][pString] = blackCheckerCount
         }
-        if (whiteCheckerCount > 0) {
+      }
+      if (whiteCheckerCount > 0) {
+        if (position === 'bar') {
+          payload.board[white]['bar'] = whiteCheckerCount
+        } else {
           if (clockwisePlayer.color === 'white') {
             relativePosition = clockwisePosition
           } else {
@@ -223,26 +225,8 @@ function buildTurnAnalysisPayload (board: Board, roll: Roll, players: { white: P
           payload.board[white][pString] = whiteCheckerCount
         }
       }
-    })
-    if (board.off.black.checkers.length > 0) {
-      payload.board[black].bar = board.off.black.checkers.length
-    }
-    if (board.off.white.checkers.length > 0) {
-      payload.board[white].bar = board.off.white.checkers.length
     }
   })
-  console.log(`black = ${black}`)
-  for (const [k, v] of Object.entries(payload.board[black])) {
-    if (v > 0) {
-      console.log(`${k} : ${v}`)
-    }
-  }
-  console.log(`white = ${white}`)
-  for (const [k, v] of Object.entries(payload.board[white])) {
-    if (v > 0) {
-      console.log(`${k} : ${v}`)
-    }
-  }
 
   return payload
 }

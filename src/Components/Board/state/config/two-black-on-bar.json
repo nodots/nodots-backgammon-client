@@ -10,5 +10,5 @@
   { "color": "black", "checkerCount": 3, "position": 19 },
   { "color": "white", "checkerCount": 1, "position": 21 },
   { "color": "white", "checkerCount": 1, "position": 22 },
-  { "color": "black", "checkerCount": 2, "position": "rail" }
+  { "color": "black", "checkerCount": 2, "position": "bar" }
 ]

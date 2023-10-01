@@ -28,7 +28,7 @@ $accent: #6b000c;
     cursor: pointer;
   }
 
-  .rail {
+  .bar {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -37,7 +37,7 @@ $accent: #6b000c;
     border-radius: 0px !important;
     padding: 10px;
 
-    .rail-checker-box {
+    .bar-checker-box {
       height: 12vw;
       width: $checker-width;
     }

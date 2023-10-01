@@ -14,9 +14,9 @@ export const reenter = (board: Board, move: Move): MoveResult => {
   let checkerToMove: Checker | undefined = undefined
 
   if (!isBar(move.origin)) {
-    console.error('[User Message]: you must move checkers on the rail first')
+    console.error('[User Message]: you must move checkers on the bar first')
   } else {
-    const oldOrigin = board.rail[move.origin.color]
+    const oldOrigin = board.bar[move.origin.color]
     const newOrigin = produce(oldOrigin, draft => {
       draft.checkers.splice(oldOrigin.checkers.length - 1, 1)
     })
@@ -48,7 +48,7 @@ export const reenter = (board: Board, move: Move): MoveResult => {
           if (isChecker(checkerToMove)) {
             if (isHit && isChecker(hitChecker)) {
               draft.checkers = [checkerToMove]
-              oldOpponentRail = board.rail[hitChecker.color]
+              oldOpponentRail = board.bar[hitChecker.color]
               newOpponentRail = produce(oldOpponentRail, opponentRailDraft => {
                 if (isChecker(hitChecker)) {
                   opponentRailDraft.checkers.push(hitChecker)
@@ -65,10 +65,10 @@ export const reenter = (board: Board, move: Move): MoveResult => {
         let newBoard = produce(board, draft => {
           draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination as Point
           if (isChecker(checkerToMove) && isBar(newOrigin)) {
-            draft.rail[checkerToMove.color] = newOrigin
+            draft.bar[checkerToMove.color] = newOrigin
           }
           if (isBar(newOpponentRail) && isChecker(hitChecker)) {
-            draft.rail[hitChecker.color] = newOpponentRail
+            draft.bar[hitChecker.color] = newOpponentRail
           }
         })
 

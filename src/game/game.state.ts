@@ -13,7 +13,8 @@ const blackPlayer: Player = {
   pipCount: 167,
   moveDirection: 'clockwise',
   dice: initDiceState.black,
-  isRobot: true
+  isRobot: false,
+  isAutoRoll: false
 }
 const whitePlayer: Player = {
   id: generateId(),
@@ -22,8 +23,11 @@ const whitePlayer: Player = {
   pipCount: 167,
   moveDirection: 'counterclockwise',
   dice: initDiceState.white,
-  isRobot: false
+  isRobot: false,
+  isAutoRoll: false
 }
+
+// FIXME: Unused
 // Game starts by both players rolling one die to determine who goes first
 function rollForStart (white: Player, black: Player): Player {
   const whiteRoll = roll()
@@ -34,8 +38,9 @@ function rollForStart (white: Player, black: Player): Player {
   }
   return blackRoll > whiteRoll ? black : white
 }
-const winner = rollForStart(whitePlayer, blackPlayer)
+// const winner = rollForStart(whitePlayer, blackPlayer)
 // const winner = whitePlayer
+const winner = blackPlayer
 winner.color === 'black' ? blackPlayer.active = true : whitePlayer.active = true
 
 const defaultGameState: Game = {

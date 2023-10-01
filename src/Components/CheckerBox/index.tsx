@@ -97,7 +97,6 @@ const CheckerBox = (props: CheckerBoxProps) => {
           console.error(e)
         }
       }
-
     }
   }
 
@@ -105,10 +104,10 @@ const CheckerBox = (props: CheckerBoxProps) => {
   const checkerCount = checkerBoxState.checkers.length
   let countDisplay: number | undefined = undefined
   checkerBoxState.checkers.forEach((c: CheckerType, i) => {
-    if (i === 6 && props.checkerBox.position !== 'off' && props.checkerBox.position !== 'rail') {
+    if (i === 6 && props.checkerBox.position !== 'off' && props.checkerBox.position !== 'bar') {
       countDisplay = checkerCount
     }
-    if (((typeof props.checkerBox.position === 'number' || props.checkerBox.position === 'rail') && i < 6) || props.checkerBox.position === 'off') {
+    if (((typeof props.checkerBox.position === 'number' || props.checkerBox.position === 'bar') && i < 6) || props.checkerBox.position === 'off') {
       checkers.push(<Checker checker={c} key={c.id ? c.id : generateId()} count={countDisplay} />)
     }
   })

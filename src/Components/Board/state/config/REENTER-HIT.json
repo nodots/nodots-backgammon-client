@@ -1,78 +1,75 @@
 [
-{
-  "position": 24,
-  "checkerCount": 1,
-  "color": "black"
-},
-{
-  "position": 23,
-  "checkerCount": 1,
-  "color": "black"
-},
-{
-  "position": 22,
-  "checkerCount": 1,
-  "color": "black"
-},
-{
-  "position": 21,
-  "checkerCount": 1,
-  "color": "black"
-},
-{
-  "position": 20,
-  "checkerCount": 1,
-  "color": "black"
-},
-{
-  "position": 19,
-  "checkerCount": 1,
-  "color": "black"
-},
+  {
+    "position": 24,
+    "checkerCount": 1,
+    "color": "black"
+  },
+  {
+    "position": 23,
+    "checkerCount": 1,
+    "color": "black"
+  },
+  {
+    "position": 22,
+    "checkerCount": 1,
+    "color": "black"
+  },
+  {
+    "position": 21,
+    "checkerCount": 1,
+    "color": "black"
+  },
+  {
+    "position": 20,
+    "checkerCount": 1,
+    "color": "black"
+  },
+  {
+    "position": 19,
+    "checkerCount": 1,
+    "color": "black"
+  },
 
-{
-  "position": "rail",
-  "checkerCount": 9,
-  "color": "black"
-},
+  {
+    "position": "bar",
+    "checkerCount": 9,
+    "color": "black"
+  },
 
-{
-  "position": 1,
-  "checkerCount": 1,
-  "color": "white"
-},
-{
-  "position": 2,
-  "checkerCount": 1,
-  "color": "white"
-},
-{
-  "position": 3,
-  "checkerCount": 1,
-  "color": "white"
-},
-{
-  "position": 4,
-  "checkerCount": 1,
-  "color": "white"
-},
-{
-  "position": 5,
-  "checkerCount": 1,
-  "color": "white"
-},
-{
-  "position": 6,
-  "checkerCount": 1,
-  "color": "white"
-},
+  {
+    "position": 1,
+    "checkerCount": 1,
+    "color": "white"
+  },
+  {
+    "position": 2,
+    "checkerCount": 1,
+    "color": "white"
+  },
+  {
+    "position": 3,
+    "checkerCount": 1,
+    "color": "white"
+  },
+  {
+    "position": 4,
+    "checkerCount": 1,
+    "color": "white"
+  },
+  {
+    "position": 5,
+    "checkerCount": 1,
+    "color": "white"
+  },
+  {
+    "position": 6,
+    "checkerCount": 1,
+    "color": "white"
+  },
 
-
-
-{
-  "position": "rail",
-  "checkerCount": 9,
-  "color": "white"
-}
-
+  {
+    "position": "bar",
+    "checkerCount": 9,
+    "color": "white"
+  }
 ]

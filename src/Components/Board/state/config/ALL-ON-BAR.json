@@ -1,0 +1,12 @@
+[
+  {
+    "position": "bar",
+    "color": "black",
+    "checkerCount": 15
+  },
+  {
+    "position": "bar",
+    "color": "white",
+    "checkerCount": 15
+  }
+]

@@ -20,6 +20,7 @@ export type Player = {
   moveDirection: MoveDirection
   pipCount: number
   isRobot: boolean
+  isAutoRoll: boolean
   homeQuadrantLocation?: QuadrantLocation
   bearOffQuadrantLocation?: QuadrantLocation
 }

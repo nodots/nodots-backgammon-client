@@ -9,10 +9,11 @@ import { Move } from './move'
 import { CheckerBox, MoveStatus } from '../components/checkerbox/state'
 import { Analytics, InitializeTurnAction, MoveCoords, TurnStatus, initializeMoves } from './turn'
 import { Turn, initializeTurn } from './turn'
-import { getPipCountForPlayer } from '../components/board/state/types/board'
+import { getCheckerBoxes, getPipCountForPlayer } from '../components/board/state/types/board'
 import { Point } from '../components/point/state/types'
 import { Play } from './turn'
 import { BgWebApi_TurnAnalysis, BgWebApi_getTurnAnalytics } from './integrations/bgweb-api'
+import { isPlayer } from '../components/player/state'
 
 export enum GAME_ACTION_TYPE {
   SET_DICE_VALUES,
@@ -79,36 +80,90 @@ export const reducer = (game: Game, action: any): Game => {
               draft.activeTurn.moves[i].dieValue = dieValue
             }
           })
-
         }
       })
       return newGame
+    // TODO: Move all of the turn stuff into the turn reducer. ;)
     case GAME_ACTION_TYPE.INITIALIZE_TURN:
-      if (isColor(game.activeColor)) {
-        const initializeMovesPayload: InitializeTurnAction = {
-          board: payload.board,
-          player: payload.player,
-          roll: payload.roll
-        }
-
-        const moves = initializeMoves(initializeMovesPayload)
-        const activeColor: Color = game.activeColor
-
-        console.log(payload)
-
-        return produce(game, draft => {
-          draft.activeTurn = {
-            id: generateId(),
-            board: game.board,
-            player: game.players[activeColor],
-            roll: payload.roll,
-            status: TurnStatus.INITIALIZED,
-            moves,
-            analytics: payload.analytics
-          }
+      if (!isColor(game.activeColor) || !isPlayer(game.players[game.activeColor])) {
+        throw new GameError({
+          model: 'Turn',
+          errorMessage: 'No color or active player'
         })
       }
+      const initializeMovesPayload: InitializeTurnAction = {
+        board: payload.board,
+        player: payload.player,
+        roll: payload.roll,
+        analytics: payload.analytics
+      }
+      const moves = initializeMoves(initializeMovesPayload)
+      const activeColor: Color = game.activeColor
+
+      let gameWithNewTurn = produce(game, draft => {
+        draft.activeTurn = {
+          id: generateId(),
+          board: game.board,
+          player: game.players[activeColor],
+          roll: payload.roll,
+          status: TurnStatus.INITIALIZED,
+          moves,
+          analytics: payload.analytics
+        }
+      })
+
+      if (payload.isAutomove) {
+        console.log('AUTOMOVE')
+        const bgwebAnalytics = payload.analytics.find(a => a.api === 'bgwebapi')
+        const bestPlay = bgwebAnalytics.analysis[0]
+        bestPlay.play.forEach(p => {
+          if (gameWithNewTurn.activeTurn) {
+            if (game.activeColor) {
+              const activePlayer = game.players[game.activeColor]
+              let relativePosition: number | undefined = undefined
+              let origin: CheckerBox | undefined = undefined
+              if (activePlayer.moveDirection === 'counterclockwise') {
+                origin = getCheckerBoxes(game.board).find(cb => cb.position == p.from)
+              } else {
+                origin = getCheckerBoxes(game.board).find(cb => cb.positionClockwise == p.from)
+              }
+              if (origin) {
+                const moveResults = moveReducer(gameWithNewTurn.activeTurn, origin)
+                gameWithNewTurn = produce(gameWithNewTurn, draft => {
+                  draft.activeTurn = moveResults
+                  draft.board = moveResults.board
+                })
+              }
+            }
+          }
+        })
+        // finalize turn
+
+        return produce(gameWithNewTurn, draft => {
+          if (!isColor(game.activeColor)) {
+            throw new GameError({
+              model: 'Turn',
+              errorMessage: 'Invalid color'
+            })
+          }
+          draft.players.black.pipCount = getPipCountForPlayer(game.board, game.players.black)
+          draft.players.white.pipCount = getPipCountForPlayer(game.board, game.players.white)
+
+          const activeColor = game.activeColor
+          const inActiveColor = activeColor === 'white' ? 'black' : 'white'
+
+          draft.players[activeColor].active = false
+          draft.players[inActiveColor].active = true
+          draft.activeColor = inActiveColor
+
+          draft.activeTurn = undefined
+        })
+      } else {
+        return gameWithNewTurn
+      }
+
       return game
+
     case GAME_ACTION_TYPE.GET_TURN_ANALYTICS:
       if (!game.activeTurn) {
         throw Error('No game.activeTurn')
@@ -156,6 +211,7 @@ export const reducer = (game: Game, action: any): Game => {
     case GAME_ACTION_TYPE.MOVE:
       if (game.activeTurn) {
         let moveResults = moveReducer(game.activeTurn, payload.checkerbox)
+        console.log(moveResults.moves)
         if (moveResults) {
           const failedMove = moveResults.moves.find(m => m.status === MoveStatus.NO_MOVE)
           if (isMove(failedMove)) {

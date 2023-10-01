@@ -1,11 +1,11 @@
 [
   {
-    "position": "rail",
+    "position": "bar",
     "color": "black",
     "checkerCount": 2
   },
   {
-    "position": "rail",
+    "position": "bar",
     "color": "white",
     "checkerCount": 2
   },

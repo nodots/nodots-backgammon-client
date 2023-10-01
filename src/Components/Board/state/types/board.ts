@@ -4,7 +4,7 @@ import { Checker } from '../../../checker/state'
 import { CheckerBox } from '../../../checkerbox/state/types'
 import { Point } from '../../../point/state/types'
 import { Off, initialize as initializeOff } from '../../../off/state/types'
-import { Bar, initialize as initializeRail } from '../../../bar/state/types'
+import { Bar, initialize as initializeBar } from '../../../bar/state/types'
 import { Quadrant, initialize as initializeQuadrants } from '../../../quadrant/state/types'
 import DEFAULT_SETUP from '../config/DEFAULT.json'
 import { CHECKERS_PER_PLAYER } from '../../../../game/game'
@@ -23,13 +23,13 @@ export enum BOARD_ACTION_TYPE {
 }
 
 export type Board = {
-  id: string,
+  id: string
   quadrants: Quadrant[]
   off: {
     white: Off,
     black: Off,
   }
-  rail: {
+  bar: {
     white: Bar,
     black: Bar
   }
@@ -45,7 +45,7 @@ export const isBoard = (b: any): b is Board => {
   if (quadrantsIndex === -1) return false
   const offIndex = keys.findIndex(k => k === 'off')
   if (offIndex === -1) return false
-  const railIndex = keys.findIndex(k => k === 'rail')
+  const railIndex = keys.findIndex(k => k === 'bar')
   if (railIndex === -1) return false
 
   return true
@@ -63,13 +63,13 @@ export const initialize = (setup?: CheckerProp[]): Board => {
   // }
 
   const off = initializeOff(DEFAULT_SETUP)
-  const rail = initializeRail(DEFAULT_SETUP)
+  const bar = initializeBar(DEFAULT_SETUP)
 
   const board: Board = {
-    id: Math.random.toString(), // Math.random().toString(),
+    id: Math.random.toString(), // FIXME
     quadrants: initializeQuadrants(DEFAULT_SETUP),
     off,
-    rail
+    bar
   }
   return board
 }
@@ -81,8 +81,8 @@ export const getCheckerBoxes = (board: Board): CheckerBox[] => {
   })
   checkerBoxes.push(board.off.white)
   checkerBoxes.push(board.off.black)
-  checkerBoxes.push(board.rail.white)
-  checkerBoxes.push(board.rail.black)
+  checkerBoxes.push(board.bar.white)
+  checkerBoxes.push(board.bar.black)
   return checkerBoxes
 }
 
@@ -130,24 +130,23 @@ export const getPipCountForPlayer = (board: Board, player: Player): number => {
     }
   })
   // FIXME
-  if (isColor(player.color) && player.color === 'black' && board.rail.black.checkers.length > 0) {
-    pipCount += board.rail.black.checkers.length * POINT_COUNT
+  if (isColor(player.color) && player.color === 'black' && board.bar.black.checkers.length > 0) {
+    pipCount += board.bar.black.checkers.length * POINT_COUNT
   }
-  if (isColor(player.color) && player.color === 'white' && board.rail.white.checkers.length > 0) {
-    pipCount += board.rail.white.checkers.length * POINT_COUNT
+  if (isColor(player.color) && player.color === 'white' && board.bar.white.checkers.length > 0) {
+    pipCount += board.bar.white.checkers.length * POINT_COUNT
   }
   return pipCount
 }
-
 
 export const getCheckers = (board: Board): { white: Checker[], black: Checker[] } => {
   const whiteCheckers: Checker[] = []
   const blackCheckers: Checker[] = []
 
-  whiteCheckers.push(...board.rail.white.checkers)
+  whiteCheckers.push(...board.bar.white.checkers)
   whiteCheckers.push(...board.off.white.checkers)
 
-  blackCheckers.push(...board.rail.black.checkers)
+  blackCheckers.push(...board.bar.black.checkers)
   blackCheckers.push(...board.off.black.checkers)
 
   board.quadrants.forEach(q => {
@@ -175,9 +174,6 @@ export const findChecker = (board: Board, checkerId: string): Point | Bar | Off 
       }
     })
   })
-
-  console.log(checkerLocation)
-
   return checkerLocation
 }
 
@@ -189,7 +185,6 @@ export const sanityCheckBoard = (board: Board): boolean => {
   const blackCheckers = checkers.black
 
   if (whiteCheckers.length !== CHECKERS_PER_PLAYER || blackCheckers.length !== CHECKERS_PER_PLAYER) {
-    console.log(whiteCheckers)
     return false
   }
 
@@ -197,7 +192,6 @@ export const sanityCheckBoard = (board: Board): boolean => {
   const blackCheckerSet = new Set(blackCheckers)
 
   if (whiteCheckerSet.size !== whiteCheckers.length) {
-    console.log(whiteCheckers)
     return false
   }
 
@@ -206,7 +200,5 @@ export const sanityCheckBoard = (board: Board): boolean => {
 
   }
 
-
   return isSane
-
 }

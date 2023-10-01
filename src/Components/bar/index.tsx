@@ -4,11 +4,11 @@ import { Bar as RailType } from './state/types'
 import CheckerBox from '../checkerbox'
 
 interface RailProps {
-  rail: RailType
+  bar: RailType
 }
 
 const Rail = (props: RailProps) => {
-  return <CheckerBox checkerBox={props.rail} />
+  return <CheckerBox checkerBox={props.bar} />
 }
 
 export default Rail

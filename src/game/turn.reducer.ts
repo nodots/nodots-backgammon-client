@@ -12,7 +12,8 @@ export interface TurnActionPayload {
   player: Player,
   roll: Roll,
   status: TurnStatus,
-  analytics: Analytics[]
+  analytics: Analytics[],
+  isAutomove: boolean
 }
 
 export interface TurnAction {

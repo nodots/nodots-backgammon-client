@@ -4,10 +4,12 @@ import { Checker } from '../../../checker/state/types'
 import { CheckerProp } from '../../../board/state/types/board'
 
 export type Bar = {
-  id: string,
-  color: Color,
-  checkers: Checker[],
-  position: CheckerBoxPosition
+  id: string
+  color: Color
+  checkers: Checker[]
+  position: 'bar'
+  positionClockwise: 'bar'
+  positionCounterClockwise: 'bar'
 }
 
 export const isBar = (v: any): v is Bar => {
@@ -31,7 +33,7 @@ export const isBar = (v: any): v is Bar => {
 }
 
 export function initialize (setup: CheckerProp[]): { white: Bar, black: Bar } {
-  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'rail')
+  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'bar')
   const whiteCheckers: Checker[] = []
   if (whiteCheckerSetup) {
     for (let i = 0; i < whiteCheckerSetup.checkerCount; i++) {
@@ -39,7 +41,7 @@ export function initialize (setup: CheckerProp[]): { white: Bar, black: Bar } {
     }
   }
 
-  const blackCheckerSetup = setup.find(cp => cp.color === 'black' && cp.position === 'rail')
+  const blackCheckerSetup = setup.find(cp => cp.color === 'black' && cp.position === 'bar')
   const blackCheckers: Checker[] = []
   if (blackCheckerSetup) {
     for (let i = 0; i < blackCheckerSetup.checkerCount; i++) {
@@ -50,14 +52,18 @@ export function initialize (setup: CheckerProp[]): { white: Bar, black: Bar } {
   const white: Bar = {
     id: generateId(),
     color: 'white',
-    position: 'rail',
+    position: 'bar',
+    positionClockwise: 'bar',
+    positionCounterClockwise: 'bar',
     checkers: whiteCheckers
   }
 
   const black: Bar = {
     id: generateId(),
     color: 'black',
-    position: 'rail',
+    position: 'bar',
+    positionClockwise: 'bar',
+    positionCounterClockwise: 'bar',
     checkers: blackCheckers
   }
 

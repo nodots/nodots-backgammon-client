@@ -79,7 +79,7 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
       destination.checkers[0].color !== checkerToMove.color
     ) {
       hitChecker = destination.checkers[0]
-      opponentRail = board.rail[hitChecker.color]
+      opponentRail = board.bar[hitChecker.color]
 
       newOpponentRail = produce(opponentRail, draft => {
         draft.checkers.push(hitChecker)
@@ -106,7 +106,7 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
       finalBoard = produce(board, draft => {
         draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex] = newOrigin
         draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
-        draft.rail[hitChecker.color] = newOpponentRail
+        draft.bar[hitChecker.color] = newOpponentRail
       })
 
       moveResult.move = finalMove

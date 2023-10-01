@@ -6,6 +6,8 @@ import { Board, Move, MoveStatus } from '../components/board/state/types'
 import { DieValue, Roll } from '../components/die/state/types'
 import { POINT_COUNT, getCheckerBoxes, isBoard } from '../components/board/state/types/board'
 import { getHomeQuadrantLocation } from '../components/player/state/types/player'
+import { BgWebApiPlay, BgWebApi_TurnAnalysis, BgWebApi_getTurnAnalytics } from './integrations/bgweb-api'
+import { CheckerBox } from '../components/checkerbox/state'
 
 export const MOVES_PER_TURN = 2
 
@@ -76,7 +78,8 @@ export const isTurn = (t: any): t is Turn => {
 export interface InitializeTurnAction {
   board: Board,
   player: Player,
-  roll: Roll
+  roll: Roll,
+  analytics?: Analytics[]
 }
 
 export const initializeTurn = (action: InitializeTurnAction): Turn => {
@@ -105,7 +108,10 @@ export const initializeMoves = (action: InitializeTurnAction): Move[] => {
   const board = action.board
   const roll = action.roll
   const player = action.player
+  const analytics = action.analytics
   const moveDirection = player.moveDirection
+
+  console.log('initializeMoves analytics:', analytics)
 
   let moveCount = MOVES_PER_TURN
   const moves: Move[] = []
@@ -114,9 +120,11 @@ export const initializeMoves = (action: InitializeTurnAction): Move[] => {
   if (roll[0] === roll[1]) {
     moveCount = moveCount * 2
   }
+
   for (let i = 0; i < moveCount; i++) {
     const dieValue = i % 2 ? roll[1] : roll[0]
-    let canmove = canMove(board, dieValue, player)
+    let canmove = canMove(board, player, analytics)
+    // console.log(`canmove = ${canmove}`)
 
     const move: Move = {
       id: generateId(),
@@ -131,56 +139,40 @@ export const initializeMoves = (action: InitializeTurnAction): Move[] => {
   return moves
 }
 
-function canMove (board: Board, dieValue: DieValue, player: Player): boolean {
+type CanMove = boolean | 'forced'
+
+function canMove (board: Board, player: Player, analytics: Analytics[] | undefined): CanMove {
   const checkerboxes = getCheckerBoxes(board)
-  let destinationCount = 0
-  const originPoints = checkerboxes.filter(cb => cb.checkers.length > 0 && cb.checkers[0].color === player.color && cb.position !== 'off')
-  if (typeof dieValue !== 'number') {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'Bad die value'
+
+  const gnuAnalytics: Analytics | undefined = analytics?.find(a => a.api === 'bgwebapi')
+
+  let gnuPlayAnalysis = gnuAnalytics?.analysis as BgWebApi_TurnAnalysis[]
+  const gnuPlays: BgWebApiPlay[] = []
+  if (gnuPlayAnalysis) {
+    gnuPlayAnalysis.forEach(gpa => {
+      gpa.play.forEach(p => {
+        gnuPlays.push(p)
+      })
     })
   }
-  const homeQuadrantLocation = getHomeQuadrantLocation(player.moveDirection)
-  const homeQuadrant = board.quadrants.find(q => q.location === homeQuadrantLocation)
-  if (homeQuadrant) {
-    let possibleDestinationPosition = dieValue as number
-    if (player.moveDirection === 'counterclockwise') {
-      possibleDestinationPosition = POINT_COUNT - dieValue + 1
-    }
-    const possibleDestination = checkerboxes.find(cb => cb.position === possibleDestinationPosition)
-    if (
-      (
-        possibleDestination &&
-        possibleDestination.checkers.length <= 1 // either open or hittable
-      ) ||
-      (
-        possibleDestination &&
-        possibleDestination.checkers.length > 1 &&
-        possibleDestination.checkers[0].color === player.color // player owns the point
-      )) {
-      destinationCount++
-    }
-  }
-  originPoints.forEach(cb => {
-    const possibleDestinationPosition = cb.position as number + dieValue
-    const possibleDestination = checkerboxes.find(cb => typeof cb.position === 'number' && cb.position === possibleDestinationPosition)
-    if (
-      (
-        possibleDestination &&
-        possibleDestination.checkers.length <= 1 // either open or hittable
-      ) ||
-      (
-        possibleDestination &&
-        possibleDestination.checkers.length > 1 &&
-        possibleDestination.checkers[0].color === player.color // player owns the point
-      )) {
-      destinationCount++
-    }
+
+  const originPoints = checkerboxes.filter(cb => cb.checkers.length > 0 && cb.checkers[0].color === player.color && cb.position !== 'off')
+  const matchingPoints: CheckerBox[] = []
+  gnuPlays.forEach(p => {
+    originPoints.filter(op => {
+      if (op.position === 'bar' || (player.moveDirection === 'counterclockwise' && op.positionCounterClockwise == p.from)) {
+        matchingPoints.push(op)
+      } else if (player.moveDirection === 'clockwise' && op.positionClockwise == p.from) {
+        matchingPoints.push(op)
+      }
+    })
   })
 
-  if (destinationCount > 0) {
+  if (matchingPoints.length === 0) {
+    return false
+  } else if (matchingPoints.length === 1) {
+    return 'forced'
+  } else {
     return true
   }
-  return false
 }

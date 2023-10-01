@@ -27,6 +27,7 @@ export enum MoveStatus {
   REVERTED,
   COMPLETED,
   NO_MOVE,
+  FORCED,
   ERROR,
 }
 

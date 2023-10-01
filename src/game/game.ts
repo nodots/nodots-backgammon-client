@@ -7,7 +7,7 @@ import { TurnActionPayload } from './turn.reducer'
 import { sanityCheckBoard } from '../components/board/state'
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
-export type CheckerBoxPosition = number | 'rail' | 'off'
+export type CheckerBoxPosition = number | 'bar' | 'off'
 export type GameErrorType = 'Configuration' | 'Game' | 'Turn' | 'Move' | 'Roll' | 'Player' | 'Die' | 'Cube' | 'CheckerBox' | 'Quadrant' | 'Point' | 'RollSurface'
 export const CHECKERS_PER_PLAYER = 15
 

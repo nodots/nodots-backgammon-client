@@ -132,7 +132,7 @@ export function getMoveMode (turn: Turn, origin: CheckerBox, dieValue: DieValue)
 
 function isReenter (board: Board, player: Player): boolean {
   let isReenter = false
-  if (board.rail[player.color].checkers.length > 0) {
+  if (board.bar[player.color].checkers.length > 0) {
     isReenter = true
   }
   return isReenter
@@ -168,9 +168,9 @@ function getMoveDestination (board: Board, player: Player, dieValue: DieValue, o
     }
   })
 
-  if (board.rail[player.color].checkers.length > 0) {
+  if (board.bar[player.color].checkers.length > 0) {
     {
-      const checkerToMove = board.rail[player.color].checkers[board.rail[player.color].checkers.length - 1]
+      const checkerToMove = board.bar[player.color].checkers[board.bar[player.color].checkers.length - 1]
       // Where can we move? Back to our home quadrant.
       if (player !== undefined) {
         const homeQuadrant = board.quadrants.find(q => q.location === getHomeQuadrantLocation(player.moveDirection))
