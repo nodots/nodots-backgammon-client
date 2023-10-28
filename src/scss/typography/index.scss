@@ -1,5 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("/fonts/gordita/stylesheet.css");
 
-body {
-  font-family: 'Roboto', sans-serif;
+body,
+div,
+li,
+p {
+  font-family: "Gordita";
+  font-weight: 500;
 }
