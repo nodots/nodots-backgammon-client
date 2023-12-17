@@ -8,7 +8,19 @@ import { sanityCheckBoard } from '../components/board/state'
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 export type CheckerBoxPosition = number | 'bar' | 'off'
-export type GameErrorType = 'Configuration' | 'Game' | 'Turn' | 'Move' | 'Roll' | 'Player' | 'Die' | 'Cube' | 'CheckerBox' | 'Quadrant' | 'Point' | 'RollSurface'
+export type GameErrorType =
+  | 'Configuration'
+  | 'Game'
+  | 'Turn'
+  | 'Move'
+  | 'Roll'
+  | 'Player'
+  | 'Die'
+  | 'Cube'
+  | 'Checkerbox'
+  | 'Quadrant'
+  | 'Point'
+  | 'RollSurface'
 export const CHECKERS_PER_PLAYER = 15
 
 export const isColor = (c: unknown): c is Color => {
@@ -24,7 +36,13 @@ export const generateId = (): string => {
 
 export class GameError extends Error {
   model: GameErrorType
-  constructor ({ model, errorMessage }: { model?: GameErrorType; errorMessage: string }) {
+  constructor({
+    model,
+    errorMessage,
+  }: {
+    model?: GameErrorType
+    errorMessage: string
+  }) {
     super(errorMessage)
     this.model = model || 'Game'
   }
@@ -45,7 +63,6 @@ export type Game = {
   initializeTurn?: (turn: TurnActionPayload) => Turn
   finalizeTurn?: () => void
 }
-
 
 export const sanityCheck = (game: Game): boolean => {
   let isSane = true

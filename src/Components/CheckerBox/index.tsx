@@ -5,9 +5,9 @@ import { useGame } from '../../game/useGame'
 // Types
 import { isColor } from '../../game/game'
 import { GameError } from '../../game/game'
-import { CheckerBox as CheckerBoxType } from './state/types'
+import { Checkerbox as CheckerBoxType } from './state/types'
 import { getHomeQuadrantLocation } from '../player/state/types/player'
-import { Move, MoveActionPayload, } from '../../game/move'
+import { Move, MoveActionPayload } from '../../game/move'
 import Checker from '../checker'
 import { Checker as CheckerType } from '../checker/state/types'
 import { isPlayer } from '../player/state/types/player'
@@ -17,7 +17,7 @@ interface CheckerBoxProps {
   checkerBox: CheckerBoxType
 }
 
-const CheckerBox = (props: CheckerBoxProps) => {
+const Checkerbox = (props: CheckerBoxProps) => {
   const { game, move, revert } = useGame()
   if (!game.activeColor) {
     throw new GameError({ model: 'Move', errorMessage: 'No activeColor' })
@@ -25,7 +25,10 @@ const CheckerBox = (props: CheckerBoxProps) => {
   const checkerBoxState = props.checkerBox
 
   if (!checkerBoxState) {
-    throw new GameError({ model: 'CheckerBox', errorMessage: 'No checkerBoxState' })
+    throw new GameError({
+      model: 'Checkerbox',
+      errorMessage: 'No checkerBoxState',
+    })
   }
   const checkers: React.JSX.Element[] = []
 
@@ -35,7 +38,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
     if (!isColor(game.activeColor)) {
       throw new GameError({
         model: 'Move',
-        errorMessage: 'Invalid activeColor'
+        errorMessage: 'Invalid activeColor',
       })
     }
 
@@ -43,15 +46,17 @@ const CheckerBox = (props: CheckerBoxProps) => {
     if (!isPlayer(activePlayer)) {
       throw new GameError({
         model: 'Move',
-        errorMessage: 'Invalid activePlayer'
+        errorMessage: 'Invalid activePlayer',
       })
     }
 
-    const homeQuadrant = game.board.quadrants.find(q => q.location === getHomeQuadrantLocation(activePlayer.moveDirection))
+    const homeQuadrant = game.board.quadrants.find(
+      (q) => q.location === getHomeQuadrantLocation(activePlayer.moveDirection)
+    )
     if (!isQuadrant(homeQuadrant)) {
       throw new GameError({
         model: 'Move',
-        errorMessage: 'No home quadrant'
+        errorMessage: 'No home quadrant',
       })
     }
 
@@ -65,7 +70,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
       }
       const payload: MoveActionPayload = {
         player: activePlayer,
-        checkerbox: props.checkerBox
+        origin: props.checkerBox,
       }
       if (game.activeTurn?.roll === undefined) {
         return alert('Roll the dice first')
@@ -78,7 +83,7 @@ const CheckerBox = (props: CheckerBoxProps) => {
       }
     } else if (e.type === 'contextmenu') {
       // Revert move
-      // console.warn('[CheckerBox Component] props.checkerBox', props.checkerBox)
+      // console.warn('[Checkerbox Component] props.checkerBox', props.checkerBox)
 
       const checkers = props.checkerBox.checkers
       if (checkers.length === 0) {
@@ -86,10 +91,12 @@ const CheckerBox = (props: CheckerBoxProps) => {
       }
       const checkerToRevert = checkers[checkers.length - 1] || undefined
       if (game.activeTurn?.moves) {
-        const moveToRevert = game.activeTurn.moves.find((m: Move) => m.checker?.id === checkerToRevert.id)
+        const moveToRevert = game.activeTurn.moves.find(
+          (m: Move) => m.checker?.id === checkerToRevert.id
+        )
         const payload: MoveActionPayload = {
           player: activePlayer,
-          checkerbox: props.checkerBox
+          origin: props.checkerBox,
         }
         try {
           revert(payload)
@@ -104,16 +111,37 @@ const CheckerBox = (props: CheckerBoxProps) => {
   const checkerCount = checkerBoxState.checkers.length
   let countDisplay: number | undefined = undefined
   checkerBoxState.checkers.forEach((c: CheckerType, i) => {
-    if (i === 6 && props.checkerBox.position !== 'off' && props.checkerBox.position !== 'bar') {
+    if (
+      i === 6 &&
+      props.checkerBox.position !== 'off' &&
+      props.checkerBox.position !== 'bar'
+    ) {
       countDisplay = checkerCount
     }
-    if (((typeof props.checkerBox.position === 'number' || props.checkerBox.position === 'bar') && i < 6) || props.checkerBox.position === 'off') {
-      checkers.push(<Checker checker={c} key={c.id ? c.id : generateId()} count={countDisplay} />)
+    if (
+      ((typeof props.checkerBox.position === 'number' ||
+        props.checkerBox.position === 'bar') &&
+        i < 6) ||
+      props.checkerBox.position === 'off'
+    ) {
+      checkers.push(
+        <Checker
+          checker={c}
+          key={c.id ? c.id : generateId()}
+          count={countDisplay}
+        />
+      )
     }
   })
-  return <div data-counter-clockwise={props.checkerBox.positionCounterClockwise} onClick={handleClick} onContextMenu={handleClick}>
-    {checkers}
-  </div>
+  return (
+    <div
+      data-counter-clockwise={props.checkerBox.positionCounterClockwise}
+      onClick={handleClick}
+      onContextMenu={handleClick}
+    >
+      {checkers}
+    </div>
+  )
 }
 
-export default CheckerBox
+export default Checkerbox

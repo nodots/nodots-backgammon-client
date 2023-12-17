@@ -1,17 +1,6 @@
-import { Board, isBoard, initialize, sanityCheckBoard, BOARD_ACTION_TYPE } from './board'
+import { Board, isBoard, initialize, sanityCheckBoard } from './board'
 import { Move, MoveStatus, MoveMode, MoveAction } from '../../../../game/move'
 
-export {
-  BOARD_ACTION_TYPE,
-  MoveStatus,
-  MoveMode,
-  sanityCheckBoard,
-  isBoard,
-  initialize,
-}
+export { MoveStatus, MoveMode, sanityCheckBoard, isBoard, initialize }
 
-export type {
-  Board,
-  Move,
-  MoveAction
-}
+export type { Board, Move, MoveAction }

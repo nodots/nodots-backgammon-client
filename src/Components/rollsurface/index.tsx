@@ -3,34 +3,31 @@ import { useGame } from '../../game/useGame'
 import { useState, useEffect } from 'react'
 // Types
 import { roll, Roll, Die as DieType } from '../die/state/types'
-import { CheckerBoxPosition, Color, Game, isColor } from '../../game'
+import { Color, Game, isColor } from '../../game'
 import { GameError } from '../../game'
 import { Analytics } from '../../game/turn'
 import { SetDiceValuesPayload } from '../die/state/dice.context'
 import { DieValue } from '../die/state/types'
 import { Turn, TurnStatus } from '../../game/turn'
 import { TurnActionPayload } from '../../game/turn.reducer'
-import { MoveStatus } from '../checkerbox/state'
+import { MoveStatus } from '../Checkerbox/state'
 import { Player } from '../player/state'
-import { CheckerBox } from '../checkerbox/state'
-import { MoveActionPayload } from '../../game/move'
 import { isPlayer } from '../player/state'
 
 // Components
-import Die from '../die'
+import Die from '../Die'
 
 // MUI
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
+
 import { BgWebApi_getTurnAnalytics } from '../../game/integrations/bgweb-api'
-import { getCheckerBoxes } from '../board/state'
-import { Theme, useTheme } from '@emotion/react'
 
 interface RollSurfaceProps {
   color: Color
 }
 
 const RollSurface = (props: RollSurfaceProps) => {
-  const { game, move, initializeTurn, finalizeTurn, getTurnAnalytics, setDiceValues } = useGame()
+  const { game, initializeTurn, finalizeTurn, setDiceValues } = useGame()
   const activeTurn = game.activeTurn
 
   let die1: DieType | undefined = undefined
@@ -41,11 +38,17 @@ const RollSurface = (props: RollSurfaceProps) => {
   if (game.activeColor) {
     die1 = game.dice[game.activeColor].dice[0]
     die2 = game.dice[game.activeColor].dice[1]
-    activePlayer = game.players.black.active ? game.players.black : game.players.white
+    activePlayer = game.players.black.active
+      ? game.players.black
+      : game.players.white
   }
 
-  const [die1Value, setDie1Value] = useState<DieValue>(die1?.value ? die1.value : 1)
-  const [die2Value, setDie2Value] = useState<DieValue>(die2?.value ? die2.value : 1)
+  const [die1Value, setDie1Value] = useState<DieValue>(
+    die1?.value ? die1.value : 1
+  )
+  const [die2Value, setDie2Value] = useState<DieValue>(
+    die2?.value ? die2.value : 1
+  )
 
   useEffect(() => {
     let newRoll: Roll | undefined = undefined
@@ -55,53 +58,41 @@ const RollSurface = (props: RollSurfaceProps) => {
         console.log('rollingDice')
         newRoll = rollDice()
       }
-      if (activePlayer.isRobot) {
-        console.log('building turnActionPayload')
-        if (newRoll) {
-          setTimeout(() => {
-            buildTurnActionPayload(game, newRoll)
-              .then(turnActionPayload => {
-                if (turnActionPayload) {
-                  initializeTurn(turnActionPayload)
-                } else {
-                  throw new GameError({
-                    model: 'Turn',
-                    errorMessage: 'Could not initialize turn'
-                  })
-                }
-              })
-          }, 1000)
-
-        }
-
-      }
-
     }
   }, [activePlayer])
 
-  async function buildTurnActionPayload (game: Game, newRoll: Roll): Promise<TurnActionPayload> {
+  async function buildTurnActionPayload(
+    game: Game,
+    newRoll: Roll
+  ): Promise<TurnActionPayload> {
     console.log('[ROLL SURFACE] buildTurnActionPayload rollValues:', newRoll)
     const analytics: Analytics[] = await getAnalytics(game, newRoll)
-    if (!isColor(game.activeColor) || !isPlayer(game.players[game.activeColor])) {
+    if (
+      !isColor(game.activeColor) ||
+      !isPlayer(game.players[game.activeColor])
+    ) {
       throw new GameError({
         model: 'Turn',
-        errorMessage: 'No active color or player'
+        errorMessage: 'No active color or player',
       })
     }
     const activePlayer = game.players[game.activeColor]
-    console.log('[ROLL SURFACE] buildTurnActionPayload activePlayer:', activePlayer)
+    console.log(
+      '[ROLL SURFACE] buildTurnActionPayload activePlayer:',
+      activePlayer
+    )
     const turn: TurnActionPayload = {
       board: game.board,
       player: game.players[game.activeColor],
       roll: [newRoll[0], newRoll[1]],
       status: TurnStatus.INITIALIZED,
       analytics,
-      isAutomove: activePlayer.isRobot
+      isAutomove: activePlayer.isRobot,
     }
     return turn
   }
 
-  function rollDice (): Roll {
+  function rollDice(): Roll {
     const newRoll: Roll = [roll() as DieValue, roll() as DieValue]
     console.log('[ROLL SURFACE] buildTurnActionPayload rollDice:')
 
@@ -110,8 +101,8 @@ const RollSurface = (props: RollSurfaceProps) => {
       color: props.color,
       values: {
         die1: newRoll[0],
-        die2: newRoll[1]
-      }
+        die2: newRoll[1],
+      },
     }
     setDie1Value(newRoll[0])
     setDie2Value(newRoll[1])
@@ -120,25 +111,29 @@ const RollSurface = (props: RollSurfaceProps) => {
     return newRoll
   }
 
-  function cleanUpTurn (): void {
+  function cleanUpTurn(): void {
     setDie1Value(1)
     setDie2Value(1)
     const setDiceValuesPayload: SetDiceValuesPayload = {
       color: props.color,
       values: {
         die1: die1Value,
-        die2: die2Value
-      }
+        die2: die2Value,
+      },
     }
     setDiceValues(setDiceValuesPayload)
   }
 
-  async function getAnalytics (game: Game, rollValues: Roll) {
+  async function getAnalytics(game: Game, rollValues: Roll) {
     console.log('[ROLL SURFACE] getAnalytics rollValues:', rollValues)
-    const bgWebAnalytics = await BgWebApi_getTurnAnalytics(game.board, rollValues as Roll, game.players)
+    const bgWebAnalytics = await BgWebApi_getTurnAnalytics(
+      game.board,
+      rollValues as Roll,
+      game.players
+    )
     const bgWebAnalyticsPayload = {
       api: 'bgwebapi',
-      analysis: bgWebAnalytics
+      analysis: bgWebAnalytics,
     }
     const analytics: Analytics[] = [bgWebAnalyticsPayload]
     return analytics
@@ -159,7 +154,10 @@ const RollSurface = (props: RollSurfaceProps) => {
 
       const lastMove = activeTurn.moves[activeTurn.moves.length - 1]
 
-      if ((lastMove && lastMove.origin && lastMove.destination) || (lastMove && lastMove.status === MoveStatus.NO_MOVE)) {
+      if (
+        (lastMove && lastMove.origin && lastMove.destination) ||
+        (lastMove && lastMove.status === MoveStatus.NO_MOVE)
+      ) {
         isTurnComplete = true
       }
 
@@ -178,7 +176,7 @@ const RollSurface = (props: RollSurfaceProps) => {
       if (!isColor(game.activeColor)) {
         throw new GameError({
           model: 'Game',
-          errorMessage: `Invalid activeColor ${game.activeColor}`
+          errorMessage: `Invalid activeColor ${game.activeColor}`,
         })
       }
 
@@ -189,14 +187,18 @@ const RollSurface = (props: RollSurfaceProps) => {
       console.log('[ROLL SURFACE] activePlayer:', activePlayer)
       console.log('[ROLL SURFACE] game:', game)
       console.log('[ROLL SURFACE]: calling BgWebApi_getTurnAnalytics')
-      const bgWebAnalytics = await BgWebApi_getTurnAnalytics(game.board, rollValues as Roll, game.players)
+      const bgWebAnalytics = await BgWebApi_getTurnAnalytics(
+        game.board,
+        rollValues as Roll,
+        game.players
+      )
       console.log('[ROLL SURFACE] bgWebAnalytics: ', bgWebAnalytics)
       const bgWebAnalyticsPayload = {
         api: 'bgwebapi',
-        analysis: bgWebAnalytics
+        analysis: bgWebAnalytics,
       }
       const analytics: Analytics[] = [bgWebAnalyticsPayload]
-      const bgwebapiAnalytics = analytics.find(a => a.api === 'bgwebapi')
+      const bgwebapiAnalytics = analytics.find((a) => a.api === 'bgwebapi')
 
       let isAutomove = activePlayer.isRobot
 
@@ -206,7 +208,7 @@ const RollSurface = (props: RollSurfaceProps) => {
         roll: rollValues,
         status: TurnStatus.INITIALIZED,
         analytics,
-        isAutomove
+        isAutomove,
       }
       initializeTurn(turn)
     }
@@ -216,7 +218,8 @@ const RollSurface = (props: RollSurfaceProps) => {
     e.preventDefault()
 
     if (isColor(game.activeColor)) {
-      if (game.dice[game.activeColor].dice[0].value === undefined ||
+      if (
+        game.dice[game.activeColor].dice[0].value === undefined ||
         game.dice[game.activeColor].dice[1].value === undefined
       ) {
         // e.stopPropagation()
@@ -231,21 +234,23 @@ const RollSurface = (props: RollSurfaceProps) => {
       color: props.color,
       values: {
         die1: die2Value,
-        die2: die1Value
-      }
+        die2: die1Value,
+      },
     }
     setDiceValues(setDiceValuesPayload)
     e.stopPropagation()
   }
 
   return (
-    <div className='roll-surface' onClick={clickHandler}>
-      {game.activeColor && game.activeColor === props.color && <>
-        <Die order={0} value={die1Value} color={props.color} />
-        {/* FIXME: hard-coded color */}
-        <SyncAltIcon onClick={swapDiceHandler} sx={{ color: '#575f90' }} />
-        <Die order={1} value={die2Value} color={props.color} />
-      </>}
+    <div className="roll-surface" onClick={clickHandler}>
+      {game.activeColor && game.activeColor === props.color && (
+        <>
+          <Die order={0} value={die1Value} color={props.color} />
+          {/* FIXME: hard-coded color */}
+          <SyncAltIcon onClick={swapDiceHandler} sx={{ color: '#575f90' }} />
+          <Die order={1} value={die2Value} color={props.color} />
+        </>
+      )}
     </div>
   )
 }

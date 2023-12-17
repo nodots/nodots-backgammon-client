@@ -1,8 +1,7 @@
 import { Box } from '@mui/material'
-import { CheckerBox as CheckerBoxType } from '../checkerbox/state/types'
-import { QuadrantLocation } from '../quadrant/state/types'
-
-import CheckerBox from '../checkerbox'
+import { Checkerbox as CheckerBoxType } from '../Checkerbox/state/types'
+import { QuadrantLocation } from '../Quadrant/state/types'
+import Checkerbox from '../Checkerbox'
 
 interface PointProps {
   point: CheckerBoxType
@@ -13,17 +12,19 @@ interface PointProps {
 
 const Point = (props: PointProps) => {
   let className = 'point'
-  props.quadrantLocation === QuadrantLocation.NW || props.quadrantLocation === QuadrantLocation.NE ?
-    className += ' north' :
-    className += ' south'
+  props.quadrantLocation === QuadrantLocation.NW ||
+  props.quadrantLocation === QuadrantLocation.NE
+    ? (className += ' north')
+    : (className += ' south')
 
-  className = props.position % 2 === 0 ?
-    className += ' even' :
-    className += ' odd'
+  className =
+    props.position % 2 === 0 ? (className += ' even') : (className += ' odd')
 
-  return <Box className={className}>
-    <CheckerBox checkerBox={props.point} />
-  </Box>
+  return (
+    <Box className={className}>
+      <Checkerbox checkerBox={props.point} />
+    </Box>
+  )
 }
 
 export default Point

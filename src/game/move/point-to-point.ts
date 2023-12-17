@@ -3,10 +3,14 @@ import { GameError } from '../game'
 import { getCheckerBoxes } from '../../components/board/state'
 import { Board } from '../../components/board/state'
 import { Checker, isChecker } from '../../components/checker/state'
-import { canAcceptChecker, isCheckerBox } from '../../components/checkerbox/state/types'
-import { Move, MoveStatus, getCheckerboxCoordinates, hit } from '.'
-import { isBar, Bar } from '../../components/bar/state/types'
-import { Point, isPoint } from '../../components/point/state/types'
+import {
+  canAcceptChecker,
+  isCheckerBox,
+} from '../../components/Checkerbox/state/types'
+import { Move, MoveStatus, hit } from '.'
+import { getCheckerboxCoordinates } from '../../components/board/state/types/board'
+import { isBar, Bar } from '../../components/Bar/state/types'
+import { Point, isPoint } from '../../components/Point/state/types'
 import { MoveResult, getNextPointPosition } from './reducer'
 
 export const pointToPoint = (board: Board, move: Move): MoveResult => {
@@ -25,11 +29,11 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
   if (!isPoint(move.origin)) {
     throw new GameError({
       model: 'Move',
-      errorMessage: 'Missing origin'
+      errorMessage: 'Missing origin',
     })
   }
 
-  newOrigin = produce(move.origin, draft => {
+  newOrigin = produce(move.origin, (draft) => {
     if (move.origin && move.origin.checkers) {
       draft.checkers.splice(move.origin.checkers.length - 1, 1)
     } else {
@@ -38,25 +42,36 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
   })
   checkerToMove = move.origin.checkers[move.origin.checkers.length - 1]
 
-  const destinationPosition = getNextPointPosition(newOrigin.position, move.dieValue, move.direction)
-  const destination = getCheckerBoxes(board).find(cb => typeof cb.position === 'number' && cb.position === destinationPosition)
+  const destinationPosition = getNextPointPosition(
+    newOrigin.position,
+    move.dieValue,
+    move.direction
+  )
+  const destination = getCheckerBoxes(board).find(
+    (cb) =>
+      typeof cb.position === 'number' && cb.position === destinationPosition
+  )
 
   if (isPoint(destination)) {
-    if (destination.checkers.length === 0 ||
+    if (
+      destination.checkers.length === 0 ||
       (destination.checkers.length >= 1 &&
         isChecker(checkerToMove) &&
-        destination.checkers.filter(c => c.color !== checkerToMove?.color).length === 0)
+        destination.checkers.filter((c) => c.color !== checkerToMove?.color)
+          .length === 0)
     ) {
       // FIXME: this is a massive hack to fix a problem with reverting moves.
-      const dupeChecker = destination.checkers.find(c => c.id === checkerToMove.id)
+      const dupeChecker = destination.checkers.find(
+        (c) => c.id === checkerToMove.id
+      )
 
-      newDestination = produce(destination, draft => {
+      newDestination = produce(destination, (draft) => {
         if (isChecker(checkerToMove) && !isChecker(dupeChecker)) {
           draft.checkers.push(checkerToMove)
         }
       })
 
-      finalMove = produce(move, draft => {
+      finalMove = produce(move, (draft) => {
         draft.checker = checkerToMove
         draft.origin = newOrigin
         draft.destination = newDestination
@@ -66,9 +81,13 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
       const originInfo = getCheckerboxCoordinates(board, move.origin.id)
       const destinationInfo = getCheckerboxCoordinates(board, newDestination.id)
 
-      finalBoard = produce(board, draft => {
-        draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex] = newOrigin
-        draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
+      finalBoard = produce(board, (draft) => {
+        draft.quadrants[originInfo.quadrantIndex].points[
+          originInfo.pointIndex
+        ] = newOrigin
+        draft.quadrants[destinationInfo.quadrantIndex].points[
+          destinationInfo.pointIndex
+        ] = newDestination
       })
 
       moveResult.move = finalMove
@@ -81,31 +100,37 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
       hitChecker = destination.checkers[0]
       opponentRail = board.bar[hitChecker.color]
 
-      newOpponentRail = produce(opponentRail, draft => {
+      newOpponentRail = produce(opponentRail, (draft) => {
         draft.checkers.push(hitChecker)
       })
 
-      newDestination = produce(destination, draft => {
-        draft.checkers = destination.checkers.filter(c => c.id !== hitChecker.id)
+      newDestination = produce(destination, (draft) => {
+        draft.checkers = destination.checkers.filter(
+          (c) => c.id !== hitChecker.id
+        )
         draft.checkers.push(checkerToMove)
       })
 
-      finalMove = produce(move, draft => {
+      finalMove = produce(move, (draft) => {
         draft.origin = newOrigin
         draft.destination = newDestination
         draft.status = MoveStatus.COMPLETED
         draft.hit = {
           checker: hitChecker,
-          checkerbox: newDestination
+          checkerbox: newDestination,
         }
       })
 
       const originInfo = getCheckerboxCoordinates(board, move.origin.id)
       const destinationInfo = getCheckerboxCoordinates(board, newDestination.id)
 
-      finalBoard = produce(board, draft => {
-        draft.quadrants[originInfo.quadrantIndex].points[originInfo.pointIndex] = newOrigin
-        draft.quadrants[destinationInfo.quadrantIndex].points[destinationInfo.pointIndex] = newDestination
+      finalBoard = produce(board, (draft) => {
+        draft.quadrants[originInfo.quadrantIndex].points[
+          originInfo.pointIndex
+        ] = newOrigin
+        draft.quadrants[destinationInfo.quadrantIndex].points[
+          destinationInfo.pointIndex
+        ] = newDestination
         draft.bar[hitChecker.color] = newOpponentRail
       })
 

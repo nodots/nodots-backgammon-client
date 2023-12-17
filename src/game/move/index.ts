@@ -1,9 +1,7 @@
-import { GameError, MoveDirection } from '../game'
-import { getCheckerBoxes, sanityCheckBoard } from '../../components/board/state/types/board'
-import { Board, } from '../../components/board/state'
-import { QuadrantLocation } from '../../components/quadrant/state/types'
+import { MoveDirection } from '../game'
+import { sanityCheckBoard } from '../../components/board/state/types/board'
 import { Checker } from '../../components/checker/state'
-import { CheckerBox } from '../../components/checkerbox/state/types'
+import { Checkerbox } from '../../components/Checkerbox/state/types'
 import { DieValue } from '../../components/die/state'
 import { Player } from '../../components/player/state'
 import { GAME_ACTION_TYPE } from '../game.reducer'
@@ -14,12 +12,13 @@ import { bearOff } from './bear-off'
 import { revert } from './revert'
 
 export enum MoveMode {
+  PREDEFINED,
   POINT_TO_POINT,
   REENTER,
   BEAR_OFF,
   NO_MOVE,
   REVERT,
-  ERROR
+  ERROR,
 }
 
 export enum MoveStatus {
@@ -36,12 +35,13 @@ Players make moves by putting checkers in different checkerboxes
 then notifies the board with a MoveAction
 */
 export interface MoveActionPayload {
-  player: Player,
-  checkerbox: CheckerBox
+  player: Player
+  origin: Checkerbox
+  destination?: Checkerbox
 }
 
 export interface MoveAction {
-  type: GAME_ACTION_TYPE,
+  type: GAME_ACTION_TYPE
   payload: MoveActionPayload
 }
 
@@ -53,12 +53,14 @@ export type Move = {
   order: number
   mode?: MoveMode
   checker?: Checker
-  origin?: CheckerBox
-  destination?: CheckerBox
-  hit: {
-    checker: Checker
-    checkerbox: CheckerBox
-  } | undefined
+  origin?: Checkerbox
+  destination?: Checkerbox
+  hit:
+    | {
+        checker: Checker
+        checkerbox: Checkerbox
+      }
+    | undefined
 }
 
 export const isMove = (m: any): m is Move => {
@@ -68,17 +70,17 @@ export const isMove = (m: any): m is Move => {
 
   const keys = Object.keys(m)
 
-  const idIndex = keys.findIndex(k => k === 'id')
+  const idIndex = keys.findIndex((k) => k === 'id')
   if (idIndex === -1) {
     return false
   }
 
-  const dieValueIndex = keys.findIndex(k => k === 'dieValue')
+  const dieValueIndex = keys.findIndex((k) => k === 'dieValue')
   if (dieValueIndex === -1) {
     return false
   }
 
-  const statusIndex = keys.findIndex(k => k === 'status')
+  const statusIndex = keys.findIndex((k) => k === 'status')
   if (statusIndex === -1) {
     return false
   }
@@ -86,65 +88,4 @@ export const isMove = (m: any): m is Move => {
   return true
 }
 
-export function getCheckerboxCoordinates (board: Board, id: string | undefined) {
-  let quadrantIndex: number | undefined = undefined
-  let pointIndex: number | undefined = undefined
-  const checkerbox = getCheckerBoxes(board).find(cb => cb.id === id)
-
-  if (checkerbox) {
-    if (typeof checkerbox.position === 'number') {
-      if (checkerbox.position <= 6) {
-        quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.SE)
-      } else if (checkerbox.position >= 7 && checkerbox.position <= 12) {
-        quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.SW)
-      } else if (checkerbox.position >= 13 && checkerbox.position <= 18) {
-        quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.NW)
-      } else if (checkerbox.position >= 19 && checkerbox.position <= 24) {
-        quadrantIndex = board.quadrants.findIndex(q => q.location === QuadrantLocation.NE)
-      } else {
-        throw new GameError({ model: 'Move', errorMessage: 'No quadrant' })
-      }
-
-      if (typeof quadrantIndex !== 'number' ||
-        quadrantIndex < 0 ||
-        quadrantIndex > 3) {
-        throw new GameError({
-          model: 'Move',
-          errorMessage: 'No Quadrant Index'
-        })
-
-      }
-      pointIndex = board.quadrants[quadrantIndex].points.findIndex(p => p.id === id)
-    } else {
-      throw new GameError({
-        model: 'Move',
-        errorMessage: 'No Quadrant'
-      })
-    }
-    return { quadrantIndex, pointIndex }
-
-  } else {
-    throw new GameError({
-      model: 'Move',
-      errorMessage: 'No checkerbox'
-    })
-  }
-}
-
-export const isCheckerInTurn = (origin: CheckerBox, moves: Move[]): boolean => {
-  let inTurn: boolean = false
-  console.log('[Revert] moves', moves)
-  const ctm = origin.checkers[origin.checkers.length - 1]
-  if (moves.length > 0 && moves.find(m => m.checker?.id !== undefined && m.checker.id === ctm.id)) {
-    inTurn = true
-  }
-  return inTurn
-}
-
-export {
-  pointToPoint,
-  reenter,
-  revert,
-  hit,
-  bearOff
-}
+export { pointToPoint, reenter, revert, hit, bearOff }

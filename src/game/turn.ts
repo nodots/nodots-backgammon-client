@@ -4,15 +4,23 @@ import { GameError } from '.'
 import { Player, isPlayer } from '../components/player/state/types/player'
 import { Board, Move, MoveStatus } from '../components/board/state/types'
 import { DieValue, Roll } from '../components/die/state/types'
-import { POINT_COUNT, getCheckerBoxes, isBoard } from '../components/board/state/types/board'
+import {
+  POINT_COUNT,
+  getCheckerBoxes,
+  isBoard,
+} from '../components/board/state/types/board'
 import { getHomeQuadrantLocation } from '../components/player/state/types/player'
-import { BgWebApiPlay, BgWebApi_TurnAnalysis, BgWebApi_getTurnAnalytics } from './integrations/bgweb-api'
-import { CheckerBox } from '../components/checkerbox/state'
+import {
+  BgWebApiPlay,
+  BgWebApi_TurnAnalysis,
+  BgWebApi_getTurnAnalytics,
+} from './integrations/bgweb-api'
+import { Checkerbox } from '../components/Checkerbox/state'
 
 export const MOVES_PER_TURN = 2
 
 export type Analytics = {
-  api: string,
+  api: string
   analysis: any
 }
 
@@ -22,7 +30,7 @@ export enum TurnStatus {
   AWAITING_FINALIZATION,
   FINALIZED,
   ERROR,
-  NO_MOVES
+  NO_MOVES,
 }
 
 export type MoveCoords = [number, number]
@@ -36,7 +44,7 @@ export type Turn = {
   player: Player
   roll: Roll
   status: TurnStatus | undefined
-  moves: Move[],
+  moves: Move[]
   analytics: Analytics[]
 }
 
@@ -46,12 +54,12 @@ export const isTurn = (t: any): t is Turn => {
   }
 
   const keys = Object.keys(t)
-  const idIndex = keys.findIndex(k => k === 'id')
+  const idIndex = keys.findIndex((k) => k === 'id')
   if (idIndex === -1) {
     return false
   }
 
-  const boardIndex = keys.findIndex(k => k === 'board')
+  const boardIndex = keys.findIndex((k) => k === 'board')
   if (boardIndex === -1) {
     return false
   }
@@ -59,7 +67,7 @@ export const isTurn = (t: any): t is Turn => {
     return false
   }
 
-  const playerIndex = keys.findIndex(k => k === 'player')
+  const playerIndex = keys.findIndex((k) => k === 'player')
   if (playerIndex === -1) {
     return false
   }
@@ -67,7 +75,7 @@ export const isTurn = (t: any): t is Turn => {
     return false
   }
 
-  const statusIndex = keys.findIndex(k => k === 'status')
+  const statusIndex = keys.findIndex((k) => k === 'status')
   if (statusIndex === -1) {
     return false
   }
@@ -76,9 +84,9 @@ export const isTurn = (t: any): t is Turn => {
 }
 
 export interface InitializeTurnAction {
-  board: Board,
-  player: Player,
-  roll: Roll,
+  board: Board
+  player: Player
+  roll: Roll
   analytics?: Analytics[]
 }
 
@@ -92,13 +100,13 @@ export const initializeTurn = (action: InitializeTurnAction): Turn => {
     roll: action.roll,
     status: TurnStatus.INITIALIZED,
     moves: moves,
-    analytics: []
+    analytics: [],
   }
   return turn
 }
 
 export const resetTurn = (turn: Turn): Turn => {
-  return produce(turn, draft => {
+  return produce(turn, (draft) => {
     draft.status = undefined
     draft.moves = []
   })
@@ -132,7 +140,7 @@ export const initializeMoves = (action: InitializeTurnAction): Move[] => {
       order: i,
       direction: moveDirection,
       status: canmove ? MoveStatus.INITIALIZED : MoveStatus.NO_MOVE,
-      hit: undefined
+      hit: undefined,
     }
     moves.push(move)
   }
@@ -141,28 +149,46 @@ export const initializeMoves = (action: InitializeTurnAction): Move[] => {
 
 type CanMove = boolean | 'forced'
 
-function canMove (board: Board, player: Player, analytics: Analytics[] | undefined): CanMove {
+function canMove(
+  board: Board,
+  player: Player,
+  analytics: Analytics[] | undefined
+): CanMove {
   const checkerboxes = getCheckerBoxes(board)
 
-  const gnuAnalytics: Analytics | undefined = analytics?.find(a => a.api === 'bgwebapi')
+  const gnuAnalytics: Analytics | undefined = analytics?.find(
+    (a) => a.api === 'bgwebapi'
+  )
 
   let gnuPlayAnalysis = gnuAnalytics?.analysis as BgWebApi_TurnAnalysis[]
   const gnuPlays: BgWebApiPlay[] = []
   if (gnuPlayAnalysis) {
-    gnuPlayAnalysis.forEach(gpa => {
-      gpa.play.forEach(p => {
+    gnuPlayAnalysis.forEach((gpa) => {
+      gpa.play.forEach((p) => {
         gnuPlays.push(p)
       })
     })
   }
 
-  const originPoints = checkerboxes.filter(cb => cb.checkers.length > 0 && cb.checkers[0].color === player.color && cb.position !== 'off')
-  const matchingPoints: CheckerBox[] = []
-  gnuPlays.forEach(p => {
-    originPoints.filter(op => {
-      if (op.position === 'bar' || (player.moveDirection === 'counterclockwise' && op.positionCounterClockwise == p.from)) {
+  const originPoints = checkerboxes.filter(
+    (cb) =>
+      cb.checkers.length > 0 &&
+      cb.checkers[0].color === player.color &&
+      cb.position !== 'off'
+  )
+  const matchingPoints: Checkerbox[] = []
+  gnuPlays.forEach((p) => {
+    originPoints.filter((op) => {
+      if (
+        op.position === 'bar' ||
+        (player.moveDirection === 'counterclockwise' &&
+          op.positionCounterClockwise == p.from)
+      ) {
         matchingPoints.push(op)
-      } else if (player.moveDirection === 'clockwise' && op.positionClockwise == p.from) {
+      } else if (
+        player.moveDirection === 'clockwise' &&
+        op.positionClockwise == p.from
+      ) {
         matchingPoints.push(op)
       }
     })

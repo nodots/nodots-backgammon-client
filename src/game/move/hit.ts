@@ -1,17 +1,17 @@
 import { produce } from 'immer'
 import { GameError } from '../game'
 import { Checker, isChecker } from '../../components/checker/state'
-import { Bar } from '../../components/bar/state/types'
+import { Bar } from '../../components/Bar/state/types'
 
 export const hit = (bar: Bar, checker: Checker): Bar => {
   if (!isChecker(checker)) {
     throw new GameError({
       model: 'Move',
-      errorMessage: 'Invalid Checker'
+      errorMessage: 'Invalid Checker',
     })
   }
 
-  const newRail = produce(bar, draft => {
+  const newRail = produce(bar, (draft) => {
     draft.checkers.push(checker)
   })
 

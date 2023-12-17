@@ -1,14 +1,14 @@
 // Types
 import { Bar as RailType } from './state/types'
 // Components
-import CheckerBox from '../checkerbox'
+import Checkerbox from '../Checkerbox'
 
 interface RailProps {
   bar: RailType
 }
 
 const Rail = (props: RailProps) => {
-  return <CheckerBox checkerBox={props.bar} />
+  return <Checkerbox checkerBox={props.bar} />
 }
 
 export default Rail

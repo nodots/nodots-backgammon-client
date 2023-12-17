@@ -19,16 +19,24 @@ export const useGameContext = (initialState: Game) => {
     dispatch({ type: GAME_ACTION_TYPE.INITIALIZE_TURN, payload })
   const finalizeTurn = () =>
     dispatch({ type: GAME_ACTION_TYPE.FINALIZE_TURN, payload: {} })
-  const getTurnAnalytics = () => {
+  const getTurnAnalytics = () =>
     dispatch({ type: GAME_ACTION_TYPE.GET_TURN_ANALYTICS })
-  }
   const move = (payload: MoveActionPayload) =>
     dispatch({ type: GAME_ACTION_TYPE.MOVE, payload })
   const revert = (payload: MoveActionPayload) => {
     dispatch({ type: GAME_ACTION_TYPE.REVERT_MOVE, payload })
   }
 
-  return { game, setCubeValue, setDiceValues, move, revert, initializeTurn, finalizeTurn, getTurnAnalytics }
+  return {
+    game,
+    setCubeValue,
+    setDiceValues,
+    move,
+    revert,
+    initializeTurn,
+    finalizeTurn,
+    getTurnAnalytics,
+  }
 }
 
 // Adding comment for commit
@@ -36,13 +44,14 @@ type UseGameContextType = ReturnType<typeof useGameContext>
 
 const initGameContextState: UseGameContextType = {
   game: initialGameState,
-  setCubeValue: () => { },
-  setDiceValues: () => { },
-  initializeTurn: () => { },
-  finalizeTurn: () => { },
-  getTurnAnalytics: () => { },
-  move: () => { },
-  revert: () => { }
+  setCubeValue: () => {},
+  setDiceValues: () => {},
+  initializeTurn: () => {},
+  finalizeTurn: () => {},
+  getTurnAnalytics: () => {},
+  move: () => {},
+  revert: () => {},
 }
 
-export const GameContext = createContext<UseGameContextType>(initGameContextState)
+export const GameContext =
+  createContext<UseGameContextType>(initGameContextState)
