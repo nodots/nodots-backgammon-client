@@ -1,4 +1,4 @@
-import { Color, CheckerBoxPosition, isColor } from '../../../../game'
+import { Color, CheckerboxPosition, isColor } from '../../../../game'
 import { generateId } from '../../../../game/game'
 import { Checker } from '../../../checker/state/types'
 import { CheckerProp } from '../../../board/state/types/board'

@@ -1,5 +1,5 @@
 import { v4 as generateId } from 'uuid'
-import { Color, CheckerBoxPosition, isColor } from '../../../../game'
+import { Color, CheckerboxPosition, isColor } from '../../../../game'
 import { Checker } from '../../../checker/state/types'
 import { CheckerProp } from '../../../board/state/types/board'
 
@@ -17,11 +17,16 @@ export const isBar = (v: any): v is Bar => {
     return false
   }
   const keys = Object.keys(v)
-  const idIndex = keys.findIndex(k => k === 'id')
-  const checkersIndex = keys.findIndex(k => k === 'checkers')
-  const positionIndex = keys.findIndex(k => k === 'position')
-  const colorIndex = keys.findIndex(k => k === 'color')
-  if (idIndex === -1 || checkersIndex === -1 || positionIndex === -1 || colorIndex === -1) {
+  const idIndex = keys.findIndex((k) => k === 'id')
+  const checkersIndex = keys.findIndex((k) => k === 'checkers')
+  const positionIndex = keys.findIndex((k) => k === 'position')
+  const colorIndex = keys.findIndex((k) => k === 'color')
+  if (
+    idIndex === -1 ||
+    checkersIndex === -1 ||
+    positionIndex === -1 ||
+    colorIndex === -1
+  ) {
     return false
   }
 
@@ -32,8 +37,10 @@ export const isBar = (v: any): v is Bar => {
   return true
 }
 
-export function initialize (setup: CheckerProp[]): { white: Bar, black: Bar } {
-  const whiteCheckerSetup = setup.find(cp => cp.color === 'white' && cp.position === 'bar')
+export function initialize(setup: CheckerProp[]): { white: Bar; black: Bar } {
+  const whiteCheckerSetup = setup.find(
+    (cp) => cp.color === 'white' && cp.position === 'bar'
+  )
   const whiteCheckers: Checker[] = []
   if (whiteCheckerSetup) {
     for (let i = 0; i < whiteCheckerSetup.checkerCount; i++) {
@@ -41,7 +48,9 @@ export function initialize (setup: CheckerProp[]): { white: Bar, black: Bar } {
     }
   }
 
-  const blackCheckerSetup = setup.find(cp => cp.color === 'black' && cp.position === 'bar')
+  const blackCheckerSetup = setup.find(
+    (cp) => cp.color === 'black' && cp.position === 'bar'
+  )
   const blackCheckers: Checker[] = []
   if (blackCheckerSetup) {
     for (let i = 0; i < blackCheckerSetup.checkerCount; i++) {
@@ -55,7 +64,7 @@ export function initialize (setup: CheckerProp[]): { white: Bar, black: Bar } {
     position: 'bar',
     positionClockwise: 'bar',
     positionCounterClockwise: 'bar',
-    checkers: whiteCheckers
+    checkers: whiteCheckers,
   }
 
   const black: Bar = {
@@ -64,9 +73,8 @@ export function initialize (setup: CheckerProp[]): { white: Bar, black: Bar } {
     position: 'bar',
     positionClockwise: 'bar',
     positionCounterClockwise: 'bar',
-    checkers: blackCheckers
+    checkers: blackCheckers,
   }
 
   return { white, black }
-
 }

@@ -2,18 +2,18 @@ import { Color, isColor, MoveDirection } from '../../../../game'
 import { Roll, DiePair } from '../../../die/state/types'
 import { Board } from '../../../board/state/types'
 import { isDiePair } from '../../../die/state/types/die-pair'
-import { QuadrantLocation } from '../../../quadrant/state'
+import { QuadrantLocation } from '../../../Quadrant/state'
 import { Analytics } from '../../../../game/turn'
 
 export interface InitializeTurnAction {
-  board: Board,
-  player: Player,
-  roll: Roll,
+  board: Board
+  player: Player
+  roll: Roll
   analytics: Analytics[]
 }
 
 export type Player = {
-  id: string,
+  id: string
   color: Color
   active: boolean
   dice: DiePair
@@ -30,40 +30,40 @@ export const isPlayer = (v: any): v is Player => {
     return false
   }
   const keys = Object.keys(v)
-  const idIndex = keys.findIndex(k => k === 'id')
+  const idIndex = keys.findIndex((k) => k === 'id')
   if (idIndex === -1) {
     return false
   }
-  const colorIndex = keys.findIndex(k => k === 'color')
+  const colorIndex = keys.findIndex((k) => k === 'color')
   if (colorIndex === -1) {
     return false
   }
   if (!isColor(v.color)) {
     return false
   }
-  const activeIndex = keys.findIndex(k => k === 'active')
+  const activeIndex = keys.findIndex((k) => k === 'active')
   if (activeIndex === -1) {
     return false
   }
   if (typeof v.active !== 'boolean') {
     return false
   }
-  const diceIndex = keys.findIndex(k => k === 'dice')
+  const diceIndex = keys.findIndex((k) => k === 'dice')
   if (diceIndex === -1) {
     return false
   }
   if (!isDiePair(v.dice)) {
     return false
   }
-  const moveDirectionIndex = keys.findIndex(k => k === 'moveDirection')
+  const moveDirectionIndex = keys.findIndex((k) => k === 'moveDirection')
   if (moveDirectionIndex === -1) {
     return false
   }
 
-  if (typeof v.moveDirection !== 'string' || (
-    v.moveDirection !== 'clockwise' &&
-    v.moveDirection !== 'counterclockwise'
-  )) {
+  if (
+    typeof v.moveDirection !== 'string' ||
+    (v.moveDirection !== 'clockwise' && v.moveDirection !== 'counterclockwise')
+  ) {
     return false
   }
 
@@ -71,9 +71,13 @@ export const isPlayer = (v: any): v is Player => {
 }
 
 export const getBearOffQuadrantLocation = (moveDirection: MoveDirection) => {
-  return moveDirection === 'clockwise' ? QuadrantLocation.NE : QuadrantLocation.SE
+  return moveDirection === 'clockwise'
+    ? QuadrantLocation.NE
+    : QuadrantLocation.SE
 }
 
 export const getHomeQuadrantLocation = (moveDirection: MoveDirection) => {
-  return moveDirection === 'clockwise' ? QuadrantLocation.SE : QuadrantLocation.NE
+  return moveDirection === 'clockwise'
+    ? QuadrantLocation.SE
+    : QuadrantLocation.NE
 }

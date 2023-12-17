@@ -6,7 +6,7 @@ import { Board, Move, MoveStatus } from '../components/board/state/types'
 import { DieValue, Roll } from '../components/die/state/types'
 import {
   POINT_COUNT,
-  getCheckerBoxes,
+  getCheckerboxes,
   isBoard,
 } from '../components/board/state/types/board'
 import { getHomeQuadrantLocation } from '../components/player/state/types/player'
@@ -154,7 +154,7 @@ function canMove(
   player: Player,
   analytics: Analytics[] | undefined
 ): CanMove {
-  const checkerboxes = getCheckerBoxes(board)
+  const checkerboxes = getCheckerboxes(board)
 
   const gnuAnalytics: Analytics | undefined = analytics?.find(
     (a) => a.api === 'bgwebapi'

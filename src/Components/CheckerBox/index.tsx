@@ -5,19 +5,19 @@ import { useGame } from '../../game/useGame'
 // Types
 import { isColor } from '../../game/game'
 import { GameError } from '../../game/game'
-import { Checkerbox as CheckerBoxType } from './state/types'
+import { Checkerbox as CheckerboxType } from './state/types'
 import { getHomeQuadrantLocation } from '../player/state/types/player'
 import { Move, MoveActionPayload } from '../../game/move'
 import Checker from '../checker'
 import { Checker as CheckerType } from '../checker/state/types'
 import { isPlayer } from '../player/state/types/player'
-import { isQuadrant } from '../quadrant/state'
+import { isQuadrant } from '../Quadrant/state'
 
-interface CheckerBoxProps {
-  checkerBox: CheckerBoxType
+interface CheckerboxProps {
+  checkerBox: CheckerboxType
 }
 
-const Checkerbox = (props: CheckerBoxProps) => {
+const Checkerbox = (props: CheckerboxProps) => {
   const { game, move, revert } = useGame()
   if (!game.activeColor) {
     throw new GameError({ model: 'Move', errorMessage: 'No activeColor' })

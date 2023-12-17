@@ -11,13 +11,13 @@ import { Turn, isTurn } from '../turn'
 import { MoveMode } from '../../components/board/state'
 import {
   MoveStatus,
-  isCheckerBox,
+  isCheckerbox,
   Checkerbox,
 } from '../../components/Checkerbox/state'
 import { getBearOffQuadrantLocation } from '../../components/player/state'
 import {
   Board,
-  getCheckerBoxes,
+  getCheckerboxes,
   getCheckers,
 } from '../../components/board/state/types/board'
 import { isPoint } from '../../components/Point/state/types'
@@ -107,7 +107,7 @@ export function areValidMoves(
 ): boolean {
   let areValidMoves = false
 
-  const checkerboxes = getCheckerBoxes(turn.board)
+  const checkerboxes = getCheckerboxes(turn.board)
   const availableCheckerboxes = checkerboxes.filter(
     (cb) => cb.checkers.length > 0 && cb.checkers[0].color === player.color
   )
@@ -128,7 +128,7 @@ export function getMoveMode(
   destination?: Checkerbox
 ): MoveMode {
   let moveMode = MoveMode.ERROR
-  if (isCheckerBox(destination)) {
+  if (isCheckerbox(destination)) {
     moveMode = MoveMode.PREDEFINED
   } else if (isReenter(turn.board, turn.player)) {
     moveMode = MoveMode.REENTER
@@ -143,7 +143,7 @@ export function getMoveMode(
         turn.player.moveDirection
       )
 
-      const checkerboxes = getCheckerBoxes(turn.board)
+      const checkerboxes = getCheckerboxes(turn.board)
       const destinationPoint = checkerboxes.find(
         (cb) => cb.position === destinationPosition
       )
@@ -199,7 +199,7 @@ function getMoveDestination(
 ): MoveResult | undefined {
   let moveResults: MoveResult | undefined = undefined
 
-  if (!isCheckerBox(origin)) {
+  if (!isCheckerbox(origin)) {
     throw new GameError({
       model: 'Move',
       errorMessage: 'Invalid origin',

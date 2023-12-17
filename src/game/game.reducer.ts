@@ -16,7 +16,7 @@ import {
 } from './turn'
 import { Turn, initializeTurn } from './turn'
 import {
-  getCheckerBoxes,
+  getCheckerboxes,
   getPipCountForPlayer,
 } from '../components/board/state/types/board'
 import { Point } from '../components/Point/state/types'

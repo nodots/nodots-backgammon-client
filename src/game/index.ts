@@ -3,19 +3,10 @@ import {
   GameError,
   GameErrorType,
   Color,
-  CheckerBoxPosition,
+  CheckerboxPosition,
   MoveDirection,
-  isColor
+  isColor,
 } from './game'
 
-export {
-  GameError,
-  isColor
-}
-export type {
-  Game,
-  GameErrorType,
-  Color,
-  CheckerBoxPosition,
-  MoveDirection
-}
+export { GameError, isColor }
+export type { Game, GameErrorType, Color, CheckerboxPosition, MoveDirection }

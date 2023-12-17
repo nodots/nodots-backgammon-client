@@ -6,10 +6,10 @@ import { Bar, isBar } from '../../components/Bar/state/types'
 import { Move, MoveStatus, MoveMode } from '.'
 import { getCheckerboxCoordinates } from '../../components/board/state/types/board'
 import { MoveResult } from './reducer'
-import { QuadrantLocation, isQuadrant } from '../../components/quadrant/state'
+import { QuadrantLocation, isQuadrant } from '../../components/Quadrant/state'
 import {
   canAcceptChecker,
-  isCheckerBox,
+  isCheckerbox,
 } from '../../components/Checkerbox/state/types'
 
 export const reenter = (board: Board, move: Move): MoveResult => {
@@ -39,7 +39,7 @@ export const reenter = (board: Board, move: Move): MoveResult => {
       )
 
       if (
-        isCheckerBox(destinationPoint) &&
+        isCheckerbox(destinationPoint) &&
         canAcceptChecker(destinationPoint, checkerToMove)
       ) {
         let opponentCheckers = destinationPoint.checkers.filter(

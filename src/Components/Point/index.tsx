@@ -1,10 +1,10 @@
 import { Box } from '@mui/material'
-import { Checkerbox as CheckerBoxType } from '../Checkerbox/state/types'
+import { Checkerbox as CheckerboxType } from '../Checkerbox/state/types'
 import { QuadrantLocation } from '../Quadrant/state/types'
 import Checkerbox from '../Checkerbox'
 
 interface PointProps {
-  point: CheckerBoxType
+  point: CheckerboxType
   position: number
   quadrantLocation: QuadrantLocation
   backgroundColor: string

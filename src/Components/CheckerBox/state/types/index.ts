@@ -1,4 +1,4 @@
-import { CheckerBoxPosition as CheckerboxPosition } from '../../../../game'
+import { CheckerboxPosition as CheckerboxPosition } from '../../../../game'
 import { Checker } from '../../../checker/state/types'
 import { Color } from '../../../../game'
 
@@ -16,7 +16,7 @@ export type Checkerbox = {
   positionCounterClockwise: CheckerboxPosition
 }
 
-export const isCheckerBox = (v: any): v is Checkerbox => {
+export const isCheckerbox = (v: any): v is Checkerbox => {
   if (typeof v !== 'object') {
     return false
   }

@@ -1,6 +1,6 @@
 import { produce } from 'immer'
 import { GameError } from '../game'
-import { getCheckerBoxes } from '../../components/board/state'
+import { getCheckerboxes } from '../../components/board/state'
 import { Board } from '../../components/board/state'
 import { Checker, isChecker } from '../../components/checker/state'
 import { Move, MoveStatus, hit } from '.'

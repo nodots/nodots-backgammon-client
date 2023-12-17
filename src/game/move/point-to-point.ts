@@ -1,11 +1,11 @@
 import { produce } from 'immer'
 import { GameError } from '../game'
-import { getCheckerBoxes } from '../../components/board/state'
+import { getCheckerboxes } from '../../components/board/state'
 import { Board } from '../../components/board/state'
 import { Checker, isChecker } from '../../components/checker/state'
 import {
   canAcceptChecker,
-  isCheckerBox,
+  isCheckerbox,
 } from '../../components/Checkerbox/state/types'
 import { Move, MoveStatus, hit } from '.'
 import { getCheckerboxCoordinates } from '../../components/board/state/types/board'
@@ -47,7 +47,7 @@ export const pointToPoint = (board: Board, move: Move): MoveResult => {
     move.dieValue,
     move.direction
   )
-  const destination = getCheckerBoxes(board).find(
+  const destination = getCheckerboxes(board).find(
     (cb) =>
       typeof cb.position === 'number' && cb.position === destinationPosition
   )

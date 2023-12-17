@@ -1,15 +1,13 @@
 import { Board, MoveMode } from './types'
 import { initBoardState } from './board.state'
-import { POINT_COUNT, getCheckerBoxes, sanityCheckBoard } from './types/board'
+import { POINT_COUNT, getCheckerboxes, sanityCheckBoard } from './types/board'
 
 export {
   initBoardState,
   POINT_COUNT,
-  getCheckerBoxes,
+  getCheckerboxes,
   sanityCheckBoard,
   MoveMode,
 }
 
-export type {
-  Board
-}
+export type { Board }

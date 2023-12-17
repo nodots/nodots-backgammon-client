@@ -8,7 +8,7 @@ import { getCheckerboxCoordinates } from '../../components/board/state/types/boa
 import { MoveResult } from './reducer'
 import { Off } from '../../components/off/state/types'
 import { Point, isPoint } from '../../components/Point/state/types'
-import { Quadrant, isQuadrant } from '../../components/quadrant/state'
+import { Quadrant, isQuadrant } from '../../components/Quadrant/state'
 import { DieValue } from '../../components/die/state'
 import { getBearOffQuadrantLocation } from '../../components/player/state'
 

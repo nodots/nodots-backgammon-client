@@ -1,6 +1,6 @@
 import { Move, MoveAction, MoveStatus, MoveMode } from '../../../game/move'
-import { isCheckerBox, Checkerbox } from './types'
+import { isCheckerbox, Checkerbox } from './types'
 
-export { MoveStatus, MoveMode, isCheckerBox }
+export { MoveStatus, MoveMode, isCheckerbox }
 
 export type { Checkerbox as Checkerbox, Move, MoveAction }

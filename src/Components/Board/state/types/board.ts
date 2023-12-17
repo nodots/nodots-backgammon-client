@@ -74,7 +74,7 @@ export const initialize = (setup?: CheckerProp[]): Board => {
   return board
 }
 
-export const getCheckerBoxes = (board: Board): Checkerbox[] => {
+export const getCheckerboxes = (board: Board): Checkerbox[] => {
   const checkerBoxes: Checkerbox[] = []
   board.quadrants.forEach((q) => {
     checkerBoxes.push(...q.points)
@@ -121,7 +121,7 @@ export const getPipCountForPlayer = (board: Board, player: Player): number => {
       errorMessage: 'Invalid color',
     })
   }
-  const checkerboxes = getCheckerBoxes(board)
+  const checkerboxes = getCheckerboxes(board)
   let pipCount = 0
   checkerboxes.forEach((cb) => {
     if (
@@ -223,7 +223,7 @@ export const sanityCheckBoard = (board: Board): boolean => {
 export function getCheckerboxCoordinates(board: Board, id: string | undefined) {
   let quadrantIndex: number | undefined = undefined
   let pointIndex: number | undefined = undefined
-  const checkerbox = getCheckerBoxes(board).find((cb) => cb.id === id)
+  const checkerbox = getCheckerboxes(board).find((cb) => cb.id === id)
 
   if (checkerbox) {
     if (typeof checkerbox.position === 'number') {

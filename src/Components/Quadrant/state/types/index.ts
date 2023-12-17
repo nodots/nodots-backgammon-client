@@ -3,7 +3,7 @@ import { CheckerProp } from '../../../board/state/types/board'
 import {
   Point,
   initialize as initializePoints,
-} from '../../../point/state/types'
+} from '../../../Point/state/types'
 
 export enum QuadrantLocation {
   SE,
