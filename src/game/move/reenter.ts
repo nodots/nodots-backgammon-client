@@ -1,12 +1,15 @@
 import { produce } from 'immer'
+import { MoveResult } from './reducer'
 import { Point } from '../../components/Point/state/types'
-import { Checker, isChecker } from '../../components/Checker/state'
+import { Checker, isChecker } from '../../components/Checker/state/types'
 import { Board } from '../../components/Board/state'
 import { Bar, isBar } from '../../components/Bar/state/types'
 import { Move, MoveStatus, MoveMode } from '.'
-import { getCheckerboxCoordinates } from '../../components/Board/state'
-import { MoveResult } from './reducer'
-import { QuadrantLocation, isQuadrant } from '../../components/Quadrant/state'
+import { getCheckerboxCoordinates } from '../../components/Board/state/types'
+import {
+  QuadrantLocation,
+  isQuadrant,
+} from '../../components/Quadrant/state/types'
 import {
   canAcceptChecker,
   isCheckerbox,

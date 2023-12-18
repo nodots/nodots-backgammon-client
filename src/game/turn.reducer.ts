@@ -8,7 +8,7 @@ import {
   initializeMoves,
 } from './turn'
 import { GameError } from '.'
-import { Board } from '../components/Board/state'
+import { Board } from '../components/Board/state/types'
 import { Player } from './player'
 import { Roll } from '../components/Die/state'
 import { GAME_ACTION_TYPE } from './game.reducer'

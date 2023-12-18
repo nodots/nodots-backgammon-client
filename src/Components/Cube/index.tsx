@@ -1,5 +1,5 @@
 import { useGame } from '../../game/useGame'
-import { SetCubeValuePayload } from './state'
+import { SetCubeValuePayload } from './state/types'
 import { CubeValue, isCubeValue } from './state/types'
 
 const Cube = () => {

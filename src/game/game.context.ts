@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react'
 import { SetDiceValuesPayload } from '../components/Die/state'
-import { SetCubeValuePayload } from '../components/Cube/state'
+import { SetCubeValuePayload } from '../components/Cube/state/types'
 import { reducer, GAME_ACTION_TYPE } from './game.reducer'
 import { Game } from './game'
 import { initialGameState } from './game.state'

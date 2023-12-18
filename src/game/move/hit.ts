@@ -1,6 +1,6 @@
 import { produce } from 'immer'
 import { GameError } from '../game'
-import { Checker, isChecker } from '../../components/Checker/state'
+import { Checker, isChecker } from '../../components/Checker/state/types'
 import { Bar } from '../../components/Bar/state/types'
 
 export const hit = (bar: Bar, checker: Checker): Bar => {

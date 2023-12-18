@@ -1,12 +1,12 @@
 import { v4 as generateId } from 'uuid'
 import { produce } from 'immer'
 import { Player, isPlayer } from './player'
-import { Board } from '../components/Board/state/types'
 import { Move, MoveStatus } from './move'
 import { Roll } from '../components/Die/state'
-import { getCheckerboxes, isBoard } from '../components/Board/state'
+import { Board } from '../components/Board/state/types'
+import { Checkerbox } from '../components/Checkerbox/state/types'
+import { getCheckerboxes, isBoard } from '../components/Board/state/types'
 import { BgWebApiPlay, BgWebApi_TurnAnalysis } from './integrations/bgweb-api'
-import { Checkerbox } from '../components/Checkerbox/state'
 
 export const MOVES_PER_TURN = 2
 

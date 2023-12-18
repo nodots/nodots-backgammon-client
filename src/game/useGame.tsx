@@ -5,7 +5,7 @@ import {
   CubeValue,
   SetCubeValuePayload,
   double,
-} from '../components/Cube/state'
+} from '../components/Cube/state/types'
 import { SetDiceValuesPayload } from '../components/Die/state'
 import { TurnActionPayload } from './turn.reducer'
 import { MoveActionPayload } from './move'
@@ -16,7 +16,7 @@ type UseGameHookType = {
   setDiceValues: (payload: SetDiceValuesPayload) => void
   setCubeValue: (payload: SetCubeValuePayload) => void
   initializeTurn: (payload: TurnActionPayload) => void
-  getTurnAnalytics: () => BgWebApi_TurnAnalysis[]
+  getTurnAnalytics: () => void
   finalizeTurn: () => void
   double: (value: CubeValue) => CubeValue
   move: (payload: MoveActionPayload) => void

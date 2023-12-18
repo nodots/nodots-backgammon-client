@@ -1,14 +1,17 @@
 import { produce } from 'immer'
 import { CHECKERS_PER_PLAYER, GameError, MoveDirection } from '../game'
-import { Board } from '../../components/Board/state'
-import { Checker, isChecker } from '../../components/Checker/state'
-import { Player, isPlayer, getBearOffQuadrantLocation } from '../player'
 import { Move, MoveStatus, pointToPoint } from '.'
-import { getCheckerboxCoordinates } from '../../components/Board/state'
+import { Player, isPlayer, getBearOffQuadrantLocation } from '../player'
 import { MoveResult } from './reducer'
+import { Checker, isChecker } from '../../components/Checker/state/types'
+import {
+  Board,
+  getCheckerboxCoordinates,
+} from '../../components/Board/state/types'
 import { Off } from '../../components/Off/state/types'
 import { Point, isPoint } from '../../components/Point/state/types'
-import { Quadrant, isQuadrant } from '../../components/Quadrant/state'
+import { Quadrant, isQuadrant } from '../../components/Quadrant/state/types'
+
 import { DieValue } from '../../components/Die/state'
 
 export const bearOff = (board: Board, move: Move): MoveResult => {
@@ -70,7 +73,6 @@ export function canBearOff(
   let bearOffQuadrant: Quadrant | undefined = undefined
   let bearOffCheckerbox: Off | undefined = undefined
   let bearOffPoint: Point | undefined = undefined
-  let bearOffPointsWithCheckers: Point[] = []
   let totalBearOffCheckers = 0
 
   if (isPlayer(player)) {

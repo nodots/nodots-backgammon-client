@@ -19,6 +19,10 @@ export type Cube = {
   owner: Color | undefined
 }
 
+export interface SetCubeValuePayload {
+  value: CubeValue | undefined
+}
+
 export const double = (value: CubeValue): CubeValue => {
   // at the start of them game the Cube has no value. If undefined, set to 2
   if (!value) {

@@ -1,10 +1,9 @@
 import { produce } from 'immer'
-import { Board } from '../../components/Board/state'
-import { Checker, isChecker } from '../../components/Checker/state'
-import { Move, MoveStatus } from '.'
-import { Bar } from '../../components/Bar/state/types'
-import { Point, isPoint } from '../../components/Point/state/types'
 import { MoveResult } from './reducer'
+import { Board } from '../../components/Board/state/types'
+import { Checker, isChecker } from '../../components/Checker/state/types'
+import { Move, MoveStatus } from '.'
+import { Point, isPoint } from '../../components/Point/state/types'
 import { getCheckerboxCoordinates } from '../../components/Board/state'
 
 export const revert = (board: Board, move: Move): MoveResult => {

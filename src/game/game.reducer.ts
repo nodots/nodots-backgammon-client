@@ -2,12 +2,14 @@ import { produce } from 'immer'
 import { isMove } from './move'
 import { Game, GameError, Color, isColor, generateId } from './game'
 import { Roll, reducer as diceReducer } from '../components/Die/state'
-
-import { getCheckerboxCoordinates } from '../components/Board/state'
+import {
+  getCheckerboxCoordinates,
+  getPipCountForPlayer,
+} from '../components/Board/state/types'
 import { areValidMoves, reducer as moveReducer } from './move/reducer'
-import { reducer as cubeReducer } from '../components/Cube/state'
+import { reducer as cubeReducer } from '../components/Cube/state/reducers/index'
 import { Move, MoveStatus } from './move'
-import { Checkerbox } from '../components/Checkerbox/state'
+import { Checkerbox } from '../components/Checkerbox/state/types'
 import {
   Analytics,
   InitializeTurnAction,
@@ -15,7 +17,6 @@ import {
   initializeMoves,
 } from './turn'
 import { Turn, initializeTurn } from './turn'
-import { getPipCountForPlayer } from '../components/Board/state'
 import { Point } from '../components/Point/state/types'
 import { BgWebApi_getTurnAnalytics } from './integrations/bgweb-api'
 import { isPlayer } from './player'

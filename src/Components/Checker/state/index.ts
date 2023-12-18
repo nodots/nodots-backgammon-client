@@ -1,5 +1,5 @@
 import { Move } from '../../../game/move'
-import { Checkerbox } from '../../Checkerbox/state'
+import { Checkerbox } from '../../Checkerbox/state/types'
 import { Checker, isChecker } from './types'
 
 export { isChecker }

@@ -1,6 +1,6 @@
 import { Player } from '../../player'
 import { Roll } from '../../../components/Die/state'
-import { Board, getCheckerboxes } from '../../../components/Board/state'
+import { Board, getCheckerboxes } from '../../../components/Board/state/types'
 
 const black = 'o'
 const white = 'x'
