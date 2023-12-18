@@ -1,4 +1,4 @@
-import { useGame } from "../../game/useGame";
+import { useGame } from '../../game/useGame'
 import {
   Card,
   CardHeader,
@@ -8,38 +8,38 @@ import {
   TableBody,
   TableCell,
   TableRow,
-} from "@mui/material";
-import { Move, MoveStatus, MoveMode } from "../Checkerbox/state";
-import { TurnStatus } from "../../game/turn";
+} from '@mui/material'
+import { Move, MoveStatus, MoveMode } from '../../game/move'
+import { TurnStatus } from '../../game/turn'
 
 export interface DebugProps {
-  elevation?: number;
+  elevation?: number
 }
 
 export const Debug = (props: DebugProps) => {
-  const { game } = useGame();
-  const activeColor = game.activeColor;
-  const activeTurn = game.activeTurn;
-  const roll = activeTurn?.roll;
-  const moves = activeTurn?.moves;
+  const { game } = useGame()
+  const activeColor = game.activeColor
+  const activeTurn = game.activeTurn
+  const roll = activeTurn?.roll
+  const moves = activeTurn?.moves
 
   if (moves && game.activeTurn) {
     const activeMoveIndex = moves.findIndex(
       (m: Move) => m.status !== MoveStatus.COMPLETED
-    );
-    const activeMove = moves[activeMoveIndex];
-    let previousMove: Move | undefined = undefined;
-    let nextMove: Move | undefined = undefined;
+    )
+    const activeMove = moves[activeMoveIndex]
+    let previousMove: Move | undefined = undefined
+    let nextMove: Move | undefined = undefined
     if (activeMoveIndex > 0) {
-      previousMove = moves[activeMoveIndex - 1];
+      previousMove = moves[activeMoveIndex - 1]
     }
     if (activeMoveIndex < moves.length - 1) {
-      nextMove = moves[activeMoveIndex + 1];
+      nextMove = moves[activeMoveIndex + 1]
     }
 
-    let activePlayer;
+    let activePlayer
     if (activeColor) {
-      activePlayer = game.players[activeColor];
+      activePlayer = game.players[activeColor]
     }
     return (
       <div className="info-column">
@@ -54,13 +54,13 @@ export const Debug = (props: DebugProps) => {
                 <TableRow>
                   <TableCell>Status</TableCell>
                   <TableCell>
-                    {activeTurn.status ? TurnStatus[activeTurn.status] : "N/A"}
+                    {activeTurn.status ? TurnStatus[activeTurn.status] : 'N/A'}
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Active Color</TableCell>
                   <TableCell>
-                    {activeColor ? activeColor.toString().toUpperCase() : "N/A"}
+                    {activeColor ? activeColor.toString().toUpperCase() : 'N/A'}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -68,29 +68,29 @@ export const Debug = (props: DebugProps) => {
                   <TableCell>
                     {activePlayer
                       ? activePlayer.color.toString().toUpperCase()
-                      : "N/A"}
+                      : 'N/A'}
                   </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Roll</TableCell>
                   <TableCell>
-                    {roll ? roll[0] : "X"}:{roll ? roll[1] : "X"}
+                    {roll ? roll[0] : 'X'}:{roll ? roll[1] : 'X'}
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
             <h2>Moves ({moves.length})</h2>
-            {moveTable(activeMove, "Active")}
-            {previousMove ? moveTable(previousMove, "Previous") : <></>}
-            {nextMove ? moveTable(nextMove, "Next") : <></>}
+            {moveTable(activeMove, 'Active')}
+            {previousMove ? moveTable(previousMove, 'Previous') : <></>}
+            {nextMove ? moveTable(nextMove, 'Next') : <></>}
           </CardContent>
         </Card>
       </div>
-    );
+    )
   } else {
-    return <Box>No Active Turn</Box>;
+    return <Box>No Active Turn</Box>
   }
-};
+}
 
 function moveTable(activeMove: Move, label: string) {
   return (
@@ -104,28 +104,28 @@ function moveTable(activeMove: Move, label: string) {
         <TableRow>
           <TableCell>Status</TableCell>
           <TableCell>
-            {activeMove ? MoveStatus[activeMove.status] : "N/A"}
+            {activeMove ? MoveStatus[activeMove.status] : 'N/A'}
           </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Mode</TableCell>
           <TableCell>
-            {activeMove?.mode ? MoveMode[activeMove.mode] : "N/A"}
+            {activeMove?.mode ? MoveMode[activeMove.mode] : 'N/A'}
           </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Origin</TableCell>
           <TableCell>
-            {activeMove?.origin ? activeMove.origin.position : "N/A"}
+            {activeMove?.origin ? activeMove.origin.position : 'N/A'}
           </TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Destination</TableCell>
           <TableCell>
-            {activeMove?.destination ? activeMove.destination.position : "N/A"}
+            {activeMove?.destination ? activeMove.destination.position : 'N/A'}
           </TableCell>
         </TableRow>
       </TableBody>
     </Table>
-  );
+  )
 }

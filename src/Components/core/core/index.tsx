@@ -4,15 +4,13 @@ import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
-import AccountCircle from '@mui/icons-material/AccountCircle'
 import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
 import { Avatar } from '@mui/material'
 
-export default function NavBar () {
+export default function NavBar() {
   const { user, logout } = useAuth0()
-  const [auth, setAuth] = React.useState(true)
+  const [, setAuth] = React.useState(true)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,25 +36,23 @@ export default function NavBar () {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position='fixed'>
+      <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: 'flex-end' }}>
-
           <div>
             <IconButton
-              size='large'
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
               onClick={handleMenu}
-              color='inherit'
+              color="inherit"
             >
-              {user &&
+              {user && (
                 <Avatar alt={user.name?.substring(0, 1)} src={user.picture} />
-              }
-
+              )}
             </IconButton>
             <Menu
-              id='menu-appbar'
+              id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
                 vertical: 'top',
@@ -74,7 +70,6 @@ export default function NavBar () {
               <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
             </Menu>
           </div>
-
         </Toolbar>
       </AppBar>
     </Box>

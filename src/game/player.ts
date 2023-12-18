@@ -1,9 +1,5 @@
 import { Color, isColor, MoveDirection } from '.'
-import {
-  Roll,
-  DiePair,
-  isDiePair,
-} from '../components/Die/state/types/die-pair'
+import { Roll, DiePair, isDiePair } from '../components/Die/state/types/dice'
 import { Board } from '../components/Board/state'
 import { QuadrantLocation } from '../components/Quadrant/state'
 import { Analytics } from './turn'

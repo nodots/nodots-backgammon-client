@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import { Dice } from '../types/die-pair'
+import { GameDice } from '../types/dice'
 import { isDieValue } from '../types/die'
 import { SetDiceValuesPayload } from '../dice.context'
 
@@ -12,7 +12,7 @@ export interface DiceAction {
   payload: SetDiceValuesPayload
 }
 
-export const reducer = (state: Dice, action: DiceAction): Dice => {
+export const reducer = (state: GameDice, action: DiceAction): GameDice => {
   const {
     payload: {
       color,

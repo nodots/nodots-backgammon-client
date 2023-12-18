@@ -1,7 +1,7 @@
-import { Dice } from './types/die-pair'
-import { DiePair } from './types/die-pair'
+import { GameDice } from './types/dice'
+import { DiePair } from './types/dice'
 
-export const initDiceState: Dice = initializeDice()
+export const initDiceState: GameDice = initializeDice()
 
 function initializeDice() {
   const white: DiePair = {

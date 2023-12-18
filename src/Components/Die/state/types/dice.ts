@@ -6,7 +6,7 @@ export type DiePair = {
   dice: [Die, Die]
 }
 
-export type Dice = {
+export type GameDice = {
   white: DiePair
   black: DiePair
 }
