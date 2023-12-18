@@ -23,7 +23,7 @@ const Checker = (props: CheckerProps) => {
         <RadioButtonCheckedTwoToneIcon
           className="checker-overlay"
           // FIXME: Hardcoded color
-          sx={{ fill: 'rgba(69, 109, 157, .4)' }}
+          sx={{ fill: 'rgba(69, 109, 157, .4)', width: '2vw', height: '2vw' }}
         />
       )}
     </div>
