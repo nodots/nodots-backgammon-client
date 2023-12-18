@@ -1,4 +1,4 @@
-import { Color, isColor } from '../../../../game'
+import { Color } from '../../../../game'
 
 /**
  * Checkers are the pieces that move around the board. By tradition they are
@@ -17,6 +17,7 @@ export const isChecker = (c: unknown): c is Checker => {
 
   return true
 }
+
 // For importing setup
 export interface CheckerProp {
   color: string

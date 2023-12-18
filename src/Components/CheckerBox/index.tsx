@@ -1,5 +1,4 @@
 import { v4 as generateId } from 'uuid'
-import { Paper } from '@mui/material'
 // Hooks
 import { useGame } from '../../game/useGame'
 // Types

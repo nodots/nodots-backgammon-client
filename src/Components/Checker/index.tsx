@@ -2,7 +2,6 @@
 import { useGame } from '../../game/useGame'
 // Types
 import { Checker as CheckerType } from './state/types'
-import { isCheckerInTurn } from './state'
 // UI
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 
@@ -14,7 +13,6 @@ export interface CheckerProps {
 }
 
 const Checker = (props: CheckerProps) => {
-  const { game } = useGame()
   const classes = `checker ${props.checker.color}`
 
   return (
@@ -24,6 +22,7 @@ const Checker = (props: CheckerProps) => {
       ) : (
         <RadioButtonCheckedTwoToneIcon
           className="checker-overlay"
+          // FIXME: Hardcoded color
           sx={{ fill: 'rgba(69, 109, 157, .4)' }}
         />
       )}

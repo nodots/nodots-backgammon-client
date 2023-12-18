@@ -3,7 +3,6 @@ import { Color } from '../../../../game'
 import { POINT_COUNT } from '../../../Board/state'
 import { Checker, CheckerProp } from '../../../Checker/state/types'
 
-// FIXME: Either use the color attribute throughout the app or abandon
 export type Point = {
   id: string
   checkers: Checker[]

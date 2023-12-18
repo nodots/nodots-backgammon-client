@@ -6,7 +6,6 @@ import {
 } from '../player'
 import { DieValue } from '../../components/Die/state'
 import { GameError, MoveDirection } from '../game'
-import {} from '../player'
 import { Move, isMove, pointToPoint, reenter } from '../move'
 import { Turn } from '../turn'
 import { MoveMode } from '../../components/Board/state'

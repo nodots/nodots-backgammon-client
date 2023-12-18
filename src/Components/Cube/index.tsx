@@ -1,4 +1,3 @@
-import { Button } from '@mui/material'
 import { useGame } from '../../game/useGame'
 import { SetCubeValuePayload } from './state'
 import { CubeValue, isCubeValue } from './state/types'
@@ -17,7 +16,10 @@ const Cube = () => {
       e.stopPropagation()
       return console.error('It is not your turn')
     }
-    if (game.cube.owner !== undefined && game.players[activeColor].color !== game.cube.owner) {
+    if (
+      game.cube.owner !== undefined &&
+      game.players[activeColor].color !== game.cube.owner
+    ) {
       e.stopPropagation()
       return console.error('You do not control the cube')
     }
@@ -38,12 +40,16 @@ const Cube = () => {
     }
     const newValue: CubeValue = double(value)
     const payload: SetCubeValuePayload = {
-      value: newValue
+      value: newValue,
     }
     setCubeValue(payload)
   }
 
-  return <div className='cube' onClick={clickHandler}>{cube.value ? cube.value : 2}</div>
+  return (
+    <div className="cube" onClick={clickHandler}>
+      {cube.value ? cube.value : 2}
+    </div>
+  )
 }
 
 export default Cube
