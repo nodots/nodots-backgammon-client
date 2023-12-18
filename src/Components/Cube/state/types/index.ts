@@ -3,15 +3,11 @@ import { Color } from '../../../../game'
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 
 export const isCubeValue = (v: unknown): v is CubeValue => {
-  if (v && typeof v === 'number' && v >= 1 &&
-    (
-      v === 2 ||
-      v === 4 ||
-      v === 8 ||
-      v === 16 ||
-      v === 32 ||
-      v === 64
-    )
+  if (
+    v &&
+    typeof v === 'number' &&
+    v >= 1 &&
+    (v === 2 || v === 4 || v === 8 || v === 16 || v === 32 || v === 64)
   ) {
     return true
   }
@@ -38,7 +34,6 @@ export const double = (value: CubeValue): CubeValue => {
       return newValue
     } else {
       throw Error('Invalid CubeValue')
-
     }
   } else {
     throw Error('Invalid CubeValue')

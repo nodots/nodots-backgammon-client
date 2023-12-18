@@ -141,20 +141,6 @@ $accent: #6b000c;
       }
     }
   }
-  .point-labels {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-
-    &.SW,
-    &.SE {
-      flex-direction: row-reverse;
-    }
-
-    .point-label {
-      font-size: 0.6rem;
-    }
-  }
 }
 
 // FIXME: This rule handles an iOS (yes, iOS) bug that prevents

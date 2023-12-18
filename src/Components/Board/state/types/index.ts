@@ -49,12 +49,6 @@ export const initialize = (setup?: CheckerProp[]): Board => {
   if (!setup) {
     setup = DEFAULT_SETUP
   }
-  // if (!sanityCheckSetup(setup)) {
-  //   throw new GameError({
-  //     model: 'Configuration',
-  //     errorMessage: 'Board initialization failed'
-  //   })
-  // }
 
   const off = initializeOff(DEFAULT_SETUP)
   const bar = initializeBar(DEFAULT_SETUP)

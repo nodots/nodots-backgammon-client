@@ -10,7 +10,10 @@ import { Move, isMove, pointToPoint, reenter } from '../move'
 import { Turn } from '../turn'
 import { MoveMode } from '../../components/Board/state'
 import { MoveStatus } from '../move'
-import { isCheckerbox, Checkerbox } from '../../components/Checkerbox/state'
+import {
+  isCheckerbox,
+  Checkerbox,
+} from '../../components/Checkerbox/state/types'
 import { Board, getCheckerboxes } from '../../components/Board/state'
 import { isPoint } from '../../components/Point/state/types'
 import { bearOff, canBearOff } from './bear-off'

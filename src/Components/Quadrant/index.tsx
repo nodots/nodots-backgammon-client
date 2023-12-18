@@ -3,6 +3,7 @@ import { Quadrant as QuadrantType, QuadrantLocation } from './state/types'
 import Point from '../Point'
 // UI
 import { Box } from '@mui/material'
+import './quadrant.scss'
 
 interface QuadrantProps {
   quadrantLocation: QuadrantLocation
@@ -43,7 +44,7 @@ export const PointLabelContainer = (props: QuadrantProps) => {
 
     labels.push(
       <Box className="point-label" key={i}>
-        {i}/{clockwisePosition}
+        {i}/<span className="black">{clockwisePosition}</span>
       </Box>
     )
   }
