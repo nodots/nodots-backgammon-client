@@ -1,25 +1,18 @@
 import { produce } from 'immer'
 import {
+  Player,
   getHomeQuadrantLocation,
-  isPlayer,
-} from '../../components/player/state/types/player'
-import { DieValue } from '../../components/die/state'
+  getBearOffQuadrantLocation,
+} from '../player'
+import { DieValue } from '../../components/Die/state'
 import { GameError, MoveDirection } from '../game'
-import { Player } from '../../components/player/state'
+import {} from '../player'
 import { Move, isMove, pointToPoint, reenter } from '../move'
-import { Turn, isTurn } from '../turn'
-import { MoveMode } from '../../components/board/state'
-import {
-  MoveStatus,
-  isCheckerbox,
-  Checkerbox,
-} from '../../components/Checkerbox/state'
-import { getBearOffQuadrantLocation } from '../../components/player/state'
-import {
-  Board,
-  getCheckerboxes,
-  getCheckers,
-} from '../../components/board/state/types/board'
+import { Turn } from '../turn'
+import { MoveMode } from '../../components/Board/state'
+import { MoveStatus } from '../move'
+import { isCheckerbox, Checkerbox } from '../../components/Checkerbox/state'
+import { Board, getCheckerboxes } from '../../components/Board/state'
 import { isPoint } from '../../components/Point/state/types'
 import { bearOff, canBearOff } from './bear-off'
 

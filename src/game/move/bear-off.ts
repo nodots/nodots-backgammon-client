@@ -1,16 +1,15 @@
 import { produce } from 'immer'
 import { CHECKERS_PER_PLAYER, GameError, MoveDirection } from '../game'
-import { Board } from '../../components/board/state'
-import { Checker, isChecker } from '../../components/checker/state'
-import { Player, isPlayer } from '../../components/player/state'
+import { Board } from '../../components/Board/state'
+import { Checker, isChecker } from '../../components/Checker/state'
+import { Player, isPlayer, getBearOffQuadrantLocation } from '../player'
 import { Move, MoveStatus, pointToPoint } from '.'
-import { getCheckerboxCoordinates } from '../../components/board/state/types/board'
+import { getCheckerboxCoordinates } from '../../components/Board/state'
 import { MoveResult } from './reducer'
-import { Off } from '../../components/off/state/types'
+import { Off } from '../../components/Off/state/types'
 import { Point, isPoint } from '../../components/Point/state/types'
 import { Quadrant, isQuadrant } from '../../components/Quadrant/state'
-import { DieValue } from '../../components/die/state'
-import { getBearOffQuadrantLocation } from '../../components/player/state'
+import { DieValue } from '../../components/Die/state'
 
 export const bearOff = (board: Board, move: Move): MoveResult => {
   let moveResult = { board, move }

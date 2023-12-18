@@ -1,11 +1,10 @@
 import { CheckerboxPosition as CheckerboxPosition } from '../../../../game'
-import { Checker } from '../../../checker/state/types'
-import { Color } from '../../../../game'
+import { Checker } from '../../../Checker/state'
 
 /**
  * Checkers can be in three different places:
  *  1. Point: One of the triangle things on the board. Default.
- *  2. Rail: On the bar between the points after being "hit" by opponent.
+ *  2. Bar: On the bar between the points after being "hit" by opponent.
  *  3. Off: Successfully moved off the board.
  */
 export type Checkerbox = {
@@ -27,7 +26,6 @@ export const isCheckerbox = (v: any): v is Checkerbox => {
   if (idIndex === -1 || checkersIndex === -1 || positionIndex === -1) {
     return false
   }
-
   return true
 }
 

@@ -17,3 +17,9 @@ export const isChecker = (c: unknown): c is Checker => {
 
   return true
 }
+// For importing setup
+export interface CheckerProp {
+  color: string
+  checkerCount: number
+  position: any
+}

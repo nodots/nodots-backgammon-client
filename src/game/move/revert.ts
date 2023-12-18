@@ -1,14 +1,17 @@
 import { produce } from 'immer'
 import { GameError } from '../game'
-import { getCheckerboxes } from '../../components/board/state'
-import { Board } from '../../components/board/state'
-import { Checker, isChecker } from '../../components/checker/state'
+import {} from '../../components/Board/state/types'
+import { Board } from '../../components/Board/state'
+import { Checker, isChecker } from '../../components/Checker/state'
 import { Move, MoveStatus, hit } from '.'
-import { getCheckerboxCoordinates } from '../../components/board/state/types/board'
+import {} from '../../components/Board/state'
 import { isBar, Bar } from '../../components/Bar/state/types'
 import { Point, isPoint } from '../../components/Point/state/types'
 import { MoveResult } from './reducer'
-import { sanityCheckBoard } from '../../components/board/state/types'
+import {
+  sanityCheckBoard,
+  getCheckerboxCoordinates,
+} from '../../components/Board/state'
 
 export const revert = (board: Board, move: Move): MoveResult => {
   let moveResult = { board, move }

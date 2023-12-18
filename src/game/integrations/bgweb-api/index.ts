@@ -1,11 +1,6 @@
-import { Turn } from '../../turn'
-import { Color } from '../../game'
-import { Player } from '../../../components/player/state'
-import { Roll } from '../../../components/die/state/types'
-import {
-  Board,
-  getCheckerboxes,
-} from '../../../components/board/state/types/board'
+import { Player } from '../../player'
+import { Roll } from '../../../components/Die/state'
+import { Board, getCheckerboxes } from '../../../components/Board/state'
 
 const black = 'o'
 const white = 'x'

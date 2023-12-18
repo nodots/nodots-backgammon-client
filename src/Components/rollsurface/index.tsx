@@ -2,17 +2,16 @@
 import { useGame } from '../../game/useGame'
 import { useState, useEffect } from 'react'
 // Types
-import { roll, Roll, Die as DieType } from '../die/state/types'
+import { Die as DieType } from '../Die/state/types/die'
+import { roll, Roll, DieValue } from '../Die/state'
 import { Color, Game, isColor } from '../../game'
 import { GameError } from '../../game'
 import { Analytics } from '../../game/turn'
-import { SetDiceValuesPayload } from '../die/state/dice.context'
-import { DieValue } from '../die/state/types'
+import { SetDiceValuesPayload } from '../Die/state/dice.context'
 import { Turn, TurnStatus } from '../../game/turn'
 import { TurnActionPayload } from '../../game/turn.reducer'
-import { MoveStatus } from '../Checkerbox/state'
-import { Player } from '../player/state'
-import { isPlayer } from '../player/state'
+import { Player, isPlayer } from '../../game/player'
+import { MoveStatus } from '../../game/move'
 
 // Components
 import Die from '../Die'

@@ -6,12 +6,17 @@ export type DiePair = {
   dice: [Die, Die]
 }
 
+export type Dice = {
+  white: DiePair
+  black: DiePair
+}
+
 export const isDiePair = (v: any): v is DiePair => {
   if (typeof v !== 'object') {
     return false
   }
   const keys = Object.keys(v)
-  const diceIndex = keys.findIndex(k => k === 'dice')
+  const diceIndex = keys.findIndex((k) => k === 'dice')
   if (diceIndex === -1) {
     return false
   }

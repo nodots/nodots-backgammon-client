@@ -30,4 +30,3 @@ export const roll = (): DieValue => {
     throw Error('Invalid DieValue')
   }
 }
-

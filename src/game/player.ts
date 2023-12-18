@@ -1,9 +1,12 @@
-import { Color, isColor, MoveDirection } from '../../../../game'
-import { Roll, DiePair } from '../../../die/state/types'
-import { Board } from '../../../board/state/types'
-import { isDiePair } from '../../../die/state/types/die-pair'
-import { QuadrantLocation } from '../../../Quadrant/state'
-import { Analytics } from '../../../../game/turn'
+import { Color, isColor, MoveDirection } from '.'
+import {
+  Roll,
+  DiePair,
+  isDiePair,
+} from '../components/Die/state/types/die-pair'
+import { Board } from '../components/Board/state'
+import { QuadrantLocation } from '../components/Quadrant/state'
+import { Analytics } from './turn'
 
 export interface InitializeTurnAction {
   board: Board

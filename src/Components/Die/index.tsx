@@ -1,8 +1,7 @@
 import { useGame } from '../../game/useGame'
 import { useState, useEffect } from 'react'
-import { Color } from '../../game'
-import { GameError } from '../../game/game'
-import { DieOrder, DieValue } from './state/types'
+import { Color, GameError } from '../../game'
+import { DieOrder, DieValue } from './state/types/die'
 
 import './die.scss'
 
@@ -13,8 +12,6 @@ interface DieProps {
 }
 
 const Die = (props: DieProps) => {
-  const { game } = useGame()
-  const activeColor = game.activeColor
   const [valueClass, setValueClass] = useState<string>('one')
 
   useEffect(() => {
@@ -38,11 +35,12 @@ const Die = (props: DieProps) => {
         setValueClass('six')
         break
       default:
-        throw new GameError({ model: 'Die', errorMessage: `Invalid pips for die ${props.value}` })
+        throw new GameError({
+          model: 'Die',
+          errorMessage: `Invalid pips for die ${props.value}`,
+        })
     }
-
   }, [props.value])
-
 
   let classes = `die ${props.color.toString()} ${valueClass}`
   return <div className={classes}></div>

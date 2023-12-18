@@ -1,4 +1,4 @@
-import { Paper, Box, Container } from '@mui/material'
+import { Paper, Box } from '@mui/material'
 // Hooks
 import { useGame } from '../../game/useGame'
 

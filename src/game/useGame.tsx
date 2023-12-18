@@ -1,8 +1,12 @@
 import { useContext } from 'react'
 import { GameContext } from './game.context'
 import { Game } from '.'
-import { CubeValue, SetCubeValuePayload, double } from '../components/cube/state'
-import { SetDiceValuesPayload } from '../components/die/state'
+import {
+  CubeValue,
+  SetCubeValuePayload,
+  double,
+} from '../components/Cube/state'
+import { SetDiceValuesPayload } from '../components/Die/state'
 import { TurnActionPayload } from './turn.reducer'
 import { MoveActionPayload } from './move'
 import { BgWebApi_TurnAnalysis } from './integrations/bgweb-api'
@@ -20,6 +24,25 @@ type UseGameHookType = {
 }
 
 export const useGame = (): UseGameHookType => {
-  const { game, initializeTurn, finalizeTurn, getTurnAnalytics, setDiceValues, setCubeValue, move, revert } = useContext(GameContext)
-  return { game, initializeTurn, finalizeTurn, getTurnAnalytics, setDiceValues, setCubeValue, move, revert, double }
+  const {
+    game,
+    initializeTurn,
+    finalizeTurn,
+    getTurnAnalytics,
+    setDiceValues,
+    setCubeValue,
+    move,
+    revert,
+  } = useContext(GameContext)
+  return {
+    game,
+    initializeTurn,
+    finalizeTurn,
+    getTurnAnalytics,
+    setDiceValues,
+    setCubeValue,
+    move,
+    revert,
+    double,
+  }
 }

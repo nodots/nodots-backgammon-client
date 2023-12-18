@@ -1,5 +1,5 @@
 import { v4 as generateId } from 'uuid'
-import { CheckerProp } from '../../../board/state/types/board'
+import { CheckerProp } from '../../../Checker/state/types'
 import {
   Point,
   initialize as initializePoints,

@@ -1,14 +1,13 @@
 import { produce } from 'immer'
 import { GameError } from '../game'
-import { getCheckerboxes } from '../../components/board/state'
-import { Board } from '../../components/board/state'
-import { Checker, isChecker } from '../../components/checker/state'
+import { Board, getCheckerboxes } from '../../components/Board/state'
+import { Checker, isChecker } from '../../components/Checker/state'
 import {
   canAcceptChecker,
   isCheckerbox,
 } from '../../components/Checkerbox/state/types'
 import { Move, MoveStatus, hit } from '.'
-import { getCheckerboxCoordinates } from '../../components/board/state/types/board'
+import { getCheckerboxCoordinates } from '../../components/Board/state'
 import { isBar, Bar } from '../../components/Bar/state/types'
 import { Point, isPoint } from '../../components/Point/state/types'
 import { MoveResult, getNextPointPosition } from './reducer'

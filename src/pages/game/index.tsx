@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import Board from '../../components/board'
+import Board from '../../components/Board'
 import NavBar from '../../components/core/core'
 
 const API_SERVER = 'http://127.0.0.1:3300'
@@ -14,6 +14,4 @@ export const GamePage = () => {
       <Board />
     </>
   )
-
 }
-

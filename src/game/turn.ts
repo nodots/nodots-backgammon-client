@@ -1,20 +1,11 @@
 import { v4 as generateId } from 'uuid'
 import { produce } from 'immer'
-import { GameError } from '.'
-import { Player, isPlayer } from '../components/player/state/types/player'
-import { Board, Move, MoveStatus } from '../components/board/state/types'
-import { DieValue, Roll } from '../components/die/state/types'
-import {
-  POINT_COUNT,
-  getCheckerboxes,
-  isBoard,
-} from '../components/board/state/types/board'
-import { getHomeQuadrantLocation } from '../components/player/state/types/player'
-import {
-  BgWebApiPlay,
-  BgWebApi_TurnAnalysis,
-  BgWebApi_getTurnAnalytics,
-} from './integrations/bgweb-api'
+import { Player, isPlayer } from './player'
+import { Board } from '../components/Board/state/types'
+import { Move, MoveStatus } from './move'
+import { Roll } from '../components/Die/state'
+import { getCheckerboxes, isBoard } from '../components/Board/state'
+import { BgWebApiPlay, BgWebApi_TurnAnalysis } from './integrations/bgweb-api'
 import { Checkerbox } from '../components/Checkerbox/state'
 
 export const MOVES_PER_TURN = 2

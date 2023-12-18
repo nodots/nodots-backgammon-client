@@ -1,7 +1,6 @@
 import { v4 as generateId } from 'uuid'
 import { Color, CheckerboxPosition, isColor } from '../../../../game'
-import { Checker } from '../../../checker/state/types'
-import { CheckerProp } from '../../../board/state/types/board'
+import { Checker, CheckerProp } from '../../../Checker/state/types'
 
 export type Bar = {
   id: string

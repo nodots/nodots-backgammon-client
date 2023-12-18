@@ -1,8 +1,8 @@
 import { v4 as generateId } from 'uuid'
-import { initCubeState } from '../components/cube/state'
-import { Player } from '../components/player/state'
-import { initBoardState } from '../components/board/state'
-import { initDiceState, roll } from '../components/die/state'
+import { Player } from './player'
+import { initCubeState } from '../components/Cube/state'
+import { initBoardState } from '../components/Board/state'
+import { initDiceState, roll } from '../components/Die/state'
 import { Game } from './game'
 
 // FIXME: needs to be from user input
@@ -14,7 +14,7 @@ const blackPlayer: Player = {
   moveDirection: 'clockwise',
   dice: initDiceState.black,
   isRobot: false,
-  isAutoRoll: false
+  isAutoRoll: false,
 }
 const whitePlayer: Player = {
   id: generateId(),
@@ -24,12 +24,12 @@ const whitePlayer: Player = {
   moveDirection: 'counterclockwise',
   dice: initDiceState.white,
   isRobot: false,
-  isAutoRoll: false
+  isAutoRoll: false,
 }
 
 // FIXME: Unused
 // Game starts by both players rolling one die to determine who goes first
-function rollForStart (white: Player, black: Player): Player {
+function rollForStart(white: Player, black: Player): Player {
   const whiteRoll = roll()
   const blackRoll = roll()
   // no ties
@@ -41,7 +41,9 @@ function rollForStart (white: Player, black: Player): Player {
 // const winner = rollForStart(whitePlayer, blackPlayer)
 // const winner = whitePlayer
 const winner = blackPlayer
-winner.color === 'black' ? blackPlayer.active = true : whitePlayer.active = true
+winner.color === 'black'
+  ? (blackPlayer.active = true)
+  : (whitePlayer.active = true)
 
 const defaultGameState: Game = {
   board: initBoardState,
@@ -51,7 +53,7 @@ const defaultGameState: Game = {
   players: {
     black: blackPlayer,
     white: whitePlayer,
-  }
+  },
 }
 
 export const initialGameState = defaultGameState
