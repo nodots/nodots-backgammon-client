@@ -122,6 +122,7 @@ export const reducer = (game: Game, action: any): Game => {
           roll: payload.roll,
           status: TurnStatus.INITIALIZED,
           moves,
+          isAutoMove: game.players[activeColor].isAutoMove,
           analytics: payload.analytics,
         }
       })
@@ -142,10 +143,9 @@ export const reducer = (game: Game, action: any): Game => {
                 analysis: a,
               }
               console.log(analytics)
-              draft.activeTurn.analytics.push(analytics)
+              draft.activeTurn.analytics?.push(analytics)
             }
           })
-          console.log(gameWAnalytics)
           return gameWAnalytics
         })
       }

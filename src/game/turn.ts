@@ -36,7 +36,8 @@ export type Turn = {
   roll: Roll
   status: TurnStatus | undefined
   moves: Move[]
-  analytics: Analytics[]
+  isAutoMove: boolean
+  analytics?: Analytics[]
 }
 
 export const isTurn = (t: any): t is Turn => {
@@ -83,7 +84,7 @@ export interface InitializeTurnAction {
 
 export const initializeTurn = (action: InitializeTurnAction): Turn => {
   const moves: Move[] = initializeMoves(action)
-
+  console.log('[AUTO MOVE] initializeTurn action:', action)
   const turn: Turn = {
     id: generateId(),
     board: action.board,
@@ -91,7 +92,16 @@ export const initializeTurn = (action: InitializeTurnAction): Turn => {
     roll: action.roll,
     status: TurnStatus.INITIALIZED,
     moves: moves,
-    analytics: [],
+    isAutoMove: action.player.isAutoMove,
+  }
+
+  if (action.analytics) {
+    turn.analytics = action.analytics
+  }
+  console.log('[AUTO MOVE] initializeTurn turn.isAutoMove', turn.isAutoMove)
+
+  if (turn.isAutoMove) {
+    console.log('[AUTO MOVE] initializeTurn turn.analytics', turn.analytics)
   }
   return turn
 }

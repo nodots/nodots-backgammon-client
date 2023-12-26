@@ -43,7 +43,12 @@ export const reducer = (
       draft.origin = origin
     })
     console.log('CALLING GETMOVEMODE with origin:', origin)
-    const moveMode = getMoveMode(turn, origin, activeMove.dieValue)
+    let moveMode: MoveMode
+    if (isCheckerbox(destination)) {
+      moveMode = MoveMode.PREDEFINED
+    } else {
+      moveMode = getMoveMode(turn, origin, activeMove.dieValue)
+    }
     switch (moveMode) {
       case MoveMode.PREDEFINED:
         console.error('PREDEFINED MOVE NOT IMPLEMENTED')

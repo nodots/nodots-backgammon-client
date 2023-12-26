@@ -52,7 +52,7 @@ const RollSurface = (props: RollSurfaceProps) => {
   useEffect(() => {
     let newRoll: Roll | undefined = undefined
     if (props.color === activePlayer?.color) {
-      if (activePlayer.isRobot || activePlayer.isAutoRoll) {
+      if (activePlayer.isAutoRoll) {
         console.log('ROBOT activePlayer:', activePlayer)
         console.log('rollingDice')
         newRoll = rollDice()
@@ -60,40 +60,8 @@ const RollSurface = (props: RollSurfaceProps) => {
     }
   }, [activePlayer])
 
-  async function buildTurnActionPayload(
-    game: Game,
-    newRoll: Roll
-  ): Promise<TurnActionPayload> {
-    console.log('[ROLL SURFACE] buildTurnActionPayload rollValues:', newRoll)
-    const analytics: Analytics[] = await getAnalytics(game, newRoll)
-    if (
-      !isColor(game.activeColor) ||
-      !isPlayer(game.players[game.activeColor])
-    ) {
-      throw new GameError({
-        model: 'Turn',
-        errorMessage: 'No active color or player',
-      })
-    }
-    const activePlayer = game.players[game.activeColor]
-    console.log(
-      '[ROLL SURFACE] buildTurnActionPayload activePlayer:',
-      activePlayer
-    )
-    const turn: TurnActionPayload = {
-      board: game.board,
-      player: game.players[game.activeColor],
-      roll: [newRoll[0], newRoll[1]],
-      status: TurnStatus.INITIALIZED,
-      analytics,
-      isAutomove: activePlayer.isRobot,
-    }
-    return turn
-  }
-
   function rollDice(): Roll {
     const newRoll: Roll = [roll() as DieValue, roll() as DieValue]
-    console.log('[ROLL SURFACE] buildTurnActionPayload rollDice:')
 
     // const newRoll = [6 as DieValue, 6 as DieValue] as Roll
     const setDiceValuesPayload: SetDiceValuesPayload = {
@@ -121,21 +89,6 @@ const RollSurface = (props: RollSurfaceProps) => {
       },
     }
     setDiceValues(setDiceValuesPayload)
-  }
-
-  async function getAnalytics(game: Game, rollValues: Roll) {
-    console.log('[ROLL SURFACE] getAnalytics rollValues:', rollValues)
-    const bgWebAnalytics = await BgWebApi_getTurnAnalytics(
-      game.board,
-      rollValues as Roll,
-      game.players
-    )
-    const bgWebAnalyticsPayload = {
-      api: 'bgwebapi',
-      analysis: bgWebAnalytics,
-    }
-    const analytics: Analytics[] = [bgWebAnalyticsPayload]
-    return analytics
   }
 
   // Event handlers
@@ -186,20 +139,21 @@ const RollSurface = (props: RollSurfaceProps) => {
       console.log('[ROLL SURFACE] activePlayer:', activePlayer)
       console.log('[ROLL SURFACE] game:', game)
       console.log('[ROLL SURFACE]: calling BgWebApi_getTurnAnalytics')
-      const bgWebAnalytics = await BgWebApi_getTurnAnalytics(
+      const analysis = await BgWebApi_getTurnAnalytics(
         game.board,
         rollValues as Roll,
         game.players
       )
-      console.log('[ROLL SURFACE] bgWebAnalytics: ', bgWebAnalytics)
       const bgWebAnalyticsPayload = {
         api: 'bgwebapi',
-        analysis: bgWebAnalytics,
+        analysis,
       }
-      const analytics: Analytics[] = [bgWebAnalyticsPayload]
-      const bgwebapiAnalytics = analytics.find((a) => a.api === 'bgwebapi')
 
-      let isAutomove = activePlayer.isRobot
+      console.log('[AUTO MOVE]: analysis', analysis)
+
+      const analytics: Analytics[] = [bgWebAnalyticsPayload]
+
+      let isAutomove = activePlayer.isAutoMove
 
       const turn: TurnActionPayload = {
         board: game.board,
