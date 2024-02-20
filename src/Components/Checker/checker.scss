@@ -1,14 +1,11 @@
-$border: #212121;
-$border-light: #ccc;
-$dark: #006b5f;
-$background: #26a89d;
-$accent: #6b000c;
+@import '../../theme/partials/dimensions';
+@import '../../theme/partials/colors';
 
 .checker {
-  border: 1px solid $border;
+  border: 1px solid $primary-main;
   border-radius: 50%;
-  width: 2.8vw;
-  height: 2.8vw;
+  width: $checker-height;
+  height: $checker-height;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -18,29 +15,33 @@ $accent: #6b000c;
   cursor: pointer;
 
   &.black {
-    background-color: $accent;
+    background-color: $black-color;
   }
 
   &.white {
-    background-color: #fff;
+    background-color: $white-color;
   }
 }
 
 .checker-overlay {  
   &.count {
-    color: $dark;
+    color: $primary-main;
     font-size: 1.5em;
     font-weight: bold;
   }
 }
-.off-container {
-  .checker-box {
+#Off {
+  .checkerbox {
     .checker {
       border-radius: 5px;
-      width: 3vw;
-      height: 0.5vh;
+      width: $checker-height;
+      height: 10px;
       border-radius: none;
+      margin: 2px 0px;
 
+      svg {
+        display: none;
+      }
       // FIXME: bad colors for checkers
       &.white {
         background-color: #fff;

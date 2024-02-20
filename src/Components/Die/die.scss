@@ -1,19 +1,13 @@
-$primary-dark: rgba(20, 20, 33, 0.4);
-$primary-light: #a8afc7;
-$primary-main: #575f90;
-$secondary-light: #004f42;
-$secondary-main: #00988b;
-$secondary-dark: #004f42;
-
-$accent: #6b000c;
+@import '../../theme/partials/dimensions';
+@import '../../theme/partials/colors';
 
 .die {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 1.5vw;
-  width: 1.5vw;
+  height: $checker-height * .5;
+  width: $checker-height * .5;
   margin: 0 2px;
   background-repeat: no-repeat;
   border: 1px solid gray;

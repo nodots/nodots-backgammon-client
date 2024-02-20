@@ -1,5 +1,3 @@
-// Hooks
-import { useGame } from '../../game/useGame'
 // Types
 import { Checker as CheckerType } from './state/types'
 // UI
@@ -9,7 +7,7 @@ import './checker.scss'
 
 export interface CheckerProps {
   checker: CheckerType
-  count: number | undefined
+  count?: number
 }
 
 const Checker = (props: CheckerProps) => {

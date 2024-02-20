@@ -1,155 +1,276 @@
-$checker-width: 3vw;
-$point-width: $checker-width;
-$point-height: $point-width * 6;
-$quadrant-width: $point-width * 7;
-$board-width: ($quadrant-width * 2) + ($checker-width * 2) + 1.5vw;
-$board-height: $point-height * 3;
+@import '../../theme/partials/dimensions';
+@import '../../theme/partials/colors';
 
-$board-color: #2f732f;
-$primary-light: #a8afc7;
-$primary-main: #575f90;
-$accent: #6b000c;
+$accent: rgba(20, 20, 20, 1 );
+$border: 1px solid $primary-main;
 
-.board {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-top: 100px;
-  padding-top: $checker-width;
-  padding-bottom: $checker-width;
-  .roll-surface {
+  #BoardContainer {
+    height: $checker-height * 13;
+    width: $checker-height * 15;
+    margin: $checker-height * .75 auto;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 3vw;
-    width: 100%;
-    background-color: $board-color;
-    cursor: pointer;
-  }
-
-  .bar {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+    border: $border;
+    border-radius: $border-radius;
+    background-color: rgba(0, 88, 181, 0.2);
     padding: 10px;
 
-    .bar-checker-box {
-      height: 12vw;
-      width: $checker-width;
-    }
-
-    .pip-count {
-      font-size: 0.8rem;
-      width: 100%;
-      text-align: center;
-      &.black {
-        background-color: $accent;
-        color: white;
-      }
-      &.white {
-        background-color: white;
-        color: black;
-      }
-    }
-  }
-
-  .off-container {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    .off-checker-box {
-      height: 9vw;
-      width: $checker-width;
-    }
-    .cube-container {
-      width: $checker-width;
-      height: $checker-width;
-      margin: 0.5vw auto;
-      padding: 5px;
-
-      .cube {
-        width: 100%;
-        height: 100%;
-        border: 2px solid $primary-main;
-        border-radius: 5px;
-        font-size: 1rem;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-      }
-    }
-    .dice-container {
-      height: 3.4vw;
-      width: 1.8vw;
-      margin: auto auto;
-      padding: 2px;
-    }
-  }
-
-  .board-half {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
-  .quadrant {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    background-color: $board-color;
-
-    &.S {
-      flex-direction: row-reverse;
-    }
-
-    .point {
-      position: relative;
-      display: flex;
+    .board-half {
+      width: $checker-height * 6;
+      border-radius: $border-radius;
+      border-color: $primary-main;
       background-color: $board-color;
-      background-repeat: no-repeat;
-      background-size: $point-width $point-height;
-      margin-left: 5px;
-      margin-right: 5px;
-      min-width: $checker-width;
-      max-width: $checker-width;
-      min-height: $point-height;
-      &.even {
-        background-color: rgba(48, 65, 114, 0.5);
-      }
-      &.odd {
-        background-color: rgba(106, 125, 181, 0.5);
-      }
+      height: 100%;
+      margin: 0px 10px;
+      display: flex;
+      flex-direction: column;
+    }
 
-      &.north {
-        background-image: url('../Point/images/point-north-mask.svg');
+    .point-labels {
+      display: flex;
+      font-size: 0.75rem;
+      color: #aaa;
+      flex-direction: row;
+      justify-content: space-around;
+      border-radius: $border-radius $border-radius 0px 0px;
+      background-color: rgba(32, 32, 32, 0.8);
+      &.south {
+        border-radius: 0px 0px 10px 10px;
+        flex-direction: row-reverse;
+      }
+    }
+
+    .quadrant {
+      height: $checker-height * 6;
+      display: flex;
+      justify-content: space-around;
+      border-radius: $border-radius;
+      background-color: $board-color;
+
+      .point {
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        margin: 0px 6px;
+        display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        background-image: url('../Point/images/point-north-mask.svg');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        &.even {
+          background-color: rgba(48, 65, 114, 0.5);
+        }
+        &.odd {
+          background-color: rgba(106, 125, 181, 0.5);
+        }
       }
 
       &.south {
-        background-image: url('../Point/images/point-south-mask.svg');
-        flex-direction: column-reverse;
+        .point {
+          align-items: flex-end;
+          flex-direction: column-reverse;
+          background-image: url('../Point/images/point-south-mask.svg');
+        }
       }
+    }
 
-      .checker-box {
+    .rollsurface {
+      min-height: $checker-height * .5;
+      width: 100%;
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #Bar, #Off {
+      height: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: $border;
+      border-radius: 10px;
+    }
+
+    #Bar {
+      width: $checker-height + 10px;
+    }
+
+    #Off {
+      width: $checker-height + 30px;
+      .checkerbox {
+        height: $checker-height * 2.5;
+        margin: $checker-height  0px;
+        width: 100%;
+        border: 1px solid $primary-main;
+        border-radius: $border-radius;
         display: flex;
+        flex-direction: column;
+
+        &.counterclockwise {
+          justify-content: flex-end;
+        }
+
       }
     }
   }
+
+  .cube {
+    height: $checker-height;
+    width: $checker-height;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(106, 125, 181, 0.5);
+    border-radius: $border-radius;
+    font-size: 2rem;
+  }
+
+
+  // Large screen
+  @media screen and (min-width: 2000px) {
+    $checker-height: 100px;
+  
+    #BoardContainer {
+      height: $checker-height * 13;
+      width: $checker-height * 15;
+      margin: ($checker-height * .75) auto;
+  
+      .board-half {
+        width: $checker-height * 6;
+      }
+  
+      .quadrant {
+        height: $checker-height * 6;
+      }
+  
+      .rollsurface {
+        min-height: $checker-height * .5;
+      }
+  
+      #Bar {
+        width: $checker-height + 10px;
+      }
+  
+      #Off {
+        width: $checker-height + 30px;
+        .checkerbox {
+          height: $checker-height * 2.5;
+          margin: $checker-height  0px;      
+        }
+      }
+    }
+  
+    .cube {
+      height: $checker-height;
+      width: $checker-height;
+    }
+  
+    .checker {
+      width: $checker-height;
+      height: $checker-height;
+    }
 }
 
-// FIXME: This rule handles an iOS (yes, iOS) bug that prevents
-// proper scaling of background svgs. Find a better solution.
-@supports (-webkit-overflow-scrolling: touch) {
-  /* CSS specific to iOS devices */
-  .point {
-    background-image: none !important;
-    background-color: $primary-main !important;
-    &.even {
-      background-color: $primary-light !important;
+// ipad
+@media screen and (min-width: 1360px) and (max-width: 1368px) {
+  $checker-height: 70px;
+
+  #BoardContainer {
+    height: $checker-height * 13;
+    width: $checker-height * 15;
+    margin: ($checker-height * .75) auto;
+
+    .board-half {
+      width: $checker-height * 6;
     }
+
+    .quadrant {
+      height: $checker-height * 6;
+    }
+
+    .rollsurface {
+      min-height: $checker-height * .5;
+    }
+
+    #Bar {
+      width: $checker-height + 10px;
+    }
+
+    #Off {
+      width: $checker-height + 30px;
+      .checkerbox {
+        height: $checker-height * 2.5;
+        margin: $checker-height  0px;
+    
+      }
+    }
+  }
+
+  .cube {
+    height: $checker-height;
+    width: $checker-height;
+  }
+
+  .checker {
+    width: $checker-height;
+    height: $checker-height;
+  }
+}
+
+// small phone
+@media screen and (max-width: 896px) {
+  $checker-height: 34px;
+
+  #BoardContainer {
+    height: 100%;
+    width: 100%;
+    margin: auto auto;
+    border: none !important;
+    border-radius: none !important;
+    .board-half {
+      width: $checker-height * 10;
+      height: $checker-height * 12;
+    }
+
+    .quadrant {
+      height: $checker-height * 7;
+    }
+
+    .rollsurface {
+      min-height: $checker-height * .5;
+    }
+
+    #Bar {
+      width: $checker-height + 2px;
+    }
+
+    #Off {
+      width: $checker-height + 3px;
+      .checkerbox {
+        height: $checker-height * 2.5;
+        margin: $checker-height  0px;
+    
+      }
+    }
+  }
+
+  .cube {
+    height: $checker-height;
+    width: $checker-height;
+    font-size: 1rem;
+  }
+
+  .checker {
+    width: $checker-height;
+    height: $checker-height;
+  }
+
+  .die {
+    width: $checker-height * .5;
+    height: $checker-height * .5;
   }
 }

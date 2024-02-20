@@ -10,7 +10,6 @@ export const GamePage = () => {
 
   return (
     <>
-      <NavBar />
       <Board />
     </>
   )

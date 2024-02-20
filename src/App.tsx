@@ -3,7 +3,6 @@ import { GameProvider } from './game/game.provider'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { appTheme } from './theme/theme'
 
-
 import './App.scss'
 import { GamePage } from './pages/game'
 import { HomePage } from './pages/home'
@@ -18,10 +17,10 @@ const App = () => {
         <div className="App">
           <GameProvider>
             <Routes>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/game' element={<GamePage />} />
-              <Route path='/profile' element={<ProfilePage />} />
-              <Route path='/sign-in' element={<SignIn />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/game" element={<GamePage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/sign-in" element={<SignIn />} />
             </Routes>
           </GameProvider>
         </div>
