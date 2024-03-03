@@ -4,8 +4,6 @@
 .checker {
   border: 1px solid $primary-main;
   border-radius: 50%;
-  width: $checker-height;
-  height: $checker-height;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -23,7 +21,7 @@
   }
 }
 
-.checker-overlay {  
+.checker-overlay {
   &.count {
     color: $primary-main;
     font-size: 1.5em;

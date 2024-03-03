@@ -17,7 +17,7 @@ import Cube from '../Cube'
 import Die from '../Die'
 import Checker from '../Checker'
 
-import './board.scss'
+import './scss/index.scss'
 import { generateId } from '../../game/game'
 
 const Board = () => {
@@ -85,8 +85,8 @@ const Board = () => {
         </div>
       </div>
       <div id="Bar">
-        <div className="clockwise"></div>
-        <div className="counterclockwise"></div>
+        <div className="checkerbox clockwise"></div>
+        <div className="checkerbox counterclockwise"></div>
       </div>
       <div id="East" className="board-half">
         <div className="point-labels north east">

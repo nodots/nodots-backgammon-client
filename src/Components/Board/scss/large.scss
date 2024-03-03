@@ -1,0 +1,60 @@
+// large screen
+@import '../../../theme/partials/colors';
+@import '../../../theme/partials/borders';
+
+@media screen and (min-width: 2300px) {
+  $checker-height: 108px;
+
+  #BoardContainer {
+    border: 1px solid $primary-light;
+    border-radius: $border-radius;
+  }
+  .board-half {
+    padding: 5px;
+  }
+  .checker {
+    height: $checker-height;
+    width: $checker-height;
+  }
+  .point {
+    height: $checker-height * 6;
+    width: $checker-height * 1.1;
+    margin: 0px 12px;
+  }
+
+  #Bar,
+  #Off {
+    border: 1px solid $primary-light !important;
+    border-radius: $border-radius;
+    display: flex !important;
+    min-width: $checker-height;
+    border: $border;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: $checker-height + 30px !important;
+    display: flex;
+    flex-direction: column;
+
+    .checkerbox {
+      margin: $checker-height 0px;
+      width: $checker-height !important;
+      height: $checker-height * 3 !important;
+      border: 1px solid $primary-light !important;
+      border-radius: $border-radius;
+
+      &.counterclockwise {
+        justify-content: flex-end;
+      }
+    }
+  }
+  .cube {
+    border: 1px solid $primary-main;
+    width: $checker-height !important;
+    height: $checker-height !important;
+  }
+  .die {
+    width: $checker-height * 0.5 !important;
+    height: $checker-height * 0.5 !important;
+  }
+}

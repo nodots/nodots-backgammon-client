@@ -1,0 +1,73 @@
+@media screen and (min-width: 1194px) and (max-width: 1200px) {
+  $checker-height: 45px;
+  $border-radius: 10px;
+
+  #BoardContainer {
+    height: $checker-height * 14;
+    width: $checker-height * 20;
+    margin: $checker-height * 0.75 auto;
+    padding: 5px;
+
+    // not sure why we have to do this here.
+    .checker {
+      height: $checker-height;
+      width: $checker-height;
+    }
+
+    .board-half {
+      width: $checker-height * 10;
+      margin: 0px 10px;
+    }
+
+    .quadrant {
+      min-width: $checker-height * 6;
+      height: $checker-height * 6;
+
+      .point {
+        height: 100%;
+        width: 100%;
+        min-width: $checker-height;
+        background-image: none !important;
+        // mask-image: url('../../Point/images/ipad/point-mask-north.png');
+      }
+
+      // &.south {
+      //   .point {
+      //     mask-image: url('../../Point/images/ipad/point-mask-south.png');
+      //   }
+      // }
+    }
+
+    .rollsurface {
+      min-height: $checker-height * 0.5;
+    }
+
+    #Bar,
+    #Off {
+      height: 100%;
+      padding: 10px;
+    }
+
+    #Bar {
+      width: $checker-height + 10px;
+    }
+
+    #Off {
+      width: $checker-height + 30px;
+      .checkerbox {
+        height: $checker-height * 2.5;
+        margin: $checker-height 0px;
+      }
+    }
+  }
+
+  .die {
+    height: $checker-height * 0.5;
+    width: $checker-height * 0.5;
+  }
+  .cube {
+    height: $checker-height;
+    width: $checker-height;
+    font-size: 2rem;
+  }
+}

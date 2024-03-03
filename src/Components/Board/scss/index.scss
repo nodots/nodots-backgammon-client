@@ -1,0 +1,109 @@
+@import '../../../theme/partials/dimensions';
+@import '../../../theme/partials/colors';
+
+#GameContainer {
+  display: flex;
+}
+
+#BoardContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  background-color: $board-color;
+  margin: auto auto;
+  padding: 5px 20px;
+
+  .board-half {
+    display: flex;
+    margin: 0px;
+    flex-direction: column;
+    flex-grow: 1;
+
+    &.north {
+      margin-bottom: 10px;
+    }
+  }
+
+  .quadrant {
+    display: flex;
+    justify-content: space-around;
+    background-color: $board-color;
+
+    .point {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-width: $checker-height;
+      background-image: url('../../Point/images/point-north-mask.svg');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      &.even {
+        background-color: rgba(48, 65, 114, 0.5);
+      }
+      &.odd {
+        background-color: rgba(106, 125, 181, 0.5);
+      }
+    }
+
+    &.south {
+      .point {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        background-image: url('../../Point/images/point-south-mask.svg');
+      }
+    }
+  }
+
+  .rollsurface {
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #Off {
+    display: none;
+  }
+
+  #Bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: $checker-height + 10px;
+  }
+
+  .cube {
+    display: flex;
+    justify-content: center;
+    height: $checker-height;
+    width: $checker-height;
+    align-items: center;
+    background-color: rgba(106, 125, 181, 0.5);
+    border-radius: $border-radius;
+    font-size: 2rem;
+  }
+
+  .point-labels {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    color: $text-light;
+    &.south {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
+// Attributes that are hidden on smallest devices
+@media screen and (min-width: 1000px) {
+  .rollsurface {
+    display: inline-block;
+  }
+}
+
+@import url('large.scss');
+@import url('ipad.scss');
+@import url('small.scss');

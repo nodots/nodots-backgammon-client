@@ -1,0 +1,60 @@
+@import '../../../theme/partials/dimensions';
+// iphone
+@media screen and (min-width: 800px) and (max-width: 832px) {
+  #BoardContainer {
+    // not sure why we have to do this here.
+    .checker {
+      height: $checker-height;
+      width: $checker-height;
+    }
+
+    .point-labels {
+      font-size: 0.5rem;
+    }
+
+    .rollsurface {
+      display: none;
+    }
+
+    .quadrant {
+      .point {
+        background-image: none !important;
+      }
+
+      // &.south {
+      //   .point {
+      //     mask: url('/Users/kenr/Code/nodots-backgammon/client/src/components/Point/images/ipad/point-mask-south.png');
+      //   }
+      // }
+    }
+
+    #Bar,
+    #Off {
+      height: 100%;
+      padding: 10px;
+    }
+
+    // #Bar {
+    //   width: $checker-height + 10px;
+    // }
+
+    #Off {
+      // width: $checker-height + 30px;
+      .checkerbox {
+        // height: $checker-height * 2.5;
+        // margin: $checker-height 0px;
+      }
+    }
+  }
+
+  .die {
+    height: $checker-height * 0.6;
+    width: $checker-height * 0.6;
+  }
+
+  .cube {
+    height: $checker-height;
+    width: $checker-height;
+    font-size: 1rem;
+  }
+}
