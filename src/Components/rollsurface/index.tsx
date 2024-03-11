@@ -21,11 +21,11 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt'
 
 import { BgWebApi_getTurnAnalytics } from '../../game/integrations/bgweb-api'
 
-interface RollSurfaceProps {
+interface Props {
   color: Color
 }
 
-const RollSurface = (props: RollSurfaceProps) => {
+const RollSurface: React.FC<Props> = ({ color }) => {
   const { game, initializeTurn, finalizeTurn, setDiceValues } = useGame()
   const activeTurn = game.activeTurn
 
@@ -49,23 +49,23 @@ const RollSurface = (props: RollSurfaceProps) => {
     die2?.value ? die2.value : 1
   )
 
-  useEffect(() => {
-    let newRoll: Roll | undefined = undefined
-    if (props.color === activePlayer?.color) {
-      if (activePlayer.isAutoRoll) {
-        console.log('ROBOT activePlayer:', activePlayer)
-        console.log('rollingDice')
-        newRoll = rollDice()
-      }
-    }
-  }, [activePlayer])
+  // useEffect(() => {
+  //   let newRoll: Roll | undefined = undefined
+  //   if (props.color === activePlayer?.color) {
+  //     if (activePlayer.isAutoRoll) {
+  //       console.log('ROBOT activePlayer:', activePlayer)
+  //       console.log('rollingDice')
+  //       newRoll = rollDice()
+  //     }
+  //   }
+  // }, [activePlayer])
 
   function rollDice(): Roll {
     const newRoll: Roll = [roll() as DieValue, roll() as DieValue]
 
     // const newRoll = [6 as DieValue, 6 as DieValue] as Roll
     const setDiceValuesPayload: SetDiceValuesPayload = {
-      color: props.color,
+      color,
       values: {
         die1: newRoll[0],
         die2: newRoll[1],
@@ -82,7 +82,7 @@ const RollSurface = (props: RollSurfaceProps) => {
     setDie1Value(1)
     setDie2Value(1)
     const setDiceValuesPayload: SetDiceValuesPayload = {
-      color: props.color,
+      color: color,
       values: {
         die1: die1Value,
         die2: die2Value,
@@ -94,10 +94,10 @@ const RollSurface = (props: RollSurfaceProps) => {
   // Event handlers
   const clickHandler = async (e: React.MouseEvent) => {
     console.log('clickHandler game:', game)
-    console.log('clickHandler props.color:', props.color)
+    console.log('clickHandler props.color:', color)
     e.preventDefault()
 
-    if (game.activeColor !== props.color) {
+    if (game.activeColor !== color) {
       console.error('Not your turn')
     }
     if (game.activeTurn) {
@@ -184,7 +184,7 @@ const RollSurface = (props: RollSurfaceProps) => {
     setDie2Value(die1Value)
 
     const setDiceValuesPayload: SetDiceValuesPayload = {
-      color: props.color,
+      color: color,
       values: {
         die1: die2Value,
         die2: die1Value,
@@ -195,15 +195,9 @@ const RollSurface = (props: RollSurfaceProps) => {
   }
 
   return (
-    <div className="roll-surface" onClick={clickHandler}>
-      {game.activeColor && game.activeColor === props.color && (
-        <>
-          <Die order={0} value={die1Value} color={props.color} />
-          {/* FIXME: hard-coded color */}
-          <SyncAltIcon onClick={swapDiceHandler} sx={{ color: '#575f90' }} />
-          <Die order={1} value={die2Value} color={props.color} />
-        </>
-      )}
+    <div className="rollsurface clockwise">
+      <Die order={0} color={color} value={1} />
+      <Die order={1} color={color} value={1} />
     </div>
   )
 }

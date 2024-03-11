@@ -1,12 +1,18 @@
 import { v4 as uuid } from 'uuid'
 import { Cube, CubeValue } from '../components/Cube/state/types'
 import { Player } from './player'
-import { Board, sanityCheckBoard } from '../components/Board/state/types'
+// import { sanityCheckBoard } from '../components/Board/state/types'
 import { Dice } from '../components/Die/state'
 import { Turn } from './turn'
 import { TurnActionPayload } from './turn.reducer'
+import { BgApiPlayerBoard } from './integrations/bgweb-api'
 
 export type Color = 'black' | 'white'
+export type PlayerBoard = BgApiPlayerBoard
+export type Board = {
+  white: PlayerBoard
+  black: PlayerBoard
+}
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 export type CheckerboxPosition = number | 'bar' | 'off'
 export type GameErrorType =
@@ -63,12 +69,4 @@ export type Game = {
   setCubeValue?: (value: CubeValue) => CubeValue
   initializeTurn?: (turn: TurnActionPayload) => Turn
   finalizeTurn?: () => void
-}
-
-export const sanityCheck = (game: Game): boolean => {
-  let isSane = true
-
-  isSane = sanityCheckBoard(game.board)
-
-  return isSane
 }

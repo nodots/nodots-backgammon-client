@@ -2,29 +2,37 @@ import { Box } from '@mui/material'
 import { Checkerbox as CheckerboxType } from '../Checkerbox/state/types'
 import { QuadrantLocation } from '../Quadrant/state/types'
 import Checkerbox from '../Checkerbox'
+import Checker from '../Checker'
+import { Color, generateId } from '../../game/game'
+import { ReactElement } from 'react'
 
-interface PointProps {
-  point: CheckerboxType
-  position: number
-  quadrantLocation: QuadrantLocation
-  backgroundColor: string
+export interface Props {
+  position: {
+    clockwise: number
+    counterclockwise: number
+  }
+  checkers: Color[]
 }
 
-const Point = (props: PointProps) => {
+const Point: React.FC<Props> = ({ position, checkers }) => {
   let className = 'point'
-  props.quadrantLocation === QuadrantLocation.NW ||
-  props.quadrantLocation === QuadrantLocation.NE
-    ? (className += ' north')
-    : (className += ' south')
 
   className =
-    props.position % 2 === 0 ? (className += ' even') : (className += ' odd')
+    position.clockwise % 2 === 0
+      ? (className += ' even')
+      : (className += ' odd')
 
-  return (
-    <Box className={className}>
-      <Checkerbox checkerBox={props.point} />
-    </Box>
-  )
+  const getCheckerComponents = () => {
+    const checkerComponents: ReactElement[] = []
+    checkers.forEach((c) =>
+      checkerComponents.push(
+        <Checker checker={{ id: generateId(), color: c }} key={generateId()} />
+      )
+    )
+    return checkerComponents
+  }
+
+  return <div className={className}>{getCheckerComponents()}</div>
 }
 
 export default Point

@@ -92,7 +92,7 @@ export const initializeTurn = (action: InitializeTurnAction): Turn => {
     roll: action.roll,
     status: TurnStatus.INITIALIZED,
     moves: moves,
-    isAutoMove: action.player.isAutoMove,
+    isAutoMove: action.player.automation.move,
   }
 
   if (action.analytics) {

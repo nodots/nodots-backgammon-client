@@ -1,0 +1,62 @@
+@import '../../../theme/partials/colors';
+@import '../../../theme/partials/borders';
+
+@media screen and (min-width: 1200px) {
+  $checker-height: 65px;
+  $border-radius: 10px;
+
+  .die {
+    height: $checker-height * 0.8;
+    width: $checker-height * 0.8;
+  }
+
+  #BoardContainer {
+    display: none;
+    width: $checker-height * 15;
+    margin: $checker-height * 0.75 auto;
+    padding: 5px;
+    .checker {
+      height: $checker-height;
+      width: $checker-height;
+    }
+
+    .point-label {
+      font-size: 0.75rem !important;
+    }
+
+    .quadrant {
+      min-width: $checker-height * 6;
+      height: $checker-height * 6;
+      border: 1px solid green;
+      .point {
+        min-width: $checker-height !important;
+        max-height: $checker-height * 5 !important;
+      }
+    }
+
+    .rollsurface {
+      min-height: $checker-height * 0.5;
+    }
+
+    #Off {
+      display: flex !important;
+      flex-direction: column;
+    }
+
+    #Bar,
+    #Off {
+      min-width: $checker-height * 1.1;
+      .checkerbox {
+        border: $border;
+        border-radius: $border-radius;
+        min-height: $checker-height * 3;
+        min-width: $checker-height;
+        margin: 0px 0px 12px 0px;
+
+        &.counterclockwise {
+          margin: 12px 0px 0px 0px;
+        }
+      }
+    }
+  }
+}

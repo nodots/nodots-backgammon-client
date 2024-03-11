@@ -1,11 +1,17 @@
 @import '../../../theme/partials/dimensions';
-// iphone
-@media screen and (min-width: 800px) and (max-width: 832px) {
+@media screen and (orientation: portrait) and (max-width: 500px) {
   #BoardContainer {
-    // not sure why we have to do this here.
+    display: none !important;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 1000px) {
+  $checker-height: 40px;
+  #BoardContainer {
     .checker {
-      height: $checker-height;
-      width: $checker-height;
+      height: $checker-height !important;
+      width: $checker-height !important;
+      border: none !important;
     }
 
     .point-labels {
@@ -18,32 +24,21 @@
 
     .quadrant {
       .point {
+        min-height: $checker-height * 4;
         background-image: none !important;
+        margin: 0px 2px 4px 2px;
       }
 
-      // &.south {
-      //   .point {
-      //     mask: url('/Users/kenr/Code/nodots-backgammon/client/src/components/Point/images/ipad/point-mask-south.png');
-      //   }
-      // }
+      &.south {
+        .point {
+          margin: 4px 2px 0px 2px;
+        }
+      }
     }
 
-    #Bar,
-    #Off {
+    #Bar {
       height: 100%;
       padding: 10px;
-    }
-
-    // #Bar {
-    //   width: $checker-height + 10px;
-    // }
-
-    #Off {
-      // width: $checker-height + 30px;
-      .checkerbox {
-        // height: $checker-height * 2.5;
-        // margin: $checker-height 0px;
-      }
     }
   }
 

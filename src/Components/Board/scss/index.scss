@@ -1,8 +1,100 @@
-@import '../../../theme/partials/dimensions';
+// @import '../../../theme/partials/dimensions';
 @import '../../../theme/partials/colors';
+@import '../../../theme/partials/borders';
+
+$checker-height: 40px;
 
 #GameContainer {
   display: flex;
+}
+
+.cube {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(106, 125, 181, 0.5);
+  border-radius: $border-radius;
+  width: $checker-height * 1.5;
+  height: $checker-height * 1.5;
+}
+
+.die {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 2px;
+  background-repeat: no-repeat;
+  border: 1px solid gray;
+  border-radius: 5px;
+  height: $checker-height;
+  width: $checker-height;
+
+  &.black {
+    background-color: white;
+    background-size: cover;
+    border-radius: 5px;
+    &.one {
+      background-image: url('../../Die/images/black/one.svg');
+    }
+    &.two {
+      background-image: url('../../Die/images/black/two.svg');
+    }
+    &.three {
+      background-image: url('../../Die/images/black/three.svg');
+    }
+    &.four {
+      background-image: url('../../Die/images/black/four.svg');
+    }
+    &.five {
+      background-image: url('../../Die/images/black/five.svg');
+    }
+    &.six {
+      background-image: url('../../Die/images/black/six.svg');
+    }
+  }
+
+  &.white {
+    background-color: black;
+    &.one {
+      background-image: url('../../Die/images/white/one.svg');
+    }
+    &.two {
+      background-image: url('../../Die/images/white/two.svg');
+    }
+    &.three {
+      background-image: url('../../Die/images/white/three.svg');
+    }
+    &.four {
+      background-image: url('../../Die/images/white/four.svg');
+    }
+    &.five {
+      background-image: url('../../Die/images/white/five.svg');
+    }
+    &.six {
+      background-image: url('../../Die/images/white/six.svg');
+    }
+  }
+}
+
+.checker {
+  border: 1px solid $primary-main;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &.black {
+    background-color: $black-color;
+  }
+
+  &.white {
+    background-color: $white-color;
+  }
 }
 
 #BoardContainer {
@@ -10,9 +102,8 @@
   flex-direction: row;
   justify-content: center;
   align-items: stretch;
-  background-color: $board-color;
+  background-color: rgba(0, 0, 139, 0.2);
   margin: auto auto;
-  padding: 5px 20px;
 
   .board-half {
     display: flex;
@@ -20,8 +111,12 @@
     flex-direction: column;
     flex-grow: 1;
 
-    &.north {
-      margin-bottom: 10px;
+    .quadrant-container {
+      display: flex;
+      flex-direction: column;
+      &.south {
+        flex-direction: column-reverse;
+      }
     }
   }
 
@@ -34,10 +129,13 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      min-width: $checker-height;
+      min-height: $checker-height * 5 !important;
+
+      margin: 0px 0px 4px 0px;
       background-image: url('../../Point/images/point-north-mask.svg');
       background-repeat: no-repeat;
       background-size: 100% 100%;
+
       &.even {
         background-color: rgba(48, 65, 114, 0.5);
       }
@@ -47,43 +145,38 @@
     }
 
     &.south {
+      flex-direction: row-reverse;
       .point {
-        align-items: flex-end;
+        margin: 4px 0px 0px 0px;
         flex-direction: column-reverse;
+        align-items: flex-start;
         background-image: url('../../Point/images/point-south-mask.svg');
       }
     }
   }
 
-  .rollsurface {
-    width: 100%;
+  #Bar {
     display: flex;
-    flex-grow: 1;
-    align-items: center;
+    padding: 5px;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
 
   #Off {
     display: none;
-  }
-
-  #Bar {
-    display: flex;
+    padding: 5px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: $checker-height + 10px;
   }
 
-  .cube {
-    display: flex;
-    justify-content: center;
-    height: $checker-height;
-    width: $checker-height;
-    align-items: center;
-    background-color: rgba(106, 125, 181, 0.5);
-    border-radius: $border-radius;
-    font-size: 2rem;
+  .checker-overlay {
+    &.count {
+      color: $primary-main;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
   }
 
   .point-labels {
@@ -100,10 +193,16 @@
 // Attributes that are hidden on smallest devices
 @media screen and (min-width: 1000px) {
   .rollsurface {
-    display: inline-block;
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: $board-color;
   }
 }
 
+// @import url('small-notebook.scss');
+// @import url('ipad.scss');
+// @import url('small.scss');
 @import url('large.scss');
-@import url('ipad.scss');
-@import url('small.scss');

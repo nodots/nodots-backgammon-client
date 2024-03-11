@@ -1,17 +1,15 @@
-import { Paper } from '@mui/material'
-import Checkerbox from '../Checkerbox'
-import { Off as OffType } from './state/types'
+// interface OffProps {
+//   off: OffType
+// }
 
-interface OffProps {
-  off: OffType
-}
+import Cube from '../Cube'
 
-const Off = (props: OffProps) => {
-  return (
-    <Paper>
-      <Checkerbox checkerBox={props.off} />
-    </Paper>
-  )
-}
+const Off: React.FC = () => (
+  <div id="Off">
+    <div className="checkerbox clockwise"></div>
+    <Cube />
+    <div className="checkerbox counterclockwise"></div>
+  </div>
+)
 
 export default Off

@@ -1,13 +1,18 @@
-$checker-height: 30px;
-$border-radius: 10px;
+// $checker-height: 40px;
+// $checker-height: 40px;
+// $border-radius: 10px;
 
-@media screen and (min-width: 1280) {
-  $checker-height: 100px;
-}
-// 13" MBP (Intel)
-@media screen and (width: 1439px) {
-}
-// ipad
-@media screen and (min-width: 1194px) and (max-width: 1200px) {
-  $checker-height: 45px;
-}
+// @media screen and (min-width: 1280) {
+//   $checker-height: 100px;
+// }
+// // 13" MBP (Intel)
+// @media screen and (width: 1439px) {
+// }
+// // ipad
+// @media screen and (min-width: 1194px) and (max-width: 1200px) {
+//   $checker-height: 45px;
+// }
+
+// @media screen and (min-width: 2300px) {
+//   $checker-height: 110px;
+// }

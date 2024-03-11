@@ -36,7 +36,7 @@ export interface BgWebApi_TurnAnalysis {
   play: BgWebApiPlay[]
 }
 
-interface BgApiPlayerBoard {
+export interface BgApiPlayerBoard {
   '1': number
   '2': number
   '3': number

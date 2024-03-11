@@ -42,22 +42,10 @@
       min-height: $checker-height * 0.5;
     }
 
-    #Bar,
-    #Off {
-      height: 100%;
-      padding: 10px;
-    }
-
     #Bar {
+      height: 100%;
       width: $checker-height + 10px;
-    }
-
-    #Off {
-      width: $checker-height + 30px;
-      .checkerbox {
-        height: $checker-height * 2.5;
-        margin: $checker-height 0px;
-      }
+      padding: 10px;
     }
   }
 

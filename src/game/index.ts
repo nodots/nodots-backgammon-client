@@ -1,4 +1,6 @@
 import {
+  PlayerBoard,
+  Board,
   Game,
   GameError,
   GameErrorType,
@@ -9,4 +11,12 @@ import {
 } from './game'
 
 export { GameError, isColor }
-export type { Game, GameErrorType, Color, CheckerboxPosition, MoveDirection }
+export type {
+  PlayerBoard,
+  Board,
+  Game,
+  GameErrorType,
+  Color,
+  CheckerboxPosition,
+  MoveDirection,
+}
