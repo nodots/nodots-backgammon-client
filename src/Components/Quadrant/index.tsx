@@ -20,21 +20,18 @@ const buildPoints = (
   board: Board,
   start: number,
   players: Players,
-  latitude: Latitude
+  latitude: Latitude,
+  longitude: Longitude
 ): PointProps[] => {
   const end = start + 6
   const points: PointProps[] = []
-  // console.log('placeCheckers board:', board)
-  // console.log('placeCheckers players:', players)
   const clockwisePlayer =
     players.white.moveDirection === 'clockwise' ? players.white : players.black
-  // console.log('placeCheckers clockwisePlayer:', clockwisePlayer)
 
   const counterclockwisePlayer =
     players.white.moveDirection === 'counterclockwise'
       ? players.white
       : players.black
-  // console.log('placeCheckers counterclockwisePlayer:', counterclockwisePlayer)
 
   const clockwiseBoard = board[clockwisePlayer.color]
   const counterclockwiseBoard = board[counterclockwisePlayer.color]
@@ -56,6 +53,8 @@ const buildPoints = (
             clockwise: position,
             counterclockwise: counterclockwisePosition,
           },
+          longitude,
+          latitude,
           checkers,
         }
         points.push(p)
@@ -68,9 +67,6 @@ const buildPoints = (
       counterclockwiseBoard[positionLabel as keyof PlayerBoard]
     const checkers: Color[] = []
     if (positionLabel !== 'bar') {
-      // positionClockwise: 25 - position,
-      // positionCounterClockwise: position,
-
       const counterclockwisePosition: number = parseInt(positionLabel)
       const clockwisePosition = 25 - counterclockwisePosition
       if (clockwisePosition >= start && clockwisePosition < end) {
@@ -84,24 +80,18 @@ const buildPoints = (
           }
         })
         if (existingPoint) {
-          // console.log(clockwisePosition)
-          // console.log(existingPoint.position)
           if (existingPoint.checkers.length > 0 && checkers.length > 0) {
             console.error(
               'Existing point already has checkers:',
               existingPoint.checkers
             )
-            console.error('New checkers for cc player:', checkers)
           }
           const existingPointIndex = points.indexOf(existingPoint)
-          console.log(points[existingPointIndex].checkers)
-          console.log(checkers)
           points[existingPointIndex].checkers.push(...checkers)
         }
       }
     }
   }
-  console.log(points)
   return points
 }
 
@@ -112,7 +102,7 @@ const Quadrant: React.FC<Props> = ({
   board,
   players,
 }) => {
-  const points = buildPoints(board, start, players, latitude)
+  const points = buildPoints(board, start, players, latitude, longitude)
 
   return (
     <div className={`quadrant-container ${latitude} ${longitude}`}>
@@ -125,6 +115,8 @@ const Quadrant: React.FC<Props> = ({
               counterclockwise: p.position.counterclockwise,
             }}
             checkers={p.checkers}
+            latitude={p.latitude}
+            longitude={p.longitude}
             key={generateId()}
           />
         ))}

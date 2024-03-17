@@ -1,29 +1,41 @@
 // Types
+import { Color } from '../../game'
 import { Checker as CheckerType } from './state/types'
 // UI
-import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
+import { Container, useTheme } from '@mui/material'
+// import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 
-import './checker.scss'
-
-export interface CheckerProps {
+export interface Props {
   checker: CheckerType
+  color: Color
   count?: number
 }
 
-const Checker = (props: CheckerProps) => {
-  const classes = `checker ${props.checker.color}`
+const Checker: React.FC<Props> = ({ checker, color, count }) => {
+  const theme = useTheme()
+  const getBackgroundColor = (color: Color) => {
+    return color === 'white'
+      ? theme.palette.secondary.light
+      : theme.palette.secondary.dark
+  }
 
   return (
-    <div className={classes} id={props.checker.id}>
-      {props.count ? (
+    <div
+      className="checker"
+      id={checker.id}
+      style={{
+        backgroundColor: getBackgroundColor(color),
+        borderColor: theme.palette.background.default,
+      }}
+    >
+      {/* {props.count ? (
         <span className="checker-count">{props.count ? props.count : ''}</span>
       ) : (
         <RadioButtonCheckedTwoToneIcon
           className="checker-overlay"
-          // FIXME: Hardcoded color
-          sx={{ fill: 'rgba(69, 109, 157, .4)', width: '2vw', height: '2vw' }}
+          sx={{ fill: 'red' }}
         />
-      )}
+      )} */}
     </div>
   )
 }

@@ -13,9 +13,6 @@
     height: $checker-height;
     width: $checker-height;
   }
-  .die {
-    border: 1px solid teal !important;
-  }
 
   #BoardContainer {
     .rollsurface {
@@ -23,11 +20,17 @@
     }
     border: $border !important;
     border-radius: $border-radius;
-    padding: 5px;
 
-    .quadrant {
-      .point {
-        min-width: $checker-height !important;
+    .point {
+      border: 1px solid tan;
+      width: $checker-height !important;
+      height: $checker-height * 5 !important;
+      padding: 0px 5px !important;
+
+      .point-background {
+        border: 1px solid orange;
+        width: $checker-height !important;
+        height: $checker-height * 5 !important;
       }
     }
 

@@ -20,12 +20,14 @@ import Die from '../Die'
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
 
 import { BgWebApi_getTurnAnalytics } from '../../game/integrations/bgweb-api'
+import { Container, useTheme } from '@mui/material'
 
 interface Props {
   color: Color
 }
 
 const RollSurface: React.FC<Props> = ({ color }) => {
+  const theme = useTheme()
   const { game, initializeTurn, finalizeTurn, setDiceValues } = useGame()
   const activeTurn = game.activeTurn
 
@@ -195,10 +197,18 @@ const RollSurface: React.FC<Props> = ({ color }) => {
   }
 
   return (
-    <div className="rollsurface clockwise">
+    <Container
+      className="rollsurface clockwise"
+      sx={{
+        backgroundColor: theme.palette.background.default,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <Die order={0} color={color} value={1} />
       <Die order={1} color={color} value={1} />
-    </div>
+    </Container>
   )
 }
 

@@ -15,6 +15,8 @@ import { CHECKERS_PER_PLAYER } from '../../../../game/game'
 import { GameError } from '../../../../game/game'
 import { CheckerProp } from '../../../Checker/state/types'
 
+export type Latitude = 'north' | 'south'
+export type Longitude = 'east' | 'west'
 export const POINT_COUNT = 24
 export type Board = {
   id: string

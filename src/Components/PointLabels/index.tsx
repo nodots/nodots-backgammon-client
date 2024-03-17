@@ -1,12 +1,14 @@
 import { ReactElement } from 'react'
+import { Latitude, Longitude } from '../Board/state/types'
+import { useTheme } from '@mui/material'
 
 interface Props {
-  latitude: 'north' | 'south'
-  longitude: 'east' | 'west'
+  latitude: Latitude
+  longitude: Longitude
   start: number
 }
 
-const getLabels = (start: number, latitude: 'north' | 'south') => {
+const getLabels = (start: number, latitude: Latitude) => {
   const labels: React.ReactElement[] = []
   for (let i = start; i < start + 6; i++) {
     labels.push(
@@ -18,8 +20,19 @@ const getLabels = (start: number, latitude: 'north' | 'south') => {
   return <>{labels}</>
 }
 
-const PointLabels: React.FC<Props> = ({ latitude, longitude, start }) => (
-  <div className={`point-labels ${latitude}`}>{getLabels(start, latitude)}</div>
-)
+const PointLabels: React.FC<Props> = ({ latitude, longitude, start }) => {
+  const theme = useTheme()
+  return (
+    <div
+      className={`point-labels ${latitude}`}
+      style={{
+        color: theme.palette.info.light,
+        borderColor: theme.palette.info.light,
+      }}
+    >
+      {getLabels(start, latitude)}
+    </div>
+  )
+}
 
 export default PointLabels

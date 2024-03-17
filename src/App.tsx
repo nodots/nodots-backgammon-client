@@ -1,9 +1,8 @@
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { GameProvider } from './game/game.provider'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { appTheme } from './theme/theme'
+import appTheme from './theme/theme'
 
-import './App.scss'
 import { GamePage } from './pages/game'
 import { HomePage } from './pages/home'
 import { SignIn } from './pages/registration/sign-in'

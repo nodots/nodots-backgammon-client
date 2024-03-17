@@ -6,50 +6,20 @@
 }
 
 @media screen and (orientation: landscape) and (max-width: 1000px) {
-  $checker-height: 40px;
-  #BoardContainer {
-    .checker {
-      height: $checker-height !important;
-      width: $checker-height !important;
-      border: none !important;
-    }
+  $checker-height: 35px;
 
-    .point-labels {
-      font-size: 0.5rem;
-    }
-
-    .rollsurface {
-      display: none;
-    }
-
-    .quadrant {
-      .point {
-        min-height: $checker-height * 4;
-        background-image: none !important;
-        margin: 0px 2px 4px 2px;
-      }
-
-      &.south {
-        .point {
-          margin: 4px 2px 0px 2px;
-        }
-      }
-    }
-
-    #Bar {
-      height: 100%;
-      padding: 10px;
-    }
+  .checker {
+    height: $checker-height !important;
+    width: $checker-height !important;
   }
 
   .die {
-    height: $checker-height * 0.6;
-    width: $checker-height * 0.6;
+    height: $checker-height * 0.5 !important;
+    width: $checker-height * 0.5 !important;
   }
 
-  .cube {
-    height: $checker-height;
-    width: $checker-height;
-    font-size: 1rem;
+  .point {
+    width: $checker-height !important;
+    height: $checker-height * 4 !important;
   }
 }

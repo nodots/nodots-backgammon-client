@@ -1,10 +1,13 @@
+import { useTheme } from '@mui/material'
 import { useGame } from '../../game/useGame'
 import { SetCubeValuePayload } from './state/types'
 import { CubeValue, isCubeValue } from './state/types'
 
-const Cube = () => {
+const Cube: React.FC = () => {
   const { game, double, setCubeValue } = useGame()
   const activeColor = game.activeColor
+  const theme = useTheme()
+
   if (!activeColor) {
     throw new Error('No active color')
   }
@@ -30,7 +33,6 @@ const Cube = () => {
     if (value === 64) {
       return
     }
-    console.log('[Cube Component] game:', game)
 
     if (value === undefined) {
       value = 2
@@ -46,7 +48,14 @@ const Cube = () => {
   }
 
   return (
-    <div className="cube" onClick={clickHandler}>
+    <div
+      className="cube"
+      onClick={clickHandler}
+      style={{
+        color: theme.palette.info.main,
+        borderColor: theme.palette.secondary.light,
+      }}
+    >
       {cube.value ? cube.value : 2}
     </div>
   )

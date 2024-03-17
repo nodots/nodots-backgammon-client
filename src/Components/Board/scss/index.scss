@@ -1,8 +1,9 @@
 // @import '../../../theme/partials/dimensions';
-@import '../../../theme/partials/colors';
+// @import '../../../theme/partials/colors';
 @import '../../../theme/partials/borders';
 
-$checker-height: 40px;
+$checker-height: 114px;
+$point-padding: 8px;
 
 #GameContainer {
   display: flex;
@@ -12,10 +13,40 @@ $checker-height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(106, 125, 181, 0.5);
+  width: $checker-height * 0.75;
+  height: $checker-height * 0.75;
+  border: $border;
   border-radius: $border-radius;
-  width: $checker-height * 1.5;
-  height: $checker-height * 1.5;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.quadrant {
+  .point {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: $checker-height * 5 !important;
+    min-width: $checker-height + $point-padding !important;
+    position: relative;
+    margin: 0px;
+    padding: 0px ($point-padding * 0.5);
+    z-index: 1;
+
+    .point-background {
+      &.south {
+        transform: rotate(180deg) !important;
+      }
+    }
+  }
+
+  &.south {
+    flex-direction: row-reverse;
+    .point {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+    }
+  }
 }
 
 .die {
@@ -24,61 +55,21 @@ $checker-height: 40px;
   justify-content: center;
   align-items: center;
   margin: 0 2px;
-  background-repeat: no-repeat;
-  border: 1px solid gray;
   border-radius: 5px;
-  height: $checker-height;
-  width: $checker-height;
-
+  height: $checker-height * 0.5;
+  width: $checker-height * 0.5;
+  background-color: black;
   &.black {
     background-color: white;
-    background-size: cover;
-    border-radius: 5px;
-    &.one {
-      background-image: url('../../Die/images/black/one.svg');
-    }
-    &.two {
-      background-image: url('../../Die/images/black/two.svg');
-    }
-    &.three {
-      background-image: url('../../Die/images/black/three.svg');
-    }
-    &.four {
-      background-image: url('../../Die/images/black/four.svg');
-    }
-    &.five {
-      background-image: url('../../Die/images/black/five.svg');
-    }
-    &.six {
-      background-image: url('../../Die/images/black/six.svg');
-    }
-  }
-
-  &.white {
-    background-color: black;
-    &.one {
-      background-image: url('../../Die/images/white/one.svg');
-    }
-    &.two {
-      background-image: url('../../Die/images/white/two.svg');
-    }
-    &.three {
-      background-image: url('../../Die/images/white/three.svg');
-    }
-    &.four {
-      background-image: url('../../Die/images/white/four.svg');
-    }
-    &.five {
-      background-image: url('../../Die/images/white/five.svg');
-    }
-    &.six {
-      background-image: url('../../Die/images/white/six.svg');
-    }
   }
 }
 
+.checker-container {
+  position: absolute;
+}
+
 .checker {
-  border: 1px solid $primary-main;
+  border: 1px solid;
   border-radius: 50%;
   margin-left: auto;
   margin-right: auto;
@@ -86,123 +77,63 @@ $checker-height: 40px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
   cursor: pointer;
-
-  &.black {
-    background-color: $black-color;
-  }
-
-  &.white {
-    background-color: $white-color;
-  }
+  height: $checker-height;
+  width: $checker-height;
 }
 
 #BoardContainer {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: stretch;
-  background-color: rgba(0, 0, 139, 0.2);
   margin: auto auto;
+  border: $border;
+  border-radius: $border-radius;
+  padding: $point-padding 0px $point-padding $point-padding;
 
   .board-half {
     display: flex;
     margin: 0px;
     flex-direction: column;
-    flex-grow: 1;
-
+    padding: 5px;
     .quadrant-container {
       display: flex;
       flex-direction: column;
+
       &.south {
         flex-direction: column-reverse;
+        border-top: none;
       }
     }
   }
 
   .quadrant {
     display: flex;
-    justify-content: space-around;
-    background-color: $board-color;
-
-    .point {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      min-height: $checker-height * 5 !important;
-
-      margin: 0px 0px 4px 0px;
-      background-image: url('../../Point/images/point-north-mask.svg');
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-
-      &.even {
-        background-color: rgba(48, 65, 114, 0.5);
-      }
-      &.odd {
-        background-color: rgba(106, 125, 181, 0.5);
-      }
-    }
-
-    &.south {
-      flex-direction: row-reverse;
-      .point {
-        margin: 4px 0px 0px 0px;
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        background-image: url('../../Point/images/point-south-mask.svg');
-      }
-    }
   }
 
-  #Bar {
-    display: flex;
-    padding: 5px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
+  #Bar,
   #Off {
-    display: none;
     padding: 5px;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-
-  .checker-overlay {
-    &.count {
-      color: $primary-main;
-      font-size: 1.5em;
-      font-weight: bold;
-    }
+    width: $checker-height;
   }
 
   .point-labels {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    color: $text-light;
+    font-size: 0.75rem;
     &.south {
       flex-direction: row-reverse;
     }
   }
 }
 
-// Attributes that are hidden on smallest devices
-@media screen and (min-width: 1000px) {
-  .rollsurface {
-    display: flex;
-    width: 100%;
-    flex-grow: 1;
-    align-items: center;
-    justify-content: center;
-    background-color: $board-color;
-  }
-}
-
 // @import url('small-notebook.scss');
 // @import url('ipad.scss');
 // @import url('small.scss');
-@import url('large.scss');
+// @import url('large.scss');
