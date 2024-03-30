@@ -1,59 +1,151 @@
 import { v4 as generateId } from 'uuid'
-import { Player } from './player'
+import { Player, generateDice } from './player'
 import { initCubeState } from '../components/Cube/state'
 import { initBoardState } from '../components/Board/state'
 import { initDiceState, roll } from '../components/Die/state'
-import { Game } from './game'
+import { Board, Color, Game, Cube, PlayerBoard } from './game'
 
-// FIXME: needs to be from user input
-const blackPlayer: Player = {
-  id: generateId(),
-  color: 'black',
-  active: false,
-  pipCount: 167,
-  moveDirection: 'clockwise',
-  dice: initDiceState.black,
-  isAutoMove: true,
-  isAutoRoll: false,
+export interface Players {
+  white: Player
+  black: Player
 }
-const whitePlayer: Player = {
-  id: generateId(),
-  color: 'white',
-  active: false,
-  pipCount: 167,
-  moveDirection: 'counterclockwise',
-  dice: initDiceState.white,
-  isAutoMove: true,
-  isAutoRoll: false,
-}
+export class GameState {
+  private whitePlayer: Player
+  private blackPlayer: Player
+  activePlayer: Player | undefined
+  players: Players
+  board: Board
+  cube: Cube
+  notificationMessage: string = ''
 
-// FIXME: Unused
-// Game starts by both players rolling one die to determine who goes first
-function rollForStart(white: Player, black: Player): Player {
-  const whiteRoll = roll()
-  const blackRoll = roll()
-  // no ties
-  if (whiteRoll === blackRoll) {
-    rollForStart(white, black)
+  constructor() {
+    this.whitePlayer = {
+      id: generateId(),
+      color: 'white',
+      moveDirection: 'clockwise',
+      username: 'White Stripes',
+      active: false,
+      pipCount: 167,
+      automation: {
+        move: false,
+        roll: false,
+      },
+    }
+
+    this.whitePlayer.dice = generateDice(this.whitePlayer)
+
+    this.blackPlayer = {
+      id: generateId(),
+      color: 'black',
+      moveDirection: 'counterclockwise',
+      username: 'Black Power',
+      active: false,
+      pipCount: 167,
+      automation: {
+        move: false,
+        roll: false,
+      },
+    }
+
+    this.blackPlayer.dice = generateDice(this.blackPlayer)
+
+    this.players = {
+      white: this.whitePlayer,
+      black: this.blackPlayer,
+    }
+
+    const whiteBoard: PlayerBoard = {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 5,
+      7: 0,
+      8: 3,
+      9: 0,
+      10: 0,
+      11: 0,
+      12: 0,
+      13: 5,
+      14: 0,
+      15: 0,
+      16: 0,
+      17: 0,
+      18: 0,
+      19: 0,
+      20: 0,
+      21: 0,
+      22: 0,
+      23: 0,
+      24: 2,
+      bar: 0,
+    }
+
+    const blackBoard: PlayerBoard = {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 5,
+      7: 0,
+      8: 3,
+      9: 0,
+      10: 0,
+      11: 0,
+      12: 0,
+      13: 5,
+      14: 0,
+      15: 0,
+      16: 0,
+      17: 0,
+      18: 0,
+      19: 0,
+      20: 0,
+      21: 0,
+      22: 0,
+      23: 0,
+      24: 2,
+      bar: 0,
+    }
+
+    this.cube = {
+      value: 2,
+      owner: undefined,
+    }
+
+    this.board = {
+      white: whiteBoard,
+      black: blackBoard,
+    }
+
+    this.rollForStart()
   }
-  return blackRoll > whiteRoll ? black : white
-}
-// const winner = rollForStart(whitePlayer, blackPlayer)
-// const winner = whitePlayer
-const winner = blackPlayer
-winner.color === 'black'
-  ? (blackPlayer.active = true)
-  : (whitePlayer.active = true)
 
-const defaultGameState: Game = {
-  board: initBoardState,
-  dice: initDiceState,
-  cube: initCubeState,
-  activeColor: winner.color,
-  players: {
-    black: blackPlayer,
-    white: whitePlayer,
-  },
-}
+  setNotification = (message: string) => (this.notificationMessage = message)
 
-export const initialGameState = defaultGameState
+  rollForStart = () => {
+    const winningColor = Math.random() >= 0.5 ? 'black' : 'white'
+    this.activePlayer = this.players[winningColor]
+    this.notificationMessage = `${this.activePlayer.username} wins the opening roll`
+    return winningColor
+  }
+
+  getPlayers = () => this.players
+
+  getBoard = () => this.board
+
+  getActivePlayer = (): Player =>
+    this.players.black.active ? this.players.black : this.players.white
+
+  getClockwisePlayer = (): Player =>
+    this.players.black.moveDirection === 'clockwise'
+      ? this.players.black
+      : this.players.white
+
+  getCounterClockwisePlayer = (): Player =>
+    this.players.black.moveDirection === 'counterclockwise'
+      ? this.players.black
+      : this.players.white
+}

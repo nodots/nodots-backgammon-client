@@ -24,7 +24,6 @@ const Point: React.FC<Props> = ({
   longitude,
 }) => {
   const theme = useTheme()
-  console.log(theme)
   let className = 'point'
 
   className =

@@ -1,4 +1,4 @@
-import { useTheme } from '@mui/material'
+import { Button, useTheme } from '@mui/material'
 import { Color, GameError } from '../../game'
 import { DieOrder, DieValue } from './state/types/die'
 
@@ -25,12 +25,7 @@ const Die: React.FC<Props> = ({ order, color, value }) => {
       : theme.palette.secondary.light
   }
   return (
-    <div
-      className="die"
-      style={{
-        backgroundColor: theme.palette.background.default,
-      }}
-    >
+    <Button className="die">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
         <g id="Layer_2" data-name="Layer 2">
           <g id="Layer_1-2" data-name="Layer 1">
@@ -38,7 +33,7 @@ const Die: React.FC<Props> = ({ order, color, value }) => {
           </g>
         </g>
       </svg>
-    </div>
+    </Button>
   )
 }
 

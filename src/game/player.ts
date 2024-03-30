@@ -14,6 +14,7 @@ export interface InitializeTurnAction {
 
 export type Player = {
   id: string
+  username: string
   color: Color
   active: boolean
   dice?: DiePair

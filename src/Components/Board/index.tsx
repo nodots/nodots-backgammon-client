@@ -6,28 +6,20 @@ import Quadrant from '../Quadrant'
 import Bar from '../Bar'
 import Off from '../Off'
 import Rollsurface from '../Rollsurface'
-import { Players } from '../../pages/game'
 import Checker from '../Checker'
-import { generateId } from '../../game/game'
-import { useTheme } from '@mui/material'
+import { GameState } from '../../game/game.state'
+import { Paper, useTheme } from '@mui/material'
 
 interface Props {
-  board: BoardType
-  players: Players
+  game: GameState
 }
 
-const Board: React.FC<Props> = ({ board, players }) => {
+function Board({ game }: Props) {
+  const { board, players } = game
   const theme = useTheme()
   return (
-    <div
-      id="BoardContainer"
-      style={{ borderColor: theme.palette.secondary.light }}
-    >
-      <div
-        id="West"
-        className="board-half"
-        style={{ borderColor: theme.palette.secondary.light }}
-      >
+    <Paper id="BoardContainer" elevation={2}>
+      <Paper id="West" className="board-half" elevation={1}>
         <Quadrant
           latitude="north"
           longitude="west"
@@ -35,7 +27,8 @@ const Board: React.FC<Props> = ({ board, players }) => {
           board={board}
           players={players}
         />
-        <Rollsurface color="black" />
+        {/* FIXME: shouldn't be color should be move direction */}
+        <Rollsurface game={game} color="black" />
         <Quadrant
           latitude="south"
           longitude="west"
@@ -43,13 +36,9 @@ const Board: React.FC<Props> = ({ board, players }) => {
           board={board}
           players={players}
         />
-      </div>
+      </Paper>
       <Bar />
-      <div
-        id="East"
-        className="board-half"
-        style={{ borderColor: theme.palette.secondary.light }}
-      >
+      <Paper id="East" className="board-half" elevation={1}>
         <Quadrant
           latitude="north"
           longitude="east"
@@ -57,7 +46,7 @@ const Board: React.FC<Props> = ({ board, players }) => {
           board={board}
           players={players}
         />
-        <Rollsurface color="white" />
+        <Rollsurface game={game} color="white" />
         <Quadrant
           latitude="south"
           longitude="east"
@@ -65,9 +54,9 @@ const Board: React.FC<Props> = ({ board, players }) => {
           board={board}
           players={players}
         />
-      </div>
-      <Off />
-    </div>
+      </Paper>
+      <Off game={game} />
+    </Paper>
   )
 }
 

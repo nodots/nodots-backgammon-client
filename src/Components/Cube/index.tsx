@@ -1,63 +1,56 @@
-import { useTheme } from '@mui/material'
-import { useGame } from '../../game/useGame'
+import { Button, useTheme } from '@mui/material'
 import { SetCubeValuePayload } from './state/types'
 import { CubeValue, isCubeValue } from './state/types'
+import { GameState } from '../../game/game.state'
 
-const Cube: React.FC = () => {
-  const { game, double, setCubeValue } = useGame()
-  const activeColor = game.activeColor
+interface Props {
+  game: GameState
+}
+
+function Cube({ game }: Props) {
+  const { players, board, cube } = game
+  const activePlayer = game.getActivePlayer()
   const theme = useTheme()
-
-  if (!activeColor) {
-    throw new Error('No active color')
-  }
-  const cube = game.cube
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
-    if (!game.players[activeColor].active) {
-      e.stopPropagation()
-      return console.error('It is not your turn')
-    }
-    if (
-      game.cube.owner !== undefined &&
-      game.players[activeColor].color !== game.cube.owner
-    ) {
-      e.stopPropagation()
-      return console.error('You do not control the cube')
-    }
+    // if (activePlayer.color !== ) {
+    //   e.stopPropagation()
+    //   return console.error('It is not your turn')
+    // }
+    // if (
+    //   game.cube.owner !== undefined &&
+    //   game.players[activeColor].color !== game.cube.owner
+    // ) {
+    //   e.stopPropagation()
+    //   return console.error('You do not control the cube')
+    // }
 
-    let value = cube.value
+    // let value = cube.value
 
-    // TODO: Do nothing if cube is already maxxed out. Should this logic be elsewhere?
-    if (value === 64) {
-      return
-    }
+    // // TODO: Do nothing if cube is already maxxed out. Should this logic be elsewhere?
+    // if (value === 64) {
+    //   return
+    // }
 
-    if (value === undefined) {
-      value = 2
-    }
-    if (!isCubeValue(value)) {
-      throw new Error('Invalid cube value')
-    }
-    const newValue: CubeValue = double(value)
-    const payload: SetCubeValuePayload = {
-      value: newValue,
-    }
-    setCubeValue(payload)
+    // if (value === undefined) {
+    //   value = 2
+    // }
+    // if (!isCubeValue(value)) {
+    //   throw new Error('Invalid cube value')
+    // }
+
+    // need doubling logic
   }
 
   return (
-    <div
+    <Button
       className="cube"
       onClick={clickHandler}
-      style={{
-        color: theme.palette.info.main,
-        borderColor: theme.palette.secondary.light,
-      }}
+      sx={{ color: theme.palette.info.main }}
     >
       {cube.value ? cube.value : 2}
-    </div>
+    </Button>
   )
 }
 

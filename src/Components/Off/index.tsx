@@ -1,15 +1,18 @@
-// interface OffProps {
-//   off: OffType
-// }
-
+import { GameState } from '../../game/game.state'
 import Cube from '../Cube'
 
-const Off: React.FC = () => (
-  <div id="Off">
-    <div className="checkerbox clockwise"></div>
-    <Cube />
-    <div className="checkerbox counterclockwise"></div>
-  </div>
-)
+interface Props {
+  game: GameState
+}
+
+function Off({ game }: Props) {
+  return (
+    <div id="Off">
+      <div className="checkerbox clockwise"></div>
+      <Cube game={game} />
+      <div className="checkerbox counterclockwise"></div>
+    </div>
+  )
+}
 
 export default Off

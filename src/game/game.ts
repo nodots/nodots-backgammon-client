@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid'
-import { Cube, CubeValue } from '../components/Cube/state/types'
 import { Player } from './player'
 // import { sanityCheckBoard } from '../components/Board/state/types'
 import { Dice } from '../components/Die/state'
@@ -53,6 +52,12 @@ export class GameError extends Error {
     super(errorMessage)
     this.model = model || 'Game'
   }
+}
+
+export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
+export type Cube = {
+  value: CubeValue
+  owner: Player | undefined
 }
 
 export type Game = {
