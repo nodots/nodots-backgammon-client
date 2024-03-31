@@ -1,28 +1,98 @@
-import { useAuth0 } from '@auth0/auth0-react'
 import BoardComponent from '../../components/Board'
-import NavBar from '../../components/core/core'
-import { PlayerBoard, Board } from '../../game'
-import { Player, generateDice } from '../../game/player'
-import { Game, generateId } from '../../game/game'
-import { GameState } from '../../game/game.state'
-import { Die } from '../../components/Die/state/types/die'
+import { Players, ready } from '../../game/Types'
 import { Paper } from '@mui/material'
 import GameNotifications from '../../components/GameNotifications'
+import { Component } from 'react'
+import { generateId } from '../../game/Types'
+import { Player } from '../../game/player'
+import { NodotsGameState } from '../../game/Types'
 const API_SERVER = 'http://127.0.0.1:3300'
-const USER_END_POINT = `${API_SERVER}/user`
 
-const showAds = false
+class GamePage extends Component {
+  private game: NodotsGameState
 
-export function GamePage() {
-  const game = new GameState()
-  game.rollForStart()
+  whitePlayer: Player = {
+    id: generateId(),
+    color: 'white',
+    moveDirection: 'counterclockwise',
+    username: 'White Stripes',
+    active: false,
+    pipCount: 167,
+    automation: {
+      move: false,
+      roll: false,
+    },
+  }
 
-  return (
-    <>
-      <Paper id="GameContainer">
-        <GameNotifications game={game} />
-        <BoardComponent game={game} />
-      </Paper>
-    </>
-  )
+  blackPlayer: Player = {
+    id: generateId(),
+    color: 'black',
+    moveDirection: 'clockwise',
+    username: 'Black Power',
+    active: false,
+    pipCount: 167,
+    automation: {
+      move: false,
+      roll: false,
+    },
+  }
+
+  players: Players = {
+    white: this.whitePlayer,
+    black: this.blackPlayer,
+  }
+
+  constructor(props: {} | Readonly<{}>) {
+    super(props)
+    const white: Player = {
+      id: generateId(),
+      color: 'white',
+      username: 'White Stripes',
+      active: false,
+      moveDirection: 'clockwise',
+      pipCount: 167,
+      automation: {
+        roll: true,
+        move: false,
+      },
+    }
+    const black: Player = {
+      id: generateId(),
+      color: 'black',
+      username: 'Black Messiah',
+      active: false,
+      moveDirection: 'counterclockwise',
+      pipCount: 167,
+      automation: {
+        roll: true,
+        move: false,
+      },
+    }
+    const players: Players = {
+      white,
+      black,
+    }
+    this.game = ready(players)
+  }
+
+  render() {
+    console.log(this.game.kind)
+    switch (this.game.kind) {
+      case 'starting':
+      case 'ready':
+        return (
+          <>
+            <Paper id="GameContainer">
+              <BoardComponent state={this.game} board={this.game.board} />
+            </Paper>
+          </>
+        )
+      case 'confirming':
+      case 'moving':
+      case 'rolling':
+        return <></>
+    }
+  }
 }
+
+export default GamePage

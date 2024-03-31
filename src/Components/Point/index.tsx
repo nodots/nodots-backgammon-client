@@ -3,7 +3,7 @@ import { Checkerbox as CheckerboxType } from '../Checkerbox/state/types'
 import { QuadrantLocation } from '../Quadrant/state/types'
 import Checkerbox from '../Checkerbox'
 import Checker from '../Checker'
-import { Color, generateId } from '../../game/game'
+import { Color, generateId } from '../../game/Types'
 import { ReactElement } from 'react'
 import { Latitude, Longitude } from '../Board/state/types'
 

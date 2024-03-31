@@ -1,15 +1,14 @@
 import { Button, useTheme } from '@mui/material'
 import { SetCubeValuePayload } from './state/types'
 import { CubeValue, isCubeValue } from './state/types'
-import { GameState } from '../../game/game.state'
+import { NodotsGameState } from '../../game/Types'
 
 interface Props {
-  game: GameState
+  state: NodotsGameState
 }
 
-function Cube({ game }: Props) {
-  const { players, board, cube } = game
-  const activePlayer = game.getActivePlayer()
+function Cube({ state }: Props) {
+  // const activePlayer = game.getActivePlayer()
   const theme = useTheme()
 
   const clickHandler = (e: React.MouseEvent) => {
@@ -49,7 +48,7 @@ function Cube({ game }: Props) {
       onClick={clickHandler}
       sx={{ color: theme.palette.info.main }}
     >
-      {cube.value ? cube.value : 2}
+      {2}
     </Button>
   )
 }

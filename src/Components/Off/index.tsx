@@ -1,4 +1,4 @@
-import { GameState } from '../../game/game.state'
+import { GameState } from '../../game'
 import Cube from '../Cube'
 
 interface Props {

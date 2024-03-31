@@ -1,5 +1,5 @@
-import { Color, CheckerboxPosition, isColor } from '../../../../game'
-import { generateId } from '../../../../game/game'
+import { Color, CheckerboxPosition, isColor } from '../../../../game/Types'
+import { generateId } from '../../../../game/Types'
 import { Checker, CheckerProp } from '../../../Checker/state/types'
 import { v4 as uuid } from 'uuid'
 

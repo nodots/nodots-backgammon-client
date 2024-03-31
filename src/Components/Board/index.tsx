@@ -1,22 +1,27 @@
 import './scss/index.scss'
-import { Color, Board as BoardType } from '../../game'
 // Components
 import Quadrant from '../Quadrant'
 
 import Bar from '../Bar'
 import Off from '../Off'
 import Rollsurface from '../Rollsurface'
-import Checker from '../Checker'
-import { GameState } from '../../game/game.state'
 import { Paper, useTheme } from '@mui/material'
+import {
+  Board as BoardType,
+  NodotsGameState,
+  Ready,
+  Starting,
+} from '../../game/Types'
 
 interface Props {
-  game: GameState
+  state: Ready | Starting
+  board: BoardType
 }
 
-function Board({ game }: Props) {
-  const { board, players } = game
+function Board({ state, board }: Props) {
+  const { game } = state
   const theme = useTheme()
+
   return (
     <Paper id="BoardContainer" elevation={2}>
       <Paper id="West" className="board-half" elevation={1}>
@@ -24,38 +29,37 @@ function Board({ game }: Props) {
           latitude="north"
           longitude="west"
           start={13}
-          board={board}
-          players={players}
+          game={state}
+          points={game.board.quadrants.west.north.points}
         />
-        {/* FIXME: shouldn't be color should be move direction */}
-        <Rollsurface game={game} color="black" />
+        <Rollsurface game={state} direction="clockwise" />
         <Quadrant
           latitude="south"
           longitude="west"
           start={7}
-          board={board}
-          players={players}
+          game={state}
+          points={game.board.quadrants.west.south.points}
         />
       </Paper>
-      <Bar />
+      <Bar game={game} />
       <Paper id="East" className="board-half" elevation={1}>
         <Quadrant
           latitude="north"
           longitude="east"
           start={19}
-          board={board}
-          players={players}
+          game={state}
+          points={game.board.quadrants.east.north.points}
         />
-        <Rollsurface game={game} color="white" />
+        <Rollsurface game={state} direction="counterclockwise" />
         <Quadrant
           latitude="south"
           longitude="east"
           start={1}
-          board={board}
-          players={players}
+          game={state}
+          points={game.board.quadrants.east.south.points}
         />
       </Paper>
-      <Off game={game} />
+      <Off game={state} />
     </Paper>
   )
 }

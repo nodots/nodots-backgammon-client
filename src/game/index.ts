@@ -1,22 +1,10 @@
-import {
-  PlayerBoard,
-  Board,
-  Game,
-  GameError,
-  GameErrorType,
-  Color,
-  CheckerboxPosition,
-  MoveDirection,
-  isColor,
-} from './game'
+import { NodotsGameState, Players, ready } from './Types'
 
-export { GameError, isColor }
-export type {
-  PlayerBoard,
-  Board,
-  Game,
-  GameErrorType,
-  Color,
-  CheckerboxPosition,
-  MoveDirection,
+class NodotsGameStore {
+  state: NodotsGameState
+
+  constructor(players: Players) {
+    this.state = ready(players)
+  }
 }
+export default NodotsGameStore

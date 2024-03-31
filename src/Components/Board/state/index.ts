@@ -10,8 +10,6 @@ import {
   isBoard,
 } from './types'
 
-import { MoveMode } from '../../../game/move'
-
 export {
   initBoardState,
   POINT_COUNT,
@@ -19,7 +17,6 @@ export {
   sanityCheckBoard,
   getCheckerboxCoordinates,
   getPipCountForPlayer,
-  MoveMode,
   isBoard,
 }
 

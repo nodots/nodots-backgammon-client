@@ -1,4 +1,4 @@
-import { Color } from '../../../../game'
+import { Color } from '../../../../game/Types'
 export type DieOrder = 0 | 1
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 

@@ -1,5 +1,5 @@
 // Types
-import { Color } from '../../game'
+import { Color } from '../../game/Types'
 import { Checker as CheckerType } from './state/types'
 // UI
 import { Button, Container, Paper, useTheme } from '@mui/material'

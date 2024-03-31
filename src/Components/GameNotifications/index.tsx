@@ -1,14 +1,14 @@
 import { Alert } from '@mui/material'
-import { GameState } from '../../game/game.state'
+import { NodotsGameState } from '../../game/Types'
 
 interface Props {
-  game: GameState
+  state: NodotsGameState
 }
 
-function GameNotifications({ game }: Props) {
+function GameNotifications({ state }: Props) {
   return (
     <Alert id="GameNotifications" variant="outlined">
-      {game.notificationMessage}
+      {state.game.notificationMessage}
     </Alert>
   )
 }

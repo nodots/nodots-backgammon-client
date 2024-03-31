@@ -1,5 +1,5 @@
 import { v4 as generateId } from 'uuid'
-import { Color } from '../../../../game'
+import { Color } from '../../../../game/Types'
 import { POINT_COUNT } from '../../../Board/state/types'
 import { Checker, CheckerProp } from '../../../Checker/state/types'
 

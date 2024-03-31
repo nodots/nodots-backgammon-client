@@ -2,7 +2,7 @@ import { ThemeProvider, CssBaseline } from '@mui/material'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import appTheme from './theme/theme'
 
-import { GamePage } from './pages/game'
+import GamePage from './pages/game'
 import { HomePage } from './pages/home'
 import { SignIn } from './pages/registration/sign-in'
 import { SignUp } from './pages/registration/sign-up'

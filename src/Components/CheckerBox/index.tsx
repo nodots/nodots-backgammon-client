@@ -2,8 +2,8 @@ import { v4 as generateId } from 'uuid'
 // Hooks
 import { useGame } from '../../game/useGame'
 // Types
-import { isColor } from '../../game/game'
-import { GameError } from '../../game/game'
+import { isColor } from '../../game/Types'
+import { GameError } from '../../game/Types'
 import { Checkerbox as CheckerboxType } from './state/types'
 import { getHomeQuadrantLocation, isPlayer } from '../../game/player'
 import { Move, MoveActionPayload } from '../../game/move'

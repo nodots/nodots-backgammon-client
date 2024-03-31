@@ -1,5 +1,5 @@
 import { Button, useTheme } from '@mui/material'
-import { Color, GameError } from '../../game'
+import { Color, GameError } from '../../game/Types'
 import { DieOrder, DieValue } from './state/types/die'
 
 const paths = [

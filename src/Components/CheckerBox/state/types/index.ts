@@ -1,4 +1,4 @@
-import { CheckerboxPosition as CheckerboxPosition } from '../../../../game'
+import { CheckerboxPosition as CheckerboxPosition } from '../../../../game/Types'
 import { Checker } from '../../../Checker/state/types'
 
 /**

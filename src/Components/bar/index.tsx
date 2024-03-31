@@ -1,17 +1,19 @@
-// Types
-import { Bar as RailType } from './state/types'
-// Components
-import Checkerbox from '../Checkerbox'
+import { GameState } from '../../game'
+import PipCount from './PipCount'
 
-// interface RailProps {
-//   bar: RailType
-// }
+interface Props {
+  game: GameState
+}
 
-const Rail: React.FC = () => (
-  <div id="Bar">
-    <div className="checkerbox clockwise"></div>
-    <div className="checkerbox counterclockwise"></div>
-  </div>
-)
+function Bar({ game }: Props) {
+  return (
+    <div id="Bar">
+      {/* <PipCount player={game.getClockwisePlayer()} /> */}
+      <div className="checkerbox counterclockwise"></div>
+      <div className="checkerbox clockwise"></div>
+      {/* <PipCount player={game.getCounterclockwisePlayer()} /> */}
+    </div>
+  )
+}
 
-export default Rail
+export default Bar
