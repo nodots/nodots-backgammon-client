@@ -1,15 +1,18 @@
-import { Color, isColor, MoveDirection } from './Types'
-import { Roll, DiePair, isDiePair } from '../components/Die/state/types/dice'
-import { Board } from '../components/Board/state/types'
-import { QuadrantLocation } from '../components/Quadrant/state/types'
-import { Analytics } from './turn'
-import { Die } from '../components/Die/state/types/die'
+import {
+  Board,
+  Color,
+  Die,
+  DiePair,
+  DieValue,
+  MoveDirection,
+  Roll,
+} from './Types'
 
 export interface InitializeTurnAction {
   board: Board
   player: Player
   roll: Roll
-  analytics: Analytics[]
+  // analytics: Analytics[]
 }
 
 export type Player = {
@@ -30,11 +33,17 @@ export const generateDice = (player: Player) => {
   const die1: Die = {
     order: 0,
     color: player.color,
+    value: 1,
   }
   const die2: Die = {
     order: 1,
     color: player.color,
+    value: 1,
   }
-  const dice: DiePair = { dice: [die1, die2] }
+  const dice: DiePair = [die2, die2]
   return dice
 }
+
+const roll = (): DieValue => (Math.floor(Math.random() * 6) + 1) as DieValue
+
+export const rollDice = (player: Player): Roll => [roll(), roll()]

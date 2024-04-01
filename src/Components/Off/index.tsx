@@ -1,18 +1,19 @@
-import { GameState } from '../../game'
+import { observer } from 'mobx-react'
+import { NodotsGameState } from '../../game/Types'
 import Cube from '../Cube'
 
 interface Props {
-  game: GameState
+  state: NodotsGameState
 }
 
-function Off({ game }: Props) {
+function Off({ state }: Props) {
   return (
     <div id="Off">
       <div className="checkerbox clockwise"></div>
-      <Cube game={game} />
+      <Cube state={state} />
       <div className="checkerbox counterclockwise"></div>
     </div>
   )
 }
 
-export default Off
+export default observer(Off)

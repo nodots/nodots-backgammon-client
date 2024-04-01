@@ -1,11 +1,12 @@
 import { v4 as uuid } from 'uuid'
-import { Player, generateDice } from './player'
+import { Player, generateDice, rollDice } from './player'
 import { BgApiPlayerBoard, BgWebApiPlay } from './integrations/bgweb-api'
-import { Roll } from '../components/Die/state'
 import NodotsGameStore from '.'
 
 export const CHECKERS_PER_PLAYER = 15
-
+export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
+export type DieOrder = 0 | 1
+export type Roll = [DieValue, DieValue]
 export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'
 export type Color = 'black' | 'white'
@@ -57,11 +58,18 @@ export class GameError extends Error {
 }
 
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
-export type Cube = {
+export interface Cube {
   value: CubeValue
   owner: Player | undefined
 }
 
+export interface Die {
+  color: Color
+  value: DieValue
+  order: DieOrder
+}
+
+export type DiePair = [Die, Die]
 export interface Checker {
   color: Color
 }
@@ -120,33 +128,31 @@ export interface Ready {
   game: NodotsGame
   board: Board
   cube: Cube
+  activePlayer: Player
   players: Players
+  gameNotification?: string
 }
 
-export interface Starting {
-  kind: 'starting'
-  game: NodotsGame
-  board: Board
-  cube: Cube
-  players: Players
-}
-
-interface Rolling {
+export interface Rolling {
   kind: 'rolling'
   activePlayer: Player
   game: NodotsGame
   board: Board
   cube: Cube
   players: Players
+  roll: Roll
+  gameNotification?: string
 }
 
 interface Moving {
   kind: 'moving'
   game: NodotsGame
   board: Board
-  player: Player
+  activePlayer: Player
+  players: Players
   cube: Cube
   roll: Roll
+  gameNotification?: string
   moves: BgWebApiPlay[]
 }
 
@@ -155,40 +161,46 @@ interface Confirming {
   store: NodotsGameStore
   game: NodotsGame
   board: Board
-  player: Player
+  activePlayer: Player
+  players: Players
   cube: Cube
   roll: Roll
+  gameNotification?: string
   moves: BgWebApiPlay[]
 }
 
-export type NodotsGameState = Ready | Starting | Rolling | Moving | Confirming
+export type NodotsGameState = Ready | Rolling | Moving | Confirming
 
-export const ready = (players: Players): Starting => {
+export const ready = (players: Players): Ready => {
   const game = new NodotsGame(players)
-  return {
-    kind: 'starting',
-    game,
-    board: game.board,
-    cube: game.cube,
-    players,
-  }
-}
-
-export const starting = (state: Starting): Rolling => {
-  const { kind, game, players, ...previous } = state
   const winningColor = rollForStart()
   const activePlayer = players[winningColor]
   activePlayer.active = true
   return {
-    kind: 'rolling',
-    activePlayer,
-    game: game,
-    cube: game.cube,
+    kind: 'ready',
+    game,
     board: game.board,
+    cube: game.cube,
+    activePlayer,
+    gameNotification: `${activePlayer.username} wins the opening roll`,
     players,
   }
 }
 
+export const rolling = (state: Ready | Rolling): Rolling => {
+  const { kind, game, activePlayer, players, ...previous } = state
+  const roll = rollDice(activePlayer)
+  return {
+    kind: 'rolling',
+    game,
+    board: game.board,
+    cube: game.cube,
+    activePlayer,
+    roll,
+    gameNotification: `${activePlayer.username} rolls ${JSON.stringify(roll)}`,
+    players,
+  }
+}
 export class NodotsGame {
   private whitePlayer: Player
   private blackPlayer: Player
@@ -197,7 +209,6 @@ export class NodotsGame {
   playerBoards: PlayerBoards
   board: Board
   cube: Cube
-  notificationMessage: string = ''
 
   defaultBoard: PlayerBoard = {
     1: 0,
@@ -253,8 +264,6 @@ export class NodotsGame {
     this.board = this.buildBoard()
   }
 
-  setNotification = (message: string) => (this.notificationMessage = message)
-
   getPlayers = () => this.players
 
   getBoard = () => this.playerBoards
@@ -278,7 +287,7 @@ export class NodotsGame {
       : this.getCounterclockwisePlayer()
 
   buildQuadrant = (
-    start: number,
+    start: 1 | 7 | 13 | 19,
     latitude: Latitude,
     longitude: Longitude
   ): Quadrant => {

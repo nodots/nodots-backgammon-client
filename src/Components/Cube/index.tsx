@@ -2,6 +2,7 @@ import { Button, useTheme } from '@mui/material'
 import { SetCubeValuePayload } from './state/types'
 import { CubeValue, isCubeValue } from './state/types'
 import { NodotsGameState } from '../../game/Types'
+import { observer } from 'mobx-react'
 
 interface Props {
   state: NodotsGameState
@@ -53,4 +54,4 @@ function Cube({ state }: Props) {
   )
 }
 
-export default Cube
+export default observer(Cube)

@@ -1,6 +1,7 @@
 import { Chip, SxProps, useTheme } from '@mui/material'
 import { Player } from '../../../game/player'
 import { Color } from '../../../game/Types'
+import { observer } from 'mobx-react'
 interface Props {
   player: Player
 }
@@ -17,4 +18,4 @@ function PipCount({ player }: Props) {
   )
 }
 
-export default PipCount
+export default observer(PipCount)

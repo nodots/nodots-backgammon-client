@@ -1,6 +1,13 @@
 import { Button, useTheme } from '@mui/material'
-import { Color, GameError } from '../../game/Types'
-import { DieOrder, DieValue } from './state/types/die'
+import {
+  Color,
+  GameError,
+  DieOrder,
+  DieValue,
+  NodotsGameState,
+} from '../../game/Types'
+import { observer } from 'mobx-react'
+import { Player } from '../../game/player'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -15,26 +22,33 @@ interface Props {
   order: DieOrder
   color: Color
   value: DieValue
+  state: NodotsGameState
 }
 
-const Die: React.FC<Props> = ({ order, color, value }) => {
+const isActive = (activePlayer: Player, color: Color) =>
+  activePlayer.color === color
+
+const Die: React.FC<Props> = ({ order, color, value, state }) => {
+  const { activePlayer } = state
   const theme = useTheme()
   const fill = (color: Color) => {
     return color === 'white'
-      ? theme.palette.secondary.dark
-      : theme.palette.secondary.light
+      ? theme.palette.secondary.light
+      : theme.palette.secondary.dark
   }
   return (
-    <Button className="die">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-        <g id="Layer_2" data-name="Layer 2">
-          <g id="Layer_1-2" data-name="Layer 1">
-            <path d={paths[value - 1]} fill={fill(color)} />
+    isActive(activePlayer, color) && (
+      <Button className="die">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <g id="Layer_2" data-name="Layer 2">
+            <g id="Layer_1-2" data-name="Layer 1">
+              <path d={paths[value - 1]} fill={fill(color)} />
+            </g>
           </g>
-        </g>
-      </svg>
-    </Button>
+        </svg>
+      </Button>
+    )
   )
 }
 
-export default Die
+export default observer(Die)

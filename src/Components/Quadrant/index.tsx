@@ -4,20 +4,21 @@ import PointComponent from '../Point'
 import { Props as PointProps } from '../Point'
 import PointLabels from '../PointLabels'
 import { NodotsGameState } from '../../game/Types'
+import { observer } from 'mobx-react'
 
 interface Props {
   latitude: Latitude
   longitude: Longitude
   start: number
-  game: NodotsGameState
   points: Point[]
+  state: NodotsGameState
 }
 
 const Quadrant: React.FC<Props> = ({
   latitude,
   longitude,
   start,
-  game,
+  state,
   points,
 }) => {
   return (
@@ -41,4 +42,4 @@ const Quadrant: React.FC<Props> = ({
   )
 }
 
-export default Quadrant
+export default observer(Quadrant)

@@ -4,6 +4,7 @@ import { Checker as CheckerType } from './state/types'
 // UI
 import { Button, Container, Paper, useTheme } from '@mui/material'
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
+import { observer } from 'mobx-react'
 
 export interface Props {
   checker: CheckerType
@@ -33,4 +34,4 @@ const Checker: React.FC<Props> = ({ checker, color, count }) => {
   )
 }
 
-export default Checker
+export default observer(Checker)

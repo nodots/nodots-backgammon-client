@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react'
 import BoardComponent from '../../components/Board'
 import { Players, ready } from '../../game/Types'
 import { Paper } from '@mui/material'
@@ -5,11 +6,11 @@ import GameNotifications from '../../components/GameNotifications'
 import { Component } from 'react'
 import { generateId } from '../../game/Types'
 import { Player } from '../../game/player'
-import { NodotsGameState } from '../../game/Types'
+import NodotsGameStore from '../../game'
 const API_SERVER = 'http://127.0.0.1:3300'
 
 class GamePage extends Component {
-  private game: NodotsGameState
+  private store: NodotsGameStore
 
   whitePlayer: Player = {
     id: generateId(),
@@ -72,27 +73,30 @@ class GamePage extends Component {
       white,
       black,
     }
-    this.game = ready(players)
+    this.store = new NodotsGameStore(players)
   }
 
   render() {
-    console.log(this.game.kind)
-    switch (this.game.kind) {
-      case 'starting':
+    switch (this.store.state.kind) {
+      case 'confirming':
+      case 'moving':
+      case 'rolling':
+        break
       case 'ready':
         return (
           <>
             <Paper id="GameContainer">
-              <BoardComponent state={this.game} board={this.game.board} />
+              <GameNotifications state={this.store.state} store={this.store} />
+              <BoardComponent
+                state={this.store.state}
+                board={this.store.state.board}
+                store={this.store}
+              />
             </Paper>
           </>
         )
-      case 'confirming':
-      case 'moving':
-      case 'rolling':
-        return <></>
     }
   }
 }
 
-export default GamePage
+export default observer(GamePage)

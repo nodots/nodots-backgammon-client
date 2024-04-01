@@ -6,19 +6,17 @@ import Bar from '../Bar'
 import Off from '../Off'
 import Rollsurface from '../Rollsurface'
 import { Paper, useTheme } from '@mui/material'
-import {
-  Board as BoardType,
-  NodotsGameState,
-  Ready,
-  Starting,
-} from '../../game/Types'
+import { Board as BoardType, Ready } from '../../game/Types'
+import { observer } from 'mobx-react'
+import NodotsGameStore from '../../game'
 
 interface Props {
-  state: Ready | Starting
+  state: Ready
+  store: NodotsGameStore
   board: BoardType
 }
 
-function Board({ state, board }: Props) {
+function Board({ state, store, board }: Props) {
   const { game } = state
   const theme = useTheme()
 
@@ -29,39 +27,39 @@ function Board({ state, board }: Props) {
           latitude="north"
           longitude="west"
           start={13}
-          game={state}
+          state={state}
           points={game.board.quadrants.west.north.points}
         />
-        <Rollsurface game={state} direction="clockwise" />
+        <Rollsurface state={state} store={store} color="black" />
         <Quadrant
           latitude="south"
           longitude="west"
           start={7}
-          game={state}
+          state={state}
           points={game.board.quadrants.west.south.points}
         />
       </Paper>
-      <Bar game={game} />
+      <Bar state={state} />
       <Paper id="East" className="board-half" elevation={1}>
         <Quadrant
           latitude="north"
           longitude="east"
           start={19}
-          game={state}
+          state={state}
           points={game.board.quadrants.east.north.points}
         />
-        <Rollsurface game={state} direction="counterclockwise" />
+        <Rollsurface state={state} store={store} color="white" />
         <Quadrant
           latitude="south"
           longitude="east"
           start={1}
-          game={state}
+          state={state}
           points={game.board.quadrants.east.south.points}
         />
       </Paper>
-      <Off game={state} />
+      <Off state={state} />
     </Paper>
   )
 }
 
-export default Board
+export default observer(Board)

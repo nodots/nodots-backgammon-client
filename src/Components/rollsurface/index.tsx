@@ -5,43 +5,31 @@ import Die from '../Die'
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
 
 import { Container, useTheme } from '@mui/material'
-import { MoveDirection, NodotsGameState } from '../../game/Types'
+import { Color, MoveDirection, NodotsGameState } from '../../game/Types'
 import { Player } from '../../game/player'
+import NodotsGameStore from '../../game'
 
 interface Props {
-  game: NodotsGameState
-  direction: MoveDirection
+  state: NodotsGameState
+  store: NodotsGameStore
+  color: Color
 }
 
-const isActive = (direction: MoveDirection, activePlayer: Player) => {
-  const active = direction === activePlayer.moveDirection
-  return active
-}
+const isActive = (activePlayer: Player, color: Color) =>
+  activePlayer.color === color
 
-function RollSurface({ game, direction }: Props) {
-  const { players, playerBoards: board, cube } = game.game
-  // const activePlayer = game.activePlayer
-  // const owner = game.getPlayerForMoveDirection(direction)
-  // const color = owner.color
-  // const theme = useTheme()
+function RollSurface({ state, store, color }: Props) {
+  const { game, players } = state
 
-  // if (
-  //   players &&
-  //   activePlayer &&
-  //   activePlayer.dice?.dice &&
-  //   activePlayer.dice.dice[0] &&
-  //   activePlayer.dice.dice[1] &&
-  //   board &&
-  //   cube
-  // ) {
-  //   const [die1Value, setDie1Value] = useState<DieValue>(1)
-  //   const [die2Value, setDie2Value] = useState<DieValue>(1)
+  const owner = players[color]
 
   // Event handlers
-  const clickHandler = async (e: React.MouseEvent) => {
-    console.log('clickHandler game:', game)
-    console.log('clickHandler direction:', direction)
+  const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
+    console.log(state.kind)
+    if (state.kind === 'ready' || state.kind === 'rolling') {
+      store.rolling(state)
+    }
   }
 
   const swapDiceHandler = (e: React.MouseEvent) => {
@@ -50,21 +38,15 @@ function RollSurface({ game, direction }: Props) {
 
   return (
     <Container
-      className={`rollsurface ${direction}`}
       sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <div
-      // className={`dice-container ${
-      //   isActive(direction, activePlayer) ? 'active' : 'inactive'
-      // }`}
-      // onClick={clickHandler}
-      >
-        <Die order={0} color={'white'} value={1} />
-        <Die order={1} color={'white'} value={1} />
+      <div className={'dice-container'} onClick={rollHandler}>
+        <Die order={0} color={color} value={1} state={state} />
+        <Die order={1} color={color} value={1} state={state} />
       </div>
     </Container>
   )

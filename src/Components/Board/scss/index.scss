@@ -18,7 +18,8 @@ $board-padding: $point-padding * 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px $checker-height 10px 0;
+  margin: 10px $checker-height - 25px 10px 0;
+  min-width: 300px;
 }
 
 .cube {
@@ -35,9 +36,7 @@ $board-padding: $point-padding * 2;
 }
 
 .dice-container {
-  &.inactive {
-    display: none;
-  }
+  min-height: $checker-height * 0.75;
 }
 
 .quadrant {

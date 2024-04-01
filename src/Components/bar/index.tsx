@@ -1,19 +1,21 @@
-import { GameState } from '../../game'
+import { observer } from 'mobx-react'
+import { NodotsGameState } from '../../game/Types'
 import PipCount from './PipCount'
 
 interface Props {
-  game: GameState
+  state: NodotsGameState
 }
 
-function Bar({ game }: Props) {
+function Bar({ state }: Props) {
+  const { game } = state
   return (
     <div id="Bar">
-      {/* <PipCount player={game.getClockwisePlayer()} /> */}
+      <PipCount player={game.getCounterclockwisePlayer()} />
       <div className="checkerbox counterclockwise"></div>
       <div className="checkerbox clockwise"></div>
-      {/* <PipCount player={game.getCounterclockwisePlayer()} /> */}
+      <PipCount player={game.getClockwisePlayer()} />
     </div>
   )
 }
 
-export default Bar
+export default observer(Bar)
