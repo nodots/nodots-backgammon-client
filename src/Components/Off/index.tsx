@@ -1,16 +1,16 @@
 import { observer } from 'mobx-react'
-import { NodotsGameState } from '../../game/Types'
 import Cube from '../Cube'
+import NodotsGameStore from '../../game'
 
 interface Props {
-  state: NodotsGameState
+  store: NodotsGameStore
 }
 
-function Off({ state }: Props) {
+function Off({ store }: Props) {
   return (
     <div id="Off">
       <div className="checkerbox clockwise"></div>
-      <Cube state={state} />
+      <Cube store={store} />
       <div className="checkerbox counterclockwise"></div>
     </div>
   )

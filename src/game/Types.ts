@@ -131,6 +131,7 @@ export interface Ready {
   activePlayer: Player
   players: Players
   roll: Roll
+  moves: BgWebApiPlay[]
   gameNotification?: string
 }
 
@@ -142,6 +143,7 @@ export interface Rolling {
   cube: Cube
   players: Players
   roll: Roll
+  moves: BgWebApiPlay[]
   gameNotification?: string
 }
 
@@ -153,21 +155,20 @@ interface Moving {
   players: Players
   cube: Cube
   roll: Roll
-  gameNotification?: string
   moves: BgWebApiPlay[]
+  gameNotification?: string
 }
 
 interface Confirming {
   kind: 'confirming'
-  store: NodotsGameStore
   game: NodotsGame
   board: Board
   activePlayer: Player
   players: Players
   cube: Cube
   roll: Roll
-  gameNotification?: string
   moves: BgWebApiPlay[]
+  gameNotification?: string
 }
 
 export type NodotsGameState = Ready | Rolling | Moving | Confirming
@@ -182,10 +183,11 @@ export const ready = (players: Players): Ready => {
     game,
     board: game.board,
     cube: game.cube,
+    players,
     activePlayer,
     roll: [1, 1],
+    moves: [],
     gameNotification: `${activePlayer.username} wins the opening roll`,
-    players,
   }
 }
 
@@ -199,6 +201,7 @@ export const rolling = (state: Ready): Rolling => {
     cube: game.cube,
     activePlayer,
     roll,
+    moves: [],
     gameNotification: `${activePlayer.username} rolls ${JSON.stringify(roll)}`,
     players,
   }
@@ -206,16 +209,63 @@ export const rolling = (state: Ready): Rolling => {
 
 export const switchDice = (state: Rolling): Rolling => {
   const { kind, game, activePlayer, players, roll } = state
-
+  const switchedRoll: Roll = [roll[1], roll[0]]
   return {
     kind: 'rolling',
     game,
     board: game.board,
     cube: game.cube,
     activePlayer,
-    roll: [roll[1], roll[0]],
-    gameNotification: `${activePlayer.username} swaps dice`,
+    roll: switchedRoll,
+    moves: [],
+    gameNotification: `${activePlayer.username} swaps dice ${JSON.stringify(
+      switchedRoll
+    )}`,
     players,
+  }
+}
+
+export const double = (state: NodotsGameState) => {
+  const {
+    kind,
+    cube,
+    game,
+    board,
+    players,
+    activePlayer,
+    roll,
+    moves,
+    gameNotification,
+  } = state
+  cube.value = cube.value !== 64 ? ((cube.value * 2) as CubeValue) : cube.value
+  return {
+    kind,
+    game,
+    board,
+    cube,
+    players,
+    activePlayer,
+    roll,
+    moves,
+    gameNotification: `${activePlayer.username} doubles to ${cube.value}`,
+  }
+}
+
+export const notify = (
+  state: NodotsGameState,
+  message: string
+): NodotsGameState => {
+  const { kind, game, board, cube, players, activePlayer, moves, roll } = state
+  return {
+    kind,
+    game,
+    board,
+    cube,
+    players,
+    activePlayer,
+    roll,
+    moves,
+    gameNotification: message,
   }
 }
 

@@ -1,13 +1,12 @@
 import { Box, Container, PaletteColor, useTheme } from '@mui/material'
-import { Checkerbox as CheckerboxType } from '../Checkerbox/state/types'
-import { QuadrantLocation } from '../Quadrant/state/types'
-import Checkerbox from '../Checkerbox'
 import Checker from '../Checker'
 import { Color, generateId } from '../../game/Types'
 import { ReactElement } from 'react'
 import { Latitude, Longitude } from '../Board/state/types'
+import NodotsGameStore from '../../game'
 
 export interface Props {
+  store: NodotsGameStore
   position: {
     clockwise: number
     counterclockwise: number
@@ -17,12 +16,7 @@ export interface Props {
   checkers: Color[]
 }
 
-const Point: React.FC<Props> = ({
-  position,
-  checkers,
-  latitude,
-  longitude,
-}) => {
+function Point({ position, checkers, latitude, store }: Props) {
   const theme = useTheme()
   let className = 'point'
 
@@ -31,7 +25,7 @@ const Point: React.FC<Props> = ({
       ? (className += ' even')
       : (className += ' odd')
 
-  const getCheckerComponents = () => {
+  const getCheckerComponents = (store: NodotsGameStore) => {
     const checkerComponents: ReactElement[] = []
     checkers.forEach((c) =>
       checkerComponents.push(
@@ -39,6 +33,7 @@ const Point: React.FC<Props> = ({
           checker={{ id: generateId(), color: c }}
           key={generateId()}
           color={c}
+          store={store}
         />
       )
     )
@@ -64,7 +59,7 @@ const Point: React.FC<Props> = ({
           fill={getBackgroundColor(position.clockwise)}
         ></polygon>
       </svg>
-      <div className="checker-container">{getCheckerComponents()}</div>
+      <div className="checker-container">{getCheckerComponents(store)}</div>
     </div>
   )
 }

@@ -54,10 +54,11 @@ function Board({ store }: Props) {
           longitude="east"
           start={1}
           state={state}
+          store={store}
           points={board.quadrants.east.south.points}
         />
       </Paper>
-      <Off state={state} />
+      <Off store={store} />
     </Paper>
   )
 }

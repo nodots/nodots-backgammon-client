@@ -34,10 +34,6 @@ function RollSurface({ state, store, color }: Props) {
     }
   }
 
-  const swapDiceHandler = (e: React.MouseEvent) => {
-    console.warn('swap dice handler not implemented')
-  }
-
   return (
     <Container
       className="roll-surface"

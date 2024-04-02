@@ -5,15 +5,26 @@ import { Checker as CheckerType } from './state/types'
 import { Button, Container, Paper, useTheme } from '@mui/material'
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
 import { observer } from 'mobx-react'
+import NodotsGameStore from '../../game'
+import React from 'react'
 
 export interface Props {
   checker: CheckerType
   color: Color
+  store: NodotsGameStore
   count?: number
 }
 
-const Checker: React.FC<Props> = ({ checker, color, count }) => {
+function Checker({ checker, color, store }: Props) {
   const theme = useTheme()
+
+  const handleCheckerClick = (e: React.MouseEvent) => {
+    store.notify(
+      store.state,
+      `${store.state.activePlayer.username} clicked checker`
+    )
+  }
+
   const getBackgroundColor = (color: Color) => {
     return color === 'white'
       ? theme.palette.secondary.light
@@ -28,9 +39,8 @@ const Checker: React.FC<Props> = ({ checker, color, count }) => {
         backgroundColor: getBackgroundColor(color),
         borderColor: theme.palette.background.default,
       }}
-    >
-      {/* <RadioButtonCheckedTwoToneIcon className="checker-overlay" /> */}
-    </Button>
+      onClick={handleCheckerClick}
+    ></Button>
   )
 }
 

@@ -5,6 +5,7 @@ import { Props as PointProps } from '../Point'
 import PointLabels from '../PointLabels'
 import { NodotsGameState } from '../../game/Types'
 import { observer } from 'mobx-react'
+import NodotsGameStore from '../../game'
 
 interface Props {
   latitude: Latitude
@@ -12,13 +13,14 @@ interface Props {
   start: number
   points: Point[]
   state: NodotsGameState
+  store: NodotsGameStore
 }
 
 const Quadrant: React.FC<Props> = ({
   latitude,
   longitude,
   start,
-  state,
+  store,
   points,
 }) => {
   return (
@@ -35,6 +37,7 @@ const Quadrant: React.FC<Props> = ({
             latitude={p.latitude}
             longitude={p.longitude}
             key={generateId()}
+            store={store}
           />
         ))}
       </div>

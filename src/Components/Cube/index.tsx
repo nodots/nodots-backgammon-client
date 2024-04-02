@@ -1,46 +1,19 @@
 import { Button, useTheme } from '@mui/material'
-import { SetCubeValuePayload } from './state/types'
-import { CubeValue, isCubeValue } from './state/types'
-import { NodotsGameState } from '../../game/Types'
 import { observer } from 'mobx-react'
+import NodotsGameStore from '../../game'
 
 interface Props {
-  state: NodotsGameState
+  store: NodotsGameStore
 }
 
-function Cube({ state }: Props) {
-  // const activePlayer = game.getActivePlayer()
+function Cube({ store }: Props) {
+  const { state } = store
+  const { activePlayer, cube } = state
   const theme = useTheme()
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
-    // if (activePlayer.color !== ) {
-    //   e.stopPropagation()
-    //   return console.error('It is not your turn')
-    // }
-    // if (
-    //   game.cube.owner !== undefined &&
-    //   game.players[activeColor].color !== game.cube.owner
-    // ) {
-    //   e.stopPropagation()
-    //   return console.error('You do not control the cube')
-    // }
-
-    // let value = cube.value
-
-    // // TODO: Do nothing if cube is already maxxed out. Should this logic be elsewhere?
-    // if (value === 64) {
-    //   return
-    // }
-
-    // if (value === undefined) {
-    //   value = 2
-    // }
-    // if (!isCubeValue(value)) {
-    //   throw new Error('Invalid cube value')
-    // }
-
-    // need doubling logic
+    store.double(state)
   }
 
   return (
@@ -49,7 +22,7 @@ function Cube({ state }: Props) {
       onClick={clickHandler}
       sx={{ color: theme.palette.info.main }}
     >
-      {2}
+      {cube.value}
     </Button>
   )
 }

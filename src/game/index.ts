@@ -7,6 +7,8 @@ import {
   ready,
   rolling,
   switchDice,
+  notify,
+  double,
 } from './Types'
 
 class NodotsGameStore {
@@ -27,6 +29,17 @@ class NodotsGameStore {
   switchDice(state: Rolling) {
     console.log('switchDice')
     this.state = switchDice(state)
+  }
+
+  @action
+  notify(state: NodotsGameState, message: string) {
+    this.state = notify(state, message)
+  }
+
+  @action
+  double(state: NodotsGameState) {
+    console.log('double')
+    this.state = double(state)
   }
 }
 export default NodotsGameStore

@@ -4,6 +4,7 @@ import NodotsGameStore from '../../game'
 import { NodotsGameState, Color } from '../../game/Types'
 import { Player } from '../../game/player'
 import { observer } from 'mobx-react'
+import { useTheme } from '@mui/material'
 
 interface Props {
   state: NodotsGameState
@@ -15,6 +16,7 @@ const isActive = (activePlayer: Player, color: Color) =>
   activePlayer.color === color
 
 function DiceSwitcher({ state, store, color }: Props) {
+  const theme = useTheme()
   const { activePlayer } = state
   const switchDiceHandler = () => {
     console.log('switchDiceHandler')
@@ -30,7 +32,7 @@ function DiceSwitcher({ state, store, color }: Props) {
   return (
     isActive(activePlayer, color) && (
       <div className={`dice-switcher ${color}`} onClick={switchDiceHandler}>
-        <SyncAltIcon />
+        <SyncAltIcon sx={{ fill: theme.palette.secondary.light }} />
       </div>
     )
   )

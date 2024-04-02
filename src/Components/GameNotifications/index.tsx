@@ -8,7 +8,6 @@ interface Props {
 
 function GameNotifications({ store }: Props) {
   const { state } = store
-  console.log(new Date().toTimeString(), state)
   return (
     state.gameNotification && (
       <Alert id="GameNotifications" variant="outlined">
