@@ -96,8 +96,8 @@ class GamePage extends Component {
   render() {
     switch (this.store.state.kind) {
       case 'confirming':
-      case 'moving':
         break
+      case 'moving':
       case 'rolling':
       case 'ready':
         return (

@@ -11,7 +11,7 @@ $board-padding: $point-padding * 2;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  margin: 25px auto;
+  margin: 12px auto;
 }
 
 #GameNotifications {
@@ -31,12 +31,8 @@ $board-padding: $point-padding * 2;
   font-weight: 800 !important;
 }
 
-.rollsurface {
-  min-height: $checker-height * 0.75;
-}
-
 .dice-container {
-  min-height: $checker-height * 0.5;
+  min-height: $checker-height;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -108,8 +104,8 @@ $board-padding: $point-padding * 2;
   align-items: center;
   position: relative;
   cursor: pointer;
-  height: $checker-height;
-  width: $checker-height;
+  height: $checker-height - 4px;
+  width: $checker-height - 4px;
 
   .checker-center {
     border-radius: 50% !important;
