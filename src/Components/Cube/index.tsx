@@ -1,6 +1,7 @@
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
+import React from 'react'
 
 interface Props {
   store: NodotsGameStore

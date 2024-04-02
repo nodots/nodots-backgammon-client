@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react'
 import Cube from '../Cube'
 import NodotsGameStore from '../../game'
+import React from 'react'
 
 interface Props {
   store: NodotsGameStore

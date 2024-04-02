@@ -1,9 +1,10 @@
-import { Box, Container, PaletteColor, useTheme } from '@mui/material'
+import { useTheme } from '@mui/material'
 import Checker from '../Checker'
 import { Color, generateId } from '../../game/Types'
 import { ReactElement } from 'react'
 import { Latitude, Longitude } from '../Board/state/types'
 import NodotsGameStore from '../../game'
+import React from 'react'
 
 export interface Props {
   store: NodotsGameStore

@@ -1,10 +1,11 @@
 // Components
 import Die from '../Die'
-import { Container, useTheme } from '@mui/material'
-import { Color, MoveDirection, NodotsGameState } from '../../game/Types'
+import { Container } from '@mui/material'
+import { Color, NodotsGameState } from '../../game/Types'
 import { Player } from '../../game/player'
 import NodotsGameStore from '../../game'
 import DiceSwitcher from './DiceSwitcher'
+import React from 'react'
 
 interface Props {
   state: NodotsGameState

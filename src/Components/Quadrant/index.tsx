@@ -1,11 +1,10 @@
-import { Color, Longitude, PlayerBoard, generateId } from '../../game/Types'
-import { Latitude, Point } from '../../game/Types'
+import { Longitude, Latitude, Point, generateId } from '../../game/Types'
 import PointComponent from '../Point'
-import { Props as PointProps } from '../Point'
 import PointLabels from '../PointLabels'
 import { NodotsGameState } from '../../game/Types'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
+import React from 'react'
 
 interface Props {
   latitude: Latitude

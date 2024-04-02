@@ -7,6 +7,7 @@ import { Component } from 'react'
 import { generateId } from '../../game/Types'
 import { Player } from '../../game/player'
 import NodotsGameStore from '../../game'
+import React from 'react'
 const API_SERVER = 'http://127.0.0.1:3300'
 
 class GamePage extends Component {
@@ -18,6 +19,10 @@ class GamePage extends Component {
     moveDirection: 'counterclockwise',
     username: 'White Stripes',
     active: false,
+    dice: [
+      { color: 'white', value: 1, order: 0 },
+      { color: 'white', value: 1, order: 1 },
+    ],
     pipCount: 167,
     automation: {
       move: false,
@@ -31,6 +36,10 @@ class GamePage extends Component {
     moveDirection: 'clockwise',
     username: 'Black Power',
     active: false,
+    dice: [
+      { color: 'white', value: 1, order: 0 },
+      { color: 'white', value: 1, order: 1 },
+    ],
     pipCount: 167,
     automation: {
       move: false,
@@ -92,12 +101,10 @@ class GamePage extends Component {
       case 'rolling':
       case 'ready':
         return (
-          <>
-            <Paper id="GameContainer">
-              <GameNotifications store={this.store} />
-              <BoardComponent store={this.store} />
-            </Paper>
-          </>
+          <Paper id="GameContainer">
+            <GameNotifications store={this.store} />
+            <BoardComponent store={this.store} />
+          </Paper>
         )
     }
   }

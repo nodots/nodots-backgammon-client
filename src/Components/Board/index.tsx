@@ -6,9 +6,9 @@ import Bar from '../Bar'
 import Off from '../Off'
 import Rollsurface from '../Rollsurface'
 import { Paper, useTheme } from '@mui/material'
-import { Board as BoardType, Ready } from '../../game/Types'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
+import React from 'react'
 
 interface Props {
   store: NodotsGameStore
@@ -28,6 +28,7 @@ function Board({ store }: Props) {
           longitude="west"
           start={13}
           state={state}
+          store={store}
           points={board.quadrants.west.north.points}
         />
         <Rollsurface state={state} store={store} color="black" />
@@ -36,6 +37,7 @@ function Board({ store }: Props) {
           longitude="west"
           start={7}
           state={state}
+          store={store}
           points={board.quadrants.west.south.points}
         />
       </Paper>
@@ -46,6 +48,7 @@ function Board({ store }: Props) {
           longitude="east"
           start={19}
           state={state}
+          store={store}
           points={board.quadrants.east.north.points}
         />
         <Rollsurface state={state} store={store} color="white" />

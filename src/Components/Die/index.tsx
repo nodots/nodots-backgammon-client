@@ -1,13 +1,8 @@
 import { Button, useTheme } from '@mui/material'
-import {
-  Color,
-  GameError,
-  DieOrder,
-  DieValue,
-  NodotsGameState,
-} from '../../game/Types'
+import { Color, DieOrder, DieValue, NodotsGameState } from '../../game/Types'
 import { observer } from 'mobx-react'
 import { Player } from '../../game/player'
+import React from 'react'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',

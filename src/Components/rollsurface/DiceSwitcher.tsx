@@ -5,6 +5,7 @@ import { NodotsGameState, Color } from '../../game/Types'
 import { Player } from '../../game/player'
 import { observer } from 'mobx-react'
 import { useTheme } from '@mui/material'
+import React from 'react'
 
 interface Props {
   state: NodotsGameState
