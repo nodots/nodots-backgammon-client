@@ -1,13 +1,10 @@
 // Components
 import Die from '../Die'
-
-// MUI
-import SyncAltIcon from '@mui/icons-material/SyncAlt'
-
 import { Container, useTheme } from '@mui/material'
 import { Color, MoveDirection, NodotsGameState } from '../../game/Types'
 import { Player } from '../../game/player'
 import NodotsGameStore from '../../game'
+import DiceSwitcher from './DiceSwitcher'
 
 interface Props {
   state: NodotsGameState
@@ -43,14 +40,16 @@ function RollSurface({ state, store, color }: Props) {
 
   return (
     <Container
+      className="roll-surface"
       sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <div className={'dice-container'} onClick={rollHandler}>
+      <div className="dice-container" onClick={rollHandler}>
         <Die order={0} color={color} value={roll[0]} state={state} />
+        <DiceSwitcher state={state} store={store} color={color} />
         <Die order={1} color={color} value={roll[1]} state={state} />
       </div>
     </Container>

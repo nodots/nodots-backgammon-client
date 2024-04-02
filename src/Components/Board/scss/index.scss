@@ -36,7 +36,13 @@ $board-padding: $point-padding * 2;
 }
 
 .dice-container {
-  min-height: $checker-height * 0.75;
+  min-height: $checker-height * 0.5;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .dice-switcher {
+    cursor: pointer;
+  }
 }
 
 .quadrant {

@@ -203,6 +203,22 @@ export const rolling = (state: Ready): Rolling => {
     players,
   }
 }
+
+export const switchDice = (state: Rolling): Rolling => {
+  const { kind, game, activePlayer, players, roll } = state
+
+  return {
+    kind: 'rolling',
+    game,
+    board: game.board,
+    cube: game.cube,
+    activePlayer,
+    roll: [roll[1], roll[0]],
+    gameNotification: `${activePlayer.username} swaps dice`,
+    players,
+  }
+}
+
 export class NodotsGame {
   private whitePlayer: Player
   private blackPlayer: Player

@@ -50,6 +50,10 @@ class GamePage extends Component {
       color: 'white',
       username: 'White Stripes',
       active: false,
+      dice: [
+        { color: 'white', order: 0, value: 1 },
+        { color: 'white', order: 1, value: 1 },
+      ],
       moveDirection: 'clockwise',
       pipCount: 167,
       automation: {
@@ -62,6 +66,10 @@ class GamePage extends Component {
       color: 'black',
       username: 'Black Messiah',
       active: false,
+      dice: [
+        { color: 'black', order: 0, value: 1 },
+        { color: 'black', order: 1, value: 1 },
+      ],
       moveDirection: 'counterclockwise',
       pipCount: 167,
       automation: {
@@ -86,7 +94,7 @@ class GamePage extends Component {
         return (
           <>
             <Paper id="GameContainer">
-              <GameNotifications state={this.store.state} store={this.store} />
+              <GameNotifications store={this.store} />
               <BoardComponent store={this.store} />
             </Paper>
           </>
