@@ -1,6 +1,6 @@
 // Types
-import { Color } from '../../game/Types'
-import { Checker as CheckerType } from './state/types'
+import { Color, Checker as CheckerType } from '../../game/Types'
+
 // UI
 import { Button, Container, Paper, useTheme } from '@mui/material'
 import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
@@ -19,10 +19,20 @@ function Checker({ checker, color, store }: Props) {
   const theme = useTheme()
 
   const handleCheckerClick = (e: React.MouseEvent) => {
-    store.notify(
-      store.state,
-      `${store.state.activePlayer.username} clicked checker`
-    )
+    switch (store.state.kind) {
+      case 'rolling':
+      case 'moving':
+        store.moving(store.state, checker.locationId)
+        break
+      case 'confirming':
+      case 'ready':
+        break
+    }
+    // store.notify(
+    //   store.state,
+    //   `${store.state.activePlayer.username} clicked checker ${checker.id}`,
+    //   'info'
+    // )
   }
 
   const getBackgroundColor = (color: Color) => {
