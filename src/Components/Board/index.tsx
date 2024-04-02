@@ -11,13 +11,13 @@ import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
 
 interface Props {
-  state: Ready
   store: NodotsGameStore
-  board: BoardType
 }
 
-function Board({ state, store, board }: Props) {
+function Board({ store }: Props) {
+  const { state } = store
   const { game } = state
+  const { board } = game
   const theme = useTheme()
 
   return (
@@ -28,7 +28,7 @@ function Board({ state, store, board }: Props) {
           longitude="west"
           start={13}
           state={state}
-          points={game.board.quadrants.west.north.points}
+          points={board.quadrants.west.north.points}
         />
         <Rollsurface state={state} store={store} color="black" />
         <Quadrant
@@ -36,7 +36,7 @@ function Board({ state, store, board }: Props) {
           longitude="west"
           start={7}
           state={state}
-          points={game.board.quadrants.west.south.points}
+          points={board.quadrants.west.south.points}
         />
       </Paper>
       <Bar state={state} />
@@ -46,7 +46,7 @@ function Board({ state, store, board }: Props) {
           longitude="east"
           start={19}
           state={state}
-          points={game.board.quadrants.east.north.points}
+          points={board.quadrants.east.north.points}
         />
         <Rollsurface state={state} store={store} color="white" />
         <Quadrant
@@ -54,7 +54,7 @@ function Board({ state, store, board }: Props) {
           longitude="east"
           start={1}
           state={state}
-          points={game.board.quadrants.east.south.points}
+          points={board.quadrants.east.south.points}
         />
       </Paper>
       <Off state={state} />

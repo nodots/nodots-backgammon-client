@@ -130,6 +130,7 @@ export interface Ready {
   cube: Cube
   activePlayer: Player
   players: Players
+  roll: Roll
   gameNotification?: string
 }
 
@@ -182,13 +183,14 @@ export const ready = (players: Players): Ready => {
     board: game.board,
     cube: game.cube,
     activePlayer,
+    roll: [1, 1],
     gameNotification: `${activePlayer.username} wins the opening roll`,
     players,
   }
 }
 
-export const rolling = (state: Ready | Rolling): Rolling => {
-  const { kind, game, activePlayer, players, ...previous } = state
+export const rolling = (state: Ready): Rolling => {
+  const { kind, game, activePlayer, players } = state
   const roll = rollDice(activePlayer)
   return {
     kind: 'rolling',

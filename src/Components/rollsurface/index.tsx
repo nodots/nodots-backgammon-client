@@ -19,16 +19,21 @@ const isActive = (activePlayer: Player, color: Color) =>
   activePlayer.color === color
 
 function RollSurface({ state, store, color }: Props) {
-  const { game, players } = state
+  const { game, roll, players } = state
 
   const owner = players[color]
+  console.log(owner.dice)
 
   // Event handlers
   const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log(state.kind)
-    if (state.kind === 'ready' || state.kind === 'rolling') {
-      store.rolling(state)
+    switch (state.kind) {
+      case 'confirming':
+      case 'moving':
+      case 'rolling':
+        break
+      case 'ready':
+        store.rolling(state)
     }
   }
 
@@ -45,8 +50,8 @@ function RollSurface({ state, store, color }: Props) {
       }}
     >
       <div className={'dice-container'} onClick={rollHandler}>
-        <Die order={0} color={color} value={1} state={state} />
-        <Die order={1} color={color} value={1} state={state} />
+        <Die order={0} color={color} value={roll[0]} state={state} />
+        <Die order={1} color={color} value={roll[1]} state={state} />
       </div>
     </Container>
   )

@@ -80,18 +80,14 @@ class GamePage extends Component {
     switch (this.store.state.kind) {
       case 'confirming':
       case 'moving':
-      case 'rolling':
         break
+      case 'rolling':
       case 'ready':
         return (
           <>
             <Paper id="GameContainer">
               <GameNotifications state={this.store.state} store={this.store} />
-              <BoardComponent
-                state={this.store.state}
-                board={this.store.state.board}
-                store={this.store}
-              />
+              <BoardComponent store={this.store} />
             </Paper>
           </>
         )

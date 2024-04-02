@@ -1,4 +1,4 @@
-import { action, makeObservable } from 'mobx'
+import { action, autorun, makeAutoObservable, makeObservable } from 'mobx'
 import {
   NodotsGameState,
   Players,
@@ -12,17 +12,14 @@ class NodotsGameStore {
   state: NodotsGameState
 
   constructor(players: Players) {
-    makeObservable(this)
+    makeAutoObservable(this)
     this.state = ready(players)
   }
 
   @action
-  rolling = (state: Ready | Rolling) => {
-    switch (state.kind) {
-      case 'ready':
-      case 'rolling':
-        this.state = rolling(state)
-    }
+  rolling(state: Ready) {
+    console.log('rolling')
+    this.state = rolling(state)
   }
 }
 export default NodotsGameStore
