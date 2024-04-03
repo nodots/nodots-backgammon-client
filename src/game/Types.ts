@@ -1,10 +1,11 @@
 import { v4 as uuid } from 'uuid'
+import { BgApiPlayerBoard } from './integrations/bgweb-api'
 import { Player, generateDice, rollDice } from './player'
-import { BgApiPlayerBoard, BgWebApiPlay } from './integrations/bgweb-api'
 
 export const CHECKERS_PER_PLAYER = 15
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type DieOrder = 0 | 1
+export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 export type Roll = [DieValue, DieValue]
 export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'
@@ -21,11 +22,11 @@ export const generateId = (): string => uuid()
 
 const rollForStart = (): Color => (Math.random() >= 0.5 ? 'black' : 'white')
 
-export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 export interface Cube {
   value: CubeValue
   owner: Player | undefined
 }
+
 export interface Die {
   color: Color
   value: DieValue
@@ -39,6 +40,7 @@ export interface Checker {
   color: Color
   locationId: string
 }
+
 export interface Point {
   id: string
   position: {
@@ -239,6 +241,7 @@ export const moving = (state: Rolling | Moving, locationId: string): Moving => {
       to: undefined,
       dieValue: roll[1],
     }
+    // Handle doubles. 2x the moves!
     if (roll[0] === roll[1]) {
       moves[2] = {
         from: undefined,
@@ -357,7 +360,6 @@ export class NodotsGame {
 
   constructor(players: Players) {
     this.whitePlayer = players.white
-
     this.whitePlayer.dice = generateDice(this.whitePlayer)
 
     this.blackPlayer = players.black

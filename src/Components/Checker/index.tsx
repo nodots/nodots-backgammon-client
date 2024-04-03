@@ -1,9 +1,5 @@
-// Types
 import { Color, Checker as CheckerType } from '../../game/Types'
-
-// UI
-import { Button, Container, Paper, useTheme } from '@mui/material'
-import RadioButtonCheckedTwoToneIcon from '@mui/icons-material/RadioButtonCheckedTwoTone'
+import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
 import React from 'react'
@@ -26,11 +22,6 @@ function Checker({ checker, store }: Props) {
       case 'ready':
         break
     }
-    // store.notify(
-    //   store.state,
-    //   `${store.state.activePlayer.username} clicked checker ${checker.id}`,
-    //   'info'
-    // )
   }
 
   const getBackgroundColor = (color: Color) => {

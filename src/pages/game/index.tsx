@@ -1,14 +1,12 @@
 import { observer } from 'mobx-react'
 import BoardComponent from '../../components/Board'
-import { Players, ready } from '../../game/Types'
+import { Players } from '../../game/Types'
 import { Paper } from '@mui/material'
 import GameNotifications from '../../components/GameNotifications'
 import { Component } from 'react'
 import { generateId } from '../../game/Types'
 import { Player } from '../../game/player'
 import NodotsGameStore from '../../game'
-import React from 'react'
-const API_SERVER = 'http://127.0.0.1:3300'
 
 class GamePage extends Component {
   private store: NodotsGameStore
@@ -94,17 +92,12 @@ class GamePage extends Component {
   }
 
   render() {
-    switch (this.store.state.kind) {
-      case 'moving':
-      case 'rolling':
-      case 'ready':
-        return (
-          <Paper id="GameContainer">
-            <GameNotifications store={this.store} />
-            <BoardComponent store={this.store} />
-          </Paper>
-        )
-    }
+    return (
+      <Paper id="GameContainer">
+        <GameNotifications store={this.store} />
+        <BoardComponent store={this.store} />
+      </Paper>
+    )
   }
 }
 
