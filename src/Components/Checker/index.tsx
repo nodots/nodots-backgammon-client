@@ -10,12 +10,11 @@ import React from 'react'
 
 export interface Props {
   checker: CheckerType
-  color: Color
   store: NodotsGameStore
   count?: number
 }
 
-function Checker({ checker, color, store }: Props) {
+function Checker({ checker, store }: Props) {
   const theme = useTheme()
 
   const handleCheckerClick = (e: React.MouseEvent) => {
@@ -24,7 +23,6 @@ function Checker({ checker, color, store }: Props) {
       case 'moving':
         store.moving(store.state, checker.locationId)
         break
-      case 'confirming':
       case 'ready':
         break
     }
@@ -46,7 +44,7 @@ function Checker({ checker, color, store }: Props) {
       className="checker"
       id={checker.id}
       sx={{
-        backgroundColor: getBackgroundColor(color),
+        backgroundColor: getBackgroundColor(checker.color),
         borderColor: theme.palette.background.default,
       }}
       onClick={handleCheckerClick}

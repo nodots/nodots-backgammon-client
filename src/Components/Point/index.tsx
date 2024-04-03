@@ -1,12 +1,13 @@
 import { useTheme } from '@mui/material'
 import Checker from '../Checker'
-import { Color, generateId } from '../../game/Types'
+import { Checker as CheckerType, Color, generateId } from '../../game/Types'
 import { ReactElement } from 'react'
 import { Latitude, Longitude } from '../Board/state/types'
 import NodotsGameStore from '../../game'
 import React from 'react'
 
 export interface Props {
+  id: string
   store: NodotsGameStore
   position: {
     clockwise: number
@@ -14,7 +15,7 @@ export interface Props {
   }
   latitude: Latitude
   longitude: Longitude
-  checkers: Color[]
+  checkers: CheckerType[]
 }
 
 function Point({ position, checkers, latitude, store }: Props) {
@@ -29,14 +30,7 @@ function Point({ position, checkers, latitude, store }: Props) {
   const getCheckerComponents = (store: NodotsGameStore) => {
     const checkerComponents: ReactElement[] = []
     checkers.forEach((c) =>
-      checkerComponents.push(
-        <Checker
-          checker={{ id: generateId(), color: c }}
-          key={generateId()}
-          color={c}
-          store={store}
-        />
-      )
+      checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
     )
     return checkerComponents
   }

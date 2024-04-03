@@ -62,7 +62,6 @@ export interface Cube {
   value: CubeValue
   owner: Player | undefined
 }
-
 export interface Die {
   color: Color
   value: DieValue
@@ -70,18 +69,21 @@ export interface Die {
 }
 
 export type DiePair = [Die, Die]
-export interface Checker {
-  color: Color
-}
 
+export interface Checker {
+  id: string
+  color: Color
+  locationId: string
+}
 export interface Point {
+  id: string
   position: {
     clockwise: number
     counterclockwise: number
   }
   latitude: Latitude
   longitude: Longitude
-  checkers: Color[]
+  checkers: Checker[]
 }
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
@@ -93,13 +95,25 @@ export interface Quadrant {
 }
 
 export interface Bar {
-  white: Checker[]
-  black: Checker[]
+  white: {
+    id: string
+    checkers: Checker[]
+  }
+  black: {
+    id: string
+    checkers: Checker[]
+  }
 }
 
 export interface Off {
-  white: Checker[]
-  black: Checker[]
+  white: {
+    id: string
+    checkers: Checker[]
+  }
+  black: {
+    id: string
+    checkers: Checker[]
+  }
 }
 
 export interface Board {
@@ -122,6 +136,12 @@ export interface Players {
   black: Player
 }
 
+export interface NodotsMove {
+  from: Point | undefined
+  to: Point | undefined
+  dieValue: DieValue
+}
+
 // states
 export interface Ready {
   kind: 'ready'
@@ -131,7 +151,7 @@ export interface Ready {
   activePlayer: Player
   players: Players
   roll: Roll
-  moves: BgWebApiPlay[]
+  moves: NodotsMove[]
   gameNotification?: string
 }
 
@@ -143,11 +163,11 @@ export interface Rolling {
   cube: Cube
   players: Players
   roll: Roll
-  moves: BgWebApiPlay[]
+  moves: NodotsMove[]
   gameNotification?: string
 }
 
-interface Moving {
+export interface Moving {
   kind: 'moving'
   game: NodotsGame
   board: Board
@@ -155,11 +175,11 @@ interface Moving {
   players: Players
   cube: Cube
   roll: Roll
-  moves: BgWebApiPlay[]
+  moves: NodotsMove[]
   gameNotification?: string
 }
 
-interface Confirming {
+export interface Confirming {
   kind: 'confirming'
   game: NodotsGame
   board: Board
@@ -167,11 +187,11 @@ interface Confirming {
   players: Players
   cube: Cube
   roll: Roll
-  moves: BgWebApiPlay[]
+  moves: NodotsMove[]
   gameNotification?: string
 }
 
-export type NodotsGameState = Ready | Rolling | Moving | Confirming
+export type NodotsGameState = Ready | Rolling | Moving
 
 export const ready = (players: Players): Ready => {
   const game = new NodotsGame(players)
@@ -248,6 +268,91 @@ export const double = (state: NodotsGameState) => {
     roll,
     moves,
     gameNotification: `${activePlayer.username} doubles to ${cube.value}`,
+  }
+}
+
+export const moving = (state: Rolling | Moving, locationId: string): Moving => {
+  const {
+    kind,
+    cube,
+    game,
+    board,
+    players,
+    activePlayer,
+    roll,
+    moves,
+    gameNotification,
+  } = state
+  const origin = game.getCheckercontainerById(locationId)
+  if (moves.length === 0) {
+    moves[0] = {
+      from: origin,
+      to: undefined,
+      dieValue: roll[0],
+    }
+    moves[1] = {
+      from: undefined,
+      to: undefined,
+      dieValue: roll[1],
+    }
+    if (roll[0] === roll[1]) {
+      moves[2] = {
+        from: undefined,
+        to: undefined,
+        dieValue: roll[0],
+      }
+      moves[3] = {
+        from: undefined,
+        to: undefined,
+        dieValue: roll[1],
+      }
+    }
+  }
+
+  let notification = 'Fucked up move'
+  const activeMove = moves.find(
+    (m) => m.from !== undefined && m.to === undefined
+  )
+  if (activeMove && activeMove.from) {
+    const relativePosition =
+      activeMove.from.position[activePlayer.moveDirection]
+
+    const newPosition = relativePosition - activeMove.dieValue
+
+    const destination = game.getCheckercontainerByDirectionAndPosition(
+      activePlayer.moveDirection,
+      newPosition
+    )
+
+    if (
+      (destination && origin && destination.checkers.length === 0) ||
+      destination?.checkers[0].color === activePlayer.color
+    ) {
+      notification = `${activePlayer.username} moves from ${
+        origin?.position[activePlayer.moveDirection]
+      } to ${destination?.position[activePlayer.moveDirection]}`
+      if (origin && destination) {
+        const checkerToMove = origin.checkers.pop()
+        if (checkerToMove) {
+          destination.checkers.push(checkerToMove)
+        }
+      }
+    } else {
+      notification = `${activePlayer.username} CANNOT move from ${
+        origin?.position[activePlayer.moveDirection]
+      } to ${destination?.position[activePlayer.moveDirection]}`
+    }
+  }
+  return {
+    kind: 'moving',
+    game,
+    board,
+    cube,
+    players,
+    activePlayer,
+    roll,
+    moves,
+    gameNotification: notification,
   }
 }
 
@@ -354,6 +459,37 @@ export class NodotsGame {
       ? this.getClockwisePlayer()
       : this.getCounterclockwisePlayer()
 
+  getCheckercontainers = () => {
+    const checkercontainers = [
+      ...this.board.quadrants.east.north.points,
+      ...this.board.quadrants.east.south.points,
+      ...this.board.quadrants.west.north.points,
+      ...this.board.quadrants.west.south.points,
+      // this.board.bar.black,
+      // this.board.bar.white,
+    ]
+    return checkercontainers
+  }
+
+  getCheckercontainerById = (id: string): Point | undefined => {
+    const containers = this.getCheckercontainers()
+    const container = containers.find((c) => c.id === id)
+    if (container) {
+      return container
+    }
+  }
+
+  getCheckercontainerByDirectionAndPosition = (
+    direction: MoveDirection,
+    position: number
+  ) => {
+    const containers = this.getCheckercontainers()
+    const container = containers.find((c) => c.position[direction] === position)
+    if (container) {
+      return container
+    }
+  }
+
   buildQuadrant = (
     start: 1 | 7 | 13 | 19,
     latitude: Latitude,
@@ -373,15 +509,21 @@ export class NodotsGame {
 
     for (const positionLabel in clockwiseBoard) {
       const checkerCount = clockwiseBoard[positionLabel as keyof PlayerBoard]
-      const checkers: Color[] = []
+      const checkers: Checker[] = []
       if (positionLabel !== 'bar') {
+        const pointId = generateId()
         const position: number = parseInt(positionLabel)
         const counterclockwisePosition = 25 - position
         if (position >= start && position < end) {
           for (let i = 0; i < checkerCount; i++) {
-            checkers.push(clockwiseColor)
+            checkers.push({
+              id: generateId(),
+              color: clockwiseColor,
+              locationId: pointId,
+            })
           }
           const p: Point = {
+            id: pointId,
             position: {
               clockwise: position,
               counterclockwise: counterclockwisePosition,
@@ -398,14 +540,11 @@ export class NodotsGame {
     for (const positionLabel in counterclockwiseBoard) {
       const checkerCount =
         counterclockwiseBoard[positionLabel as keyof PlayerBoard]
-      const checkers: Color[] = []
+      const checkers: Checker[] = []
       if (positionLabel !== 'bar') {
         const counterclockwisePosition: number = parseInt(positionLabel)
         const clockwisePosition = 25 - counterclockwisePosition
         if (clockwisePosition >= start && clockwisePosition < end) {
-          for (let i = 0; i < checkerCount; i++) {
-            checkers.push(counterclockwiseColor)
-          }
           const existingPoint = points.find((p) => {
             if (p.position.clockwise === clockwisePosition) {
               return p
@@ -417,6 +556,13 @@ export class NodotsGame {
                 'Existing point already has checkers:',
                 existingPoint.checkers
               )
+            }
+            for (let i = 0; i < checkerCount; i++) {
+              checkers.push({
+                id: generateId(),
+                color: counterclockwiseColor,
+                locationId: existingPoint.id,
+              })
             }
             const existingPointIndex = points.indexOf(existingPoint)
             points[existingPointIndex].checkers.push(...checkers)
@@ -445,12 +591,24 @@ export class NodotsGame {
         },
       },
       bar: {
-        white: [],
-        black: [],
+        white: {
+          id: generateId(),
+          checkers: [],
+        },
+        black: {
+          id: generateId(),
+          checkers: [],
+        },
       },
       off: {
-        white: [],
-        black: [],
+        white: {
+          id: generateId(),
+          checkers: [],
+        },
+        black: {
+          id: generateId(),
+          checkers: [],
+        },
       },
     }
   }

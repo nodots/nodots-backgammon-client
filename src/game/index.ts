@@ -9,6 +9,8 @@ import {
   switchDice,
   notify,
   double,
+  Moving,
+  moving,
 } from './Types'
 
 class NodotsGameStore {
@@ -40,6 +42,20 @@ class NodotsGameStore {
   double(state: NodotsGameState) {
     console.log('double')
     this.state = double(state)
+  }
+
+  @action
+  moving(state: Rolling | Moving, locationId: string) {
+    // console.log(`moving ${state.kind} from:`, locationId)
+    switch (state.kind) {
+      case 'moving':
+      case 'rolling':
+        this.state = moving(state, locationId)
+        console.log(this.state)
+        break
+      default:
+        console.log(state)
+    }
   }
 }
 export default NodotsGameStore
