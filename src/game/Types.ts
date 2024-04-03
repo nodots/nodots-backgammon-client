@@ -1,7 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { Player, generateDice, rollDice } from './player'
 import { BgApiPlayerBoard, BgWebApiPlay } from './integrations/bgweb-api'
-import NodotsGameStore from '.'
 
 export const CHECKERS_PER_PLAYER = 15
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
@@ -11,20 +10,6 @@ export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
-export type CheckerboxPosition = number | 'bar' | 'off'
-export type GameErrorType =
-  | 'Configuration'
-  | 'Game'
-  | 'Turn'
-  | 'Move'
-  | 'Roll'
-  | 'Player'
-  | 'Die'
-  | 'Cube'
-  | 'Checkerbox'
-  | 'Quadrant'
-  | 'Point'
-  | 'RollSurface'
 
 export type PlayerBoard = BgApiPlayerBoard
 export type PlayerBoards = {
@@ -32,30 +17,9 @@ export type PlayerBoards = {
   black: PlayerBoard
 }
 
-export const isColor = (c: unknown): c is Color => {
-  if (c && typeof c === 'string' && (c === 'white' || c === 'black')) {
-    return true
-  }
-  return false
-}
-
 export const generateId = (): string => uuid()
 
 const rollForStart = (): Color => (Math.random() >= 0.5 ? 'black' : 'white')
-
-export class GameError extends Error {
-  model: GameErrorType
-  constructor({
-    model,
-    errorMessage,
-  }: {
-    model?: GameErrorType
-    errorMessage: string
-  }) {
-    super(errorMessage)
-    this.model = model || 'Game'
-  }
-}
 
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 export interface Cube {
@@ -142,7 +106,6 @@ export interface NodotsMove {
   dieValue: DieValue
 }
 
-// states
 export interface Ready {
   kind: 'ready'
   game: NodotsGame
@@ -212,7 +175,7 @@ export const ready = (players: Players): Ready => {
 }
 
 export const rolling = (state: Ready): Rolling => {
-  const { kind, game, activePlayer, players } = state
+  const { game, activePlayer, players } = state
   const roll = rollDice(activePlayer)
   return {
     kind: 'rolling',
@@ -228,35 +191,26 @@ export const rolling = (state: Ready): Rolling => {
 }
 
 export const switchDice = (state: Rolling): Rolling => {
-  const { kind, game, activePlayer, players, roll } = state
+  const { game, activePlayer, players, roll } = state
+  const { cube, board } = game
   const switchedRoll: Roll = [roll[1], roll[0]]
   return {
     kind: 'rolling',
     game,
-    board: game.board,
-    cube: game.cube,
+    board,
+    cube,
+    players,
     activePlayer,
     roll: switchedRoll,
     moves: [],
     gameNotification: `${activePlayer.username} swaps dice ${JSON.stringify(
       switchedRoll
     )}`,
-    players,
   }
 }
 
 export const double = (state: NodotsGameState) => {
-  const {
-    kind,
-    cube,
-    game,
-    board,
-    players,
-    activePlayer,
-    roll,
-    moves,
-    gameNotification,
-  } = state
+  const { kind, cube, game, board, players, activePlayer, roll, moves } = state
   cube.value = cube.value !== 64 ? ((cube.value * 2) as CubeValue) : cube.value
   return {
     kind,
@@ -272,17 +226,7 @@ export const double = (state: NodotsGameState) => {
 }
 
 export const moving = (state: Rolling | Moving, locationId: string): Moving => {
-  const {
-    kind,
-    cube,
-    game,
-    board,
-    players,
-    activePlayer,
-    roll,
-    moves,
-    gameNotification,
-  } = state
+  const { cube, game, board, players, activePlayer, roll, moves } = state
   const origin = game.getCheckercontainerById(locationId)
   if (moves.length === 0) {
     moves[0] = {
