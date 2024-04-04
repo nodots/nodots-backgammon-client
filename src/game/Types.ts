@@ -113,7 +113,7 @@ export interface Ready {
   game: NodotsGame
   board: Board
   cube: Cube
-  activePlayer: Player
+  activeColor: Color
   players: Players
   roll: Roll
   moves: NodotsMove[]
@@ -122,7 +122,7 @@ export interface Ready {
 
 export interface Rolling {
   kind: 'rolling'
-  activePlayer: Player
+  activeColor: Color
   game: NodotsGame
   board: Board
   cube: Cube
@@ -136,7 +136,7 @@ export interface Moving {
   kind: 'moving'
   game: NodotsGame
   board: Board
-  activePlayer: Player
+  activeColor: Color
   players: Players
   cube: Cube
   roll: Roll
@@ -148,7 +148,7 @@ export interface Confirming {
   kind: 'confirming'
   game: NodotsGame
   board: Board
-  activePlayer: Player
+  activeColor: Color
   players: Players
   cube: Cube
   roll: Roll
@@ -156,35 +156,36 @@ export interface Confirming {
   gameNotification?: string
 }
 
-export type NodotsGameState = Ready | Rolling | Moving
+export type NodotsGameState = Ready | Rolling | Moving | Confirming
 
 export const ready = (players: Players): Ready => {
   const game = new NodotsGame(players)
-  const winningColor = rollForStart()
-  const activePlayer = players[winningColor]
-  activePlayer.active = true
+  const activeColor = rollForStart()
+  const activePlayer = players[activeColor]
+
   return {
     kind: 'ready',
     game,
     board: game.board,
     cube: game.cube,
     players,
-    activePlayer,
+    activeColor,
     roll: [1, 1],
     moves: [],
     gameNotification: `${activePlayer.username} wins the opening roll`,
   }
 }
 
-export const rolling = (state: Ready): Rolling => {
-  const { game, activePlayer, players } = state
+export const rolling = (state: Ready | Rolling): Rolling => {
+  const { game, activeColor, players } = state
+  const activePlayer = players[activeColor]
   const roll = rollDice(activePlayer)
   return {
     kind: 'rolling',
     game,
     board: game.board,
     cube: game.cube,
-    activePlayer,
+    activeColor,
     roll,
     moves: [],
     gameNotification: `${activePlayer.username} rolls ${JSON.stringify(roll)}`,
@@ -193,8 +194,9 @@ export const rolling = (state: Ready): Rolling => {
 }
 
 export const switchDice = (state: Rolling): Rolling => {
-  const { game, activePlayer, players, roll } = state
+  const { game, activeColor, players, roll } = state
   const { cube, board } = game
+  const activePlayer = players[activeColor]
   const switchedRoll: Roll = [roll[1], roll[0]]
   return {
     kind: 'rolling',
@@ -202,7 +204,7 @@ export const switchDice = (state: Rolling): Rolling => {
     board,
     cube,
     players,
-    activePlayer,
+    activeColor,
     roll: switchedRoll,
     moves: [],
     gameNotification: `${activePlayer.username} swaps dice ${JSON.stringify(
@@ -212,7 +214,8 @@ export const switchDice = (state: Rolling): Rolling => {
 }
 
 export const double = (state: NodotsGameState) => {
-  const { kind, cube, game, board, players, activePlayer, roll, moves } = state
+  const { kind, cube, game, board, players, activeColor, roll, moves } = state
+  const activePlayer = players[activeColor]
   cube.value = cube.value !== 64 ? ((cube.value * 2) as CubeValue) : cube.value
   return {
     kind,
@@ -220,16 +223,22 @@ export const double = (state: NodotsGameState) => {
     board,
     cube,
     players,
-    activePlayer,
+    activeColor,
     roll,
     moves,
     gameNotification: `${activePlayer.username} doubles to ${cube.value}`,
   }
 }
 
-export const moving = (state: Rolling | Moving, locationId: string): Moving => {
-  const { cube, game, board, players, activePlayer, roll, moves } = state
+export const moving = (
+  state: Rolling | Moving,
+  locationId: string
+): Moving | Confirming => {
+  const { cube, game, board, players, activeColor, roll, moves } = state
   const origin = game.getCheckercontainerById(locationId)
+  const activePlayer = players[activeColor]
+  let activeMove: NodotsMove | undefined = undefined
+  let notification = ''
   if (moves.length === 0) {
     moves[0] = {
       from: origin,
@@ -254,12 +263,15 @@ export const moving = (state: Rolling | Moving, locationId: string): Moving => {
         dieValue: roll[1],
       }
     }
+    activeMove = moves[0]
+  } else {
+    const activeMoveCandidate = moves.find((m) => m.from === undefined)
+    if (activeMoveCandidate) {
+      activeMove = activeMoveCandidate
+      activeMove.from = origin
+    }
   }
 
-  let notification = 'Fucked up move'
-  const activeMove = moves.find(
-    (m) => m.from !== undefined && m.to === undefined
-  )
   if (activeMove && activeMove.from) {
     const relativePosition =
       activeMove.from.position[activePlayer.moveDirection]
@@ -285,21 +297,41 @@ export const moving = (state: Rolling | Moving, locationId: string): Moving => {
         }
       }
     } else {
+      activeMove.from = undefined
+      activeMove.to = undefined
       notification = `${activePlayer.username} CANNOT move from ${
         origin?.position[activePlayer.moveDirection]
       } to ${destination?.position[activePlayer.moveDirection]}`
     }
   }
+
+  const remainingMoves = moves.filter((m) => m.from === undefined)
+
   return {
-    kind: 'moving',
+    kind: remainingMoves.length > 0 ? 'moving' : 'confirming',
     game,
     board,
     cube,
     players,
-    activePlayer,
+    activeColor,
     roll,
     moves,
     gameNotification: notification,
+  }
+}
+
+export const confirming = (state: Confirming): Rolling => {
+  const { game, activeColor, players, board, cube, roll, moves } = state
+  return {
+    kind: 'rolling',
+    game,
+    board,
+    cube,
+    players,
+    activeColor: activeColor === 'black' ? 'white' : 'black',
+    roll: [1, 1],
+    moves,
+    gameNotification: `Move confirmed by ${activeColor}`,
   }
 }
 
@@ -307,14 +339,15 @@ export const notify = (
   state: NodotsGameState,
   message: string
 ): NodotsGameState => {
-  const { kind, game, board, cube, players, activePlayer, moves, roll } = state
+  const { kind, game, board, cube, players, activeColor, moves, roll } = state
+
   return {
     kind,
     game,
     board,
     cube,
     players,
-    activePlayer,
+    activeColor,
     roll,
     moves,
     gameNotification: message,
@@ -324,7 +357,7 @@ export const notify = (
 export class NodotsGame {
   private whitePlayer: Player
   private blackPlayer: Player
-  activePlayer: Player | undefined
+  activeColor: Color | undefined
   players: Players
   playerBoards: PlayerBoards
   board: Board
@@ -388,8 +421,10 @@ export class NodotsGame {
   getBoard = () => this.playerBoards
 
   getActivePlayer = (): Player =>
-    this.players.black.active ? this.players.black : this.players.white
+    this.activeColor === 'black' ? this.players.black : this.players.white
 
+  getNewActivePlayer = (): Player =>
+    this.activeColor === 'black' ? this.players.white : this.players.black
   getClockwisePlayer = (): Player =>
     this.players.black.moveDirection === 'clockwise'
       ? this.players.black

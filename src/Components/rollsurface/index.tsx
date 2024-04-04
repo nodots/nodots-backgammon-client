@@ -13,25 +13,27 @@ interface Props {
   color: Color
 }
 
-const isActive = (activePlayer: Player, color: Color) =>
-  activePlayer.color === color
+const isActive = (activeColor: Color, color: Color) => activeColor === color
 
 function RollSurface({ state, store, color }: Props) {
   const { game, roll, players } = state
 
   const owner = players[color]
-  console.log(owner.dice)
 
   // Event handlers
   const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
     switch (state.kind) {
-      case 'confirming':
       case 'moving':
       case 'rolling':
+        store.rolling(state)
         break
       case 'ready':
         store.rolling(state)
+        break
+      case 'confirming':
+        store.confirming(state)
+        console.log(state)
     }
   }
 

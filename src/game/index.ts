@@ -11,6 +11,8 @@ import {
   double,
   Moving,
   moving,
+  Confirming,
+  confirming,
 } from './Types'
 
 class NodotsGameStore {
@@ -43,14 +45,13 @@ class NodotsGameStore {
 
   @action
   moving(state: Rolling | Moving, locationId: string) {
-    switch (state.kind) {
-      case 'moving':
-      case 'rolling':
-        this.state = moving(state, locationId)
-        break
-      default:
-        break
-    }
+    this.state = moving(state, locationId)
+  }
+
+  @action
+  confirming(state: Confirming) {
+    this.state = confirming(state)
+    console.log('confirming new state')
   }
 }
 

@@ -16,7 +16,6 @@ class GamePage extends Component {
     color: 'white',
     moveDirection: 'counterclockwise',
     username: 'White Stripes',
-    active: false,
     dice: [
       { color: 'white', value: 1, order: 0 },
       { color: 'white', value: 1, order: 1 },
@@ -33,7 +32,6 @@ class GamePage extends Component {
     color: 'black',
     moveDirection: 'clockwise',
     username: 'Black Power',
-    active: false,
     dice: [
       { color: 'white', value: 1, order: 0 },
       { color: 'white', value: 1, order: 1 },
@@ -56,7 +54,6 @@ class GamePage extends Component {
       id: generateId(),
       color: 'white',
       username: 'White Stripes',
-      active: false,
       dice: [
         { color: 'white', order: 0, value: 1 },
         { color: 'white', order: 1, value: 1 },
@@ -72,7 +69,6 @@ class GamePage extends Component {
       id: generateId(),
       color: 'black',
       username: 'Black Messiah',
-      active: false,
       dice: [
         { color: 'black', order: 0, value: 1 },
         { color: 'black', order: 1, value: 1 },

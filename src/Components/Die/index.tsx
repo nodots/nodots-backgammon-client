@@ -20,11 +20,10 @@ interface Props {
   state: NodotsGameState
 }
 
-const isActive = (activePlayer: Player, color: Color) =>
-  activePlayer.color === color
+const isActive = (activeColor: Color, color: Color) => activeColor === color
 
 const Die: React.FC<Props> = ({ order, color, value, state }) => {
-  const { activePlayer } = state
+  const { activeColor } = state
   const theme = useTheme()
   const fill = (color: Color) => {
     return color === 'white'
@@ -32,7 +31,7 @@ const Die: React.FC<Props> = ({ order, color, value, state }) => {
       : theme.palette.secondary.dark
   }
   return (
-    isActive(activePlayer, color) && (
+    isActive(activeColor, color) && (
       <Button className="die">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
           <g id="Layer_2" data-name="Layer 2">

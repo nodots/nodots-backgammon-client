@@ -19,7 +19,6 @@ export type Player = {
   id: string
   username: string
   color: Color
-  active: boolean
   dice: DiePair
   moveDirection: MoveDirection
   pipCount: number
