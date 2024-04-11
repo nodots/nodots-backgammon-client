@@ -12,21 +12,16 @@ export interface Props {
 
 function Checker({ checker, store }: Props) {
   const { state } = store
-  const { activeColor, players } = state
-  const activePlayer = players[activeColor]
   const theme = useTheme()
 
   const handleCheckerClick = (e: React.MouseEvent) => {
     switch (store.state.kind) {
       case 'rolling':
       case 'moving':
-        store.moving(store.state, checker.locationId)
+        store.moving(store.state, checker.id)
         break
       case 'confirming':
-        store.notify(
-          store.state,
-          `${activePlayer.username} needs to confirm or revert completed move`
-        )
+        store.confirming(store.state)
         break
       case 'ready':
         break

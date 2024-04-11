@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import { BgApiPlayerBoard } from './integrations/bgweb-api'
 import { Player, generateDice, rollDice } from './player'
+import { isObject } from 'mobx/dist/internal'
 
 export const CHECKERS_PER_PLAYER = 15
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
@@ -19,8 +20,6 @@ export type PlayerBoards = {
 }
 
 export const generateId = (): string => uuid()
-
-const rollForStart = (): Color => (Math.random() >= 0.5 ? 'black' : 'white')
 
 export interface Cube {
   value: CubeValue
@@ -41,15 +40,29 @@ export interface Checker {
   locationId: string
 }
 
-export interface Point {
+export type Checkercontainer = {
   id: string
+  kind: string
+  checkers: Checker[]
+}
+export interface Point extends Checkercontainer {
+  kind: 'point'
   position: {
     clockwise: number
     counterclockwise: number
   }
   latitude: Latitude
   longitude: Longitude
-  checkers: Checker[]
+}
+
+export interface Bar extends Checkercontainer {
+  kind: 'bar'
+  color: Color
+}
+
+export interface Off extends Checkercontainer {
+  kind: 'off'
+  color: Color
 }
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
@@ -60,27 +73,8 @@ export interface Quadrant {
   points: Point[]
 }
 
-export interface Bar {
-  white: {
-    id: string
-    checkers: Checker[]
-  }
-  black: {
-    id: string
-    checkers: Checker[]
-  }
-}
-
-export interface Off {
-  white: {
-    id: string
-    checkers: Checker[]
-  }
-  black: {
-    id: string
-    checkers: Checker[]
-  }
-}
+// export type OriginCheckercontainer = Point | Bar
+// export type DestinationCheckercontainer = Point | Off
 
 export interface Board {
   quadrants: {
@@ -93,8 +87,8 @@ export interface Board {
       south: Quadrant
     }
   }
-  bar: Bar
-  off: Off
+  bar: [Bar, Bar]
+  off: [Off, Off]
 }
 
 export interface Players {
@@ -103,258 +97,274 @@ export interface Players {
 }
 
 export interface NodotsMove {
-  from: Point | undefined
-  to: Point | undefined
+  from: Checkercontainer | undefined
+  to: Checkercontainer | undefined
   dieValue: DieValue
 }
 
+export interface NodotsMessage {
+  game?: string
+  debug?: string
+  players?: {
+    white?: string
+    black?: string
+  }
+}
 export interface Ready {
   kind: 'ready'
   game: NodotsGame
-  board: Board
-  cube: Cube
-  activeColor: Color
-  players: Players
-  roll: Roll
-  moves: NodotsMove[]
-  gameNotification?: string
+  message?: NodotsMessage
+}
+
+export interface RollForStart {
+  kind: 'roll-for-start'
+  game: NodotsGame
+  message?: NodotsMessage
 }
 
 export interface Rolling {
   kind: 'rolling'
-  activeColor: Color
   game: NodotsGame
-  board: Board
-  cube: Cube
-  players: Players
-  roll: Roll
-  moves: NodotsMove[]
-  gameNotification?: string
+  message?: NodotsMessage
 }
 
 export interface Moving {
   kind: 'moving'
   game: NodotsGame
-  board: Board
-  activeColor: Color
-  players: Players
-  cube: Cube
-  roll: Roll
-  moves: NodotsMove[]
-  gameNotification?: string
+  message?: NodotsMessage
 }
 
 export interface Confirming {
   kind: 'confirming'
   game: NodotsGame
-  board: Board
-  activeColor: Color
-  players: Players
-  cube: Cube
-  roll: Roll
-  moves: NodotsMove[]
-  gameNotification?: string
+  message?: NodotsMessage
 }
 
-export type NodotsGameState = Ready | Rolling | Moving | Confirming
+export type NodotsGameState =
+  | Ready
+  | Rolling
+  | RollForStart
+  | Moving
+  | Confirming
 
 export const ready = (players: Players): Ready => {
   const game = new NodotsGame(players)
-  const activeColor = rollForStart()
-  const activePlayer = players[activeColor]
 
   return {
     kind: 'ready',
     game,
-    board: game.board,
-    cube: game.cube,
-    players,
-    activeColor,
-    roll: [1, 1],
-    moves: [],
-    gameNotification: `${activePlayer.username} wins the opening roll`,
   }
 }
 
-export const rolling = (state: Ready | Rolling): Rolling => {
-  const { game, activeColor, players } = state
+export const rollForStart = (state: Ready): RollForStart => {
+  const { game } = state
+  const { players } = game
+  game.activeColor = Math.random() >= 0.5 ? 'black' : 'white'
+  const message = {
+    game: `${game.players[game.activeColor].username} wins the opening roll`,
+  }
+
+  return {
+    kind: 'roll-for-start',
+    game,
+    message,
+  }
+}
+
+export const rolling = (state: Rolling | RollForStart): Rolling => {
+  const { game } = state
+  const { players, activeColor } = game
+  if (!activeColor) {
+    throw new Error('No active color')
+  }
   const activePlayer = players[activeColor]
-  const roll = rollDice(activePlayer)
+  if (!activePlayer) {
+    throw new Error(`No active player or color`)
+  }
+
+  game.roll = rollDice(activePlayer)
+  const message = {
+    game: `${game.players[activeColor].username} rolls ${JSON.stringify(
+      game.roll
+    )}`,
+    debug: `${JSON.stringify(state)} ${activeColor}`,
+  }
+
   return {
     kind: 'rolling',
     game,
-    board: game.board,
-    cube: game.cube,
-    activeColor,
-    roll,
-    moves: [],
-    gameNotification: `${activePlayer.username} rolls ${JSON.stringify(roll)}`,
-    players,
+    message,
   }
 }
 
 export const switchDice = (state: Rolling): Rolling => {
-  const { game, activeColor, players, roll } = state
-  const { cube, board } = game
+  const { game } = state
+  const { cube, board, players, activeColor, roll } = game
+  if (!activeColor) {
+    throw new Error('No activecolor')
+  }
   const activePlayer = players[activeColor]
-  const switchedRoll: Roll = [roll[1], roll[0]]
+  if (
+    !game.roll ||
+    typeof game.roll === undefined ||
+    game.roll.length !== 2 ||
+    game.roll[0] === undefined ||
+    game.roll[1] === undefined
+  ) {
+    throw new Error('No roll')
+  }
+  game.roll = [game.roll[1], game.roll[0]]
+
   return {
     kind: 'rolling',
     game,
-    board,
-    cube,
-    players,
-    activeColor,
-    roll: switchedRoll,
-    moves: [],
-    gameNotification: `${activePlayer.username} swaps dice ${JSON.stringify(
-      switchedRoll
-    )}`,
+    message: {
+      game: `${activePlayer.username} swaps dice ${JSON.stringify(game.roll)}`,
+      debug: JSON.stringify(game.activeColor),
+    },
   }
 }
 
 export const double = (state: NodotsGameState) => {
-  const { kind, cube, game, board, players, activeColor, roll, moves } = state
+  const { kind, game } = state
+  const { board, players, activeColor, roll, moves } = game
+  if (!activeColor) {
+    throw new Error('No activecolor')
+  }
   const activePlayer = players[activeColor]
-  cube.value = cube.value !== 64 ? ((cube.value * 2) as CubeValue) : cube.value
+  game.cube.value =
+    game.cube.value !== 64
+      ? ((game.cube.value * 2) as CubeValue)
+      : game.cube.value
   return {
     kind,
     game,
-    board,
-    cube,
-    players,
-    activeColor,
-    roll,
-    moves,
-    gameNotification: `${activePlayer.username} doubles to ${cube.value}`,
+    messages: {
+      game: `${activePlayer.username} doubles to ${game.cube.value}`,
+      debug: game.activeColor,
+    },
   }
 }
 
-export const moving = (
-  state: Rolling | Moving,
-  locationId: string
-): Moving | Confirming => {
-  const { cube, game, board, players, activeColor, roll, moves } = state
-  const origin = game.getCheckercontainerById(locationId)
+export const moving = (state: Rolling | Moving, checkerId: string) => {
+  const { game } = state
+  const { activeColor, players, roll } = game
+  if (!activeColor) {
+    throw Error('No activeColor for game')
+  }
+  if (roll[0] === undefined || roll[1] === undefined) {
+    throw Error('No roll baby')
+  }
   const activePlayer = players[activeColor]
-  let activeMove: NodotsMove | undefined = undefined
-  let notification = ''
-  if (moves.length === 0) {
-    moves[0] = {
-      from: origin,
-      to: undefined,
-      dieValue: roll[0],
+  const checker = game.getChecker(checkerId)
+
+  if (activePlayer.color !== checker.color) {
+    const errorMessage = `Not ${
+      players[checker.color].username
+    }'s checker to move`
+    const message: NodotsMessage = {
+      players: {
+        white: checker.color === 'white' ? errorMessage : undefined,
+        black: checker.color === 'black' ? errorMessage : undefined,
+      },
     }
-    moves[1] = {
-      from: undefined,
-      to: undefined,
-      dieValue: roll[1],
-    }
-    // Handle doubles. 2x the moves!
-    if (roll[0] === roll[1]) {
-      moves[2] = {
-        from: undefined,
-        to: undefined,
+    notify(state, message)
+  }
+
+  let originPoint: Point | undefined
+  let originBar: Bar | undefined
+
+  try {
+    originPoint = game.getOriginPointById(checker.locationId)
+  } catch (e: any) {
+    originBar = game.board.bar.find((bar) => bar.id === checker.locationId)
+  }
+
+  if (!originPoint && !originBar) {
+    throw new Error(`Could not find origin`)
+  }
+
+  if (game.moves[0] === undefined && game.roll[0]) {
+    if (originPoint) {
+      const destinationPoint = game.getDestinationPointFromOriginPoint(
+        originPoint,
+        game.roll[0],
+        activePlayer
+      )
+
+      const firstMove: NodotsMove = {
+        from: originPoint,
+        to: destinationPoint,
         dieValue: roll[0],
       }
-      moves[3] = {
+      const nextMove: NodotsMove = {
         from: undefined,
         to: undefined,
         dieValue: roll[1],
       }
-    }
-    activeMove = moves[0]
-  } else {
-    const activeMoveCandidate = moves.find((m) => m.from === undefined)
-    if (activeMoveCandidate) {
-      activeMove = activeMoveCandidate
-      activeMove.from = origin
-    }
-  }
 
-  if (activeMove && activeMove.from) {
-    const relativePosition =
-      activeMove.from.position[activePlayer.moveDirection]
+      game.moves = [firstMove, nextMove]
 
-    const newPosition = relativePosition - activeMove.dieValue
-
-    const destination = game.getCheckercontainerByDirectionAndPosition(
-      activePlayer.moveDirection,
-      newPosition
-    )
-
-    if (
-      (destination && origin && destination.checkers.length === 0) ||
-      destination?.checkers[0].color === activePlayer.color
-    ) {
-      notification = `${activePlayer.username} moves from ${
-        origin?.position[activePlayer.moveDirection]
-      } to ${destination?.position[activePlayer.moveDirection]}`
-      if (origin && destination) {
-        const checkerToMove = origin.checkers.pop()
-        if (checkerToMove) {
-          destination.checkers.push(checkerToMove)
-        }
+      if (game.roll[0] === game.roll[1]) {
+        game.moves.push(nextMove, nextMove)
       }
-    } else {
-      activeMove.from = undefined
-      activeMove.to = undefined
-      notification = `${activePlayer.username} CANNOT move from ${
-        origin?.position[activePlayer.moveDirection]
-      } to ${destination?.position[activePlayer.moveDirection]}`
+
+      return {
+        kind: 'moving',
+        game,
+      }
+    } else if (originBar) {
+      console.log(originBar)
     }
   }
 
-  const remainingMoves = moves.filter((m) => m.from === undefined)
-
-  return {
-    kind: remainingMoves.length > 0 ? 'moving' : 'confirming',
-    game,
-    board,
-    cube,
-    players,
-    activeColor,
-    roll,
-    moves,
-    gameNotification: notification,
-  }
+  return state
 }
 
 export const confirming = (state: Confirming): Rolling => {
-  const { game, activeColor, players, board, cube, roll, moves } = state
+  const { game } = state
+  const { activeColor, players, board, cube, roll, moves } = game
   return {
     kind: 'rolling',
     game,
-    board,
-    cube,
-    players,
-    activeColor: activeColor === 'black' ? 'white' : 'black',
-    roll: [1, 1],
-    moves,
-    gameNotification: `Move confirmed by ${activeColor}`,
+    message: {
+      game: `Move confirmed by ${activeColor}`,
+      debug: `confirming activeColor = ${
+        activeColor === 'black' ? 'white' : 'black'
+      }`,
+    },
   }
 }
 
 export const notify = (
   state: NodotsGameState,
-  message: string
+  messages: NodotsMessage
 ): NodotsGameState => {
-  const { kind, game, board, cube, players, activeColor, moves, roll } = state
+  const { kind, game } = state
+  const { board, cube, players, activeColor, moves, roll } = game
 
   return {
     kind,
     game,
-    board,
-    cube,
-    players,
-    activeColor,
-    roll,
-    moves,
-    gameNotification: message,
+    message: {
+      game: messages.game,
+      debug: messages.debug,
+      players: {
+        white: messages?.players?.white,
+        black: messages?.players?.black,
+      },
+    },
   }
 }
 
+export interface NodotsLog {
+  gameId: string
+  state: NodotsGameState
+  timestamp: Date
+  message: string
+}
 export class NodotsGame {
+  id: string
   private whitePlayer: Player
   private blackPlayer: Player
   activeColor: Color | undefined
@@ -362,6 +372,13 @@ export class NodotsGame {
   playerBoards: PlayerBoards
   board: Board
   cube: Cube
+  checkers: Checker[]
+  log: NodotsLog[]
+  roll: Roll | [undefined, undefined]
+  moves:
+    | [NodotsMove, NodotsMove]
+    | [NodotsMove, NodotsMove, NodotsMove, NodotsMove]
+    | [undefined, undefined]
 
   defaultBoard: PlayerBoard = {
     1: 0,
@@ -392,6 +409,9 @@ export class NodotsGame {
   }
 
   constructor(players: Players) {
+    this.id = generateId()
+    this.log = []
+
     this.whitePlayer = players.white
     this.whitePlayer.dice = generateDice(this.whitePlayer)
 
@@ -412,8 +432,10 @@ export class NodotsGame {
       white: this.defaultBoard,
       black: this.defaultBoard,
     }
-
+    this.moves = [undefined, undefined]
+    this.roll = [undefined, undefined]
     this.board = this.buildBoard()
+    this.checkers = this.getCheckers()
   }
 
   getPlayers = () => this.players
@@ -425,6 +447,7 @@ export class NodotsGame {
 
   getNewActivePlayer = (): Player =>
     this.activeColor === 'black' ? this.players.white : this.players.black
+
   getClockwisePlayer = (): Player =>
     this.players.black.moveDirection === 'clockwise'
       ? this.players.black
@@ -446,29 +469,74 @@ export class NodotsGame {
       ...this.board.quadrants.east.south.points,
       ...this.board.quadrants.west.north.points,
       ...this.board.quadrants.west.south.points,
-      // this.board.bar.black,
-      // this.board.bar.white,
+      this.board.bar[0],
+      this.board.bar[1],
+      this.board.off[0],
+      this.board.off[1],
     ]
     return checkercontainers
   }
 
-  getCheckercontainerById = (id: string): Point | undefined => {
-    const containers = this.getCheckercontainers()
-    const container = containers.find((c) => c.id === id)
-    if (container) {
-      return container
-    }
+  getCheckers = (): Checker[] => {
+    const checkercontainers = this.getCheckercontainers()
+    const checkers: Checker[] = []
+
+    checkercontainers.map((checkercontainer) =>
+      checkers.push(...checkercontainer.checkers)
+    )
+    return checkers
   }
 
-  getCheckercontainerByDirectionAndPosition = (
-    direction: MoveDirection,
-    position: number
-  ) => {
-    const containers = this.getCheckercontainers()
-    const container = containers.find((c) => c.position[direction] === position)
-    if (container) {
-      return container
+  getChecker = (id: string): Checker => {
+    const checker = this.getCheckers().find((checker) => checker.id === id)
+    if (!checker) {
+      throw Error(`No checker found for ${id}`)
     }
+    return checker
+  }
+
+  getPoints = (): Point[] => [
+    ...this.board.quadrants.east.north.points,
+    ...this.board.quadrants.east.south.points,
+    ...this.board.quadrants.west.north.points,
+    ...this.board.quadrants.west.south.points,
+  ]
+
+  getOriginPointById = (id: string): Point => {
+    const point = this.getPoints().find((point) => point.id === id)
+    if (!point) {
+      throw new Error(`Could not find point for id ${id}`)
+    }
+    return point
+  }
+
+  getCheckercontainerById = (id: string): Checkercontainer => {
+    const container = this.getCheckercontainers().find((c) => c.id === id)
+    if (!container) {
+      throw Error(`No checkercontainer found for ${id}`)
+    }
+    return container
+  }
+
+  getDestinationPointFromOriginPoint = (
+    origin: Point,
+    dieValue: DieValue,
+    player: Player
+  ): Point => {
+    const originPosition = origin.position[player.moveDirection]
+    const destinationPosition = originPosition + dieValue
+
+    const destination = this.getPoints().find(
+      (point) => point.position[player.moveDirection] === destinationPosition
+    )
+
+    if (!destination) {
+      throw new Error(
+        `Could not find destination from origin: ${JSON.stringify(origin)}`
+      )
+    }
+
+    return destination
   }
 
   buildQuadrant = (
@@ -505,6 +573,7 @@ export class NodotsGame {
           }
           const p: Point = {
             id: pointId,
+            kind: 'point',
             position: {
               clockwise: position,
               counterclockwise: counterclockwisePosition,
@@ -571,26 +640,14 @@ export class NodotsGame {
           south: this.buildQuadrant(7, 'south', 'west'),
         },
       },
-      bar: {
-        white: {
-          id: generateId(),
-          checkers: [],
-        },
-        black: {
-          id: generateId(),
-          checkers: [],
-        },
-      },
-      off: {
-        white: {
-          id: generateId(),
-          checkers: [],
-        },
-        black: {
-          id: generateId(),
-          checkers: [],
-        },
-      },
+      bar: [
+        { kind: 'bar', id: generateId(), color: 'white', checkers: [] },
+        { kind: 'bar', id: generateId(), color: 'black', checkers: [] },
+      ],
+      off: [
+        { kind: 'off', id: generateId(), color: 'white', checkers: [] },
+        { kind: 'off', id: generateId(), color: 'black', checkers: [] },
+      ],
     }
   }
 }

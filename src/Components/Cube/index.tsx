@@ -9,7 +9,7 @@ interface Props {
 
 function Cube({ store }: Props) {
   const { state } = store
-  const { activePlayer, cube } = state
+  const { cube } = state.game
   const theme = useTheme()
 
   const clickHandler = (e: React.MouseEvent) => {

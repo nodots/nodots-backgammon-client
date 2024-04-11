@@ -1,5 +1,11 @@
 import { Button, useTheme } from '@mui/material'
-import { Color, DieOrder, DieValue, NodotsGameState } from '../../game/Types'
+import {
+  Color,
+  DieOrder,
+  DieValue,
+  NodotsGameState,
+  Roll,
+} from '../../game/Types'
 import { observer } from 'mobx-react'
 import { Player } from '../../game/player'
 import React from 'react'
@@ -22,8 +28,23 @@ interface Props {
 
 const isActive = (activeColor: Color, color: Color) => activeColor === color
 
-const Die: React.FC<Props> = ({ order, color, value, state }) => {
-  const { activeColor } = state
+interface Props {
+  order: DieOrder
+  color: Color
+  value: DieValue
+  state: NodotsGameState
+}
+
+function Die({ order, color, value, state }: Props) {
+  const { activeColor } = state.game
+  let roll: Roll = [1, 1]
+  if (state.game.roll[0] !== undefined && state.game.roll[1] !== undefined) {
+    roll = [state.game.roll[0], state.game.roll[1]]
+  }
+  const d = roll[order]
+  if (!d) {
+    throw new Error(`Undefined roll for ${order}`)
+  }
   const theme = useTheme()
   const fill = (color: Color) => {
     return color === 'white'
@@ -31,12 +52,13 @@ const Die: React.FC<Props> = ({ order, color, value, state }) => {
       : theme.palette.secondary.dark
   }
   return (
+    activeColor &&
     isActive(activeColor, color) && (
       <Button className="die">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
           <g id="Layer_2" data-name="Layer 2">
             <g id="Layer_1-2" data-name="Layer 1">
-              <path d={paths[value - 1]} fill={fill(color)} />
+              <path d={paths[roll[order] - 1]} fill={fill(color)} />
             </g>
           </g>
         </svg>

@@ -1,10 +1,12 @@
 import { action, makeAutoObservable } from 'mobx'
 import {
   NodotsGameState,
+  NodotsMessage,
   Players,
   Ready,
   Rolling,
   ready,
+  rollForStart,
   rolling,
   switchDice,
   notify,
@@ -13,6 +15,7 @@ import {
   moving,
   Confirming,
   confirming,
+  RollForStart,
 } from './Types'
 
 class NodotsGameStore {
@@ -24,7 +27,14 @@ class NodotsGameStore {
   }
 
   @action
-  rolling(state: Ready) {
+  rollForStart(state: Ready) {
+    this.state = rollForStart(state)
+    console.log(this.state.game.activeColor)
+  }
+
+  @action
+  rolling(state: RollForStart | Rolling) {
+    console.log('Rolling')
     this.state = rolling(state)
   }
 
@@ -34,7 +44,7 @@ class NodotsGameStore {
   }
 
   @action
-  notify(state: NodotsGameState, message: string) {
+  notify(state: NodotsGameState, message: NodotsMessage) {
     this.state = notify(state, message)
   }
 
@@ -44,8 +54,14 @@ class NodotsGameStore {
   }
 
   @action
-  moving(state: Rolling | Moving, locationId: string) {
-    this.state = moving(state, locationId)
+  moving(state: Rolling | Moving, checkerId: string) {
+    const { game } = state
+    const { activeColor } = game
+    try {
+      this.state = moving(state, checkerId)
+    } catch (e) {
+      throw e
+    }
   }
 
   @action

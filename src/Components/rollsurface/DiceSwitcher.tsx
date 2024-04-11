@@ -17,10 +17,10 @@ const isActive = (activeColor: Color, color: Color) => activeColor === color
 
 function DiceSwitcher({ state, store, color }: Props) {
   const theme = useTheme()
-  const { activeColor, players } = state
-  const activePlayer = players[activeColor]
+  const { game } = state
+  const { activeColor } = state.game
+
   const switchDiceHandler = () => {
-    console.log('switchDiceHandler')
     switch (state.kind) {
       case 'rolling':
         store.switchDice(state)
@@ -31,7 +31,8 @@ function DiceSwitcher({ state, store, color }: Props) {
   }
 
   return (
-    isActive(activeColor, color) && (
+    game.activeColor &&
+    isActive(game.activeColor, color) && (
       <div className={`dice-switcher ${color}`} onClick={switchDiceHandler}>
         <SyncAltIcon sx={{ fill: theme.palette.secondary.light }} />
       </div>

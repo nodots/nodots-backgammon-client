@@ -1,12 +1,12 @@
-import { observer } from 'mobx-react'
-import BoardComponent from '../../components/Board'
-import { Players } from '../../game/Types'
 import { Paper } from '@mui/material'
-import GameNotifications from '../../components/GameNotifications'
+import { observer } from 'mobx-react'
 import { Component } from 'react'
-import { generateId } from '../../game/Types'
-import { Player } from '../../game/player'
+import BoardComponent from '../../components/Board'
+import GameNotifications from '../../components/Nofitications/Game'
+import DebugNotifications from '../../components/Nofitications/Debug'
 import NodotsGameStore from '../../game'
+import { Players, generateId } from '../../game/Types'
+import { Player } from '../../game/player'
 
 class GamePage extends Component {
   private store: NodotsGameStore
@@ -58,7 +58,7 @@ class GamePage extends Component {
         { color: 'white', order: 0, value: 1 },
         { color: 'white', order: 1, value: 1 },
       ],
-      moveDirection: 'clockwise',
+      moveDirection: 'counterclockwise',
       pipCount: 167,
       automation: {
         roll: true,
@@ -73,7 +73,7 @@ class GamePage extends Component {
         { color: 'black', order: 0, value: 1 },
         { color: 'black', order: 1, value: 1 },
       ],
-      moveDirection: 'counterclockwise',
+      moveDirection: 'clockwise',
       pipCount: 167,
       automation: {
         roll: true,
@@ -84,7 +84,18 @@ class GamePage extends Component {
       white,
       black,
     }
+
     this.store = new NodotsGameStore(players)
+    switch (this.store.state.kind) {
+      case 'ready':
+        this.store.rollForStart(this.store.state)
+        break
+      case 'confirming':
+      case 'moving':
+      case 'roll-for-start':
+      case 'rolling':
+        break
+    }
   }
 
   render() {
@@ -92,6 +103,7 @@ class GamePage extends Component {
       <Paper id="GameContainer">
         <GameNotifications store={this.store} />
         <BoardComponent store={this.store} />
+        <DebugNotifications store={this.store} />
       </Paper>
     )
   }

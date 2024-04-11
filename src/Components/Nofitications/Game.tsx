@@ -11,15 +11,17 @@ interface Props {
 function GameNotifications({ store, severity }: Props) {
   const { state } = store
   return (
-    state.gameNotification && (
-      <Alert
-        id="GameNotifications"
-        variant="outlined"
-        severity={severity ? severity : 'info'}
-      >
-        {state.gameNotification}
-      </Alert>
-    )
+    <div id="GameNotificationsContainer">
+      {state.message?.game && (
+        <Alert
+          id="GameNotifications"
+          variant="outlined"
+          severity={severity ? severity : 'info'}
+        >
+          {state.message?.game}
+        </Alert>
+      )}
+    </div>
   )
 }
 
