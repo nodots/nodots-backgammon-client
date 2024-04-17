@@ -2,19 +2,23 @@ import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
 import React from 'react'
+import { NodotsGameState } from '../../game/Types'
+import { CubeValue } from './state'
 
 interface Props {
-  store: NodotsGameStore
+  state: NodotsGameState
 }
 
-function Cube({ store }: Props) {
-  const { state } = store
-  const { cube } = state.game
+export const double = (value: CubeValue) =>
+  value !== 64 ? ((value * 2) as CubeValue) : value
+
+function Cube({ state }: Props) {
+  const { cube } = state
   const theme = useTheme()
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
-    store.double(state)
+    double(cube.value)
   }
 
   return (

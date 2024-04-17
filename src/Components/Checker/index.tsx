@@ -1,4 +1,9 @@
-import { Color, Checker as CheckerType } from '../../game/Types'
+import {
+  Color,
+  Checker as CheckerType,
+  moving,
+  confirming,
+} from '../../game/Types'
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
@@ -15,15 +20,14 @@ function Checker({ checker, store }: Props) {
   const theme = useTheme()
 
   const handleCheckerClick = (e: React.MouseEvent) => {
-    switch (store.state.kind) {
+    switch (state.kind) {
       case 'rolling':
       case 'moving':
-        store.moving(store.state, checker.id)
+        moving(state, checker.id)
         break
       case 'confirming':
-        store.confirming(store.state)
-        break
-      case 'ready':
+      case 'initializing':
+      case 'rolling-for-start':
         break
     }
   }

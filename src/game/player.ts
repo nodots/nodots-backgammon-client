@@ -1,10 +1,12 @@
 import {
   Board,
+  Checker,
   Color,
   Die,
   DiePair,
   DieValue,
   MoveDirection,
+  PlayerBoard,
   Roll,
 } from './Types'
 
@@ -19,6 +21,8 @@ export type Player = {
   id: string
   username: string
   color: Color
+  board: PlayerBoard
+  checkers: Checker[]
   dice: DiePair
   moveDirection: MoveDirection
   pipCount: number

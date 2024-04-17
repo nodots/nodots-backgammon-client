@@ -1,4 +1,14 @@
-import { Longitude, Latitude, Point, generateId } from '../../game/Types'
+import {
+  Longitude,
+  Latitude,
+  Point,
+  generateId,
+  Confirming,
+  Moving,
+  Ready,
+  Rolling,
+  RollingForStart,
+} from '../../game/Types'
 import PointComponent from '../Point'
 import PointLabels from '../PointLabels'
 import { NodotsGameState } from '../../game/Types'
@@ -7,27 +17,21 @@ import NodotsGameStore from '../../game'
 import React from 'react'
 
 interface Props {
+  state: Ready | Confirming | Rolling | RollingForStart | Moving
   latitude: Latitude
   longitude: Longitude
   start: number
   points: Point[]
-  state: NodotsGameState
-  store: NodotsGameStore
 }
 
-const Quadrant: React.FC<Props> = ({
-  latitude,
-  longitude,
-  start,
-  store,
-  points,
-}) => {
+function Quadrant({ state, latitude, longitude, start, points }: Props) {
   return (
     <div className={`quadrant-container ${latitude} ${longitude}`}>
       <PointLabels latitude={latitude} longitude={longitude} start={start} />
       <div className={`quadrant ${latitude} ${longitude}`}>
         {points.map((p) => (
           <PointComponent
+            id={generateId()}
             position={{
               clockwise: p.position.clockwise,
               counterclockwise: p.position.counterclockwise,
@@ -36,7 +40,7 @@ const Quadrant: React.FC<Props> = ({
             latitude={p.latitude}
             longitude={p.longitude}
             key={generateId()}
-            store={store}
+            state={state}
           />
         ))}
       </div>

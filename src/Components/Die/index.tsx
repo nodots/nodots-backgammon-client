@@ -1,10 +1,15 @@
 import { Button, useTheme } from '@mui/material'
 import {
   Color,
+  Confirming,
   DieOrder,
   DieValue,
+  Moving,
   NodotsGameState,
+  Ready,
   Roll,
+  Rolling,
+  RollingForStart,
 } from '../../game/Types'
 import { observer } from 'mobx-react'
 import { Player } from '../../game/player'
@@ -22,25 +27,14 @@ const paths = [
 interface Props {
   order: DieOrder
   color: Color
-  value: DieValue
-  state: NodotsGameState
+  state: RollingForStart | Rolling | Ready | Confirming | Moving
 }
 
 const isActive = (activeColor: Color, color: Color) => activeColor === color
 
-interface Props {
-  order: DieOrder
-  color: Color
-  value: DieValue
-  state: NodotsGameState
-}
-
-function Die({ order, color, value, state }: Props) {
-  const { activeColor } = state.game
+function Die({ order, color, state }: Props) {
+  const { activeColor } = state
   let roll: Roll = [1, 1]
-  if (state.game.roll[0] !== undefined && state.game.roll[1] !== undefined) {
-    roll = [state.game.roll[0], state.game.roll[1]]
-  }
   const d = roll[order]
   if (!d) {
     throw new Error(`Undefined roll for ${order}`)

@@ -1,14 +1,20 @@
 import { useTheme } from '@mui/material'
 import Checker from '../Checker'
-import { Checker as CheckerType, Color, generateId } from '../../game/Types'
+import {
+  Checker as CheckerType,
+  Confirming,
+  Moving,
+  Ready,
+  Rolling,
+  RollingForStart,
+} from '../../game/Types'
 import { ReactElement } from 'react'
 import { Latitude, Longitude } from '../Board/state/types'
 import NodotsGameStore from '../../game'
-import React from 'react'
 
 export interface Props {
   id: string
-  store: NodotsGameStore
+  state: Ready | Confirming | Rolling | RollingForStart | Moving
   position: {
     clockwise: number
     counterclockwise: number
@@ -18,7 +24,7 @@ export interface Props {
   checkers: CheckerType[]
 }
 
-function Point({ position, checkers, latitude, store }: Props) {
+function Point({ position, checkers, latitude, state }: Props) {
   const theme = useTheme()
   let className = 'point'
 
@@ -54,7 +60,7 @@ function Point({ position, checkers, latitude, store }: Props) {
           fill={getBackgroundColor(position.clockwise)}
         ></polygon>
       </svg>
-      <div className="checker-container">{getCheckerComponents(store)}</div>
+      <div className="checker-container"></div>
     </div>
   )
 }

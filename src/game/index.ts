@@ -3,19 +3,18 @@ import {
   NodotsGameState,
   NodotsMessage,
   Players,
+  Initializing,
+  RollingForStart,
   Ready,
   Rolling,
-  ready,
-  rollForStart,
+  initializing,
+  rollingForStart,
   rolling,
   switchDice,
-  notify,
   double,
   Moving,
   moving,
   Confirming,
-  confirming,
-  RollForStart,
 } from './Types'
 
 class NodotsGameStore {
@@ -23,18 +22,16 @@ class NodotsGameStore {
 
   constructor(players: Players) {
     makeAutoObservable(this)
-    this.state = ready(players)
+    this.state = initializing(players)
   }
 
   @action
-  rollForStart(state: Ready) {
-    this.state = rollForStart(state)
-    console.log(this.state.game.activeColor)
+  rollForStart(state: Initializing) {
+    this.state = rollingForStart(state)
   }
 
   @action
-  rolling(state: RollForStart | Rolling) {
-    console.log('Rolling')
+  rolling(state: RollingForStart | Ready) {
     this.state = rolling(state)
   }
 
@@ -43,32 +40,31 @@ class NodotsGameStore {
     this.state = switchDice(state)
   }
 
-  @action
-  notify(state: NodotsGameState, message: NodotsMessage) {
-    this.state = notify(state, message)
-  }
+  // @action
+  // notify(state: NodotsGameState, message: NodotsMessage) {
+  //   this.state = notify(state, message)
+  // }
 
-  @action
-  double(state: NodotsGameState) {
-    this.state = double(state)
-  }
+  // @action
+  // double(state: NodotsGameState) {
+  //   this.state = double(state)
+  // }
 
-  @action
-  moving(state: Rolling | Moving, checkerId: string) {
-    const { game } = state
-    const { activeColor } = game
-    try {
-      this.state = moving(state, checkerId)
-    } catch (e) {
-      throw e
-    }
-  }
+  // @action
+  // moving(state: Rolling | Moving, checkerId: string) {
+  //   const { activeColor } = state
+  //   try {
+  //     this.state = moving(state, checkerId)
+  //   } catch (e) {
+  //     throw e
+  //   }
+  // }
 
-  @action
-  confirming(state: Confirming) {
-    this.state = confirming(state)
-    console.log('confirming new state')
-  }
+  // @action
+  // confirming(state: Confirming) {
+  //   this.state = confirming(state)
+  //   console.log('confirming new state')
+  // }
 }
 
 export default NodotsGameStore

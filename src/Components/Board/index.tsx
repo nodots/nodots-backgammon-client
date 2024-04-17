@@ -9,61 +9,71 @@ import { Paper, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
 import React from 'react'
+import {
+  Confirming,
+  Moving,
+  NodotsGameState,
+  Ready,
+  Rolling,
+  RollingForStart,
+} from '../../game/Types'
 
 interface Props {
-  store: NodotsGameStore
+  state: NodotsGameState
 }
 
-function Board({ store }: Props) {
-  const { state } = store
-  const { game } = state
-  const { board } = game
+function Board({ state }: Props) {
+  const { board } = state
   const theme = useTheme()
-
-  return (
-    <Paper id="BoardContainer" elevation={2}>
-      <Paper id="West" className="board-half" elevation={1}>
-        <Quadrant
-          latitude="north"
-          longitude="west"
-          start={13}
-          state={state}
-          store={store}
-          points={board.quadrants.west.north.points}
-        />
-        <Rollsurface state={state} store={store} color="black" />
-        <Quadrant
-          latitude="south"
-          longitude="west"
-          start={7}
-          state={state}
-          store={store}
-          points={board.quadrants.west.south.points}
-        />
-      </Paper>
-      <Bar state={state} />
-      <Paper id="East" className="board-half" elevation={1}>
-        <Quadrant
-          latitude="north"
-          longitude="east"
-          start={19}
-          state={state}
-          store={store}
-          points={board.quadrants.east.north.points}
-        />
-        <Rollsurface state={state} store={store} color="white" />
-        <Quadrant
-          latitude="south"
-          longitude="east"
-          start={1}
-          state={state}
-          store={store}
-          points={board.quadrants.east.south.points}
-        />
-      </Paper>
-      <Off store={store} />
-    </Paper>
-  )
+  switch (state.kind) {
+    case 'initializing':
+      return <></>
+    case 'confirming':
+    case 'moving':
+    case 'ready':
+    case 'rolling':
+    case 'rolling-for-start':
+      return (
+        <Paper id="BoardContainer" elevation={2}>
+          <Paper id="West" className="board-half" elevation={1}>
+            <Quadrant
+              latitude="north"
+              longitude="west"
+              start={13}
+              state={state}
+              points={board.quadrants.west.north.points}
+            />
+            <Rollsurface state={state} color="black" />
+            <Quadrant
+              latitude="south"
+              longitude="west"
+              start={7}
+              state={state}
+              points={board.quadrants.west.south.points}
+            />
+          </Paper>
+          <Bar state={state} />
+          <Paper id="East" className="board-half" elevation={1}>
+            <Quadrant
+              latitude="north"
+              longitude="east"
+              start={19}
+              state={state}
+              points={board.quadrants.east.north.points}
+            />
+            <Rollsurface state={state} color="white" />
+            <Quadrant
+              latitude="south"
+              longitude="east"
+              start={1}
+              state={state}
+              points={board.quadrants.east.south.points}
+            />
+          </Paper>
+          <Off state={state} />
+        </Paper>
+      )
+  }
 }
 
 export default observer(Board)
