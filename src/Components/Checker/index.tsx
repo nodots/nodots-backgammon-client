@@ -3,6 +3,11 @@ import {
   Checker as CheckerType,
   moving,
   confirming,
+  Rolling,
+  Confirming,
+  RollingForStart,
+  Moving,
+  Ready,
 } from '../../game/Types'
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
@@ -11,12 +16,11 @@ import React from 'react'
 
 export interface Props {
   checker: CheckerType
-  store: NodotsGameStore
+  state: RollingForStart | Rolling | Ready | Confirming | Moving
   count?: number
 }
 
-function Checker({ checker, store }: Props) {
-  const { state } = store
+function Checker({ checker, state }: Props) {
   const theme = useTheme()
 
   const handleCheckerClick = (e: React.MouseEvent) => {
@@ -26,7 +30,6 @@ function Checker({ checker, store }: Props) {
         moving(state, checker.id)
         break
       case 'confirming':
-      case 'initializing':
       case 'rolling-for-start':
         break
     }

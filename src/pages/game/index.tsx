@@ -26,7 +26,6 @@ class GamePage extends Component {
       color: 'white',
       username: 'White Stripes',
       board: whiteBoard,
-      checkers: buildCheckersForColor('white'),
       dice: [
         { color: 'white', order: 0, value: 1 },
         { color: 'white', order: 1, value: 1 },
@@ -43,7 +42,6 @@ class GamePage extends Component {
       color: 'black',
       username: 'Black Messiah',
       board: blackBoard,
-      checkers: buildCheckersForColor('black'),
       dice: [
         { color: 'black', order: 0, value: 1 },
         { color: 'black', order: 1, value: 1 },
@@ -59,8 +57,6 @@ class GamePage extends Component {
       white,
       black,
     }
-
-    console.log(players.black.checkers)
 
     this.store = new NodotsGameStore(players)
 

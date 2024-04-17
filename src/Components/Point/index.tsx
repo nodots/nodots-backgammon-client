@@ -33,10 +33,13 @@ function Point({ position, checkers, latitude, state }: Props) {
       ? (className += ' even')
       : (className += ' odd')
 
-  const getCheckerComponents = (store: NodotsGameStore) => {
+  const getCheckerComponents = (
+    checkers: CheckerType[],
+    state: Rolling | RollingForStart | Confirming | Ready | Moving
+  ) => {
     const checkerComponents: ReactElement[] = []
     checkers.forEach((c) =>
-      checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
+      checkerComponents.push(<Checker key={c.id} checker={c} state={state} />)
     )
     return checkerComponents
   }
@@ -60,7 +63,9 @@ function Point({ position, checkers, latitude, state }: Props) {
           fill={getBackgroundColor(position.clockwise)}
         ></polygon>
       </svg>
-      <div className="checker-container"></div>
+      <div className="checker-container">
+        {getCheckerComponents(checkers, state)}
+      </div>
     </div>
   )
 }

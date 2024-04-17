@@ -22,7 +22,6 @@ export type Player = {
   username: string
   color: Color
   board: PlayerBoard
-  checkers: Checker[]
   dice: DiePair
   moveDirection: MoveDirection
   pipCount: number
