@@ -17,6 +17,7 @@ import NodotsGameStore from '../../game'
 import React from 'react'
 
 interface Props {
+  store: NodotsGameStore
   state: Ready | Confirming | Rolling | RollingForStart | Moving
   latitude: Latitude
   longitude: Longitude
@@ -24,7 +25,7 @@ interface Props {
   points: Point[]
 }
 
-function Quadrant({ state, latitude, longitude, start, points }: Props) {
+function Quadrant({ store, state, latitude, longitude, start, points }: Props) {
   return (
     <div className={`quadrant-container ${latitude} ${longitude}`}>
       <PointLabels latitude={latitude} longitude={longitude} start={start} />
@@ -32,6 +33,7 @@ function Quadrant({ state, latitude, longitude, start, points }: Props) {
         {points.map((p) => (
           <PointComponent
             id={generateId()}
+            store={store}
             position={{
               clockwise: p.position.clockwise,
               counterclockwise: p.position.counterclockwise,

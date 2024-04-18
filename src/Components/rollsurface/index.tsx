@@ -9,8 +9,6 @@ import {
   Ready,
   Rolling,
   RollingForStart,
-  confirming,
-  rolling,
 } from '../../game/Types'
 import { Player } from '../../game/player'
 import NodotsGameStore from '../../game'
@@ -18,13 +16,14 @@ import DiceSwitcher from './DiceSwitcher'
 import React from 'react'
 
 interface Props {
-  state: RollingForStart | Rolling | Confirming | Ready | Moving
+  store: NodotsGameStore
+  state: RollingForStart | Rolling | Confirming | Moving | Ready
   color: Color
 }
 
 const isActive = (activeColor: Color, color: Color) => activeColor === color
 
-function RollSurface({ state, color }: Props) {
+function RollSurface({ store, state, color }: Props) {
   const { players } = state
 
   const owner = players[color]
@@ -34,14 +33,12 @@ function RollSurface({ state, color }: Props) {
     e.preventDefault()
     switch (state.kind) {
       case 'ready':
-        rolling(state)
+        store.rolling(state)
         break
       case 'moving':
-        confirming(state)
+        store.confirming(state)
         break
       case 'confirming':
-      case 'rolling':
-      case 'rolling-for-start':
         break
     }
   }

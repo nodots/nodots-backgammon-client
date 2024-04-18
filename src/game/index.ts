@@ -14,6 +14,7 @@ import {
   double,
   Moving,
   moving,
+  confirming,
   Confirming,
 } from './Types'
 
@@ -31,7 +32,7 @@ class NodotsGameStore {
   }
 
   @action
-  rolling(state: RollingForStart | Ready) {
+  rolling(state: Ready) {
     this.state = rolling(state)
   }
 
@@ -50,21 +51,17 @@ class NodotsGameStore {
   //   this.state = double(state)
   // }
 
-  // @action
-  // moving(state: Rolling | Moving, checkerId: string) {
-  //   const { activeColor } = state
-  //   try {
-  //     this.state = moving(state, checkerId)
-  //   } catch (e) {
-  //     throw e
-  //   }
-  // }
+  @action
+  moving(state: Rolling | Moving, checkerId: string) {
+    console.log(`store.moving`)
+    this.state = moving(state, checkerId)
+  }
 
-  // @action
-  // confirming(state: Confirming) {
-  //   this.state = confirming(state)
-  //   console.log('confirming new state')
-  // }
+  @action
+  confirming(state: Moving) {
+    this.state = confirming(state)
+    console.log('confirming new state')
+  }
 }
 
 export default NodotsGameStore

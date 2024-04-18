@@ -15,19 +15,20 @@ import NodotsGameStore from '../../game'
 import React from 'react'
 
 export interface Props {
+  store: NodotsGameStore
   checker: CheckerType
   state: RollingForStart | Rolling | Ready | Confirming | Moving
   count?: number
 }
 
-function Checker({ checker, state }: Props) {
+function Checker({ checker, state, store }: Props) {
   const theme = useTheme()
 
   const handleCheckerClick = (e: React.MouseEvent) => {
     switch (state.kind) {
       case 'rolling':
       case 'moving':
-        moving(state, checker.id)
+        store.moving(state, checker.id)
         break
       case 'confirming':
       case 'rolling-for-start':

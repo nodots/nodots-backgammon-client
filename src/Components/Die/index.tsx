@@ -27,14 +27,18 @@ const paths = [
 interface Props {
   order: DieOrder
   color: Color
-  state: RollingForStart | Rolling | Ready | Confirming | Moving
+  state: RollingForStart | Rolling | Confirming | Moving | Ready
 }
 
 const isActive = (activeColor: Color, color: Color) => activeColor === color
 
 function Die({ order, color, state }: Props) {
   const { activeColor } = state
-  let roll: Roll = [1, 1]
+  let roll = [1, 1]
+  switch (state.kind) {
+    case 'rolling':
+      roll = state.roll
+  }
   const d = roll[order]
   if (!d) {
     throw new Error(`Undefined roll for ${order}`)

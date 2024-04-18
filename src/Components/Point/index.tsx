@@ -14,6 +14,7 @@ import NodotsGameStore from '../../game'
 
 export interface Props {
   id: string
+  store: NodotsGameStore
   state: Ready | Confirming | Rolling | RollingForStart | Moving
   position: {
     clockwise: number
@@ -24,7 +25,7 @@ export interface Props {
   checkers: CheckerType[]
 }
 
-function Point({ position, checkers, latitude, state }: Props) {
+function Point({ position, checkers, latitude, state, store }: Props) {
   const theme = useTheme()
   let className = 'point'
 
@@ -34,12 +35,15 @@ function Point({ position, checkers, latitude, state }: Props) {
       : (className += ' odd')
 
   const getCheckerComponents = (
+    store: NodotsGameStore,
     checkers: CheckerType[],
     state: Rolling | RollingForStart | Confirming | Ready | Moving
   ) => {
     const checkerComponents: ReactElement[] = []
     checkers.forEach((c) =>
-      checkerComponents.push(<Checker key={c.id} checker={c} state={state} />)
+      checkerComponents.push(
+        <Checker key={c.id} checker={c} state={state} store={store} />
+      )
     )
     return checkerComponents
   }
@@ -64,7 +68,7 @@ function Point({ position, checkers, latitude, state }: Props) {
         ></polygon>
       </svg>
       <div className="checker-container">
-        {getCheckerComponents(checkers, state)}
+        {getCheckerComponents(store, checkers, state)}
       </div>
     </div>
   )

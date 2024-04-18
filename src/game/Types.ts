@@ -15,7 +15,7 @@ export type MoveDirection = 'clockwise' | 'counterclockwise'
 export interface Checker {
   id: string
   color: Color
-  locationId?: string
+  locationId: string
 }
 
 export const whiteBoard: PlayerBoard = {
@@ -163,8 +163,10 @@ const getDestinationPointFromOriginPoint = (
   dieValue: DieValue,
   player: Player
 ): Point => {
+  console.log(player.moveDirection)
   const originPosition = origin.position[player.moveDirection]
-  const destinationPosition = originPosition - dieValue
+  // console.log(origin.position)
+  const destinationPosition = originPosition + dieValue
 
   const destination = getPoints(board).find(
     (point) => point.position[player.moveDirection] === destinationPosition
@@ -260,37 +262,6 @@ const buildQuadrant = (
         }
       }
     }
-
-    // if (positionLabel !== 'bar') {
-    //   const counterclockwisePosition: number = parseInt(positionLabel)
-    //   const clockwisePosition = 25 - counterclockwisePosition
-    //   if (clockwisePosition >= start && clockwisePosition < end) {
-    //     const existingPoint = points.find((p) => {
-    //       if (p.position.clockwise === clockwisePosition) {
-    //         return p
-    //       }
-    //     })
-    //     if (existingPoint) {
-    //       if (existingPoint.checkers.length > 0) {
-    //         console.error(
-    //           'Existing point already has checkers:',
-    //           existingPoint.checkers
-    //         )
-    //       }
-    //       const pointCheckers = counterclockwiseCheckers.slice(
-    //         usedClockwiseCheckers,
-    //         checkerCount
-    //       )
-    //       usedCounterclockwiseCheckers =
-    //         usedCounterclockwiseCheckers + checkerCount
-    //       pointCheckers.map(
-    //         (checker) => (checker.locationId = existingPoint.id)
-    //       )
-    //       const existingPointIndex = points.indexOf(existingPoint)
-    //       points[existingPointIndex].checkers.push(...pointCheckers)
-    //     }
-    //   }
-    // }
   }
 
   return {
@@ -378,9 +349,6 @@ export interface Quadrant {
   points: Point[]
 }
 
-// export type OriginCheckercontainer = Point | Bar
-// export type DestinationCheckercontainer = Point | Off
-
 export interface Board {
   quadrants: {
     east: {
@@ -446,11 +414,12 @@ interface NodotsGameCheckers {
 interface NodotsGame {
   kind:
     | 'initializing'
-    | 'rolling-for-start'
     | 'ready'
+    | 'rolling-for-start'
     | 'rolling'
-    | 'moving'
+    | 'doubling'
     | 'confirming'
+    | 'moving'
   board: Board
   players: Players
   checkers: {}
@@ -461,16 +430,15 @@ interface NodotsGame {
 export interface Initializing extends NodotsGame {
   kind: 'initializing'
 }
-export interface RollingForStart extends NodotsGame {
-  kind: 'rolling-for-start'
-  activeColor: Color
-}
 
 export interface Ready extends NodotsGame {
   kind: 'ready'
   activeColor: Color
 }
-
+export interface RollingForStart extends NodotsGame {
+  kind: 'rolling-for-start'
+  activeColor: Color
+}
 export interface Rolling extends NodotsGame {
   kind: 'rolling'
   activeColor: Color
@@ -499,7 +467,7 @@ export const buildCheckersForColor = (color: Color): PlayerCheckers => {
     const checker: Checker = {
       id: generateId(),
       color,
-      locationId: undefined,
+      locationId: '',
     }
     checkers.push(checker)
   }
@@ -511,8 +479,8 @@ export const buildCheckersForColor = (color: Color): PlayerCheckers => {
 
 export type NodotsGameState =
   | Initializing
-  | RollingForStart
   | Ready
+  | RollingForStart
   | Rolling
   | Moving
   | Confirming
@@ -548,7 +516,7 @@ export const initializing = (players: Players): Initializing => {
 export const getNextMove = (moves: NodotsMoves) =>
   moves.find((move) => move.from === undefined)
 
-export const rollingForStart = (state: Initializing): RollingForStart => {
+export const rollingForStart = (state: Initializing): Ready => {
   const { players, board, cube, checkers } = state
   const activeColor = Math.random() >= 0.5 ? 'black' : 'white'
   const message = {
@@ -556,7 +524,7 @@ export const rollingForStart = (state: Initializing): RollingForStart => {
   }
 
   return {
-    kind: 'rolling-for-start',
+    kind: 'ready',
     activeColor,
     players,
     board,
@@ -566,7 +534,7 @@ export const rollingForStart = (state: Initializing): RollingForStart => {
   }
 }
 
-export const rolling = (state: RollingForStart | Ready): Rolling => {
+export const rolling = (state: Ready): Rolling => {
   const { players, board, cube, activeColor, checkers } = state
   const activePlayer = players[activeColor]
 
@@ -654,8 +622,41 @@ export const moving = (
   checkerId: string
 ): Moving | Confirming => {
   const { board, players, cube, activeColor, moves, roll, checkers } = state
+  const activePlayer = players[activeColor]
   const nextMove = getNextMove(moves)
+  const checker = getChecker(board, checkerId)
+  const origin = getCheckercontainerById(board, checker.locationId)
 
+  if (!nextMove) {
+    throw new Error('No nextMove')
+  }
+
+  if (origin.kind === 'point') {
+    const destination = getDestinationPointFromOriginPoint(
+      board,
+      origin as Point,
+      nextMove.dieValue,
+      activePlayer
+    )
+
+    origin.checkers = origin.checkers.filter(
+      (checker) => checker.id !== checkerId
+    )
+    destination.checkers.push(checker)
+
+    nextMove.from = origin
+    nextMove.to = destination
+    return {
+      kind: 'moving',
+      board,
+      players,
+      cube,
+      checkers,
+      activeColor,
+      moves,
+      roll,
+    }
+  }
   return {
     kind: 'moving',
     board,
