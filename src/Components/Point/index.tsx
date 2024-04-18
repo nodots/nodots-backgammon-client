@@ -6,11 +6,11 @@ import {
   Ready,
   Rolling,
   RollingForStart,
-} from '../../game/Types'
-import { Checker as CheckerType } from '../../game/checker'
+} from '../../GameStore/types'
+import { Checker as CheckerType } from '../../GameStore/types/Checker'
 import { ReactElement } from 'react'
 import { Latitude, Longitude } from '../Board/state/types'
-import NodotsGameStore from '../../game'
+import NodotsGameStore from '../../GameStore'
 
 export interface Props {
   id: string

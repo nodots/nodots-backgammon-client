@@ -1,6 +1,6 @@
 // MUI
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
-import NodotsGameStore from '../../game'
+import NodotsGameStore from '../../GameStore'
 import {
   NodotsGameState,
   Color,
@@ -10,8 +10,8 @@ import {
   Rolling,
   RollingForStart,
   switchDice,
-} from '../../game/Types'
-import { Player } from '../../game/player'
+} from '../../GameStore/types'
+import { Player } from '../../GameStore/types/Player'
 import { observer } from 'mobx-react'
 import { useTheme } from '@mui/material'
 import React from 'react'

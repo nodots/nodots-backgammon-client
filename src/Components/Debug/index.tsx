@@ -1,4 +1,4 @@
-import { useGame } from '../../game/useGame'
+import { useGame } from '../../GameStore/useGame'
 import {
   Card,
   CardHeader,
@@ -9,8 +9,8 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material'
-import { Move, MoveStatus, MoveMode } from '../../game/move'
-import { TurnStatus } from '../../game/turn'
+import { Move, MoveStatus, MoveMode } from '../../GameStore/types/Move'
+import { TurnStatus } from '../../GameStore/turn'
 
 export interface DebugProps {
   elevation?: number

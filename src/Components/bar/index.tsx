@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react'
-import { NodotsGameState } from '../../game/Types'
+import { NodotsGameState } from '../../GameStore/types'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
-} from '../../game/player'
+} from '../../GameStore/types/Player'
 import PipCount from './PipCount'
 
 interface Props {

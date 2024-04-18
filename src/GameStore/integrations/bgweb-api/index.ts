@@ -1,4 +1,4 @@
-import { Player } from '../../player'
+import { Player } from '../../types/Player'
 import { Roll } from '../../../components/Die/state'
 import { Board, getCheckerboxes } from '../../../components/Board/state/types'
 

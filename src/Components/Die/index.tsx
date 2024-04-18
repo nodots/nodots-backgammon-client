@@ -7,10 +7,10 @@ import {
   Ready,
   Rolling,
   RollingForStart,
-} from '../../game/Types'
-import { DieOrder, DieValue, Roll } from '../../game/dice'
+} from '../../GameStore/types'
+import { DieOrder, DieValue, Roll } from '../../GameStore/types/Dice'
 import { observer } from 'mobx-react'
-import { Player } from '../../game/player'
+import { Player } from '../../GameStore/types/Player'
 import React from 'react'
 
 const paths = [

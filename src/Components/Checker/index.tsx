@@ -7,11 +7,11 @@ import {
   RollingForStart,
   Moving,
   Ready,
-} from '../../game/Types'
-import { Checker as CheckerType } from '../../game/checker'
+} from '../../GameStore/types'
+import { Checker as CheckerType } from '../../GameStore/types/Checker'
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../game'
+import NodotsGameStore from '../../GameStore'
 import React from 'react'
 
 export interface Props {

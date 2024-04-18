@@ -1,4 +1,4 @@
-import { Color } from '../../../../game/Types'
+import { Color } from '../../../../GameStore/types'
 
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 

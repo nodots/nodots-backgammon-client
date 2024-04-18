@@ -1,6 +1,6 @@
 import { AlertColor, Card } from '@mui/material'
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../game'
+import NodotsGameStore from '../../GameStore'
 
 interface Props {
   store: NodotsGameStore

@@ -1,22 +1,18 @@
 import { action, makeAutoObservable } from 'mobx'
+import { Players } from './types/Player'
 import {
-  NodotsGameState,
-  NodotsMessage,
-  Players,
   Initializing,
-  RollingForStart,
+  Moving,
+  NodotsGameState,
   Ready,
   Rolling,
-  initializing,
-  rollingForStart,
-  rolling,
-  switchDice,
-  double,
-  Moving,
-  moving,
   confirming,
-  Confirming,
-} from './Types'
+  initializing,
+  moving,
+  rolling,
+  rollingForStart,
+  switchDice,
+} from './types'
 
 class NodotsGameStore {
   state: NodotsGameState

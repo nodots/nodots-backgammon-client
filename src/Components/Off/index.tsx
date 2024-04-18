@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import Cube from '../Cube'
-import NodotsGameStore from '../../game'
+import NodotsGameStore from '../../GameStore'
 import React from 'react'
 import {
   Ready,
@@ -8,7 +8,7 @@ import {
   Rolling,
   RollingForStart,
   Moving,
-} from '../../game/Types'
+} from '../../GameStore/types'
 
 interface Props {
   state: Ready | Confirming | Rolling | RollingForStart | Moving

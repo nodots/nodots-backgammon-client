@@ -1,5 +1,5 @@
-import { isColor } from '../../../../game/Types'
-import { Player } from '../../../../game/player'
+import { isColor } from '../../../../GameStore/types'
+import { Player } from '../../../../GameStore/types/Player'
 import { Checker } from '../../../Checker/state/types'
 import { Checkerbox } from '../../../Checkerbox/state/types'
 import { Point } from '../../../Point/state/types'
@@ -11,8 +11,8 @@ import {
   initialize as initializeQuadrants,
 } from '../../../Quadrant/state/types'
 import DEFAULT_SETUP from '../config/DEFAULT.json'
-import { CHECKERS_PER_PLAYER } from '../../../../game/Types'
-import { GameError } from '../../../../game/Types'
+import { CHECKERS_PER_PLAYER } from '../../../../GameStore/types'
+import { GameError } from '../../../../GameStore/types'
 import { CheckerProp } from '../../../Checker/state/types'
 
 export type Latitude = 'north' | 'south'

@@ -1,6 +1,6 @@
 import { Chip, SxProps, useTheme } from '@mui/material'
-import { Player } from '../../../game/player'
-import { Color } from '../../../game/Types'
+import { Player } from '../../../GameStore/types/Player'
+import { Color } from '../../../GameStore/types'
 import { observer } from 'mobx-react'
 interface Props {
   player: Player

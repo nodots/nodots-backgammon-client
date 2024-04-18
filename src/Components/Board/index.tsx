@@ -7,7 +7,7 @@ import Off from '../Off'
 import Rollsurface from '../Rollsurface'
 import { Paper, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../game'
+import NodotsGameStore from '../../GameStore'
 import React from 'react'
 import {
   Confirming,
@@ -16,7 +16,7 @@ import {
   Ready,
   Rolling,
   RollingForStart,
-} from '../../game/Types'
+} from '../../GameStore/types'
 
 interface Props {
   store: NodotsGameStore

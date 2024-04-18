@@ -9,9 +9,9 @@ import {
   Ready,
   Rolling,
   RollingForStart,
-} from '../../game/Types'
-import { Player } from '../../game/player'
-import NodotsGameStore from '../../game'
+} from '../../GameStore/types'
+import { Player } from '../../GameStore/types/Player'
+import NodotsGameStore from '../../GameStore'
 import DiceSwitcher from './DiceSwitcher'
 import React from 'react'
 

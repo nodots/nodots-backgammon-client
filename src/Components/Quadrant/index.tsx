@@ -5,14 +5,14 @@ import {
   Ready,
   Rolling,
   RollingForStart,
-} from '../../game/Types'
-import { Longitude, Latitude } from '../../game/board'
-import { Point } from '../../game/checkercontainer'
+} from '../../GameStore/types'
+import { Longitude, Latitude } from '../../GameStore/types/Board'
+import { Point } from '../../GameStore/types/Checkercontainer'
 import PointComponent from '../Point'
 import PointLabels from '../PointLabels'
-import { NodotsGameState } from '../../game/Types'
+import { NodotsGameState } from '../../GameStore/types'
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../game'
+import NodotsGameStore from '../../GameStore'
 import React from 'react'
 
 interface Props {
