@@ -2,15 +2,13 @@ import { Button, useTheme } from '@mui/material'
 import {
   Color,
   Confirming,
-  DieOrder,
-  DieValue,
   Moving,
   NodotsGameState,
   Ready,
-  Roll,
   Rolling,
   RollingForStart,
 } from '../../game/Types'
+import { DieOrder, DieValue, Roll } from '../../game/dice'
 import { observer } from 'mobx-react'
 import { Player } from '../../game/player'
 import React from 'react'

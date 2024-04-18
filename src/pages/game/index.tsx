@@ -5,15 +5,11 @@ import BoardComponent from '../../components/Board'
 import GameNotifications from '../../components/Nofitications/Game'
 import DebugNotifications from '../../components/Nofitications/Debug'
 import NodotsGameStore from '../../game'
-import {
-  Players,
-  blackBoard,
-  buildCheckersForColor,
-  generateId,
-  getCheckersForColor,
-  rollingForStart,
-  whiteBoard,
-} from '../../game/Types'
+import { generateId, rollingForStart } from '../../game/Types'
+import { buildCheckersForColor } from '../../game/checkercontainer'
+import { Players } from '../../game/player'
+import { getCheckersForColor } from '../../game/board'
+import { blackBoard, whiteBoard } from '../../game/board'
 import { Player } from '../../game/player'
 
 class GamePage extends Component {

@@ -1,13 +1,13 @@
 import { useTheme } from '@mui/material'
 import Checker from '../Checker'
 import {
-  Checker as CheckerType,
   Confirming,
   Moving,
   Ready,
   Rolling,
   RollingForStart,
 } from '../../game/Types'
+import { Checker as CheckerType } from '../../game/checker'
 import { ReactElement } from 'react'
 import { Latitude, Longitude } from '../Board/state/types'
 import NodotsGameStore from '../../game'

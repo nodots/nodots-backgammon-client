@@ -1,7 +1,4 @@
 import {
-  Longitude,
-  Latitude,
-  Point,
   generateId,
   Confirming,
   Moving,
@@ -9,6 +6,8 @@ import {
   Rolling,
   RollingForStart,
 } from '../../game/Types'
+import { Longitude, Latitude } from '../../game/board'
+import { Point } from '../../game/checkercontainer'
 import PointComponent from '../Point'
 import PointLabels from '../PointLabels'
 import { NodotsGameState } from '../../game/Types'

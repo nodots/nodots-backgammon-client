@@ -1,6 +1,5 @@
 import {
   Color,
-  Checker as CheckerType,
   moving,
   confirming,
   Rolling,
@@ -9,6 +8,7 @@ import {
   Moving,
   Ready,
 } from '../../game/Types'
+import { Checker as CheckerType } from '../../game/checker'
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../game'
