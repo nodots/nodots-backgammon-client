@@ -2,11 +2,11 @@ import {
   generateId,
   Confirming,
   Moving,
-  Ready,
   Rolling,
   RollingForStart,
+  Rolled,
 } from '../../GameStore/types'
-import { Longitude, Latitude } from '../../GameStore/types/Board'
+import { Longitude, Latitude, Points } from '../../GameStore/types/Board'
 import { Point } from '../../GameStore/types/Checkercontainer'
 import PointComponent from '../Point'
 import PointLabels from '../PointLabels'
@@ -15,13 +15,15 @@ import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import React from 'react'
 
+type QuadrantPoints = Array<Point>
+
 interface Props {
   store: NodotsGameStore
-  state: Ready | Confirming | Rolling | RollingForStart | Moving
+  state: Confirming | Rolling | Rolled | RollingForStart | Moving
   latitude: Latitude
   longitude: Longitude
   start: number
-  points: Point[]
+  points: QuadrantPoints
 }
 
 function Quadrant({ store, state, latitude, longitude, start, points }: Props) {
@@ -33,13 +35,9 @@ function Quadrant({ store, state, latitude, longitude, start, points }: Props) {
           <PointComponent
             id={generateId()}
             store={store}
-            position={{
-              clockwise: p.position.clockwise,
-              counterclockwise: p.position.counterclockwise,
-            }}
             checkers={p.checkers}
-            latitude={p.latitude}
-            longitude={p.longitude}
+            position={p.position}
+            latitude={latitude}
             key={generateId()}
             state={state}
           />

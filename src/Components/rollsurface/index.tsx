@@ -5,9 +5,8 @@ import {
   Color,
   Confirming,
   Moving,
-  NodotsGameState,
-  Ready,
   Rolling,
+  Rolled,
   RollingForStart,
 } from '../../GameStore/types'
 import { Player } from '../../GameStore/types/Player'
@@ -17,7 +16,7 @@ import React from 'react'
 
 interface Props {
   store: NodotsGameStore
-  state: RollingForStart | Rolling | Confirming | Moving | Ready
+  state: RollingForStart | Rolling | Confirming | Moving | Rolled
   color: Color
 }
 
@@ -32,14 +31,16 @@ function RollSurface({ store, state, color }: Props) {
   const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
     switch (state.kind) {
-      case 'ready':
+      case 'rolling':
+        console.log('RollSurface rolling:')
         store.rolling(state)
         break
       case 'moving':
         store.confirming(state)
         break
-      case 'confirming':
-        break
+      default:
+        console.log('rollHandler no action')
+      // store.confirming(state)
     }
   }
 

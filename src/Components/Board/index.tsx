@@ -9,14 +9,7 @@ import { Paper, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import React from 'react'
-import {
-  Confirming,
-  Moving,
-  NodotsGameState,
-  Ready,
-  Rolling,
-  RollingForStart,
-} from '../../GameStore/types'
+import { NodotsGameState } from '../../GameStore/types'
 
 interface Props {
   store: NodotsGameStore
@@ -24,26 +17,31 @@ interface Props {
 }
 
 function Board({ store, state }: Props) {
-  const { board } = state
   const theme = useTheme()
   switch (state.kind) {
     case 'initializing':
       return <></>
     case 'confirming':
     case 'moving':
-    case 'ready':
     case 'rolling':
+    case 'rolled':
     case 'rolling-for-start':
+      store.state.boardStore.points.map((p) =>
+        console.log(
+          `${p.position.clockwise} : ${p.position.counterclockwise} checkers:`,
+          p.checkers.length
+        )
+      )
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>
             <Quadrant
               store={store}
+              state={state}
               latitude="north"
               longitude="west"
-              start={13}
-              state={state}
-              points={board.quadrants.west.north.points}
+              start={7}
+              points={[]}
             />
             <Rollsurface store={store} state={state} color="black" />
             <Quadrant
@@ -52,7 +50,7 @@ function Board({ store, state }: Props) {
               longitude="west"
               start={7}
               state={state}
-              points={board.quadrants.west.south.points}
+              points={[]}
             />
           </Paper>
           <Bar state={state} />
@@ -63,7 +61,7 @@ function Board({ store, state }: Props) {
               longitude="east"
               start={19}
               state={state}
-              points={board.quadrants.east.north.points}
+              points={[]}
             />
             <Rollsurface store={store} state={state} color="white" />
             <Quadrant
@@ -72,7 +70,7 @@ function Board({ store, state }: Props) {
               longitude="east"
               start={1}
               state={state}
-              points={board.quadrants.east.south.points}
+              points={[]}
             />
           </Paper>
           <Off state={state} />

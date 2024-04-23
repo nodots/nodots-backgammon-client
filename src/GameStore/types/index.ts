@@ -1,27 +1,48 @@
 import { v4 as uuid } from 'uuid'
-import {
-  Board,
-  blackBoard,
-  buildBoard,
-  getChecker,
-  getCheckercontainerById,
-  whiteBoard,
-} from './Board'
-import { getDestinationPointFromOriginPoint } from './Move'
-import { NodotsGameCheckers, buildCheckersForColor } from './Checker'
-import { Point } from './Checkercontainer'
+import { NodotsBoardStore, buildNodotsBoardStore } from './Board'
+import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
-import { NodotsMove, NodotsMoves, getNextMove } from './Move'
+import { NodotsMoves, move } from './Move'
 import { Players } from './Player'
 
 export const CHECKERS_PER_PLAYER = 15
+export type PointPosition =
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14
+  | 15
+  | 16
+  | 17
+  | 18
+  | 19
+  | 20
+  | 21
+  | 22
+  | 23
+  | 24
+
+export type CheckerboxPosition = PointPosition | 'bar' | 'off'
+export type OriginPosition = PointPosition | 'bar'
+export type DestinationPosition = PointPosition | 'off'
+
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 
 export const generateId = (): string => uuid()
-export const getNewActiveColor = (activeColor: Color): Color =>
+export const changeActiveColor = (activeColor: Color): Color =>
   activeColor === 'black' ? 'white' : 'black'
 
 interface NodotsGame {
@@ -30,12 +51,12 @@ interface NodotsGame {
     | 'ready'
     | 'rolling-for-start'
     | 'rolling'
+    | 'rolled'
     | 'doubling'
     | 'confirming'
     | 'moving'
-  board: Board
+  boardStore: NodotsBoardStore
   players: Players
-  checkers: NodotsGameCheckers
   cube: Cube
   message?: NodotsMessage
 }
@@ -43,17 +64,17 @@ interface NodotsGame {
 export interface Initializing extends NodotsGame {
   kind: 'initializing'
 }
-
-export interface Ready extends NodotsGame {
-  kind: 'ready'
-  activeColor: Color
-}
 export interface RollingForStart extends NodotsGame {
   kind: 'rolling-for-start'
   activeColor: Color
 }
 export interface Rolling extends NodotsGame {
   kind: 'rolling'
+  activeColor: Color
+}
+
+export interface Rolled extends NodotsGame {
+  kind: 'rolled'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
@@ -76,22 +97,15 @@ export interface Confirming extends NodotsGame {
 
 export type NodotsGameState =
   | Initializing
-  | Ready
   | RollingForStart
   | Rolling
+  | Rolled
   | Moving
   | Confirming
 
 export const initializing = (players: Players): Initializing => {
   players.black.dice = generateDice(players.black)
   players.white.dice = generateDice(players.black)
-  players.black.board = blackBoard
-  players.white.board = whiteBoard
-
-  const checkers: NodotsGameCheckers = {
-    white: buildCheckersForColor('white'),
-    black: buildCheckersForColor('black'),
-  }
 
   const cube: Cube = {
     id: generateId(),
@@ -99,56 +113,63 @@ export const initializing = (players: Players): Initializing => {
     owner: undefined,
   }
 
-  const board = buildBoard(players, checkers)
+  // this is the board _store_ not the representation of the board
+  const boardStore = buildNodotsBoardStore(players)
 
   return {
     kind: 'initializing',
     players,
-    board,
+    boardStore,
     cube,
-    checkers,
   }
 }
 
-export const rollingForStart = (state: Initializing): Ready => {
-  const { players, board, cube, checkers } = state
+export const rollingForStart = (state: Initializing): Rolling => {
+  const { players, boardStore, cube } = state
   const activeColor = Math.random() >= 0.5 ? 'black' : 'white'
   const message = {
     game: `${players[activeColor].username} wins the opening roll`,
   }
 
   return {
-    kind: 'ready',
+    kind: 'rolling',
     activeColor,
     players,
-    board,
+    boardStore,
     cube,
-    checkers,
     message,
   }
 }
 
-export const rolling = (state: Ready): Rolling => {
-  const { players, board, cube, activeColor, checkers } = state
+export const rolling = (state: Rolling): Rolled => {
+  const { players, boardStore, cube, activeColor } = state
   const activePlayer = players[activeColor]
 
   const roll = rollDice(players[activeColor])
-
-  const move1: NodotsMove = {
-    from: undefined,
-    to: undefined,
-    dieValue: roll[0],
+  const moves: NodotsMoves = [
+    {
+      from: undefined,
+      to: undefined,
+      dieValue: roll[0],
+    },
+    {
+      from: undefined,
+      to: undefined,
+      dieValue: roll[1],
+    },
+  ]
+  if (roll[0] === roll[1]) {
+    moves.push({
+      from: undefined,
+      to: undefined,
+      dieValue: roll[0],
+    })
+    moves.push({
+      from: undefined,
+      to: undefined,
+      dieValue: roll[1],
+    })
   }
-  const move2: NodotsMove = {
-    from: undefined,
-    to: undefined,
-    dieValue: roll[1],
-  }
-
-  const moves:
-    | [NodotsMove, NodotsMove]
-    | [NodotsMove, NodotsMove, NodotsMove, NodotsMove] = [move1, move2]
-  roll[0] === roll[1] ?? moves.push(...moves)
 
   const message = {
     game: `${activePlayer.username} rolls ${JSON.stringify(roll)}`,
@@ -156,31 +177,29 @@ export const rolling = (state: Ready): Rolling => {
   }
 
   return {
-    kind: 'rolling',
+    kind: 'rolled',
     activeColor,
     roll,
     moves,
     players,
-    board,
-    checkers,
+    boardStore,
     cube,
     message,
   }
 }
 
-export const switchDice = (state: Rolling): Rolling => {
-  const { cube, board, players, activeColor, roll, moves, checkers } = state
+export const switchDice = (state: Rolled): Rolled => {
+  const { cube, boardStore, players, activeColor, roll, moves } = state
   const activePlayer = players[activeColor]
 
   return {
-    kind: 'rolling',
+    kind: 'rolled',
     roll: [roll[1], roll[0]],
     activeColor,
     moves,
     players,
-    board,
+    boardStore,
     cube,
-    checkers,
     message: {
       game: `${activePlayer.username} swaps dice ${JSON.stringify(roll)}`,
       debug: JSON.stringify(activeColor),
@@ -188,9 +207,8 @@ export const switchDice = (state: Rolling): Rolling => {
   }
 }
 
-export const double = (state: Rolling | Moving): Rolling | Moving => {
-  const { kind, board, players, activeColor, roll, cube, moves, checkers } =
-    state
+export const double = (state: Rolled | Moving): Rolled | Moving => {
+  const { kind, boardStore, players, activeColor, roll, cube, moves } = state
 
   const activePlayer = players[activeColor]
 
@@ -199,8 +217,7 @@ export const double = (state: Rolling | Moving): Rolling | Moving => {
     kind,
     cube,
     activeColor,
-    board,
-    checkers,
+    boardStore,
     players,
     roll,
     moves,
@@ -212,66 +229,40 @@ export const double = (state: Rolling | Moving): Rolling | Moving => {
 }
 
 export const moving = (
-  state: Rolling | Moving,
+  state: Rolled | Moving,
   checkerId: string
 ): Moving | Confirming => {
-  const { board, players, cube, activeColor, moves, roll, checkers } = state
+  const { activeColor, players } = state
   const activePlayer = players[activeColor]
-  const nextMove = getNextMove(moves)
-  const checker = getChecker(board, checkerId)
-  const origin = getCheckercontainerById(board, checker.locationId)
+  return move(state, activePlayer, checkerId)
+}
 
-  if (!nextMove) {
-    throw new Error('No nextMove')
-  }
+export const confirming = (state: Moving): Rolling => {
+  const { boardStore, players, cube, activeColor } = state
 
-  if (origin.kind === 'point') {
-    const destination = getDestinationPointFromOriginPoint(
-      board,
-      origin as Point,
-      nextMove.dieValue,
-      activePlayer
-    )
-
-    origin.checkers = origin.checkers.filter(
-      (checker) => checker.id !== checkerId
-    )
-    destination.checkers.push(checker)
-
-    nextMove.from = origin
-    nextMove.to = destination
-    return {
-      kind: 'moving',
-      board,
-      players,
-      cube,
-      checkers,
-      activeColor,
-      moves,
-      roll,
-    }
-  }
   return {
-    kind: 'moving',
-    board,
+    kind: 'rolling',
+    activeColor: changeActiveColor(activeColor),
+    boardStore,
     players,
     cube,
-    checkers,
-    activeColor,
-    moves,
-    roll,
   }
 }
 
-export const confirming = (state: Moving): Ready => {
-  const { board, players, cube, checkers, activeColor } = state
-
-  return {
-    kind: 'ready',
-    activeColor: getNewActiveColor(activeColor),
-    board,
-    players,
-    cube,
-    checkers,
-  }
-}
+export type PlayerCheckers = [
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker
+]

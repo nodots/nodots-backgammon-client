@@ -6,7 +6,7 @@ import {
   Confirming,
   RollingForStart,
   Moving,
-  Ready,
+  Rolled,
 } from '../../GameStore/types'
 import { Checker as CheckerType } from '../../GameStore/types/Checker'
 import { Button, useTheme } from '@mui/material'
@@ -17,7 +17,7 @@ import React from 'react'
 export interface Props {
   store: NodotsGameStore
   checker: CheckerType
-  state: RollingForStart | Rolling | Ready | Confirming | Moving
+  state: RollingForStart | Rolling | Rolled | Confirming | Moving
   count?: number
 }
 
@@ -26,10 +26,11 @@ function Checker({ checker, state, store }: Props) {
 
   const handleCheckerClick = (e: React.MouseEvent) => {
     switch (state.kind) {
-      case 'rolling':
+      case 'rolled':
       case 'moving':
         store.moving(state, checker.id)
         break
+      case 'rolling':
       case 'confirming':
       case 'rolling-for-start':
         break
@@ -44,14 +45,16 @@ function Checker({ checker, state, store }: Props) {
 
   return (
     <Button
-      className="checker"
+      className={`checker ${checker.highlight ? ' highlight' : ''}`}
       id={checker.id}
       sx={{
         backgroundColor: getBackgroundColor(checker.color),
         borderColor: theme.palette.background.default,
       }}
       onClick={handleCheckerClick}
-    ></Button>
+    >
+      <span className="debug">{checker.id.substring(0, 8)}</span>
+    </Button>
   )
 }
 

@@ -4,7 +4,7 @@ import {
   Initializing,
   Moving,
   NodotsGameState,
-  Ready,
+  Rolled,
   Rolling,
   confirming,
   initializing,
@@ -28,12 +28,13 @@ class NodotsGameStore {
   }
 
   @action
-  rolling(state: Ready) {
+  rolling(state: Rolling) {
+    console.log('Store: rolling')
     this.state = rolling(state)
   }
 
   @action
-  switchDice(state: Rolling) {
+  switchDice(state: Rolled) {
     this.state = switchDice(state)
   }
 
@@ -48,7 +49,7 @@ class NodotsGameStore {
   // }
 
   @action
-  moving(state: Rolling | Moving, checkerId: string) {
+  moving(state: Rolled | Moving, checkerId: string) {
     console.log(`store.moving`)
     this.state = moving(state, checkerId)
   }

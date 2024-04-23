@@ -1,115 +1,215 @@
-import { generateId } from '.'
-import { NodotsGameCheckers } from './Checker'
+import { MoveDirection, PointPosition, generateId } from '.'
 import { Players } from './Player'
-import { Quadrant } from './Quadrant'
 import { Bar, Off, Point, Checkercontainer } from './Checkercontainer'
-import { buildQuadrant } from './Quadrant'
 import { Color } from '.'
 import { Checker } from './Checker'
-import { getCheckercontainers } from './Checkercontainer'
-import { BgApiPlayerBoard } from '../integrations/bgweb-api'
 
 export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'
 
-export interface Board {
-  quadrants: {
-    east: {
-      north: Quadrant
-      south: Quadrant
-    }
-    west: {
-      north: Quadrant
-      south: Quadrant
-    }
-  }
+export type Points = [
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point,
+  Point
+]
+export interface NodotsBoardStore {
+  points: Points
   bar: [Bar, Bar]
   off: [Off, Off]
 }
 
-export const buildBoard = (
-  players: Players,
-  checkers: NodotsGameCheckers
-): Board => {
+export type CheckercontainerCheckers =
+  | []
+  | [Checker]
+  | [Checker, Checker]
+  | [Checker, Checker, Checker]
+  | [Checker, Checker, Checker, Checker]
+  | [Checker, Checker, Checker, Checker, Checker]
+  | [Checker, Checker, Checker, Checker, Checker, Checker]
+  | [Checker, Checker, Checker, Checker, Checker, Checker, Checker]
+  | [Checker, Checker, Checker, Checker, Checker, Checker, Checker, Checker]
+  | [
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker
+    ]
+  | [
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker
+    ]
+  | [
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker
+    ]
+  | [
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker
+    ]
+  | [
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker
+    ]
+  | [
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker,
+      Checker
+    ]
+
+export const getLatLongForClockwisePosition = (
+  position: PointPosition
+): [Latitude, Longitude] => {
+  if (position <= 6) {
+    return ['south', 'east']
+  } else if (position >= 7 && position <= 12) {
+    return ['south', 'west']
+  } else if (position >= 13 && position <= 17) {
+    return ['north', 'west']
+  } else {
+    return ['north', 'east']
+  }
+}
+
+export const buildPoints = (players: Players): Points => {
+  let points: Points
+  const temp_points = []
+
+  let i: PointPosition = 1
+
+  for (i; i < 25; i++) {
+    const point: Point = {
+      id: generateId(),
+      kind: 'point',
+      position: {
+        clockwise: i as PointPosition,
+        counterclockwise: (25 - i) as PointPosition,
+      },
+      checkers: [],
+    }
+    temp_points.push(point)
+  }
+  if (temp_points.length === 24) {
+    points = temp_points as Points
+    return points
+  } else {
+    throw new Error(`Invalid number of points ${temp_points.length}`)
+  }
+}
+
+export const buildNodotsBoardStore = (players: Players): NodotsBoardStore => {
   return {
-    quadrants: {
-      east: {
-        north: buildQuadrant(19, 'north', 'east', players, checkers),
-        south: buildQuadrant(1, 'south', 'east', players, checkers),
-      },
-      west: {
-        north: buildQuadrant(13, 'north', 'west', players, checkers),
-        south: buildQuadrant(7, 'south', 'west', players, checkers),
-      },
-    },
+    points: buildPoints(players),
     bar: [
-      { kind: 'bar', id: generateId(), color: 'white', checkers: [] },
-      { kind: 'bar', id: generateId(), color: 'black', checkers: [] },
+      {
+        kind: 'bar',
+        id: generateId(),
+        color: 'white',
+        position: 'bar',
+        checkers: [],
+      },
+      {
+        kind: 'bar',
+        position: 'bar',
+        id: generateId(),
+        color: 'black',
+        checkers: [],
+      },
     ],
     off: [
-      { kind: 'off', id: generateId(), color: 'white', checkers: [] },
-      { kind: 'off', id: generateId(), color: 'black', checkers: [] },
+      {
+        id: generateId(),
+        kind: 'off',
+        position: 'off',
+        color: 'white',
+        checkers: [],
+      },
+      {
+        id: generateId(),
+        kind: 'off',
+        position: 'off',
+        color: 'black',
+        checkers: [],
+      },
     ],
   }
 }
 
-export const whiteBoard: PlayerBoard = {
-  1: 0,
-  2: 0,
-  3: 0,
-  4: 0,
-  5: 0,
-  6: 5,
-  7: 0,
-  8: 3,
-  9: 0,
-  10: 0,
-  11: 0,
-  12: 0,
-  13: 5,
-  14: 0,
-  15: 0,
-  16: 0,
-  17: 0,
-  18: 0,
-  19: 0,
-  20: 0,
-  21: 0,
-  22: 0,
-  23: 0,
-  24: 2,
-  bar: 0,
-}
-
-export const blackBoard: PlayerBoard = {
-  1: 0,
-  2: 0,
-  3: 0,
-  4: 0,
-  5: 0,
-  6: 5,
-  7: 0,
-  8: 3,
-  9: 0,
-  10: 0,
-  11: 0,
-  12: 0,
-  13: 5,
-  14: 0,
-  15: 0,
-  16: 0,
-  17: 0,
-  18: 0,
-  19: 0,
-  20: 0,
-  21: 0,
-  22: 0,
-  23: 0,
-  24: 2,
-  bar: 0,
-}
-
-const getCheckers = (board: Board): Checker[] => {
+export const getCheckers = (board: NodotsBoardStore): Checker[] => {
   const checkercontainers = getCheckercontainers(board)
   const checkers: Checker[] = []
 
@@ -119,26 +219,25 @@ const getCheckers = (board: Board): Checker[] => {
   return checkers
 }
 
-export const getCheckersForColor = (board: Board, color: Color): Checker[] =>
-  getCheckers(board).filter((checker) => checker.color === color)
+export const getCheckersForColor = (
+  board: NodotsBoardStore,
+  color: Color
+): Checker[] => getCheckers(board).filter((checker) => checker.color === color)
 
-export const getChecker = (board: Board, id: string): Checker => {
-  const checker = getCheckers(board).find((checker) => checker.id === id)
-  if (!checker) {
-    throw Error(`No checker found for ${id}`)
-  }
-  return checker
+export const getPoints = (board: NodotsBoardStore): Points => board.points
+export const getBars = (board: NodotsBoardStore): [Bar, Bar] => board.bar
+export const getOffs = (board: NodotsBoardStore): [Off, Off] => board.off
+export const getCheckercontainers = (
+  board: NodotsBoardStore
+): Checkercontainer[] => {
+  const points = getPoints(board) as Checkercontainer[]
+  const bar = getBars(board) as Checkercontainer[]
+  const off = getOffs(board) as Checkercontainer[]
+  return points.concat(...bar).concat(...off)
 }
 
-export const getPoints = (board: Board): Point[] => [
-  ...board.quadrants.east.north.points,
-  ...board.quadrants.east.south.points,
-  ...board.quadrants.west.north.points,
-  ...board.quadrants.west.south.points,
-]
-
 export const getCheckercontainerById = (
-  board: Board,
+  board: NodotsBoardStore,
   id: string
 ): Checkercontainer => {
   const container = getCheckercontainers(board).find((c) => c.id === id)
@@ -147,8 +246,39 @@ export const getCheckercontainerById = (
   }
   return container
 }
-export type PlayerBoard = BgApiPlayerBoard
-export type PlayerBoards = {
-  white: PlayerBoard
-  black: PlayerBoard
+
+export type PlayerBoard = {
+  points: [
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point,
+    Point
+  ]
+  bar: Bar
+  off: Off
 }
+
+export const buildPlayerBoard = (
+  moveDirection: MoveDirection,
+  color: Color
+) => {}

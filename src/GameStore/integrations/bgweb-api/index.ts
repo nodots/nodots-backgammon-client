@@ -1,6 +1,6 @@
+import { NodotsBoardStore } from '../../types/Board'
+import { Roll } from '../../types/Dice'
 import { Player } from '../../types/Player'
-import { Roll } from '../../../components/Die/state'
-import { Board, getCheckerboxes } from '../../../components/Board/state/types'
 
 const black = 'o'
 const white = 'x'
@@ -126,7 +126,7 @@ const printPlayerBoard = (player: string, board: BgApiPlayerBoard) => {
 }
 
 export const BgWebApi_getTurnAnalytics = async (
-  board: Board,
+  board: NodotsBoardStore,
   roll: Roll,
   players: { white: Player; black: Player }
 ): Promise<BgWebApi_TurnAnalysis[] | void> => {
@@ -145,7 +145,7 @@ export const BgWebApi_getTurnAnalytics = async (
 }
 
 function buildTurnAnalysisPayload(
-  board: Board,
+  board: NodotsBoardStore,
   roll: Roll,
   players: { white: Player; black: Player }
 ): BgApiPayload {

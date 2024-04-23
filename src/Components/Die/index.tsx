@@ -3,8 +3,7 @@ import {
   Color,
   Confirming,
   Moving,
-  NodotsGameState,
-  Ready,
+  Rolled,
   Rolling,
   RollingForStart,
 } from '../../GameStore/types'
@@ -25,22 +24,24 @@ const paths = [
 interface Props {
   order: DieOrder
   color: Color
-  state: RollingForStart | Rolling | Confirming | Moving | Ready
+  state: RollingForStart | Rolling | Confirming | Moving | Rolled
 }
 
 const isActive = (activeColor: Color, color: Color) => activeColor === color
 
 function Die({ order, color, state }: Props) {
   const { activeColor } = state
-  let roll = [1, 1]
+  let roll: Roll
   switch (state.kind) {
-    case 'rolling':
+    case 'rolled':
+    case 'moving':
+    case 'confirming':
       roll = state.roll
+      break
+    default:
+      roll = [1, 1]
   }
-  const d = roll[order]
-  if (!d) {
-    throw new Error(`Undefined roll for ${order}`)
-  }
+
   const theme = useTheme()
   const fill = (color: Color) => {
     return color === 'white'

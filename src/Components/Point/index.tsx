@@ -3,29 +3,28 @@ import Checker from '../Checker'
 import {
   Confirming,
   Moving,
-  Ready,
+  Rolled,
   Rolling,
   RollingForStart,
 } from '../../GameStore/types'
 import { Checker as CheckerType } from '../../GameStore/types/Checker'
 import { ReactElement } from 'react'
-import { Latitude, Longitude } from '../Board/state/types'
 import NodotsGameStore from '../../GameStore'
+import { Latitude, Longitude } from '../../GameStore/types/Board'
 
 export interface Props {
   id: string
   store: NodotsGameStore
-  state: Ready | Confirming | Rolling | RollingForStart | Moving
+  state: Confirming | Rolling | Rolled | RollingForStart | Moving
   position: {
     clockwise: number
     counterclockwise: number
   }
   latitude: Latitude
-  longitude: Longitude
   checkers: CheckerType[]
 }
 
-function Point({ position, checkers, latitude, state, store }: Props) {
+function Point({ id, position, checkers, latitude, state, store }: Props) {
   const theme = useTheme()
   let className = 'point'
 
@@ -37,7 +36,7 @@ function Point({ position, checkers, latitude, state, store }: Props) {
   const getCheckerComponents = (
     store: NodotsGameStore,
     checkers: CheckerType[],
-    state: Rolling | RollingForStart | Confirming | Ready | Moving
+    state: Rolling | Rolled | RollingForStart | Confirming | Moving
   ) => {
     const checkerComponents: ReactElement[] = []
     checkers.forEach((c) =>
@@ -67,7 +66,11 @@ function Point({ position, checkers, latitude, state, store }: Props) {
           fill={getBackgroundColor(position.clockwise)}
         ></polygon>
       </svg>
-      <div className="checker-container">
+      <div className="checker-container" key={id}>
+        <ul className="hidden">
+          <li>c: {position.clockwise}</li>
+          <li>cc: {position.counterclockwise}</li>
+        </ul>
         {getCheckerComponents(store, checkers, state)}
       </div>
     </div>
