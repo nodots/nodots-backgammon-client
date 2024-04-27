@@ -41,3 +41,20 @@ export const getChecker = (board: NodotsBoardStore, id: string): Checker => {
 export const generateChecker = (color: Color): Checker => {
   return { id: generateId(), color, locationId: '' }
 }
+
+export const generateCheckersForLocationId = (
+  color: Color,
+  locationId: string,
+  count: number
+): Checker[] => {
+  const checkers: Checker[] = []
+  for (let i = 0; i < count; i++) {
+    const checker: Checker = {
+      id: generateId(),
+      color,
+      locationId,
+    }
+    checkers.push(checker)
+  }
+  return checkers
+}

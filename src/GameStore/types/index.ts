@@ -1,11 +1,11 @@
 import { v4 as uuid } from 'uuid'
-import { NodotsBoardStore, buildNodotsBoardStore } from './Board'
+import { NodotsBoardStore, PlayerBoard, buildNodotsBoardStore } from './Board'
 import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { NodotsMoves, move } from './Move'
-import { Players } from './Player'
+import { Players, buildInitialPlayerBoard } from './Player'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -40,6 +40,11 @@ export type DestinationPosition = PointPosition | 'off'
 
 export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
+
+export interface PlayerBoards {
+  white: PlayerBoard
+  black: PlayerBoard
+}
 
 export const generateId = (): string => uuid()
 export const changeActiveColor = (activeColor: Color): Color =>
@@ -113,7 +118,9 @@ export const initializing = (players: Players): Initializing => {
     owner: undefined,
   }
 
-  // this is the board _store_ not the representation of the board
+  // TODO: Again, think carefully about this demarcation.
+  // This is the board _store_ not the representation of the board
+  // See GamePage constructor for other side of this conversation.
   const boardStore = buildNodotsBoardStore(players)
 
   return {

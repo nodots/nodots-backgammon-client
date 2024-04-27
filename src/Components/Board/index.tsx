@@ -1,6 +1,6 @@
 import './scss/index.scss'
 // Components
-import Quadrant from '../Quadrant'
+import Quadrant, { buildQuadrants } from '../Quadrant'
 
 import Bar from '../Bar'
 import Off from '../Off'
@@ -10,6 +10,16 @@ import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import React from 'react'
 import { NodotsGameState } from '../../GameStore/types'
+import { NodotsBoardStore } from '../../GameStore/types/Board'
+
+export const buildBoardDisplay = (
+  store: NodotsGameStore,
+  boardStore: NodotsBoardStore
+) => {
+  const quadrants = buildQuadrants(store, boardStore)
+
+  console.log(quadrants)
+}
 
 interface Props {
   store: NodotsGameStore
@@ -26,17 +36,18 @@ function Board({ store, state }: Props) {
     case 'rolling':
     case 'rolled':
     case 'rolling-for-start':
-      store.state.boardStore.points.map((p) =>
-        console.log(
-          `${p.position.clockwise} : ${p.position.counterclockwise} checkers:`,
-          p.checkers.length
-        )
-      )
+      // store.state.boardStore.points.map((p) =>
+      //   console.log(
+      //     `${p.position.clockwise} : ${p.position.counterclockwise} checkers:`,
+      //     p.checkers.length
+      //   )
+      // )
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>
             <Quadrant
               store={store}
+              boardStore={store.state.boardStore}
               state={state}
               latitude="north"
               longitude="west"
@@ -46,10 +57,11 @@ function Board({ store, state }: Props) {
             <Rollsurface store={store} state={state} color="black" />
             <Quadrant
               store={store}
+              boardStore={store.state.boardStore}
+              state={state}
               latitude="south"
               longitude="west"
               start={7}
-              state={state}
               points={[]}
             />
           </Paper>
@@ -57,19 +69,21 @@ function Board({ store, state }: Props) {
           <Paper id="East" className="board-half" elevation={1}>
             <Quadrant
               store={store}
+              boardStore={store.state.boardStore}
+              state={state}
               latitude="north"
               longitude="east"
               start={19}
-              state={state}
               points={[]}
             />
             <Rollsurface store={store} state={state} color="white" />
             <Quadrant
               store={store}
+              boardStore={store.state.boardStore}
+              state={state}
               latitude="south"
               longitude="east"
               start={1}
-              state={state}
               points={[]}
             />
           </Paper>

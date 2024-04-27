@@ -11,7 +11,7 @@ export interface Die {
   order: DieOrder
 }
 
-export type DiePair = [Die, Die]
+export type Dice = [Die, Die]
 
 export const generateDice = (player: Player) => {
   const die1: Die = {
@@ -24,7 +24,7 @@ export const generateDice = (player: Player) => {
     color: player.color,
     value: 1,
   }
-  const dice: DiePair = [die2, die2]
+  const dice: Dice = [die1, die2]
   return dice
 }
 
