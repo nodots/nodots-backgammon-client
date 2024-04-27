@@ -5,7 +5,7 @@ import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { NodotsMoves, move } from './Move'
-import { Players, buildInitialPlayerBoard } from './Player'
+import { Players } from './Player'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -122,6 +122,10 @@ export const initializing = (players: Players): Initializing => {
   // This is the board _store_ not the representation of the board
   // See GamePage constructor for other side of this conversation.
   const boardStore = buildNodotsBoardStore(players)
+
+  // boardStore.points.forEach((point) =>
+  //   console.log(point.position, point.checkers)
+  // )
 
   return {
     kind: 'initializing',

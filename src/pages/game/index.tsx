@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
-import BoardComponent, { buildBoardDisplay } from '../../components/Board'
+import BoardComponent from '../../components/Board'
 import GameNotifications from '../../components/Nofitications/Game'
 import DebugNotifications from '../../components/Nofitications/Debug'
 import NodotsGameStore from '../../GameStore'
@@ -40,7 +40,7 @@ const blackPlayer: Player = {
     roll: true,
     move: false,
   },
-  board: buildInitialPlayerBoard('counterclockwise', 'white'),
+  board: buildInitialPlayerBoard('clockwise', 'black'),
   dice: [
     { color: 'black', order: 0, value: 1 },
     { color: 'black', order: 1, value: 1 },
@@ -60,7 +60,6 @@ interface NodotsBoardDisplay {
 
 class GamePage extends Component {
   private store: NodotsGameStore
-  private display
 
   constructor(props: {} | Readonly<{}>) {
     super(props)
@@ -69,8 +68,6 @@ class GamePage extends Component {
     // have both players play the same color in the same direction.
     // See initializing method in GameStore/types/ for other side of this convo
     this.store = new NodotsGameStore({ white: whitePlayer, black: blackPlayer })
-    this.display = buildBoardDisplay(this.store, this.store.state.boardStore)
-    console.log(this.display)
     switch (this.store.state.kind) {
       case 'initializing':
         this.store.state = rollingForStart(this.store.state)

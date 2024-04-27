@@ -5,8 +5,10 @@ import {
   getCounterclockwisePlayer,
 } from '../../GameStore/types/Player'
 import PipCount from './PipCount'
+import NodotsGameStore from '../../GameStore'
+import { NodotsBoardStore } from '../../GameStore/types/Board'
 
-interface Props {
+export interface Props {
   state: NodotsGameState
 }
 

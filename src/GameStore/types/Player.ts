@@ -2,11 +2,8 @@ import { Color, MoveDirection, PointPosition, generateId } from '.'
 import { Dice } from './Dice'
 import { PlayerBoard, Points } from './Board'
 import { Point } from './Checkercontainer'
-import {
-  Checker,
-  buildCheckersForColor,
-  generateCheckersForLocationId,
-} from './Checker'
+import { Checker, generateCheckersForLocationId } from './Checker'
+import NodotsGameStore from '..'
 
 export type Player = {
   id: string
@@ -50,12 +47,14 @@ export const buildInitialPlayerBoard = (
   direction: MoveDirection,
   color: Color
 ): PlayerBoard => {
+  console.log(`buildInitialPlayerBoard ${direction} ${color}`)
   let points: Points
   const tempPoints: Point[] = []
   for (let i = 0; i < 24; i++) {
     const pointId = generateId()
     const clockwisePosition: PointPosition = (i + 1) as number as PointPosition
     const counterclockwisePosition = (25 - clockwisePosition) as PointPosition
+    console.log(clockwisePosition, counterclockwisePosition)
     const position =
       direction === 'clockwise' ? clockwisePosition : counterclockwisePosition
 

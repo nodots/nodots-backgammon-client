@@ -15,7 +15,6 @@ import { Latitude, Longitude } from '../../GameStore/types/Board'
 export interface Props {
   id: string
   store: NodotsGameStore
-  state: Confirming | Rolling | Rolled | RollingForStart | Moving
   position: {
     clockwise: number
     counterclockwise: number
@@ -24,7 +23,7 @@ export interface Props {
   checkers: CheckerType[]
 }
 
-function Point({ id, position, checkers, latitude, state, store }: Props) {
+function Point({ id, position, checkers, latitude, store }: Props) {
   const theme = useTheme()
   let className = 'point'
 
@@ -35,14 +34,11 @@ function Point({ id, position, checkers, latitude, state, store }: Props) {
 
   const getCheckerComponents = (
     store: NodotsGameStore,
-    checkers: CheckerType[],
-    state: Rolling | Rolled | RollingForStart | Confirming | Moving
+    checkers: CheckerType[]
   ) => {
     const checkerComponents: ReactElement[] = []
     checkers.forEach((c) =>
-      checkerComponents.push(
-        <Checker key={c.id} checker={c} state={state} store={store} />
-      )
+      checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
     )
     return checkerComponents
   }
@@ -66,12 +62,17 @@ function Point({ id, position, checkers, latitude, state, store }: Props) {
           fill={getBackgroundColor(position.clockwise)}
         ></polygon>
       </svg>
-      <div className="checker-container" key={id}>
-        <ul className="hidden">
-          <li>c: {position.clockwise}</li>
-          <li>cc: {position.counterclockwise}</li>
+      <div
+        className="checker-container"
+        key={id}
+        data-position-clockwise={position.clockwise}
+        data-position-counterclockwise={position.counterclockwise}
+      >
+        <ul className="hidden debug-list">
+          <li>{position.clockwise}</li>
+          <li>{position.counterclockwise}</li>
         </ul>
-        {getCheckerComponents(store, checkers, state)}
+        {getCheckerComponents(store, checkers)}
       </div>
     </div>
   )

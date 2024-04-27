@@ -8,27 +8,39 @@ import {
   Moving,
   Rolled,
 } from '../../GameStore/types'
-import { Checker as CheckerType } from '../../GameStore/types/Checker'
+import {
+  Checker as CheckerType,
+  getChecker,
+} from '../../GameStore/types/Checker'
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import React from 'react'
+import { getCheckercontainerById } from '../../GameStore/types/Board'
 
 export interface Props {
   store: NodotsGameStore
   checker: CheckerType
-  state: RollingForStart | Rolling | Rolled | Confirming | Moving
   count?: number
 }
 
-function Checker({ checker, state, store }: Props) {
+function Checker({ checker, store }: Props) {
   const theme = useTheme()
 
   const handleCheckerClick = (e: React.MouseEvent) => {
-    switch (state.kind) {
+    const checker = e.currentTarget
+    const color = checker.getAttribute('data-color')
+    console.log(`${checker.id} ${color} parent positions:`)
+    const container = checker.parentElement
+    const clockwisePosition = container?.getAttribute('data-position-clockwise')
+    const counterclockwisePosition = container?.getAttribute(
+      'data-position-counterClockwise'
+    )
+    console.log(clockwisePosition, counterclockwisePosition)
+    switch (store.state.kind) {
       case 'rolled':
       case 'moving':
-        store.moving(state, checker.id)
+        store.moving(store.state, checker.id)
         break
       case 'rolling':
       case 'confirming':
@@ -51,9 +63,10 @@ function Checker({ checker, state, store }: Props) {
         backgroundColor: getBackgroundColor(checker.color),
         borderColor: theme.palette.background.default,
       }}
+      data-color={checker.color}
       onClick={handleCheckerClick}
     >
-      <span className="debug">{checker.id.substring(0, 8)}</span>
+      <span className="hidden">{checker.id}</span>
     </Button>
   )
 }

@@ -3,17 +3,17 @@ import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import React from 'react'
 import { NodotsGameState } from '../../GameStore/types'
-import { CubeValue } from './state'
+import { CubeValue } from '../../GameStore/types/Cube'
 
 interface Props {
-  state: NodotsGameState
+  store: NodotsGameStore
 }
 
 export const double = (value: CubeValue) =>
   value !== 64 ? ((value * 2) as CubeValue) : value
 
-function Cube({ state }: Props) {
-  const { cube } = state
+function Cube({ store }: Props) {
+  const { cube } = store.state
   const theme = useTheme()
 
   const clickHandler = (e: React.MouseEvent) => {

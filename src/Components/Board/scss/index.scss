@@ -10,6 +10,12 @@ $board-padding: $point-padding * 2;
   display: none;
 }
 
+.debug-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
 #GameContainer {
   display: flex;
   flex-direction: column;
@@ -131,10 +137,6 @@ $board-padding: $point-padding * 2;
   cursor: pointer;
   height: $checker-height - 4px;
   width: $checker-height - 4px;
-
-  .debug {
-    display: none;
-  }
 
   .checker-center {
     border-radius: 50% !important;

@@ -157,15 +157,29 @@ export const buildPoints = (players: Players): Point[] => {
   const clockwiseBoard = clockwisePlayer.board
   const counterclockwiseBoard = counterclockwisePlayer.board
 
+  clockwiseBoard?.points.forEach((point) =>
+    console.log(
+      `${point.position.clockwise} ${point.position.counterclockwise}`,
+      point.checkers
+    )
+  )
+  counterclockwiseBoard?.points.forEach((point) =>
+    console.log(
+      `${point.position.clockwise} ${point.position.counterclockwise}`,
+      point.checkers
+    )
+  )
+
   if (clockwiseBoard && counterclockwiseBoard) {
     for (let i = 0; i < 24; i++) {
       const checkers: Checker[] = []
-      const clockwisePosition: PointPosition = (i + 1) as PointPosition
-      const counterclockwisePosition: PointPosition = (24 - i) as PointPosition
+      const clockwisePosition: PointPosition = (24 - i) as PointPosition
+      const counterclockwisePosition: PointPosition = (i + 1) as PointPosition
 
       const clockwisePoint = clockwiseBoard.points.find(
         (p) => p.position.clockwise === clockwisePosition
       )
+
       const counterclockwisePoint = counterclockwiseBoard.points.find(
         (p) => p.position.counterclockwise === counterclockwisePosition
       )

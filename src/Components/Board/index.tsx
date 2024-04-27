@@ -1,9 +1,8 @@
 import './scss/index.scss'
 // Components
-import Quadrant, { buildQuadrants } from '../Quadrant'
-
-import Bar from '../Bar'
-import Off from '../Off'
+import Quadrant, { QuadrantPoints, Props as QuadrantProps } from '../Quadrant'
+import Bar, { Props as BarProps } from '../Bar'
+import Off, { Props as OffProps } from '../Off'
 import Rollsurface from '../Rollsurface'
 import { Paper, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
@@ -12,13 +11,17 @@ import React from 'react'
 import { NodotsGameState } from '../../GameStore/types'
 import { NodotsBoardStore } from '../../GameStore/types/Board'
 
-export const buildBoardDisplay = (
-  store: NodotsGameStore,
-  boardStore: NodotsBoardStore
-) => {
-  const quadrants = buildQuadrants(store, boardStore)
+export type Quadrants = [
+  QuadrantProps,
+  QuadrantProps,
+  QuadrantProps,
+  QuadrantProps
+]
 
-  console.log(quadrants)
+export interface BoardDisplay {
+  quadrants: Quadrants
+  bar: BarProps
+  off: OffProps
 }
 
 interface Props {
@@ -48,21 +51,23 @@ function Board({ store, state }: Props) {
             <Quadrant
               store={store}
               boardStore={store.state.boardStore}
-              state={state}
               latitude="north"
               longitude="west"
-              start={7}
-              points={[]}
+              start={13}
+              points={
+                store.state.boardStore.points.slice(12, 18) as QuadrantPoints
+              }
             />
             <Rollsurface store={store} state={state} color="black" />
             <Quadrant
               store={store}
               boardStore={store.state.boardStore}
-              state={state}
               latitude="south"
               longitude="west"
               start={7}
-              points={[]}
+              points={
+                store.state.boardStore.points.slice(6, 12) as QuadrantPoints
+              }
             />
           </Paper>
           <Bar state={state} />
@@ -70,24 +75,26 @@ function Board({ store, state }: Props) {
             <Quadrant
               store={store}
               boardStore={store.state.boardStore}
-              state={state}
               latitude="north"
               longitude="east"
               start={19}
-              points={[]}
+              points={
+                store.state.boardStore.points.slice(18, 24) as QuadrantPoints
+              }
             />
             <Rollsurface store={store} state={state} color="white" />
             <Quadrant
               store={store}
               boardStore={store.state.boardStore}
-              state={state}
               latitude="south"
               longitude="east"
               start={1}
-              points={[]}
+              points={
+                store.state.boardStore.points.slice(0, 6) as QuadrantPoints
+              }
             />
           </Paper>
-          <Off state={state} />
+          <Off store={store} />
         </Paper>
       )
   }

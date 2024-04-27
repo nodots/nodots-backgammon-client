@@ -3,22 +3,21 @@ import Cube from '../Cube'
 import NodotsGameStore from '../../GameStore'
 import React from 'react'
 import {
-  Ready,
   Confirming,
   Rolling,
   RollingForStart,
   Moving,
 } from '../../GameStore/types'
 
-interface Props {
-  state: Ready | Confirming | Rolling | RollingForStart | Moving
+export interface Props {
+  store: NodotsGameStore
 }
 
-function Off({ state }: Props) {
+function Off({ store }: Props) {
   return (
     <div id="Off">
       <div className="checkerbox clockwise"></div>
-      <Cube state={state} />
+      <Cube store={store} />
       <div className="checkerbox counterclockwise"></div>
     </div>
   )
