@@ -2,7 +2,7 @@
 // @import '../../../theme/partials/colors';
 @import '../../../theme/partials/borders';
 
-$checker-height: 80px;
+$checker-height: 70px;
 $point-padding: 8px;
 $board-padding: $point-padding * 2;
 
@@ -16,12 +16,18 @@ $board-padding: $point-padding * 2;
   padding: 0;
 }
 
+.debug-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 #GameContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  margin: 12px auto;
+  margin: 12px 10px;
 }
 
 #GameNotificationsContainer {
@@ -36,20 +42,20 @@ $board-padding: $point-padding * 2;
 }
 
 #DebugNotifications {
-  display: hidden;
-  // position: absolute;
-  // z-index: 100;
-  // right: 0;
-  // top: 0;
-  // margin-top: 15px;
-  // margin-right: 15px;
-  // padding: 20px;
-  // width: 15vw;
-  // height: 80%;
-  // overflow: scroll;
-  // background-color: rgba(0, 38, 86, 0.8);
-  // font-family: 'Courier New', Courier, monospace;
-  // font-weight: 800;
+  margin-top: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+  padding: 20px;
+  width: 90vw;
+  height: 50vh;
+  overflow: scroll;
+  background-color: rgba(0, 38, 86, 0.8);
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+  .debug-state {
+    font-family: Arial, Helvetica, sans-serif !important;
+    text-transform: uppercase;
+  }
 }
 
 .cube {
@@ -155,8 +161,6 @@ $board-padding: $point-padding * 2;
 
 #BoardContainer {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   padding: $board-padding 0 $board-padding $board-padding;
 
   .board-half {

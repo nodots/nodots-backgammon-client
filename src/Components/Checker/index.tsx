@@ -16,7 +16,7 @@ import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import React from 'react'
-import { getCheckercontainerById } from '../../GameStore/types/Board'
+import { getCheckercontainer } from '../../GameStore/types/Board'
 
 export interface Props {
   store: NodotsGameStore
@@ -27,16 +27,15 @@ export interface Props {
 function Checker({ checker, store }: Props) {
   const theme = useTheme()
 
+  const handleDebugClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const checker = e.currentTarget
+    checker.className = 'debug-highlight'
+  }
+
   const handleCheckerClick = (e: React.MouseEvent) => {
     const checker = e.currentTarget
-    const color = checker.getAttribute('data-color')
-    console.log(`${checker.id} ${color} parent positions:`)
-    const container = checker.parentElement
-    const clockwisePosition = container?.getAttribute('data-position-clockwise')
-    const counterclockwisePosition = container?.getAttribute(
-      'data-position-counterClockwise'
-    )
-    console.log(clockwisePosition, counterclockwisePosition)
+
     switch (store.state.kind) {
       case 'rolled':
       case 'moving':
@@ -65,6 +64,7 @@ function Checker({ checker, store }: Props) {
       }}
       data-color={checker.color}
       onClick={handleCheckerClick}
+      onContextMenu={handleDebugClick}
     >
       <span className="hidden">{checker.id}</span>
     </Button>

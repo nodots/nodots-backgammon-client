@@ -2,12 +2,12 @@ import { PlayerCheckers } from '.'
 import { CHECKERS_PER_PLAYER, generateId } from '.'
 import { Color } from '.'
 import NodotsGameStore from '..'
-import { NodotsBoardStore, getCheckercontainerById, getCheckers } from './Board'
+import { NodotsBoardStore, getCheckercontainer, getCheckers } from './Board'
 
 export interface Checker {
   id: string
   color: Color
-  locationId: string
+  checkercontainerId: string
   highlight?: boolean
 }
 
@@ -25,16 +25,15 @@ export const getChecker = (board: NodotsBoardStore, id: string): Checker => {
 }
 
 export const generateChecker = (
-  store: NodotsGameStore,
   color: Color,
-  locationId: string
+  checkercontainerId: string
 ): Checker => {
-  return { id: generateId(), color, locationId }
+  return { id: generateId(), color, checkercontainerId }
 }
 
-export const generateCheckersForLocationId = (
+export const generateCheckersForCheckercontainerId = (
   color: Color,
-  locationId: string,
+  checkercontainerId: string,
   count: number
 ): Checker[] => {
   const checkers: Checker[] = []
@@ -43,7 +42,7 @@ export const generateCheckersForLocationId = (
     const checker: Checker = {
       id: generateId(),
       color,
-      locationId,
+      checkercontainerId,
     }
     checkers.push(checker)
   }

@@ -13,10 +13,13 @@ function DebugNotifications({ store, severity }: Props) {
     d.getMinutes() < 10 ? '0' : ''
   }${d.getMinutes()}:${d.getSeconds() < 10 ? '0' : ''}${d.getSeconds()}`
   return (
-    <Card
-      raised={true}
-      id="DebugNotifications"
-    >{`${ts} > ${store.state.kind}`}</Card>
+    <Card raised={true} id="DebugNotifications">
+      <div className="debug-state">{store.state.kind}</div>
+
+      <div className="debug-message">
+        {store.state.message?.debug ? store.state.message.debug : ''}
+      </div>
+    </Card>
   )
 }
 

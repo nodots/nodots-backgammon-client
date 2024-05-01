@@ -1,16 +1,20 @@
 import { useTheme } from '@mui/material'
 import Checker from '../Checker'
-import {
-  Confirming,
-  Moving,
-  Rolled,
-  Rolling,
-  RollingForStart,
-} from '../../GameStore/types'
 import { Checker as CheckerType } from '../../GameStore/types/Checker'
 import { ReactElement } from 'react'
 import NodotsGameStore from '../../GameStore'
 import { Latitude, Longitude } from '../../GameStore/types/Board'
+
+export const getCheckerComponents = (
+  store: NodotsGameStore,
+  checkers: CheckerType[]
+) => {
+  const checkerComponents: ReactElement[] = []
+  checkers.forEach((c) =>
+    checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
+  )
+  return checkerComponents
+}
 
 export interface Props {
   id: string
@@ -31,17 +35,6 @@ function Point({ id, position, checkers, latitude, store }: Props) {
     position.clockwise % 2 === 0
       ? (className += ' even')
       : (className += ' odd')
-
-  const getCheckerComponents = (
-    store: NodotsGameStore,
-    checkers: CheckerType[]
-  ) => {
-    const checkerComponents: ReactElement[] = []
-    checkers.forEach((c) =>
-      checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
-    )
-    return checkerComponents
-  }
 
   const getBackgroundColor = (position: number) => {
     return position % 2 === 0

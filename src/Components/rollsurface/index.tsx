@@ -32,7 +32,6 @@ function RollSurface({ store, state, color }: Props) {
     e.preventDefault()
     switch (state.kind) {
       case 'rolling':
-        console.log('RollSurface rolling:')
         store.rolling(state)
         break
       case 'moving':

@@ -49,6 +49,8 @@ export interface PlayerBoards {
 export const generateId = (): string => uuid()
 export const changeActiveColor = (activeColor: Color): Color =>
   activeColor === 'black' ? 'white' : 'black'
+export const getInactiveColor = (activeColor: Color): Color =>
+  activeColor === 'black' ? 'white' : 'black'
 
 interface NodotsGame {
   kind:
@@ -94,9 +96,9 @@ export interface Moving extends NodotsGame {
 
 export interface Confirming extends NodotsGame {
   kind: 'confirming'
-  game: NodotsGame
   activeColor: Color
   roll: Roll
+  moves: NodotsMoves
   message?: NodotsMessage
 }
 
@@ -122,10 +124,6 @@ export const initializing = (players: Players): Initializing => {
   // This is the board _store_ not the representation of the board
   // See GamePage constructor for other side of this conversation.
   const boardStore = buildNodotsBoardStore(players)
-
-  // boardStore.points.forEach((point) =>
-  //   console.log(point.position, point.checkers)
-  // )
 
   return {
     kind: 'initializing',
@@ -184,7 +182,7 @@ export const rolling = (state: Rolling): Rolled => {
 
   const message = {
     game: `${activePlayer.username} rolls ${JSON.stringify(roll)}`,
-    debug: `${JSON.stringify(state)} ${activeColor}`,
+    debug: `${JSON.stringify(moves)}`,
   }
 
   return {
@@ -200,12 +198,12 @@ export const rolling = (state: Rolling): Rolled => {
 }
 
 export const switchDice = (state: Rolled): Rolled => {
-  const { cube, boardStore, players, activeColor, roll, moves } = state
+  const { cube, boardStore, players, roll, activeColor, moves } = state
   const activePlayer = players[activeColor]
-
+  const newRoll: Roll = [roll[1], roll[0]]
   return {
     kind: 'rolled',
-    roll: [roll[1], roll[0]],
+    roll: newRoll,
     activeColor,
     moves,
     players,
@@ -213,7 +211,7 @@ export const switchDice = (state: Rolled): Rolled => {
     cube,
     message: {
       game: `${activePlayer.username} swaps dice ${JSON.stringify(roll)}`,
-      debug: JSON.stringify(activeColor),
+      debug: JSON.stringify(roll),
     },
   }
 }
@@ -245,7 +243,10 @@ export const moving = (
 ): Moving | Confirming => {
   const { activeColor, players } = state
   const activePlayer = players[activeColor]
-  return move(state, activePlayer, checkerId)
+
+  const newState = move(state, checkerId)
+
+  return newState
 }
 
 export const confirming = (state: Moving): Rolling => {
@@ -257,6 +258,18 @@ export const confirming = (state: Moving): Rolling => {
     boardStore,
     players,
     cube,
+  }
+}
+
+export const debugging = (
+  state: NodotsGameState,
+  messageText: string
+): NodotsGameState => {
+  return {
+    ...state,
+    message: {
+      debug: `${messageText}`,
+    },
   }
 }
 

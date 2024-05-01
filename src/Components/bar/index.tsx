@@ -7,19 +7,32 @@ import {
 import PipCount from './PipCount'
 import NodotsGameStore from '../../GameStore'
 import { NodotsBoardStore } from '../../GameStore/types/Board'
+import { getCheckerComponents } from '../Point'
 
 export interface Props {
-  state: NodotsGameState
+  store: NodotsGameStore
 }
 
-function Bar({ state }: Props) {
-  const { players } = state
+function Bar({ store }: Props) {
+  const { state } = store
+  const { players, boardStore } = state
+  const clockwisePlayer = getClockwisePlayer(players)
+  const clockwiseColor = clockwisePlayer.color
+  const clockwiseCheckers = boardStore.bar[clockwiseColor].checkers
+  const counterclockwisePlayer = getCounterclockwisePlayer(players)
+  const counterclockwiseColor = counterclockwisePlayer.color
+  const counterclockwiseCheckers =
+    boardStore.bar[counterclockwiseColor].checkers
   return (
     <div id="Bar">
-      <PipCount player={getCounterclockwisePlayer(players)} />
-      <div className="checkerbox counterclockwise"></div>
-      <div className="checkerbox clockwise"></div>
-      <PipCount player={getClockwisePlayer(players)} />
+      <PipCount player={clockwisePlayer} />
+      <div className="checkerbox counterclockwise">
+        {getCheckerComponents(store, clockwiseCheckers)}
+      </div>
+      <div className="checkerbox clockwise">
+        {getCheckerComponents(store, counterclockwiseCheckers)}
+      </div>
+      <PipCount player={counterclockwisePlayer} />
     </div>
   )
 }

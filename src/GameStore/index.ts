@@ -7,6 +7,7 @@ import {
   Rolled,
   Rolling,
   confirming,
+  debugging,
   initializing,
   moving,
   rolling,
@@ -58,6 +59,11 @@ class NodotsGameStore {
   confirming(state: Moving) {
     this.state = confirming(state)
     console.log('confirming new state')
+  }
+
+  @action
+  debugging(state: NodotsGameState, messageText: string) {
+    this.state = debugging(state, messageText)
   }
 }
 

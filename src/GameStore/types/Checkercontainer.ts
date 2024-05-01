@@ -1,4 +1,9 @@
-import { NodotsBoardStore, Latitude, Longitude } from './Board'
+import {
+  NodotsBoardStore,
+  Latitude,
+  Longitude,
+  getCheckercontainers,
+} from './Board'
 import { Checker } from './Checker'
 import { Color, PointPosition } from '.'
 
@@ -7,6 +12,7 @@ export type Checkercontainer = {
   kind: string
   checkers: Checker[]
 }
+
 export interface Point extends Checkercontainer {
   kind: 'point'
   position: {

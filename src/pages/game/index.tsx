@@ -6,7 +6,7 @@ import GameNotifications from '../../components/Nofitications/Game'
 import DebugNotifications from '../../components/Nofitications/Debug'
 import NodotsGameStore from '../../GameStore'
 import { generateId, rollingForStart } from '../../GameStore/types'
-import { Players, buildInitialPlayerBoard } from '../../GameStore/types/Player'
+import { Players } from '../../GameStore/types/Player'
 import { Player } from '../../GameStore/types/Player'
 
 import Quadrant from '../../components/Quadrant'
@@ -27,7 +27,6 @@ const whitePlayer: Player = {
     { color: 'white', order: 0, value: 1 },
     { color: 'white', order: 1, value: 1 },
   ],
-  board: buildInitialPlayerBoard('counterclockwise', 'white'),
 }
 
 const blackPlayer: Player = {
@@ -40,7 +39,6 @@ const blackPlayer: Player = {
     roll: true,
     move: false,
   },
-  board: buildInitialPlayerBoard('clockwise', 'black'),
   dice: [
     { color: 'black', order: 0, value: 1 },
     { color: 'black', order: 1, value: 1 },
@@ -83,7 +81,7 @@ class GamePage extends Component {
   render() {
     return (
       <Paper id="GameContainer">
-        <GameNotifications store={this.store} />
+        {/* <GameNotifications store={this.store} /> */}
         <BoardComponent store={this.store} state={this.store.state} />
         <DebugNotifications store={this.store} />
       </Paper>

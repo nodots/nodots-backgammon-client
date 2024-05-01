@@ -70,7 +70,7 @@ function Board({ store, state }: Props) {
               }
             />
           </Paper>
-          <Bar state={state} />
+          <Bar store={store} />
           <Paper id="East" className="board-half" elevation={1}>
             <Quadrant
               store={store}
