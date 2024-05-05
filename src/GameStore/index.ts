@@ -36,6 +36,7 @@ class NodotsGameStore {
 
   @action
   switchDice(state: Rolled) {
+    console.log('switchDice state:', state)
     this.state = switchDice(state)
   }
 
