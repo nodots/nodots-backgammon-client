@@ -1,12 +1,11 @@
-import { MoveDirection, PointPosition, generateId } from '.'
+import { Color, PointPosition, generateId } from '.'
+import { Checker, generateCheckersForCheckercontainerId } from './Checker'
+import { Bar, Checkercontainer, Off, Point } from './Checkercontainer'
 import {
   Players,
   getClockwisePlayer,
   getCounterclockwisePlayer,
 } from './Player'
-import { Bar, Off, Point, Checkercontainer } from './Checkercontainer'
-import { Color } from '.'
-import { Checker, generateCheckersForCheckercontainerId } from './Checker'
 
 export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'
@@ -37,17 +36,6 @@ export type Points = [
   Point,
   Point
 ]
-export interface NodotsBoardStore {
-  points: Point[]
-  bar: {
-    white: Bar
-    black: Bar
-  }
-  off: {
-    white: Off
-    black: Off
-  }
-}
 
 export type CheckercontainerCheckers =
   | []
@@ -141,20 +129,17 @@ export type CheckercontainerCheckers =
       Checker
     ]
 
-export const getLatLongForClockwisePosition = (
-  position: PointPosition
-): [Latitude, Longitude] => {
-  if (position <= 6) {
-    return ['south', 'east']
-  } else if (position >= 7 && position <= 12) {
-    return ['south', 'west']
-  } else if (position >= 13 && position <= 17) {
-    return ['north', 'west']
-  } else {
-    return ['north', 'east']
+export interface NodotsBoardStore {
+  points: Point[]
+  bar: {
+    white: Bar
+    black: Bar
+  }
+  off: {
+    white: Off
+    black: Off
   }
 }
-
 const buildPoints = (players: Players): Points => {
   const tempPoints: Point[] = []
   for (let i = 0; i < 24; i++) {
@@ -244,7 +229,7 @@ const buildPoints = (players: Players): Points => {
   if (tempPoints.length === 24) {
     return tempPoints as Points
   } else {
-    throw new Error(`invalid tempPoints length ${tempPoints.length}`)
+    throw Error(`invalid tempPoints length ${tempPoints.length}`)
   }
 }
 
@@ -253,32 +238,32 @@ export const buildNodotsBoardStore = (players: Players): NodotsBoardStore => {
     points: buildPoints(players),
     bar: {
       white: {
-        kind: 'bar',
         id: generateId(),
-        color: 'white',
+        kind: 'bar',
         position: 'bar',
+        color: 'white',
         checkers: [],
       },
       black: {
+        id: generateId(),
         kind: 'bar',
         position: 'bar',
-        id: generateId(),
         color: 'black',
         checkers: [],
       },
     },
     off: {
       white: {
-        kind: 'off',
         id: generateId(),
-        color: 'white',
+        kind: 'off',
         position: 'off',
+        color: 'white',
         checkers: [],
       },
       black: {
+        id: generateId(),
         kind: 'off',
         position: 'off',
-        id: generateId(),
         color: 'black',
         checkers: [],
       },
@@ -328,35 +313,4 @@ export const getCheckercontainer = (
     throw Error(`No checkercontainer found for ${id}`)
   }
   return container
-}
-
-export type PlayerBoard = {
-  points: [
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point,
-    Point
-  ]
-  bar: Bar
-  off: Off
 }

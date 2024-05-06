@@ -1,8 +1,5 @@
-import { PlayerCheckers } from '.'
-import { CHECKERS_PER_PLAYER, generateId } from '.'
-import { Color } from '.'
-import NodotsGameStore from '..'
-import { NodotsBoardStore, getCheckercontainer, getCheckers } from './Board'
+import { Color, PlayerCheckers, generateId } from '.'
+import { NodotsBoardStore, getCheckers } from './Board'
 
 export interface Checker {
   id: string

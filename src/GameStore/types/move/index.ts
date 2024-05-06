@@ -92,31 +92,6 @@ export const getOriginPointById = (
   return point
 }
 
-export const getDestinationForOrigin = (
-  store: NodotsBoardStore,
-  origin: Checkercontainer,
-  dieValue: DieValue,
-  player: Player
-): Checkercontainer => {
-  switch (origin.kind) {
-    case 'point':
-      {
-        const originPoint = origin as Point
-        let destination: Point = originPoint
-        const destinationPosition =
-          player.moveDirection === 'clockwise'
-            ? originPoint.position.clockwise - dieValue
-            : originPoint.position.clockwise + dieValue
-      }
-
-      break
-    default:
-      console.log(origin.kind)
-  }
-  let destination = store.off.black
-  return destination
-}
-
 export const move = (
   state: NodotsMoveState,
   checkerId: string
@@ -146,7 +121,6 @@ export const move = (
 
       if (originCheckercontainer.kind === 'point') {
         if (isBearOff(board, player)) {
-          alert('Bear Off')
           bearOff(
             state,
             checkerToMove,

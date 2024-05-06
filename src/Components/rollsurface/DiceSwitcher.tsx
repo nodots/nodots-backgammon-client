@@ -1,15 +1,13 @@
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
-import { observer } from 'mobx-react'
 import { useTheme } from '@mui/material'
-import { Color, NodotsGameState, Rolled } from '../../GameStore/types'
+import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
+import { Color } from '../../GameStore/types'
 
 interface Props {
-  color: Color
   store: NodotsGameStore
+  color: Color
 }
-
-const isActive = (activeColor: Color, color: Color) => activeColor === color
 
 function DiceSwitcher({ store, color }: Props) {
   const theme = useTheme()

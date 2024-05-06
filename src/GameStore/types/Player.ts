@@ -1,9 +1,5 @@
-import { Color, MoveDirection, PointPosition, generateId } from '.'
+import { Color, MoveDirection } from '.'
 import { Dice } from './Dice'
-import { PlayerBoard, Points } from './Board'
-import { Point } from './Checkercontainer'
-import { Checker, generateCheckersForCheckercontainerId } from './Checker'
-import NodotsGameStore from '..'
 
 export type Player = {
   id: string
@@ -16,6 +12,11 @@ export type Player = {
     move: boolean
     roll: boolean
   }
+}
+
+export interface Players {
+  white: Player
+  black: Player
 }
 
 export const getActivePlayer = (activeColor: Color, players: Players): Player =>
@@ -36,8 +37,3 @@ export const getPlayerForMoveDirection = (
   direction === 'clockwise'
     ? getClockwisePlayer(players)
     : getCounterclockwisePlayer(players)
-
-export interface Players {
-  white: Player
-  black: Player
-}

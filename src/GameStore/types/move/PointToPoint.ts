@@ -37,16 +37,20 @@ export const pointToPoint = (
     (checker) => checker.id !== checkerToMove.id
   ))
   const destinationCheckers = [...destination.checkers, checkerToMove]
+
   const updatedOrigin = board.points.find(
     (point) => point.id === origin.id
   ) as Point
+  updatedOrigin.checkers = originCheckers
+
   const updatedDestination = board.points.find(
     (point) => point.id === destination.id
   ) as Point
-  updatedOrigin.checkers = originCheckers
   updatedDestination.checkers = destinationCheckers
+
   activeMove.from = updatedOrigin
   activeMove.to = updatedDestination
+
   return {
     ...state,
     kind: 'move',

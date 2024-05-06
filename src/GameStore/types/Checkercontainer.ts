@@ -1,11 +1,5 @@
-import {
-  NodotsBoardStore,
-  Latitude,
-  Longitude,
-  getCheckercontainers,
-} from './Board'
-import { Checker } from './Checker'
 import { Color, PointPosition } from '.'
+import { Checker } from './Checker'
 
 export type Checkercontainer = {
   id: string

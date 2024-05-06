@@ -1,5 +1,4 @@
 import { action, makeAutoObservable } from 'mobx'
-import { Players } from './types/Player'
 import {
   Initializing,
   Moving,
@@ -14,6 +13,7 @@ import {
   rollingForStart,
   switchDice,
 } from './types'
+import { Players } from './types/Player'
 
 class NodotsGameStore {
   state: NodotsGameState
@@ -30,13 +30,11 @@ class NodotsGameStore {
 
   @action
   rolling(state: Rolling) {
-    console.log('Store: rolling')
     this.state = rolling(state)
   }
 
   @action
   switchDice(state: Rolled) {
-    console.log('switchDice state:', state)
     this.state = switchDice(state)
   }
 
@@ -58,7 +56,6 @@ class NodotsGameStore {
   @action
   confirming(state: Moving) {
     this.state = confirming(state)
-    console.log('confirming new state')
   }
 
   @action

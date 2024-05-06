@@ -29,4 +29,5 @@ export const generateDice = (player: Player) => {
 }
 
 const roll = (): DieValue => (Math.floor(Math.random() * 6) + 1) as DieValue
+
 export const rollDice = (): Roll => [roll(), roll()]

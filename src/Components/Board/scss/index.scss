@@ -2,8 +2,8 @@
 // @import '../../../theme/partials/colors';
 @import '../../../theme/partials/borders';
 
-$checker-height: 70px;
-$point-padding: 8px;
+$checker-height: 80px;
+$point-padding: $checker-height * 0.1;
 $board-padding: $point-padding * 2;
 
 .hidden {
@@ -27,7 +27,7 @@ $board-padding: $point-padding * 2;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  margin: 12px 10px;
+  margin: 130px auto;
 }
 
 #GameNotificationsContainer {
@@ -162,7 +162,7 @@ $board-padding: $point-padding * 2;
 #BoardContainer {
   display: flex;
   padding: $board-padding 0 $board-padding $board-padding;
-
+  margin: 50px auto;
   .board-half {
     display: flex;
     margin: 0px;

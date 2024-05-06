@@ -34,6 +34,24 @@ export type PointPosition =
   | 23
   | 24
 
+export type PlayerCheckers = [
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker,
+  Checker
+]
+
 export type CheckerboxPosition = PointPosition | 'bar' | 'off'
 export type OriginPosition = PointPosition | 'bar'
 export type DestinationPosition = PointPosition | 'off'
@@ -114,9 +132,6 @@ export const initializing = (players: Players): Initializing => {
     owner: undefined,
   }
 
-  // TODO: Again, think carefully about this demarcation.
-  // This is the board _store_ not the representation of the board
-  // See GamePage constructor for other side of this conversation.
   const boardStore = buildNodotsBoardStore(players)
 
   return {
@@ -194,8 +209,13 @@ export const rolling = (state: Rolling): Rolled => {
 export const switchDice = (state: Rolled): Rolled => {
   const { cube, boardStore, players, roll, activeColor, moves } = state
   const activePlayer = players[activeColor]
+
+  if (roll[0] === roll[1]) return state
+
   const newRoll: Roll = [roll[1], roll[0]]
-  const newDebug = `SWITCH: ${newRoll[0]}/${newRoll[1]}`
+  moves[0].dieValue = newRoll[0]
+  moves[1].dieValue = newRoll[1]
+
   return {
     kind: 'rolled',
     roll: newRoll,
@@ -205,15 +225,13 @@ export const switchDice = (state: Rolled): Rolled => {
     boardStore,
     cube,
     message: {
-      game: `${activePlayer.username} swaps dice ${JSON.stringify(roll)}`,
-      debug: newDebug,
+      game: `${activePlayer.username} swaps dice ${JSON.stringify(newRoll)}`,
     },
   }
 }
 
 export const double = (state: Rolled | Moving): Rolled | Moving => {
   const { kind, boardStore, players, activeColor, roll, cube, moves } = state
-
   const activePlayer = players[activeColor]
 
   cube.value = cube.value !== 64 ? ((cube.value * 2) as CubeValue) : cube.value
@@ -238,7 +256,6 @@ export const moving = (
 ): Moving | Confirming => {
   const { activeColor, players, boardStore, moves } = state
   const player = players[activeColor]
-  const activeMove = getNextMove(moves)
 
   const moveState: Initialized = {
     kind: 'initialized',
@@ -256,7 +273,7 @@ export const moving = (
 }
 
 export const confirming = (state: Moving): Rolling => {
-  const { boardStore, players, cube, activeColor } = state
+  const { activeColor } = state
 
   return {
     ...state,
@@ -276,21 +293,3 @@ export const debugging = (
     },
   }
 }
-
-export type PlayerCheckers = [
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker
-]
