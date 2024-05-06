@@ -81,9 +81,9 @@ class GamePage extends Component {
   render() {
     return (
       <Paper id="GameContainer">
-        {/* <GameNotifications store={this.store} /> */}
+        <GameNotifications store={this.store} />
         <BoardComponent store={this.store} state={this.store.state} />
-        <DebugNotifications store={this.store} />
+        {/* <DebugNotifications store={this.store} /> */}
       </Paper>
     )
   }

@@ -1,16 +1,9 @@
 import { Button, useTheme } from '@mui/material'
-import {
-  Color,
-  Confirming,
-  Moving,
-  Rolled,
-  Rolling,
-  RollingForStart,
-} from '../../GameStore/types'
-import { DieOrder, DieValue, Roll } from '../../GameStore/types/Dice'
+import { Color, NodotsGameState } from '../../GameStore/types'
+import { DieOrder, Roll } from '../../GameStore/types/Dice'
 import { observer } from 'mobx-react'
-import { Player } from '../../GameStore/types/Player'
 import React from 'react'
+import NodotsGameStore from '../../GameStore'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -24,22 +17,28 @@ const paths = [
 interface Props {
   order: DieOrder
   color: Color
-  state: RollingForStart | Rolling | Confirming | Moving | Rolled
+  state: NodotsGameState
+  store: NodotsGameStore
 }
 
 const isActive = (activeColor: Color, color: Color) => activeColor === color
 
-function Die({ order, color, state }: Props) {
-  const { activeColor } = state
-  let roll: Roll
-  switch (state.kind) {
-    case 'rolled':
-    case 'moving':
-    case 'confirming':
-      roll = state.roll
-      break
-    default:
-      roll = [1, 1]
+function Die({ order, color, store }: Props) {
+  const { state } = store
+
+  const rollHandler = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    switch (state.kind) {
+      case 'rolling':
+        store.rolling(state)
+        break
+      case 'moving':
+        store.confirming(state)
+        break
+      default:
+        console.log('rollHandler no action')
+      // store.confirming(state)
+    }
   }
 
   const theme = useTheme()
@@ -48,20 +47,45 @@ function Die({ order, color, state }: Props) {
       ? theme.palette.secondary.light
       : theme.palette.secondary.dark
   }
-  return (
-    activeColor &&
-    isActive(activeColor, color) && (
-      <Button className="die">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-          <g id="Layer_2" data-name="Layer 2">
-            <g id="Layer_1-2" data-name="Layer 1">
-              <path d={paths[roll[order] - 1]} fill={fill(color)} />
-            </g>
-          </g>
-        </svg>
-      </Button>
-    )
-  )
+
+  switch (store.state.kind) {
+    case 'rolling-for-start':
+    case 'initializing':
+      return <></>
+    case 'rolling':
+      return (
+        store.state.activeColor === color && (
+          <Button className="die" onClick={rollHandler}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+              <g id="Layer_2" data-name="Layer 2">
+                <g id="Layer_1-2" data-name="Layer 1">
+                  <path d={paths[0]} fill={fill(color)} />
+                </g>
+              </g>
+            </svg>
+          </Button>
+        )
+      )
+    case 'rolled':
+    case 'moving':
+    case 'confirming':
+      return (
+        store.state.activeColor === color && (
+          <Button className="die" onClick={rollHandler}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+              <g id="Layer_2" data-name="Layer 2">
+                <g id="Layer_1-2" data-name="Layer 1">
+                  <path
+                    d={paths[store.state.roll[order] - 1]}
+                    fill={fill(color)}
+                  />
+                </g>
+              </g>
+            </svg>
+          </Button>
+        )
+      )
+  }
 }
 
 export default observer(Die)

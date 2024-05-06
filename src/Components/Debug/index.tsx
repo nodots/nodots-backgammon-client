@@ -9,7 +9,7 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material'
-import { Move, MoveStatus, MoveMode } from '../../GameStore/types/Move'
+import { Move, MoveStatus, MoveMode } from '../../GameStore/types/move'
 import { TurnStatus } from '../../GameStore/turn'
 
 export interface DebugProps {

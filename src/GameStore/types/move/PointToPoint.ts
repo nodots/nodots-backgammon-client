@@ -1,27 +1,59 @@
-import { NodotsMove } from '.'
-import { NodotsBoardStore } from '../Board'
+import { NodotsMove, NodotsMoveState } from '.'
 import { Checker } from '../Checker'
 import { Point } from '../Checkercontainer'
-import { Player } from '../Player'
+import { hit } from './Hit'
 
 export const pointToPoint = (
-  board: NodotsBoardStore,
-  player: Player,
-  origin: Point,
-  checker: Checker,
-  move: NodotsMove
-): NodotsBoardStore => {
+  state: NodotsMoveState,
+  checkerToMove: Checker,
+  activeMove: NodotsMove,
+  origin: Point
+): NodotsMoveState => {
+  const { player, board } = state
   const originPosition = origin.position[player.moveDirection]
-  const moveDelta = (move.dieValue as number) * -1
-  const destinationPosition = originPosition + moveDelta
-  if (destinationPosition < 0) {
-    console.warn('Bear off in pointToPoint not yet supported')
-  } else {
-    const destination = board.points.find(
-      (point) => point.position[player.moveDirection] === destinationPosition
-    )
-    move.from = origin
-    move.to = destination
+  const delta = activeMove.dieValue * -1
+  const destinationPosition = originPosition + delta
+  const destination = board.points.find(
+    (point) => point.position[player.moveDirection] === destinationPosition
+  ) as Point
+
+  if (
+    destination.checkers.length > 1 &&
+    destination.checkers[0].color !== checkerToMove.color
+  ) {
+    return {
+      ...state,
+    }
   }
-  return board
+
+  if (
+    destination.checkers.length === 1 &&
+    destination.checkers[0].color !== checkerToMove.color
+  ) {
+    hit(state, destination)
+  }
+
+  const originCheckers = (origin.checkers = origin.checkers.filter(
+    (checker) => checker.id !== checkerToMove.id
+  ))
+  const destinationCheckers = [...destination.checkers, checkerToMove]
+  const updatedOrigin = board.points.find(
+    (point) => point.id === origin.id
+  ) as Point
+  const updatedDestination = board.points.find(
+    (point) => point.id === destination.id
+  ) as Point
+  updatedOrigin.checkers = originCheckers
+  updatedDestination.checkers = destinationCheckers
+  activeMove.from = updatedOrigin
+  activeMove.to = updatedDestination
+  return {
+    ...state,
+    kind: 'move',
+    activeMove,
+    checkerToMove,
+    origin: updatedOrigin,
+    destination: updatedDestination,
+    board,
+  }
 }

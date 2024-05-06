@@ -1,10 +1,12 @@
-import { CHECKERS_PER_PLAYER, OriginPosition } from '..'
+import { CHECKERS_PER_PLAYER, DestinationPosition, OriginPosition } from '..'
 import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
-import { Checkercontainer, Point } from '../Checkercontainer'
+import { Checker, getChecker } from '../Checker'
+import { Bar, Checkercontainer, Point } from '../Checkercontainer'
 import { DieValue } from '../Dice'
 import { Player } from '../Player'
 import { bearOff } from './BearOff'
 import { pointToPoint } from './PointToPoint'
+import { reenter } from './Reenter'
 
 export interface NodotsMove {
   from: Checkercontainer | undefined
@@ -15,6 +17,51 @@ export interface NodotsMove {
 export type NodotsMoves =
   | [NodotsMove, NodotsMove]
   | [NodotsMove, NodotsMove, NodotsMove, NodotsMove]
+
+interface Move {
+  player: Player
+  board: NodotsBoardStore
+  moves: NodotsMoves
+}
+
+export interface Initialized extends Move {
+  kind: 'initialized'
+}
+export interface CheckerClicked extends Move {
+  kind: 'checker-clicked'
+  activeMove: NodotsMove
+  checkerToMove: Checker
+}
+
+export interface OriginDetermined extends Move {
+  kind: 'origin-determined'
+  activeMove: NodotsMove
+  checkerToMove: Checker
+  origin: OriginPosition
+}
+
+export interface DestinationDetermined extends Move {
+  kind: 'origin-determined'
+  activeMove: NodotsMove
+  checkerToMove: Checker
+  origin: OriginPosition
+  destination: DestinationPosition
+}
+
+export interface Moved extends Move {
+  kind: 'move'
+  activeMove: NodotsMove
+  checkerToMove: Checker
+  origin: Checkercontainer
+  destination: Checkercontainer
+}
+
+export type NodotsMoveState =
+  | Initialized
+  | CheckerClicked
+  | OriginDetermined
+  | DestinationDetermined
+  | Moved
 
 export const getNextMove = (moves: NodotsMoves) =>
   moves.find((move) => move.from === undefined)
@@ -60,7 +107,6 @@ export const getDestinationForOrigin = (
           player.moveDirection === 'clockwise'
             ? originPoint.position.clockwise - dieValue
             : originPoint.position.clockwise + dieValue
-        console.log(destinationPosition)
       }
 
       break
@@ -72,64 +118,58 @@ export const getDestinationForOrigin = (
 }
 
 export const move = (
-  board: NodotsBoardStore,
-  checkerId: string,
-  player: Player,
-  activeMove: NodotsMove
-): NodotsBoardStore => {
-  const checkercontainers = getCheckercontainers(board)
-  const originContainer = checkercontainers.find((checkercontainer) =>
-    checkercontainer.checkers.find((checker) => checker.id === checkerId)
-  ) as Checkercontainer
+  state: NodotsMoveState,
+  checkerId: string
+): NodotsMoveState => {
+  const { board, moves, player } = state
 
-  if (originContainer.checkers.length === 0) {
-    console.error('Origin has no checkers')
-    return board
-  }
-
-  if (
-    originContainer.checkers.length > 1 &&
-    originContainer.checkers[0].color !== player.color
-  ) {
-    console.error(`Not ${player.username}'s checker to move`)
-    return board
-  }
-
-  const checkerToMove = originContainer.checkers.find(
-    (checker) => checker.id === checkerId
-  )
-  if (!checkerToMove) {
-    throw Error('No checker to move')
-  }
-  const originKind = originContainer.kind
-
-  if (isBearOff(board, player))
-    return bearOff(board, originContainer.id, checkerId, activeMove)
-
-  switch (originKind) {
-    case 'point':
-      // console.log('point2point or bearOff or noMove')
-      if (board.bar[player.color].checkers.length > 0) {
-        console.error(
-          `${player.username} has checkers on the bar and must move those first`
-        )
-        return board
+  switch (state.kind) {
+    case 'initialized':
+      const checkerToMove = getChecker(board, checkerId)
+      if (checkerToMove.color !== player.color) {
+        console.error(`Not ${player.username}'s checker`)
+        return state
       }
-      const origin = originContainer as Point
+      const activeMove = getNextMove(moves) as NodotsMove
+      const originCheckercontainer = getCheckercontainers(board).find(
+        (checkercontainer) =>
+          checkercontainer.checkers.find((checker) => checker.id === checkerId)
+      ) as Checkercontainer
 
-      // const originPosition = origin.position[player.moveDirection]
-      return pointToPoint(board, player, origin, checkerToMove, activeMove)
+      if (
+        board.bar[player.color].checkers.length > 0 &&
+        originCheckercontainer.kind !== 'bar'
+      ) {
+        console.error(`${player.username} has checkers on the bar`)
+        return state
+      }
 
+      if (originCheckercontainer.kind === 'point') {
+        if (isBearOff(board, player)) {
+          alert('Bear Off')
+          bearOff(
+            state,
+            checkerToMove,
+            activeMove,
+            originCheckercontainer as Point
+          )
+        } else {
+          pointToPoint(
+            state,
+            checkerToMove,
+            activeMove,
+            originCheckercontainer as Point
+          )
+        }
+      }
+      if (originCheckercontainer.kind === 'bar') {
+        reenter(state, checkerToMove, activeMove, originCheckercontainer as Bar)
+      }
       break
-    case 'bar':
-      console.log('reenter')
+    case 'checker-clicked':
+    case 'origin-determined':
+    case 'move':
       break
-    case 'off':
-      console.error('cannot move from off')
-      break
-    default:
-    // noop
   }
-
-  return board
+  return state
 }

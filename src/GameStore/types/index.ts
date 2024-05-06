@@ -1,11 +1,11 @@
 import { v4 as uuid } from 'uuid'
-import { NodotsBoardStore, PlayerBoard, buildNodotsBoardStore } from './Board'
+import { NodotsBoardStore, buildNodotsBoardStore } from './Board'
 import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { Players } from './Player'
-import { NodotsMoves, getNextMove, move } from './move'
+import { NodotsMoves, move, getNextMove, Initialized } from './move'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -237,17 +237,17 @@ export const moving = (
   checkerId: string
 ): Moving | Confirming => {
   const { activeColor, players, boardStore, moves } = state
-  const activePlayer = players[activeColor]
+  const player = players[activeColor]
   const activeMove = getNextMove(moves)
 
-  if (!activeMove) {
-    return {
-      ...state,
-      kind: 'confirming',
-    }
+  const moveState: Initialized = {
+    kind: 'initialized',
+    player,
+    moves,
+    board: boardStore,
   }
 
-  const newBoardStore = move(boardStore, checkerId, activePlayer, activeMove)
+  move(moveState, checkerId)
 
   return {
     ...state,

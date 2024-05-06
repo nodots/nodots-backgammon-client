@@ -28,20 +28,6 @@ function RollSurface({ store, state, color }: Props) {
   const owner = players[color]
 
   // Event handlers
-  const rollHandler = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    switch (state.kind) {
-      case 'rolling':
-        store.rolling(state)
-        break
-      case 'moving':
-        store.confirming(state)
-        break
-      default:
-        console.log('rollHandler no action')
-      // store.confirming(state)
-    }
-  }
 
   return (
     <Container
@@ -52,10 +38,10 @@ function RollSurface({ store, state, color }: Props) {
         justifyContent: 'center',
       }}
     >
-      <div className="dice-container" onClick={rollHandler}>
-        <Die order={0} color={color} state={state} />
-        <DiceSwitcher state={state} color={color} />
-        <Die order={1} color={color} state={state} />
+      <div className="dice-container">
+        <Die order={0} color={color} state={state} store={store} />
+        <DiceSwitcher color={color} store={store} />
+        <Die order={1} color={color} state={state} store={store} />
       </div>
     </Container>
   )

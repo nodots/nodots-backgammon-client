@@ -52,7 +52,6 @@ class NodotsGameStore {
 
   @action
   moving(state: Rolled | Moving, checkerId: string) {
-    console.log(`store.moving`)
     this.state = moving(state, checkerId)
   }
 

@@ -25,14 +25,14 @@ function Bar({ store }: Props) {
     boardStore.bar[counterclockwiseColor].checkers
   return (
     <div id="Bar">
-      <PipCount player={clockwisePlayer} />
+      <PipCount player={counterclockwisePlayer} />
       <div className="checkerbox counterclockwise">
         {getCheckerComponents(store, clockwiseCheckers)}
       </div>
       <div className="checkerbox clockwise">
         {getCheckerComponents(store, counterclockwiseCheckers)}
       </div>
-      <PipCount player={counterclockwisePlayer} />
+      <PipCount player={clockwisePlayer} />
     </div>
   )
 }
