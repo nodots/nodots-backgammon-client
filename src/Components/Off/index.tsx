@@ -1,13 +1,6 @@
 import { observer } from 'mobx-react'
-import Cube from '../Cube'
 import NodotsGameStore from '../../GameStore'
-import React from 'react'
-import {
-  Confirming,
-  Rolling,
-  RollingForStart,
-  Moving,
-} from '../../GameStore/types'
+import Cube from '../Cube'
 
 export interface Props {
   store: NodotsGameStore

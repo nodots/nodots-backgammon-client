@@ -1,22 +1,9 @@
-import {
-  Color,
-  moving,
-  confirming,
-  Rolling,
-  Confirming,
-  RollingForStart,
-  Moving,
-  Rolled,
-} from '../../GameStore/types'
-import {
-  Checker as CheckerType,
-  getChecker,
-} from '../../GameStore/types/Checker'
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
 import React from 'react'
-import { getCheckercontainer } from '../../GameStore/types/Board'
+import NodotsGameStore from '../../GameStore'
+import { Color } from '../../GameStore/types'
+import { Checker as CheckerType } from '../../GameStore/types/Checker'
 
 export interface Props {
   store: NodotsGameStore

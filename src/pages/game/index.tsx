@@ -1,17 +1,14 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
-import BoardComponent from '../../components/Board'
-import GameNotifications from '../../components/Nofitications/Game'
-import DebugNotifications from '../../components/Nofitications/Debug'
 import NodotsGameStore from '../../GameStore'
 import { generateId, rollingForStart } from '../../GameStore/types'
-import { Players } from '../../GameStore/types/Player'
 import { Player } from '../../GameStore/types/Player'
-
-import Quadrant from '../../components/Quadrant'
+import BoardComponent from '../../components/Board'
+import GameNotifications from '../../components/Nofitications/Game'
 import Bar from '../../components/Bar'
 import Off from '../../components/Off'
+import Quadrant from '../../components/Quadrant'
 
 const whitePlayer: Player = {
   id: generateId(),
@@ -61,10 +58,6 @@ class GamePage extends Component {
 
   constructor(props: {} | Readonly<{}>) {
     super(props)
-    // TODO: Think carefully about this transition from the model to the presentation.
-    // Quadrants only exist in presentation for example. We also want to be able to
-    // have both players play the same color in the same direction.
-    // See initializing method in GameStore/types/ for other side of this convo
     this.store = new NodotsGameStore({ white: whitePlayer, black: blackPlayer })
     switch (this.store.state.kind) {
       case 'initializing':

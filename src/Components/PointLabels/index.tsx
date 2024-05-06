@@ -1,6 +1,5 @@
-import { ReactElement } from 'react'
-import { Latitude, Longitude } from '../Board/state/types'
 import { useTheme } from '@mui/material'
+import { Latitude, Longitude } from '../../GameStore/types/Board'
 
 interface Props {
   latitude: Latitude

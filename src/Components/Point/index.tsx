@@ -1,9 +1,9 @@
 import { useTheme } from '@mui/material'
-import Checker from '../Checker'
-import { Checker as CheckerType } from '../../GameStore/types/Checker'
 import { ReactElement } from 'react'
 import NodotsGameStore from '../../GameStore'
-import { Latitude, Longitude } from '../../GameStore/types/Board'
+import { Latitude } from '../../GameStore/types/Board'
+import { Checker as CheckerType } from '../../GameStore/types/Checker'
+import Checker from '../Checker'
 
 export const getCheckerComponents = (
   store: NodotsGameStore,

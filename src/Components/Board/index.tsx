@@ -1,15 +1,12 @@
-import './scss/index.scss'
-// Components
-import Quadrant, { QuadrantPoints, Props as QuadrantProps } from '../Quadrant'
-import Bar, { Props as BarProps } from '../Bar'
-import Off, { Props as OffProps } from '../Off'
-import Rollsurface from '../Rollsurface'
-import { Paper, useTheme } from '@mui/material'
+import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
-import React from 'react'
 import { NodotsGameState } from '../../GameStore/types'
-import { NodotsBoardStore } from '../../GameStore/types/Board'
+import Bar, { Props as BarProps } from '../Bar'
+import Off, { Props as OffProps } from '../Off'
+import Quadrant, { QuadrantPoints, Props as QuadrantProps } from '../Quadrant'
+import Rollsurface from '../Rollsurface'
+import './scss/index.scss'
 
 export type Quadrants = [
   QuadrantProps,
@@ -30,7 +27,6 @@ interface Props {
 }
 
 function Board({ store, state }: Props) {
-  const theme = useTheme()
   switch (state.kind) {
     case 'initializing':
       return <></>
@@ -39,12 +35,6 @@ function Board({ store, state }: Props) {
     case 'rolling':
     case 'rolled':
     case 'rolling-for-start':
-      // store.state.boardStore.points.map((p) =>
-      //   console.log(
-      //     `${p.position.clockwise} : ${p.position.counterclockwise} checkers:`,
-      //     p.checkers.length
-      //   )
-      // )
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>

@@ -83,10 +83,12 @@ interface NodotsGame {
 export interface Initializing extends NodotsGame {
   kind: 'initializing'
 }
+
 export interface RollingForStart extends NodotsGame {
   kind: 'rolling-for-start'
   activeColor: Color
 }
+
 export interface Rolling extends NodotsGame {
   kind: 'rolling'
   activeColor: Color
@@ -150,11 +152,9 @@ export const rollingForStart = (state: Initializing): Rolling => {
   }
 
   return {
+    ...state,
     kind: 'rolling',
     activeColor,
-    players,
-    boardStore,
-    cube,
     message,
   }
 }
@@ -195,13 +195,10 @@ export const rolling = (state: Rolling): Rolled => {
   }
 
   return {
+    ...state,
     kind: 'rolled',
-    activeColor,
     roll,
     moves,
-    players,
-    boardStore,
-    cube,
     message,
   }
 }
@@ -217,13 +214,9 @@ export const switchDice = (state: Rolled): Rolled => {
   moves[1].dieValue = newRoll[1]
 
   return {
+    ...state,
     kind: 'rolled',
     roll: newRoll,
-    activeColor,
-    moves,
-    players,
-    boardStore,
-    cube,
     message: {
       game: `${activePlayer.username} swaps dice ${JSON.stringify(newRoll)}`,
     },
@@ -231,18 +224,13 @@ export const switchDice = (state: Rolled): Rolled => {
 }
 
 export const double = (state: Rolled | Moving): Rolled | Moving => {
-  const { kind, boardStore, players, activeColor, roll, cube, moves } = state
+  const { players, activeColor, cube } = state
   const activePlayer = players[activeColor]
 
   cube.value = cube.value !== 64 ? ((cube.value * 2) as CubeValue) : cube.value
   return {
-    kind,
+    ...state,
     cube,
-    activeColor,
-    boardStore,
-    players,
-    roll,
-    moves,
     message: {
       game: `${activePlayer.username} doubles to ${cube.value}`,
       debug: activeColor,

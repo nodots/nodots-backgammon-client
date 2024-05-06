@@ -36,7 +36,7 @@ $board-padding: $point-padding * 2;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px $checker-height - 25px 10px 0;
+    margin: 25px $checker-height - 25px 10px 0;
     min-width: 300px;
   }
 }
@@ -82,7 +82,6 @@ $board-padding: $point-padding * 2;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    // min-height: $checker-height * 5 !important;
     min-width: $checker-height + $point-padding !important;
     position: relative;
     margin: 0px;
@@ -162,7 +161,7 @@ $board-padding: $point-padding * 2;
 #BoardContainer {
   display: flex;
   padding: $board-padding 0 $board-padding $board-padding;
-  margin: 50px auto;
+  margin: 20px auto;
   .board-half {
     display: flex;
     margin: 0px;

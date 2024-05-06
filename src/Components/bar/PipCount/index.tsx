@@ -1,7 +1,8 @@
 import { Chip, SxProps, useTheme } from '@mui/material'
-import { Player } from '../../../GameStore/types/Player'
-import { Color } from '../../../GameStore/types'
 import { observer } from 'mobx-react'
+import { Color } from '../../../GameStore/types'
+import { Player } from '../../../GameStore/types/Player'
+
 interface Props {
   player: Player
 }
@@ -14,7 +15,11 @@ function PipCount({ player }: Props) {
       : { backgroundColor: theme.palette.secondary.light }
 
   return (
-    <Chip className={`pip-count`} label={167} sx={getStyles(player.color)} />
+    <Chip
+      className={`pip-count`}
+      label={player.pipCount}
+      sx={getStyles(player.color)}
+    />
   )
 }
 

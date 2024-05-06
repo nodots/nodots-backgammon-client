@@ -1,18 +1,15 @@
-// Components
-import Die from '../Die'
 import { Container } from '@mui/material'
+import NodotsGameStore from '../../GameStore'
 import {
   Color,
   Confirming,
   Moving,
-  Rolling,
   Rolled,
+  Rolling,
   RollingForStart,
 } from '../../GameStore/types'
-import { Player } from '../../GameStore/types/Player'
-import NodotsGameStore from '../../GameStore'
+import Die from '../Die'
 import DiceSwitcher from './DiceSwitcher'
-import React from 'react'
 
 interface Props {
   store: NodotsGameStore
@@ -23,12 +20,6 @@ interface Props {
 const isActive = (activeColor: Color, color: Color) => activeColor === color
 
 function RollSurface({ store, state, color }: Props) {
-  const { players } = state
-
-  const owner = players[color]
-
-  // Event handlers
-
   return (
     <Container
       className="roll-surface"

@@ -1,24 +1,14 @@
+import { observer } from 'mobx-react'
+import NodotsGameStore from '../../GameStore'
+import { generateId } from '../../GameStore/types'
 import {
-  generateId,
-  Confirming,
-  Moving,
-  Rolling,
-  RollingForStart,
-  Rolled,
-} from '../../GameStore/types'
-import {
-  Longitude,
   Latitude,
-  Points,
+  Longitude,
   NodotsBoardStore,
 } from '../../GameStore/types/Board'
 import { Point } from '../../GameStore/types/Checkercontainer'
 import PointComponent from '../Point'
 import PointLabels from '../PointLabels'
-import { NodotsGameState } from '../../GameStore/types'
-import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
-import React from 'react'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
