@@ -115,20 +115,19 @@ export const move = (
         board.bar[player.color].checkers.length > 0 &&
         originCheckercontainer.kind !== 'bar'
       ) {
-        console.error(`${player.username} has checkers on the bar`)
         return state
       }
 
       if (originCheckercontainer.kind === 'point') {
         if (isBearOff(board, player)) {
-          bearOff(
+          return bearOff(
             state,
             checkerToMove,
             activeMove,
             originCheckercontainer as Point
           )
         } else {
-          pointToPoint(
+          return pointToPoint(
             state,
             checkerToMove,
             activeMove,
@@ -137,7 +136,12 @@ export const move = (
         }
       }
       if (originCheckercontainer.kind === 'bar') {
-        reenter(state, checkerToMove, activeMove, originCheckercontainer as Bar)
+        return reenter(
+          state,
+          checkerToMove,
+          activeMove,
+          originCheckercontainer as Bar
+        )
       }
       break
     case 'checker-clicked':

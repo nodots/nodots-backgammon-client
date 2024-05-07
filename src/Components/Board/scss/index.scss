@@ -193,6 +193,9 @@ $board-padding: $point-padding * 2;
 
   #Bar {
     justify-content: space-between;
+    .pip-count {
+      min-width: 2.5rem;
+    }
   }
 
   #Off {

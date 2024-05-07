@@ -1,5 +1,6 @@
 import { action, makeAutoObservable } from 'mobx'
 import {
+  Confirming,
   Initializing,
   Moving,
   NodotsGameState,
@@ -54,7 +55,7 @@ class NodotsGameStore {
   }
 
   @action
-  confirming(state: Moving) {
+  confirming(state: Confirming) {
     this.state = confirming(state)
   }
 

@@ -28,11 +28,12 @@ function Die({ order, color, store }: Props) {
 
   const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
+
     switch (state.kind) {
       case 'rolling':
         store.rolling(state)
         break
-      case 'moving':
+      case 'confirming':
         store.confirming(state)
         break
       default:

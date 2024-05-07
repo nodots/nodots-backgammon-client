@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { NodotsBoardStore, buildNodotsBoardStore } from './Board'
+import { NodotsBoardStore, buildNodotsBoardStore, getPipCounts } from './Board'
 import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
@@ -252,15 +252,26 @@ export const moving = (
     board: boardStore,
   }
 
-  move(moveState, checkerId)
+  const results = move(moveState, checkerId)
+  const kind =
+    results.moves.filter((move) => move.to === undefined).length === 0
+      ? 'confirming'
+      : 'moving'
+
+  const pipCounts = getPipCounts(boardStore, players)
+  players.black.pipCount = pipCounts.black
+  players.white.pipCount = pipCounts.white
 
   return {
     ...state,
-    kind: 'moving',
+    kind,
+    boardStore: results.board,
+    moves: results.moves,
+    players,
   }
 }
 
-export const confirming = (state: Moving): Rolling => {
+export const confirming = (state: Confirming): Rolling => {
   const { activeColor } = state
 
   return {
