@@ -1,7 +1,9 @@
-import { Color, MoveDirection } from '.'
+import { Color, MoveDirection, NodotsGameState } from '.'
 import { Dice } from './Dice'
+import { isBearOff } from './move'
 
 export type Player = {
+  kind: 'moving' | 'reentering' | 'bearing-off'
   id: string
   username: string
   color: Color
@@ -14,13 +16,39 @@ export type Player = {
   }
 }
 
+export interface MovingPlayer extends Player {
+  kind: 'moving'
+}
+
+export interface ReenteringPlayer extends Player {
+  kind: 'reentering'
+}
+export interface BearingOffPlayer extends Player {
+  kind: 'bearing-off'
+}
+
 export interface Players {
   white: Player
   black: Player
 }
 
-export const getActivePlayer = (activeColor: Color, players: Players): Player =>
-  activeColor === 'black' ? players.black : players.white
+export const getActivePlayer = (
+  state: NodotsGameState,
+  activeColor: Color,
+  players: Players
+): Player => {
+  const untypedPlayer = players[activeColor]
+  if (isBearOff(state.boardStore, untypedPlayer)) {
+    const activePlayer = untypedPlayer as BearingOffPlayer
+    return activePlayer
+  }
+  if (isReenter(state.boardStore, untypedPlayer)) {
+    console.log('nope')
+  }
+  const activePlayer = activeColor === 'black' ? players.black : players.white
+
+  return activePlayer
+}
 
 export const getClockwisePlayer = (players: Players): Player =>
   players.black.moveDirection === 'clockwise' ? players.black : players.white

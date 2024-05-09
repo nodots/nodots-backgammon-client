@@ -5,7 +5,6 @@ import { pointToPoint } from './PointToPoint'
 
 export const bearOff = (
   state: NodotsMoveState, // FIXME: narrow state
-  checkerToMove: Checker,
   activeMove: NodotsMove,
   origin: Point
 ): NodotsMoveState => {
@@ -15,7 +14,7 @@ export const bearOff = (
   const destinationPosition = originPosition + delta
 
   if (destinationPosition < 0) {
-    const destination = board.off[checkerToMove.color]
+    const destination = board.off[activeMove.checker.color]
     const destinationCheckers = [...destination.checkers, checkerToMove]
 
     const originCheckers = (origin.checkers = origin.checkers.filter(
@@ -38,6 +37,6 @@ export const bearOff = (
       board,
     }
   } else {
-    return pointToPoint(state, checkerToMove, activeMove, origin)
+    return pointToPoint(state, checkerToMove)
   }
 }

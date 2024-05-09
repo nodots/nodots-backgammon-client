@@ -1,4 +1,4 @@
-import { CHECKERS_PER_PLAYER, DestinationPosition, OriginPosition } from '..'
+import { CHECKERS_PER_PLAYER, MoveDirection } from '..'
 import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
 import { Checker, getChecker } from '../Checker'
 import { Bar, Checkercontainer, Point } from '../Checkercontainer'
@@ -8,10 +8,16 @@ import { bearOff } from './BearOff'
 import { pointToPoint } from './PointToPoint'
 import { reenter } from './Reenter'
 
+// TODO: Flubbed moves don't change state
+// TODO: Implement revert move
+// TODO: Implement forced moves
+
 export interface NodotsMove {
+  checker: Checker | undefined
   from: Checkercontainer | undefined
   to: Checkercontainer | undefined
   dieValue: DieValue
+  direction: MoveDirection
 }
 
 export type NodotsMoves =
@@ -27,26 +33,6 @@ interface Move {
 export interface Initialized extends Move {
   kind: 'initialized'
 }
-export interface CheckerClicked extends Move {
-  kind: 'checker-clicked'
-  activeMove: NodotsMove
-  checkerToMove: Checker
-}
-
-export interface OriginDetermined extends Move {
-  kind: 'origin-determined'
-  activeMove: NodotsMove
-  checkerToMove: Checker
-  origin: OriginPosition
-}
-
-export interface DestinationDetermined extends Move {
-  kind: 'origin-determined'
-  activeMove: NodotsMove
-  checkerToMove: Checker
-  origin: OriginPosition
-  destination: DestinationPosition
-}
 
 export interface Moved extends Move {
   kind: 'move'
@@ -56,12 +42,58 @@ export interface Moved extends Move {
   destination: Checkercontainer
 }
 
-export type NodotsMoveState =
-  | Initialized
-  | CheckerClicked
-  | OriginDetermined
-  | DestinationDetermined
-  | Moved
+export type NodotsMoveState = Initialized | Moved
+
+export const getDestinationForOrigin = (
+  state: NodotsMoveState,
+  origin: Checkercontainer,
+  activeMove: NodotsMove
+): Checkercontainer => {
+  const checker = activeMove.checker as Checker // FIXME
+  console.log('[getDestinationForOrigin] checker:', checker)
+  switch (origin.kind) {
+    case 'point':
+      let destinationPoint: Point
+      const originPoint = origin as Point
+      const originPointPosition = originPoint.position[activeMove.direction]
+      const delta = activeMove.dieValue * -1
+      console.log(
+        '[getDestinationForOrigin] originPointPosition:',
+        originPointPosition
+      )
+      console.log('[getDestinationForOrigin] delta:', delta)
+      if (delta > 0) {
+        console.warn('bearOff not supported')
+        // bearOff(state, activeMove, origin)
+      } else {
+        const destinationPointPosition =
+          originPoint.position[activeMove.direction] + delta
+
+        console.log(
+          '[getDestinationForOrigin] destinationPointPosition:',
+          destinationPointPosition
+        )
+
+        destinationPoint = state.board.points.find(
+          (point) =>
+            point.position[activeMove.direction] === destinationPointPosition
+        ) as Point // FIXME
+
+        console.log(
+          '[getDestinationForOrigin] destinationPoint:',
+          destinationPoint
+        )
+        return destinationPoint
+      }
+      throw Error('Could not find destination')
+    case 'bar':
+      state.board.bar[checker.color]
+      break
+    default:
+      break
+  }
+  return origin //FIXME
+}
 
 export const getNextMove = (moves: NodotsMoves) =>
   moves.find((move) => move.from === undefined)
@@ -80,6 +112,9 @@ export const isBearOff = (board: NodotsBoardStore, player: Player): boolean => {
 
   return homeBoardCheckerCount === CHECKERS_PER_PLAYER ? true : false
 }
+
+export const isReenter = (board: NodotsBoardStore, player: Player): boolean =>
+  board.bar[player.color].checkers.length > 0 ? true : false
 
 export const getOriginPointById = (
   board: NodotsBoardStore,
@@ -111,6 +146,7 @@ export const move = (
           checkercontainer.checkers.find((checker) => checker.id === checkerId)
       ) as Checkercontainer
 
+      // TODO: Is being on the bar a state of a player? I think so. Ready | Bar | BearingOff | Resigned | Won | Lost
       if (
         board.bar[player.color].checkers.length > 0 &&
         originCheckercontainer.kind !== 'bar'
@@ -118,20 +154,22 @@ export const move = (
         return state
       }
 
+      const destination = getDestinationForOrigin(
+        state,
+        originCheckercontainer,
+        activeMove
+      )
+
       if (originCheckercontainer.kind === 'point') {
         if (isBearOff(board, player)) {
-          return bearOff(
-            state,
-            checkerToMove,
-            activeMove,
-            originCheckercontainer as Point
-          )
+          return bearOff(state, activeMove, originCheckercontainer as Point)
         } else {
           return pointToPoint(
             state,
             checkerToMove,
             activeMove,
-            originCheckercontainer as Point
+            originCheckercontainer as Point,
+            destination as Point
           )
         }
       }
@@ -140,12 +178,11 @@ export const move = (
           state,
           checkerToMove,
           activeMove,
-          originCheckercontainer as Bar
+          originCheckercontainer as Bar,
+          destination as Point
         )
       }
       break
-    case 'checker-clicked':
-    case 'origin-determined':
     case 'move':
       break
   }
