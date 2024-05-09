@@ -7,15 +7,10 @@ export const pointToPoint = (
   state: NodotsMoveState,
   checkerToMove: Checker,
   activeMove: NodotsMove,
-  origin: Point
+  origin: Point,
+  destination: Point
 ): NodotsMoveState => {
   const { player, board } = state
-  const originPosition = origin.position[player.moveDirection]
-  const delta = activeMove.dieValue * -1
-  const destinationPosition = originPosition + delta
-  const destination = board.points.find(
-    (point) => point.position[player.moveDirection] === destinationPosition
-  ) as Point
 
   if (
     destination.checkers.length > 1 &&

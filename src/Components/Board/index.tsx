@@ -31,6 +31,7 @@ function Board({ store, state }: Props) {
     case 'initializing':
       return <></>
     case 'confirming':
+    case 'confirmed':
     case 'moving':
     case 'rolling':
     case 'rolled':

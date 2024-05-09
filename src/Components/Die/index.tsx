@@ -26,16 +26,22 @@ const isActive = (activeColor: Color, color: Color) => activeColor === color
 function Die({ order, color, store }: Props) {
   const { state } = store
 
+  console.log('[Die] state:', state.kind)
+
   const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
-
+    console.log(state.kind)
     switch (state.kind) {
+      case 'moving':
+        console.log('Why are we moving?')
+        break
       case 'rolling':
         store.rolling(state)
         break
       case 'confirming':
         store.confirming(state)
         break
+      case 'confirmed':
       default:
       //noop
     }
@@ -51,7 +57,7 @@ function Die({ order, color, store }: Props) {
   switch (store.state.kind) {
     case 'rolling-for-start':
     case 'initializing':
-      return <></>
+      break
     case 'rolling':
       return (
         store.state.activeColor === color && (
@@ -67,6 +73,7 @@ function Die({ order, color, store }: Props) {
         )
       )
     case 'rolled':
+    case 'confirmed':
     case 'moving':
     case 'confirming':
       return (

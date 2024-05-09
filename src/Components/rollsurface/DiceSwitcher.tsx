@@ -13,29 +13,30 @@ function DiceSwitcher({ store, color }: Props) {
   const theme = useTheme()
 
   const switchDiceHandler = () => {
-    console.log('switchDiceHandler', store.state.kind)
     switch (store.state.kind) {
+      case 'confirming':
+      case 'confirmed':
+      case 'initializing':
+      case 'rolling':
+      case 'moving':
+        break
       case 'rolled':
         store.switchDice(store.state)
         break
-      case 'confirming':
-      case 'initializing':
-      case 'moving':
-      case 'rolling':
       case 'rolling-for-start':
       default:
+        alert(`Unexpected state ${store.state.kind}`)
         break
     }
   }
 
+  console.log('switchDiceHandler', store.state.kind)
   switch (store.state.kind) {
     case 'rolling-for-start':
+    case 'rolling':
     case 'initializing':
       return <></>
-    case 'rolling':
     case 'rolled':
-    case 'moving':
-    case 'confirming':
       return (
         store.state.activeColor === color && (
           <div className={`dice-switcher ${color}`} onClick={switchDiceHandler}>

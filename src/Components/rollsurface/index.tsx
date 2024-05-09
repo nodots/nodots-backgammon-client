@@ -2,6 +2,7 @@ import { Container } from '@mui/material'
 import NodotsGameStore from '../../GameStore'
 import {
   Color,
+  Confirmed,
   Confirming,
   Moving,
   Rolled,
@@ -13,7 +14,7 @@ import DiceSwitcher from './DiceSwitcher'
 
 interface Props {
   store: NodotsGameStore
-  state: RollingForStart | Rolling | Confirming | Moving | Rolled
+  state: RollingForStart | Rolling | Rolled | Confirming | Confirmed | Moving
   color: Color
 }
 
@@ -31,7 +32,7 @@ function RollSurface({ store, state, color }: Props) {
     >
       <div className="dice-container">
         <Die order={0} color={color} state={state} store={store} />
-        <DiceSwitcher color={color} store={store} />
+        <DiceSwitcher store={store} color={color} />
         <Die order={1} color={color} state={state} store={store} />
       </div>
     </Container>

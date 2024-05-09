@@ -73,6 +73,7 @@ interface NodotsGame {
     | 'rolled'
     | 'doubling'
     | 'confirming'
+    | 'confirmed'
     | 'moving'
   boardStore: NodotsBoardStore
   players: Players
@@ -106,10 +107,19 @@ export interface Moving extends NodotsGame {
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
+  message?: NodotsMessage
 }
 
 export interface Confirming extends NodotsGame {
   kind: 'confirming'
+  activeColor: Color
+  roll: Roll
+  moves: NodotsMoves
+  message?: NodotsMessage
+}
+
+export interface Confirmed extends NodotsGame {
+  kind: 'confirmed'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
@@ -123,6 +133,7 @@ export type NodotsGameState =
   | Rolled
   | Moving
   | Confirming
+  | Confirmed
 
 export const initializing = (players: Players): Initializing => {
   players.black.dice = generateDice(players.black)
@@ -145,7 +156,7 @@ export const initializing = (players: Players): Initializing => {
 }
 
 export const rollingForStart = (state: Initializing): Rolling => {
-  const { players, boardStore, cube } = state
+  const { players } = state
   const activeColor = Math.random() >= 0.5 ? 'black' : 'white'
   const message = {
     game: `${players[activeColor].username} wins the opening roll`,
@@ -160,37 +171,51 @@ export const rollingForStart = (state: Initializing): Rolling => {
 }
 
 export const rolling = (state: Rolling): Rolled => {
-  const { players, boardStore, cube, activeColor } = state
+  const { players, activeColor } = state
   const activePlayer = players[activeColor]
 
   const roll = rollDice()
   const moves: NodotsMoves = [
     {
+      checker: undefined,
       from: undefined,
       to: undefined,
       dieValue: roll[0],
+      direction: activePlayer.moveDirection,
     },
     {
+      checker: undefined,
       from: undefined,
       to: undefined,
       dieValue: roll[1],
+      direction: activePlayer.moveDirection,
     },
   ]
   if (roll[0] === roll[1]) {
     moves.push({
+      checker: undefined,
       from: undefined,
       to: undefined,
       dieValue: roll[0],
+      direction: activePlayer.moveDirection,
     })
     moves.push({
+      checker: undefined,
       from: undefined,
       to: undefined,
       dieValue: roll[1],
+      direction: activePlayer.moveDirection,
     })
   }
 
+  const isDouble = () => {
+    return roll[0] === roll[1] ? true : false
+  }
+
   const message = {
-    game: `${activePlayer.username} rolls ${JSON.stringify(roll)}`,
+    game: `${activePlayer.username} roll: ${roll[0]} ${roll[1]}.${
+      isDouble() ? '**' : ''
+    } ROLLING => `,
     debug: `MOVES: ${moves.map((move) => move.dieValue)}`,
   }
 
@@ -204,7 +229,7 @@ export const rolling = (state: Rolling): Rolled => {
 }
 
 export const switchDice = (state: Rolled): Rolled => {
-  const { cube, boardStore, players, roll, activeColor, moves } = state
+  const { players, roll, activeColor, moves } = state
   const activePlayer = players[activeColor]
 
   if (roll[0] === roll[1]) return state
@@ -218,7 +243,7 @@ export const switchDice = (state: Rolled): Rolled => {
     kind: 'rolled',
     roll: newRoll,
     message: {
-      game: `${activePlayer.username} swaps dice ${JSON.stringify(newRoll)}`,
+      game: `${activePlayer.username} switchDice ${newRoll[0]} ${newRoll[1]} ROLLED => `,
     },
   }
 }
@@ -253,21 +278,16 @@ export const moving = (
   }
 
   const results = move(moveState, checkerId)
-  const kind =
-    results.moves.filter((move) => move.to === undefined).length === 0
-      ? 'confirming'
-      : 'moving'
 
-  const pipCounts = getPipCounts(boardStore, players)
-  players.black.pipCount = pipCounts.black
-  players.white.pipCount = pipCounts.white
+  const remainingMoves = results.moves.filter(
+    (move) => move.from === undefined
+  ).length
 
   return {
     ...state,
-    kind,
+    kind: remainingMoves === 0 ? 'confirming' : 'moving',
     boardStore: results.board,
     moves: results.moves,
-    players,
   }
 }
 
