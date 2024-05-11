@@ -9,7 +9,7 @@ export const bearOff = (
   origin: Point
 ): NodotsMoveState => {
   const { player, board } = state
-  const originPosition = origin.position[player.moveDirection]
+  const originPosition = origin.position[player.direction]
   const delta = activeMove.dieValue * -1
   const destinationPosition = originPosition + delta
 

@@ -226,11 +226,9 @@ function buildTurnAnalysisPayload(
       let clockwisePlayer: Player | undefined = undefined
       let counterClockwisePlayer: Player | undefined = undefined
       clockwisePlayer =
-        players.white.moveDirection === 'clockwise'
-          ? players.white
-          : players.black
+        players.white.direction === 'clockwise' ? players.white : players.black
       counterClockwisePlayer =
-        players.white.moveDirection === 'counterclockwise'
+        players.white.direction === 'counterclockwise'
           ? players.white
           : players.black
 

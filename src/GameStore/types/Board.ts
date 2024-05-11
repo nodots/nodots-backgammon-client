@@ -1,4 +1,14 @@
-import { Color, PointPosition, generateId } from '.'
+import {
+  BoardImportAllPointOne,
+  BoardImportBearOff,
+  CHECKERS_PER_PLAYER,
+  CheckerboxPosition,
+  Color,
+  IBoardImport,
+  IBoardImports,
+  PointPosition,
+  generateId,
+} from '.'
 import { Checker, generateCheckersForCheckercontainerId } from './Checker'
 import { Bar, Checkercontainer, Off, Point } from './Checkercontainer'
 import {
@@ -141,7 +151,73 @@ export interface NodotsBoardStore {
   }
 }
 
-const buildPoints = (players: NodotsPlayers): Points => {
+const buildPoints = (
+  players: NodotsPlayers,
+  boardImports?: IBoardImports
+): Points => {
+  if (boardImports) {
+    const pointId = generateId()
+    const tempPoints: Point[] = []
+
+    for (let i = 0; i < 24; i++) {
+      const checkers: Checker[] = []
+
+      const clockwiseColor = getClockwisePlayer(players).color
+      const clockwisePosition: PointPosition = (i +
+        1) as number as PointPosition
+      const counterclockwisePosition = (25 - clockwisePosition) as PointPosition
+
+      const counterclockwiseColor = getCounterclockwisePlayer(players).color
+      const clockwiseBoard = boardImports.clockwise
+      const counterclockwiseBoard = boardImports.counterclockwise
+
+      clockwiseBoard.map((checkerbox) => {
+        if (checkerbox.position === clockwisePosition) {
+          const checkercount = checkerbox.checkercount
+          console.log(`clockwise ${checkercount} ${clockwiseColor}`)
+          checkers.push(
+            ...generateCheckersForCheckercontainerId(
+              clockwiseColor,
+              pointId,
+              checkercount
+            )
+          )
+        }
+      })
+
+      counterclockwiseBoard.map((checkerbox) => {
+        if (checkerbox.position === counterclockwisePosition) {
+          const checkercount = checkerbox.checkercount
+          console.log(`clockwise ${checkercount} ${counterclockwiseColor}`)
+          checkers.push(
+            ...generateCheckersForCheckercontainerId(
+              counterclockwiseColor,
+              pointId,
+              checkercount
+            )
+          )
+        }
+      })
+
+      const point: Point = {
+        id: pointId,
+        kind: 'point',
+        position: {
+          clockwise: clockwisePosition,
+          counterclockwise: counterclockwisePosition,
+        },
+        checkers,
+      }
+      tempPoints.push(point)
+    }
+
+    if (tempPoints.length === 24) {
+      return tempPoints as Points
+    } else {
+      throw Error(`invalid tempPoints length ${tempPoints.length}`)
+    }
+  }
+
   const tempPoints: Point[] = []
   for (let i = 0; i < 24; i++) {
     const pointId = generateId()
@@ -238,7 +314,10 @@ export const buildNodotsBoardStore = (
   players: NodotsPlayers
 ): NodotsBoardStore => {
   return {
-    points: buildPoints(players),
+    points: buildPoints(players, {
+      clockwise: BoardImportBearOff,
+      counterclockwise: BoardImportBearOff,
+    }),
     bar: {
       white: {
         id: generateId(),

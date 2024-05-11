@@ -19,7 +19,7 @@ const whitePlayer: InitializingPlayer = {
   id: generateId(),
   color: 'white',
   username: 'White Stripes',
-  moveDirection: 'counterclockwise',
+  direction: 'counterclockwise',
   pipCount: 167,
   automation: {
     roll: true,
@@ -36,7 +36,7 @@ const blackPlayer: InitializingPlayer = {
   id: generateId(),
   color: 'black',
   username: 'Black Messiah',
-  moveDirection: 'clockwise',
+  direction: 'clockwise',
   pipCount: 167,
   automation: {
     roll: true,

@@ -65,16 +65,16 @@ export const buildMoveMessage = (
   switch (lastMoveFrom.kind) {
     case 'point':
       const fromPoint = lastMoveFrom as Point
-      msgString += ` from ${fromPoint.position[player.moveDirection]}`
+      msgString += ` from ${fromPoint.position[player.direction]}`
       if (lastMoveTo.kind === 'point') {
         const toPoint = lastMoveTo as Point
-        msgString += ` to ${toPoint.position[player.moveDirection]}`
+        msgString += ` to ${toPoint.position[player.direction]}`
       }
       break
     case 'bar':
       const bar = lastMoveFrom as Bar
       const destination = lastMoveTo as Point
-      msgString += ` bar to ${destination.position[player.moveDirection]}`
+      msgString += ` bar to ${destination.position[player.direction]}`
       break
     default:
       msgString += `from ${JSON.stringify(lastMove.from)} to ${JSON.stringify(
@@ -137,7 +137,7 @@ export const isBearOffing = (
   player: Player
 ): boolean => {
   const homeBoardPoints = board.points.filter(
-    (point) => point.position[player.moveDirection] <= 6
+    (point) => point.position[player.direction] <= 6
   )
   const homeBoardCheckerCount = homeBoardPoints
     .map((point) =>

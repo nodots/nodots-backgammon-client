@@ -8,7 +8,7 @@ export type Player = {
   username: string
   color: Color
   dice: Dice
-  moveDirection: MoveDirection
+  direction: MoveDirection
   pipCount: number
   automation: {
     move: boolean
@@ -78,14 +78,12 @@ export const getActivePlayer = (
 }
 
 export const getClockwisePlayer = (players: NodotsPlayers): NodotsPlayer =>
-  players.black.moveDirection === 'clockwise' ? players.black : players.white
+  players.black.direction === 'clockwise' ? players.black : players.white
 
 export const getCounterclockwisePlayer = (
   players: NodotsPlayers
 ): NodotsPlayer =>
-  players.black.moveDirection === 'counterclockwise'
-    ? players.black
-    : players.white
+  players.black.direction === 'counterclockwise' ? players.black : players.white
 
 export const getPlayerForMoveDirection = (
   players: NodotsPlayers,

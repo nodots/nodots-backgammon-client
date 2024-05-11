@@ -5,13 +5,7 @@ import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers } from './Player'
-import {
-  NodotsMoves,
-  move,
-  getNextMove,
-  Initialized,
-  buildMoveMessage,
-} from './move'
+import { NodotsMoves, Initialized, buildMoveMessage, move } from './move'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -70,6 +64,31 @@ export const changeActiveColor = (activeColor: Color): Color =>
 export const getInactiveColor = (activeColor: Color): Color =>
   activeColor === 'black' ? 'white' : 'black'
 
+export interface ICheckercontainerImport {
+  position: CheckerboxPosition
+  checkercount: number
+}
+
+export type IBoardImport = ICheckercontainerImport[]
+
+export interface IBoardImports {
+  clockwise: IBoardImport
+  counterclockwise: IBoardImport
+}
+
+export const BoardImportAllPointOne: IBoardImport = [
+  { position: 1, checkercount: CHECKERS_PER_PLAYER },
+]
+
+export const BoardImportBearOff: IBoardImport = [
+  { position: 1, checkercount: 2 },
+  { position: 2, checkercount: 2 },
+  { position: 3, checkercount: 2 },
+  { position: 4, checkercount: 3 },
+  { position: 5, checkercount: 3 },
+  { position: 6, checkercount: 3 },
+]
+
 interface NodotsGame {
   kind:
     | 'initializing'
@@ -77,10 +96,11 @@ interface NodotsGame {
     | 'rolling-for-start'
     | 'rolling'
     | 'rolled'
-    | 'doubling'
+    | 'moving'
     | 'confirming'
     | 'confirmed'
-    | 'moving'
+    | 'doubling'
+
   boardStore: NodotsBoardStore
   players: NodotsPlayers
   cube: Cube
@@ -113,7 +133,6 @@ export interface Moving extends NodotsGame {
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
-  message?: NodotsMessage
 }
 
 export interface Confirming extends NodotsGame {
@@ -121,7 +140,6 @@ export interface Confirming extends NodotsGame {
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
-  message?: NodotsMessage
 }
 
 export interface Confirmed extends NodotsGame {
@@ -129,7 +147,6 @@ export interface Confirmed extends NodotsGame {
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
-  message?: NodotsMessage
 }
 
 export type NodotsGameState =
@@ -189,14 +206,14 @@ export const rolling = (state: Rolling): Rolled => {
       from: undefined,
       to: undefined,
       dieValue: roll[0],
-      direction: activePlayer.moveDirection,
+      direction: activePlayer.direction,
     },
     {
       checker: undefined,
       from: undefined,
       to: undefined,
       dieValue: roll[1],
-      direction: activePlayer.moveDirection,
+      direction: activePlayer.direction,
     },
   ]
   if (roll[0] === roll[1]) {
@@ -205,14 +222,14 @@ export const rolling = (state: Rolling): Rolled => {
       from: undefined,
       to: undefined,
       dieValue: roll[0],
-      direction: activePlayer.moveDirection,
+      direction: activePlayer.direction,
     })
     moves.push({
       checker: undefined,
       from: undefined,
       to: undefined,
       dieValue: roll[1],
-      direction: activePlayer.moveDirection,
+      direction: activePlayer.direction,
     })
   }
 
