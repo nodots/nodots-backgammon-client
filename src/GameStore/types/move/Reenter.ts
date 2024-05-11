@@ -12,18 +12,29 @@ export const reenter = (
 ): NodotsMoveState => {
   const { board } = state
 
-  activeMove.from = origin
-  activeMove.to = destination
+  const originCheckers = (origin.checkers = origin.checkers.filter(
+    (checker) => checker.id !== checkerToMove.id
+  ))
+  const destinationCheckers = [...destination.checkers, checkerToMove]
 
-  console.log('[reenter] origin:', origin)
-  console.log('[reenter] destination:', destination)
-  console.log('[reenter] activeMove:', activeMove)
+  const updatedOrigin = board.bar[checkerToMove.color]
+  updatedOrigin.checkers = originCheckers
 
-  if (
-    destination.checkers.length > 1 &&
-    destination.checkers[0].color !== checkerToMove.color
-  ) {
-    throw Error('THIS SPACE OCCUPIED')
+  const updatedDestination = board.points.find(
+    (point) => point.id === destination.id
+  ) as Point // FIXME
+  updatedDestination.checkers = destinationCheckers
+
+  activeMove.from = updatedOrigin
+  activeMove.to = updatedDestination
+
+  return {
+    ...state,
+    kind: 'move',
+    activeMove,
+    checkerToMove,
+    origin: updatedOrigin,
+    destination: updatedDestination,
+    board,
   }
-  return state
 }

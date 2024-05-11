@@ -10,23 +10,7 @@ export const pointToPoint = (
   origin: Point,
   destination: Point
 ): NodotsMoveState => {
-  const { player, board } = state
-
-  if (
-    destination.checkers.length > 1 &&
-    destination.checkers[0].color !== checkerToMove.color
-  ) {
-    return {
-      ...state,
-    }
-  }
-
-  if (
-    destination.checkers.length === 1 &&
-    destination.checkers[0].color !== checkerToMove.color
-  ) {
-    hit(state, destination)
-  }
+  const { board } = state
 
   const originCheckers = (origin.checkers = origin.checkers.filter(
     (checker) => checker.id !== checkerToMove.id

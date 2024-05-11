@@ -27,6 +27,7 @@ export interface Props {
   checkers: CheckerType[]
 }
 
+// TODO: Handle display of > 6 checkers.
 function Point({ id, position, checkers, latitude, store }: Props) {
   const theme = useTheme()
   let className = 'point'

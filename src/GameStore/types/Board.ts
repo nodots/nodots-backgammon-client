@@ -2,7 +2,7 @@ import { Color, PointPosition, generateId } from '.'
 import { Checker, generateCheckersForCheckercontainerId } from './Checker'
 import { Bar, Checkercontainer, Off, Point } from './Checkercontainer'
 import {
-  Players,
+  NodotsPlayers,
   getClockwisePlayer,
   getCounterclockwisePlayer,
 } from './Player'
@@ -140,7 +140,8 @@ export interface NodotsBoardStore {
     black: Off
   }
 }
-const buildPoints = (players: Players): Points => {
+
+const buildPoints = (players: NodotsPlayers): Points => {
   const tempPoints: Point[] = []
   for (let i = 0; i < 24; i++) {
     const pointId = generateId()
@@ -233,7 +234,9 @@ const buildPoints = (players: Players): Points => {
   }
 }
 
-export const buildNodotsBoardStore = (players: Players): NodotsBoardStore => {
+export const buildNodotsBoardStore = (
+  players: NodotsPlayers
+): NodotsBoardStore => {
   return {
     points: buildPoints(players),
     bar: {
@@ -315,7 +318,10 @@ export const getCheckercontainer = (
   return container
 }
 
-export const getPipCounts = (board: NodotsBoardStore, players: Players) => {
+export const getPipCounts = (
+  board: NodotsBoardStore,
+  players: NodotsPlayers
+) => {
   const pipCounts = {
     white: board.bar.white.checkers.length * 24,
     black: board.bar.black.checkers.length * 24,

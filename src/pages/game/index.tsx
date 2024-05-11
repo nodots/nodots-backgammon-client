@@ -2,15 +2,20 @@ import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
 import NodotsGameStore from '../../GameStore'
-import { generateId, rollingForStart } from '../../GameStore/types'
-import { Player } from '../../GameStore/types/Player'
+import {
+  Initializing,
+  generateId,
+  rollingForStart,
+} from '../../GameStore/types'
+import { InitializingPlayer, Player } from '../../GameStore/types/Player'
 import BoardComponent from '../../components/Board'
 import GameNotifications from '../../components/Nofitications/Game'
 import Bar from '../../components/Bar'
 import Off from '../../components/Off'
 import Quadrant from '../../components/Quadrant'
 
-const whitePlayer: Player = {
+const whitePlayer: InitializingPlayer = {
+  kind: 'initializing',
   id: generateId(),
   color: 'white',
   username: 'White Stripes',
@@ -26,7 +31,8 @@ const whitePlayer: Player = {
   ],
 }
 
-const blackPlayer: Player = {
+const blackPlayer: InitializingPlayer = {
+  kind: 'initializing',
   id: generateId(),
   color: 'black',
   username: 'Black Messiah',

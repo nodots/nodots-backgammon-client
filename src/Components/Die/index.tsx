@@ -22,11 +22,9 @@ interface Props {
 }
 
 const isActive = (activeColor: Color, color: Color) => activeColor === color
-
+// TODO: Show move state with dice
 function Die({ order, color, store }: Props) {
   const { state } = store
-
-  console.log('[Die] state:', state.kind)
 
   const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()

@@ -4,8 +4,14 @@ import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
-import { Players } from './Player'
-import { NodotsMoves, move, getNextMove, Initialized } from './move'
+import { MovingPlayer, NodotsPlayers } from './Player'
+import {
+  NodotsMoves,
+  move,
+  getNextMove,
+  Initialized,
+  buildMoveMessage,
+} from './move'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -76,7 +82,7 @@ interface NodotsGame {
     | 'confirmed'
     | 'moving'
   boardStore: NodotsBoardStore
-  players: Players
+  players: NodotsPlayers
   cube: Cube
   message?: NodotsMessage
 }
@@ -135,7 +141,7 @@ export type NodotsGameState =
   | Confirming
   | Confirmed
 
-export const initializing = (players: Players): Initializing => {
+export const initializing = (players: NodotsPlayers): Initializing => {
   players.black.dice = generateDice(players.black)
   players.white.dice = generateDice(players.black)
 
@@ -158,8 +164,10 @@ export const initializing = (players: Players): Initializing => {
 export const rollingForStart = (state: Initializing): Rolling => {
   const { players } = state
   const activeColor = Math.random() >= 0.5 ? 'black' : 'white'
+  const activePlayer = players[activeColor]
+  activePlayer.kind = 'moving'
   const message = {
-    game: `${players[activeColor].username} wins the opening roll`,
+    game: `${activePlayer.username} wins the opening roll`,
   }
 
   return {
@@ -268,7 +276,7 @@ export const moving = (
   checkerId: string
 ): Moving | Confirming => {
   const { activeColor, players, boardStore, moves } = state
-  const player = players[activeColor]
+  const player = players[activeColor] as MovingPlayer
 
   const moveState: Initialized = {
     kind: 'initialized',
@@ -283,11 +291,14 @@ export const moving = (
     (move) => move.from === undefined
   ).length
 
+  const message = buildMoveMessage(player, moves)
+
   return {
     ...state,
     kind: remainingMoves === 0 ? 'confirming' : 'moving',
     boardStore: results.board,
     moves: results.moves,
+    message,
   }
 }
 

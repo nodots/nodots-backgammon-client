@@ -15,12 +15,12 @@ import {
   rollingForStart,
   switchDice,
 } from './types'
-import { Players } from './types/Player'
+import { NodotsPlayers } from './types/Player'
 
 class NodotsGameStore {
   state: NodotsGameState
 
-  constructor(players: Players) {
+  constructor(players: NodotsPlayers) {
     makeAutoObservable(this)
     this.state = initializing(players)
   }

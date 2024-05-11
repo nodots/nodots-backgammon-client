@@ -29,8 +29,7 @@ function DiceSwitcher({ store, color }: Props) {
         break
     }
   }
-
-  console.log('switchDiceHandler', store.state.kind)
+  console.log(store.state.kind)
   switch (store.state.kind) {
     case 'rolling-for-start':
     case 'rolling':

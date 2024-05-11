@@ -1,9 +1,9 @@
 import { Color, MoveDirection, NodotsGameState } from '.'
 import { Dice } from './Dice'
-import { isBearOff } from './move'
+import { isBearOffing, isReentering, isMoving, NodotsMoveState } from './move'
 
 export type Player = {
-  kind: 'moving' | 'reentering' | 'bearing-off'
+  kind: 'initializing' | 'waiting' | 'moving' | 'reentering' | 'bearing-off'
   id: string
   username: string
   color: Color
@@ -16,50 +16,79 @@ export type Player = {
   }
 }
 
+export interface InitializingPlayer extends Player {
+  kind: 'initializing'
+}
+
+export interface WaitingPlayer extends Player {
+  kind: 'waiting'
+}
 export interface MovingPlayer extends Player {
   kind: 'moving'
+  moveState: NodotsMoveState
 }
 
 export interface ReenteringPlayer extends Player {
   kind: 'reentering'
-}
-export interface BearingOffPlayer extends Player {
-  kind: 'bearing-off'
+  moveState: NodotsMoveState
 }
 
-export interface Players {
-  white: Player
-  black: Player
+export interface BearingOffPlayer extends Player {
+  kind: 'bearing-off'
+  moveState: NodotsMoveState
+}
+
+export type NodotsPlayer =
+  | InitializingPlayer
+  | MovingPlayer
+  | WaitingPlayer
+  | BearingOffPlayer
+  | ReenteringPlayer
+
+export interface NodotsPlayers {
+  white: NodotsPlayer
+  black: NodotsPlayer
 }
 
 export const getActivePlayer = (
   state: NodotsGameState,
   activeColor: Color,
-  players: Players
+  players: NodotsPlayers
 ): Player => {
   const untypedPlayer = players[activeColor]
-  if (isBearOff(state.boardStore, untypedPlayer)) {
+
+  if (isBearOffing(state.boardStore, untypedPlayer)) {
     const activePlayer = untypedPlayer as BearingOffPlayer
     return activePlayer
   }
-  if (isReenter(state.boardStore, untypedPlayer)) {
-    console.log('nope')
+
+  if (isReentering(state.boardStore, untypedPlayer)) {
+    const activePlayer = untypedPlayer as ReenteringPlayer
+    return activePlayer
   }
+
+  // if (isMoving(state)) {
+  //   const activePlayer = untypedPlayer as MovingPlayer
+  //   return activePlayer
+  // }
+
   const activePlayer = activeColor === 'black' ? players.black : players.white
 
   return activePlayer
 }
 
-export const getClockwisePlayer = (players: Players): Player =>
+export const getClockwisePlayer = (players: NodotsPlayers): NodotsPlayer =>
   players.black.moveDirection === 'clockwise' ? players.black : players.white
 
-export const getCounterclockwisePlayer = (players: Players): Player =>
+export const getCounterclockwisePlayer = (
+  players: NodotsPlayers
+): NodotsPlayer =>
   players.black.moveDirection === 'counterclockwise'
     ? players.black
     : players.white
 
 export const getPlayerForMoveDirection = (
-  players: Players,
+  players: NodotsPlayers,
   direction: MoveDirection
 ): Player =>
   direction === 'clockwise'
