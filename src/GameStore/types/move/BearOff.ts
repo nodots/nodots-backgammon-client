@@ -1,3 +1,4 @@
+import checker from 'vite-plugin-checker'
 import { NodotsMove, NodotsMoveState } from '.'
 import { Checker } from '../Checker'
 import { Checkercontainer, Point } from '../Checkercontainer'
@@ -9,33 +10,31 @@ export const bearOff = (
   origin: Point,
   destination: Checkercontainer
 ): NodotsMoveState => {
-  const { board } = state
-
-  const originCheckers = (origin.checkers = origin.checkers.filter(
+  const { board, player, moves } = state
+  const originCheckers = origin.checkers.filter(
     (checker) => checker.id !== checkerToMove.id
-  ))
-  const destinationCheckers = [...destination.checkers, checkerToMove]
+  )
+  const destinationCheckers = destination.checkers.concat(checkerToMove)
 
   const updatedOrigin = board.points.find(
     (point) => point.id === origin.id
   ) as Point
   updatedOrigin.checkers = originCheckers
 
-  const updatedDestination = board.points.find(
-    (point) => point.id === destination.id
-  ) as Point
+  const updatedDestination = board.off[checkerToMove.color]
   updatedDestination.checkers = destinationCheckers
 
   activeMove.from = updatedOrigin
   activeMove.to = updatedDestination
 
   return {
-    ...state,
     kind: 'move',
     activeMove,
     checkerToMove,
+    board,
+    player,
+    moves,
     origin: updatedOrigin,
     destination: updatedDestination,
-    board,
   }
 }

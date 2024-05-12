@@ -1,7 +1,7 @@
 import { CHECKERS_PER_PLAYER, DestinationPosition, MoveDirection } from '..'
 import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
 import { Checker, getChecker } from '../Checker'
-import { Bar, Checkercontainer, Point } from '../Checkercontainer'
+import { Bar, Checkercontainer, Off, Point } from '../Checkercontainer'
 import { DieValue } from '../Dice'
 import { NodotsMessage } from '../Message'
 import { MovingPlayer, NodotsPlayer, Player } from '../Player'
@@ -57,30 +57,29 @@ export const buildMoveMessage = (
   moves: NodotsMoves
 ): NodotsMessage => {
   const lastMove = getLastMove(moves) as NodotsMove
-  console.log(lastMove)
   let msgString = `${player.username} moves `
-  const lastMoveFrom = lastMove.from as Checkercontainer
-  const lastMoveTo = lastMove.to as Checkercontainer
+  // const lastMoveFrom = lastMove.from as Checkercontainer
+  // const lastMoveTo = lastMove.to as Checkercontainer
 
-  switch (lastMoveFrom.kind) {
-    case 'point':
-      const fromPoint = lastMoveFrom as Point
-      msgString += ` from ${fromPoint.position[player.direction]}`
-      if (lastMoveTo.kind === 'point') {
-        const toPoint = lastMoveTo as Point
-        msgString += ` to ${toPoint.position[player.direction]}`
-      }
-      break
-    case 'bar':
-      const bar = lastMoveFrom as Bar
-      const destination = lastMoveTo as Point
-      msgString += ` bar to ${destination.position[player.direction]}`
-      break
-    default:
-      msgString += `from ${JSON.stringify(lastMove.from)} to ${JSON.stringify(
-        lastMove.to
-      )}`
-  }
+  // switch (lastMoveFrom.kind) {
+  //   case 'point':
+  //     const fromPoint = lastMoveFrom as Point
+  //     msgString += ` from ${fromPoint.position[player.direction]}`
+  //     // if (lastMoveTo.kind === 'point') {
+  //     //   const toPoint = lastMoveTo as Point
+  //     //   msgString += ` to ${toPoint.position[player.direction]}`
+  //     // }
+  //     break
+  //   case 'bar':
+  //     const bar = lastMoveFrom as Bar
+  //     const destination = lastMoveTo as Point
+  //     msgString += ` bar to ${destination.position[player.direction]}`
+  //     break
+  //   default:
+  //     msgString += `from ${JSON.stringify(lastMove.from)} to ${JSON.stringify(
+  //       lastMove.to
+  //     )}`
+  // }
 
   return {
     game: msgString,
@@ -91,37 +90,29 @@ export const getDestinationForOrigin = (
   state: NodotsMoveState,
   origin: Checkercontainer,
   activeMove: NodotsMove
-): Checkercontainer => {
+): Off | Point => {
   switch (origin.kind) {
     case 'point':
-      let destinationPoint: Point
+      let destination: Point | Off | undefined = undefined
       const originPoint = origin as Point
       const delta = activeMove.dieValue * -1
       const checkerToMove = activeMove.checker
         ? activeMove.checker
         : origin.checkers[0]
-      if (delta < 0 && state.kind === 'move') {
-        alert('Bearing off')
-        // return state.board.off['black'] // FIXME
-        if (activeMove.checker) {
-          console.log(state.board.off)
-          return state.board.off[checkerToMove.color]
-        } else {
-          throw Error('activeMove has not checker')
-        }
+      if (delta < 0) {
+        destination = state.board.off[checkerToMove.color] as Off
       } else {
         const destinationPointPosition =
           originPoint.position[activeMove.direction] + delta
-        destinationPoint = state.board.points.find(
+        destination = state.board.points.find(
           (point) =>
             point.position[activeMove.direction] === destinationPointPosition
         ) as Point // FIXME
-
-        return destinationPoint
       }
+      return destination
     case 'bar':
       const destinationPointPosition = 25 - activeMove.dieValue
-      const destination = state.board.points.find((point) => {
+      destination = state.board.points.find((point) => {
         return point.position[activeMove.direction] === destinationPointPosition
       }) as Point // FIXME
       return destination
@@ -209,13 +200,15 @@ export const move = (
         state,
         originCheckercontainer,
         activeMove
-      ) as Point // Fixme
+      ) as DestinationPosition // Fixme
 
       if (!destination) {
-        throw Error(`No destination for ${JSON.stringify(origin)}`)
+        console.log(`No destination for ${JSON.stringify(origin)}`)
       }
 
       if (
+        destination &&
+        destination.checkers &&
         destination.checkers.length > 1 &&
         destination.checkers[0].color !== checkerToMove.color
       ) {
@@ -225,6 +218,7 @@ export const move = (
       }
 
       if (
+        destination.checkers &&
         destination.checkers.length === 1 &&
         destination.checkers[0].color !== checkerToMove.color
       ) {
