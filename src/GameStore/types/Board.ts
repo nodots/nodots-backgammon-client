@@ -1,11 +1,9 @@
+import { debug } from 'console'
 import {
-  BoardImportAllPointOne,
-  BoardImportBearOff,
-  CHECKERS_PER_PLAYER,
-  CheckerboxPosition,
   Color,
   IBoardImport,
   IBoardImports,
+  ICheckercontainerImport,
   PointPosition,
   generateId,
 } from '.'
@@ -16,6 +14,7 @@ import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
 } from './Player'
+import { BOARD_IMPORT_DEFAULT } from '../board-setups'
 
 export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'
@@ -151,146 +150,204 @@ export interface NodotsBoardStore {
   }
 }
 
-const buildPoints = (
+const buildBar = (
   players: NodotsPlayers,
-  boardImports?: IBoardImports
-): Points => {
-  if (boardImports) {
-    const pointId = generateId()
-    const tempPoints: Point[] = []
+  boards: IBoardImports
+): { white: Bar; black: Bar } => {
+  const clockwisePlayer = getClockwisePlayer(players)
+  const counterclockwisePlayer = getCounterclockwisePlayer(players)
 
-    for (let i = 0; i < 24; i++) {
-      const checkers: Checker[] = []
+  const clockwiseBoard = boards.clockwise
+  const counterclockwiseBoard = boards.counterclockwise
 
-      const clockwiseColor = getClockwisePlayer(players).color
-      const clockwisePosition: PointPosition = (i +
-        1) as number as PointPosition
-      const counterclockwisePosition = (25 - clockwisePosition) as PointPosition
+  const clockwiseColor = clockwisePlayer.color
+  const counterclockwiseColor = counterclockwisePlayer.color
 
-      const counterclockwiseColor = getCounterclockwisePlayer(players).color
-      const clockwiseBoard = boardImports.clockwise
-      const counterclockwiseBoard = boardImports.counterclockwise
+  const clockwiseBar = clockwiseBoard.find((cc) => cc.position === 'bar')
+  const counterclockwiseBar = counterclockwiseBoard.find(
+    (cc) => cc.position === 'bar'
+  )
 
-      clockwiseBoard.map((checkerbox) => {
-        if (checkerbox.position === clockwisePosition) {
-          const checkercount = checkerbox.checkercount
-          console.log(`clockwise ${checkercount} ${clockwiseColor}`)
-          checkers.push(
-            ...generateCheckersForCheckercontainerId(
-              clockwiseColor,
-              pointId,
-              checkercount
-            )
-          )
-        }
-      })
+  const clockwiseId = generateId()
+  const counterclockwiseId = generateId()
 
-      counterclockwiseBoard.map((checkerbox) => {
-        if (checkerbox.position === counterclockwisePosition) {
-          const checkercount = checkerbox.checkercount
-          console.log(`clockwise ${checkercount} ${counterclockwiseColor}`)
-          checkers.push(
-            ...generateCheckersForCheckercontainerId(
-              counterclockwiseColor,
-              pointId,
-              checkercount
-            )
-          )
-        }
-      })
+  const clockwiseCheckers = generateCheckersForCheckercontainerId(
+    clockwiseColor,
+    clockwiseId,
+    clockwiseBar?.checkercount ? clockwiseBar.checkercount : 0
+  )
 
-      const point: Point = {
-        id: pointId,
-        kind: 'point',
-        position: {
-          clockwise: clockwisePosition,
-          counterclockwise: counterclockwisePosition,
-        },
-        checkers,
-      }
-      tempPoints.push(point)
+  const counterclockwiseCheckers = generateCheckersForCheckercontainerId(
+    counterclockwiseColor,
+    counterclockwiseId,
+    counterclockwiseBar?.checkercount ? counterclockwiseBar.checkercount : 0
+  )
+
+  if (clockwiseColor === 'black') {
+    return {
+      black: {
+        id: clockwiseId,
+        kind: 'bar',
+        position: 'bar',
+        color: 'black',
+        checkers: clockwiseCheckers,
+      },
+      white: {
+        id: counterclockwiseId,
+        kind: 'bar',
+        position: 'bar',
+        color: 'white',
+        checkers: counterclockwiseCheckers,
+      },
     }
-
-    if (tempPoints.length === 24) {
-      return tempPoints as Points
-    } else {
-      throw Error(`invalid tempPoints length ${tempPoints.length}`)
+  } else {
+    return {
+      black: {
+        id: counterclockwiseId,
+        kind: 'bar',
+        position: 'bar',
+        color: 'black',
+        checkers: counterclockwiseCheckers,
+      },
+      white: {
+        id: clockwiseId,
+        kind: 'bar',
+        position: 'bar',
+        color: 'white',
+        checkers: clockwiseCheckers,
+      },
     }
   }
+}
 
+const buildOff = (
+  players: NodotsPlayers,
+  boards: IBoardImports
+): { white: Off; black: Off } => {
+  const clockwisePlayer = getClockwisePlayer(players)
+  const counterclockwisePlayer = getCounterclockwisePlayer(players)
+
+  const clockwiseBoard = boards.clockwise
+  const counterclockwiseBoard = boards.counterclockwise
+
+  const clockwiseColor = clockwisePlayer.color
+  const counterclockwiseColor = counterclockwisePlayer.color
+
+  const clockwiseOff = clockwiseBoard.find(
+    (cc) => cc.position === 'off'
+  ) as unknown as ICheckercontainerImport
+  const counterclockwiseOff = counterclockwiseBoard.find(
+    (cc) => cc.position === 'off'
+  ) as unknown as ICheckercontainerImport
+
+  const clockwiseId = generateId()
+  const counterclockwiseId = generateId()
+
+  const clockwiseCheckers = generateCheckersForCheckercontainerId(
+    clockwiseColor,
+    clockwiseId,
+    clockwiseOff?.checkercount ? clockwiseOff.checkercount : 0
+  )
+
+  const counterclockwiseCheckers = generateCheckersForCheckercontainerId(
+    counterclockwiseColor,
+    counterclockwiseId,
+    counterclockwiseOff?.checkercount ? counterclockwiseOff.checkercount : 0
+  )
+
+  if (clockwiseColor === 'black') {
+    return {
+      black: {
+        id: generateId(),
+        kind: 'off',
+        position: 'off',
+        color: 'black',
+        checkers: clockwiseCheckers,
+      },
+      white: {
+        id: generateId(),
+        kind: 'off',
+        position: 'off',
+        color: 'white',
+        checkers: counterclockwiseCheckers,
+      },
+    }
+  } else {
+    return {
+      black: {
+        id: generateId(),
+        kind: 'off',
+        position: 'off',
+        color: 'black',
+        checkers: counterclockwiseCheckers,
+      },
+      white: {
+        id: generateId(),
+        kind: 'off',
+        position: 'off',
+        color: 'white',
+        checkers: clockwiseCheckers,
+      },
+    }
+  }
+}
+
+export const buildBoard = (
+  players: NodotsPlayers,
+  boardImports?: IBoardImports
+): NodotsBoardStore => {
+  let clockwiseBoardImport = BOARD_IMPORT_DEFAULT
+  let counterclockwiseBoardImport = BOARD_IMPORT_DEFAULT
+
+  if (boardImports && boardImports.clockwise) {
+    clockwiseBoardImport = boardImports.clockwise
+  }
+
+  if (boardImports && boardImports.counterclockwise) {
+    counterclockwiseBoardImport = boardImports.counterclockwise
+  }
+
+  const imports: IBoardImports = {
+    clockwise: clockwiseBoardImport,
+    counterclockwise: counterclockwiseBoardImport,
+  }
   const tempPoints: Point[] = []
+  const clockwiseColor = getClockwisePlayer(players).color
+  const counterclockwiseColor = getCounterclockwisePlayer(players).color
+
   for (let i = 0; i < 24; i++) {
     const pointId = generateId()
-    const clockwiseColor = getClockwisePlayer(players).color
-    const counterclockwiseColor = getCounterclockwisePlayer(players).color
+    const checkers: Checker[] = []
+
     const clockwisePosition: PointPosition = (i + 1) as number as PointPosition
     const counterclockwisePosition = (25 - clockwisePosition) as PointPosition
 
-    const checkers: Checker[] = []
-    switch (clockwisePosition) {
-      case 24:
+    clockwiseBoardImport.map((checkerbox) => {
+      if (checkerbox.position === clockwisePosition) {
+        const checkercount = checkerbox.checkercount
         checkers.push(
-          ...generateCheckersForCheckercontainerId(clockwiseColor, pointId, 2)
+          ...generateCheckersForCheckercontainerId(
+            clockwiseColor,
+            pointId,
+            checkercount
+          )
         )
-        break
-      case 13:
-        checkers.push(
-          ...generateCheckersForCheckercontainerId(clockwiseColor, pointId, 5)
-        )
-        break
-      case 8:
-        checkers.push(
-          ...generateCheckersForCheckercontainerId(clockwiseColor, pointId, 3)
-        )
-        break
-      case 6:
-        checkers.push(
-          ...generateCheckersForCheckercontainerId(clockwiseColor, pointId, 5)
-        )
-        break
-      default:
-      // noop
-    }
-    switch (counterclockwisePosition) {
-      case 24:
+      }
+    })
+
+    counterclockwiseBoardImport.map((checkerbox) => {
+      if (checkerbox.position === counterclockwisePosition) {
+        const checkercount = checkerbox.checkercount
         checkers.push(
           ...generateCheckersForCheckercontainerId(
             counterclockwiseColor,
             pointId,
-            2
+            checkercount
           )
         )
-        break
-      case 13:
-        checkers.push(
-          ...generateCheckersForCheckercontainerId(
-            counterclockwiseColor,
-            pointId,
-            5
-          )
-        )
-        break
-      case 8:
-        checkers.push(
-          ...generateCheckersForCheckercontainerId(
-            counterclockwiseColor,
-            pointId,
-            3
-          )
-        )
-        break
-      case 6:
-        checkers.push(
-          ...generateCheckersForCheckercontainerId(
-            counterclockwiseColor,
-            pointId,
-            5
-          )
-        )
-        break
-      default:
-      // noop
-    }
+      }
+    })
+
     const point: Point = {
       id: pointId,
       kind: 'point',
@@ -304,52 +361,13 @@ const buildPoints = (
   }
 
   if (tempPoints.length === 24) {
-    return tempPoints as Points
+    return {
+      points: tempPoints,
+      bar: buildBar(players, imports),
+      off: buildOff(players, imports),
+    }
   } else {
     throw Error(`invalid tempPoints length ${tempPoints.length}`)
-  }
-}
-
-export const buildNodotsBoardStore = (
-  players: NodotsPlayers
-): NodotsBoardStore => {
-  return {
-    points: buildPoints(players, {
-      clockwise: BoardImportBearOff,
-      counterclockwise: BoardImportBearOff,
-    }),
-    bar: {
-      white: {
-        id: generateId(),
-        kind: 'bar',
-        position: 'bar',
-        color: 'white',
-        checkers: [],
-      },
-      black: {
-        id: generateId(),
-        kind: 'bar',
-        position: 'bar',
-        color: 'black',
-        checkers: [],
-      },
-    },
-    off: {
-      white: {
-        id: generateId(),
-        kind: 'off',
-        position: 'off',
-        color: 'white',
-        checkers: [],
-      },
-      black: {
-        id: generateId(),
-        kind: 'off',
-        position: 'off',
-        color: 'black',
-        checkers: [],
-      },
-    },
   }
 }
 

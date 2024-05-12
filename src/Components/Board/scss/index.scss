@@ -199,7 +199,26 @@ $board-padding: $point-padding * 2;
   }
 
   #Off {
-    justify-content: center;
+    justify-content: space-around;
+    .checkercontainer {
+      border: 1px solid rgb(79, 195, 247);
+      display: flex;
+      flex-direction: column;
+      margin: 5px;
+      border-radius: $border-radius;
+      height: $checker-height * 1.8;
+      width: $checker-height;
+      margin: 15px 0px 15px 0px;
+      .checker {
+        max-height: 8px;
+        border-radius: 0 !important;
+        margin: 2px 0 0 0px;
+        padding: 1px !important;
+      }
+      &.counterclockwise {
+        flex-direction: column-reverse;
+      }
+    }
   }
 
   .point-labels {

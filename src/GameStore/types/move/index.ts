@@ -92,17 +92,23 @@ export const getDestinationForOrigin = (
   origin: Checkercontainer,
   activeMove: NodotsMove
 ): Checkercontainer => {
-  const checker = activeMove.checker as Checker // FIXME
-  console.log('[getDestinationForOrigin] checker:', checker)
   switch (origin.kind) {
     case 'point':
       let destinationPoint: Point
       const originPoint = origin as Point
       const delta = activeMove.dieValue * -1
-
-      if (delta > 0 && state.kind === 'move') {
-        return state.board.off['black'] // FIXME
-        // return state.board.off[activeMove.checker.color]
+      const checkerToMove = activeMove.checker
+        ? activeMove.checker
+        : origin.checkers[0]
+      if (delta < 0 && state.kind === 'move') {
+        alert('Bearing off')
+        // return state.board.off['black'] // FIXME
+        if (activeMove.checker) {
+          console.log(state.board.off)
+          return state.board.off[checkerToMove.color]
+        } else {
+          throw Error('activeMove has not checker')
+        }
       } else {
         const destinationPointPosition =
           originPoint.position[activeMove.direction] + delta
@@ -113,7 +119,6 @@ export const getDestinationForOrigin = (
 
         return destinationPoint
       }
-      throw Error('Could not find destination')
     case 'bar':
       const destinationPointPosition = 25 - activeMove.dieValue
       const destination = state.board.points.find((point) => {
@@ -229,7 +234,13 @@ export const move = (
       switch (originCheckercontainer.kind) {
         case 'point':
           if (isBearOffing(board, player)) {
-            return bearOff(state, activeMove, originCheckercontainer as Point)
+            return bearOff(
+              state,
+              checkerToMove,
+              activeMove,
+              originCheckercontainer as Point,
+              destination
+            )
           } else {
             return pointToPoint(
               state,

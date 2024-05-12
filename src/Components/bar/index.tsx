@@ -1,12 +1,10 @@
 import { observer } from 'mobx-react'
-import { NodotsGameState } from '../../GameStore/types'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
 } from '../../GameStore/types/Player'
 import PipCount from './PipCount'
 import NodotsGameStore from '../../GameStore'
-import { NodotsBoardStore } from '../../GameStore/types/Board'
 import { getCheckerComponents } from '../Point'
 
 export interface Props {

@@ -1,11 +1,12 @@
 import { v4 as uuid } from 'uuid'
-import { NodotsBoardStore, buildNodotsBoardStore, getPipCounts } from './Board'
+import { NodotsBoardStore, buildBoard } from './Board'
 import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers } from './Player'
 import { NodotsMoves, Initialized, buildMoveMessage, move } from './move'
+import { BOARD_IMPORT_ALL_OFF, BOARD_IMPORT_BEAR_OFF } from '../board-setups'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -75,19 +76,6 @@ export interface IBoardImports {
   clockwise: IBoardImport
   counterclockwise: IBoardImport
 }
-
-export const BoardImportAllPointOne: IBoardImport = [
-  { position: 1, checkercount: CHECKERS_PER_PLAYER },
-]
-
-export const BoardImportBearOff: IBoardImport = [
-  { position: 1, checkercount: 2 },
-  { position: 2, checkercount: 2 },
-  { position: 3, checkercount: 2 },
-  { position: 4, checkercount: 3 },
-  { position: 5, checkercount: 3 },
-  { position: 6, checkercount: 3 },
-]
 
 interface NodotsGame {
   kind:
@@ -168,7 +156,10 @@ export const initializing = (players: NodotsPlayers): Initializing => {
     owner: undefined,
   }
 
-  const boardStore = buildNodotsBoardStore(players)
+  const boardStore = buildBoard(players, {
+    clockwise: BOARD_IMPORT_BEAR_OFF,
+    counterclockwise: BOARD_IMPORT_BEAR_OFF,
+  })
 
   return {
     kind: 'initializing',

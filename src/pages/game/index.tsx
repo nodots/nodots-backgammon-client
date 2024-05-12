@@ -48,17 +48,6 @@ const blackPlayer: InitializingPlayer = {
   ],
 }
 
-interface NodotsBoardDisplay {
-  quadrants: [
-    typeof Quadrant,
-    typeof Quadrant,
-    typeof Quadrant,
-    typeof Quadrant
-  ]
-  bar: typeof Bar
-  off: typeof Off
-}
-
 class GamePage extends Component {
   private store: NodotsGameStore
 
