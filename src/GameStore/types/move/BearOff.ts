@@ -1,7 +1,7 @@
 import checker from 'vite-plugin-checker'
 import { NodotsMove, NodotsMoveState } from '.'
 import { Checker } from '../Checker'
-import { Checkercontainer, Point } from '../Checkercontainer'
+import { Checkercontainer, Off, Point } from '../Checkercontainer'
 
 export const bearOff = (
   state: NodotsMoveState,
@@ -11,6 +11,9 @@ export const bearOff = (
   destination: Checkercontainer
 ): NodotsMoveState => {
   const { board, player, moves } = state
+  if (!activeMove) {
+    throw Error('No activeMove')
+  }
   const originCheckers = origin.checkers.filter(
     (checker) => checker.id !== checkerToMove.id
   )

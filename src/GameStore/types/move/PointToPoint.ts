@@ -1,6 +1,7 @@
-import { NodotsMove, NodotsMoveState } from '.'
+import { NodotsMove, NodotsMoveState, isBearOffing } from '.'
 import { Checker } from '../Checker'
-import { Point } from '../Checkercontainer'
+import { Checkercontainer, Point } from '../Checkercontainer'
+import { bearOff } from './BearOff'
 import { hit } from './Hit'
 
 export const pointToPoint = (
@@ -8,7 +9,7 @@ export const pointToPoint = (
   checkerToMove: Checker,
   activeMove: NodotsMove,
   origin: Point,
-  destination: Point
+  destination: Checkercontainer
 ): NodotsMoveState => {
   const { board } = state
 

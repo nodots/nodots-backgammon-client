@@ -90,26 +90,23 @@ export const getDestinationForOrigin = (
   state: NodotsMoveState,
   origin: Checkercontainer,
   activeMove: NodotsMove
-): Off | Point => {
+): Off | Point | undefined => {
+  const { board, player } = state
   switch (origin.kind) {
     case 'point':
       let destination: Point | Off | undefined = undefined
       const originPoint = origin as Point
       const delta = activeMove.dieValue * -1
-      const checkerToMove = activeMove.checker
-        ? activeMove.checker
-        : origin.checkers[0]
-      if (delta < 0) {
-        destination = state.board.off[checkerToMove.color] as Off
+      const dpp = originPoint.position[activeMove.direction] + delta
+      console.log(dpp)
+      if (dpp <= 0) {
+        return board.off[player.color]
       } else {
-        const destinationPointPosition =
-          originPoint.position[activeMove.direction] + delta
-        destination = state.board.points.find(
-          (point) =>
-            point.position[activeMove.direction] === destinationPointPosition
-        ) as Point // FIXME
+        return board.points.find(
+          (point) => point.position[player.direction] === dpp
+        )
       }
-      return destination
+
     case 'bar':
       const destinationPointPosition = 25 - activeMove.dieValue
       destination = state.board.points.find((point) => {
@@ -117,9 +114,8 @@ export const getDestinationForOrigin = (
       }) as Point // FIXME
       return destination
     default:
-      break
+      throw Error('Unknown situation')
   }
-  return origin //FIXME
 }
 
 export const getLastMove = (moves: NodotsMoves) =>
@@ -143,7 +139,9 @@ export const isBearOffing = (
     )
     .reduce((a, b) => a + b, 0)
 
-  return homeBoardCheckerCount === CHECKERS_PER_PLAYER ? true : false
+  const offCheckerCount = board.off[player.color].checkers.length
+  const checkerCount = homeBoardCheckerCount + offCheckerCount
+  return checkerCount === CHECKERS_PER_PLAYER ? true : false
 }
 
 export const isReentering = (
@@ -200,7 +198,7 @@ export const move = (
         state,
         originCheckercontainer,
         activeMove
-      ) as DestinationPosition // Fixme
+      ) as Point | Off
 
       if (!destination) {
         console.log(`No destination for ${JSON.stringify(origin)}`)
@@ -218,16 +216,19 @@ export const move = (
       }
 
       if (
+        destination &&
         destination.checkers &&
         destination.checkers.length === 1 &&
-        destination.checkers[0].color !== checkerToMove.color
+        destination.checkers[0].color !== checkerToMove.color &&
+        destination.kind !== 'off'
       ) {
         hit(state, destination)
       }
 
       switch (originCheckercontainer.kind) {
         case 'point':
-          if (isBearOffing(board, player)) {
+          console.log(destination)
+          if (destination.kind === 'off') {
             return bearOff(
               state,
               checkerToMove,
@@ -235,15 +236,14 @@ export const move = (
               originCheckercontainer as Point,
               destination
             )
-          } else {
-            return pointToPoint(
-              state,
-              checkerToMove,
-              activeMove,
-              originCheckercontainer as Point,
-              destination as Point
-            )
           }
+          return pointToPoint(
+            state,
+            checkerToMove,
+            activeMove,
+            originCheckercontainer as Point,
+            destination
+          )
         case 'bar':
           return reenter(
             state,

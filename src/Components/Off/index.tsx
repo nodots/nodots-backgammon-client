@@ -23,12 +23,12 @@ function Off({ store }: Props) {
     boardStore.off[counterclockwiseColor].checkers
   return (
     <div id="Off">
-      <div className="checkercontainer clockwise">
-        {getCheckerComponents(store, clockwiseCheckers)}
-      </div>
-      <Cube store={store} />
       <div className="checkercontainer counterclockwise">
         {getCheckerComponents(store, counterclockwiseCheckers)}
+      </div>
+      <Cube store={store} />
+      <div className="checkercontainer clockwise">
+        {getCheckerComponents(store, clockwiseCheckers)}
       </div>
     </div>
   )

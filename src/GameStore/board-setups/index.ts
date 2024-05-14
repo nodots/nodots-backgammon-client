@@ -27,3 +27,8 @@ export const BOARD_IMPORT_BEAR_OFF: IBoardImport = [
   { position: 5, checkercount: 3 },
   { position: 6, checkercount: 3 },
 ]
+
+export const BOARD_IMPORT_END_GAME: IBoardImport = [
+  { position: 1, checkercount: 3 },
+  { position: 'off', checkercount: 12 },
+]

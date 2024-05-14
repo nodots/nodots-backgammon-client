@@ -6,7 +6,11 @@ import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers } from './Player'
 import { NodotsMoves, Initialized, buildMoveMessage, move } from './move'
-import { BOARD_IMPORT_ALL_OFF, BOARD_IMPORT_BEAR_OFF } from '../board-setups'
+import {
+  BOARD_IMPORT_ALL_OFF,
+  BOARD_IMPORT_BEAR_OFF,
+  BOARD_IMPORT_END_GAME,
+} from '../board-setups'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -157,8 +161,8 @@ export const initializing = (players: NodotsPlayers): Initializing => {
   }
 
   const boardStore = buildBoard(players, {
-    clockwise: BOARD_IMPORT_BEAR_OFF,
-    counterclockwise: BOARD_IMPORT_BEAR_OFF,
+    clockwise: BOARD_IMPORT_END_GAME,
+    counterclockwise: BOARD_IMPORT_END_GAME,
   })
 
   return {
