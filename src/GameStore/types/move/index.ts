@@ -4,7 +4,7 @@ import { Checker, getChecker } from '../Checker'
 import { Bar, Checkercontainer, Off, Point } from '../Checkercontainer'
 import { DieValue } from '../Dice'
 import { NodotsMessage } from '../Message'
-import { MovingPlayer, NodotsPlayer, Player } from '../Player'
+import { WinningPlayer, MovingPlayer, NodotsPlayer, Player } from '../Player'
 import { bearOff } from './BearOff'
 import { hit } from './Hit'
 import { pointToPoint } from './PointToPoint'
@@ -43,14 +43,22 @@ export interface Moving extends Move {
   destination: Checkercontainer
 }
 export interface Moved extends Move {
-  kind: 'move'
+  kind: 'moved'
   activeMove: NodotsMove
   checkerToMove: Checker
   origin: Checkercontainer
   destination: Checkercontainer
 }
 
-export type NodotsMoveState = Initialized | Moved | Moving
+export interface Completed {
+  kind: 'completed'
+  winner: Player
+  board: NodotsBoardStore
+  player: WinningPlayer
+  moves: NodotsMoves
+}
+
+export type NodotsMoveState = Initialized | Moved | Moving | Completed
 
 export const buildMoveMessage = (
   player: NodotsPlayer,
@@ -175,7 +183,7 @@ export const move = (
   state: NodotsMoveState,
   checkerId: string
 ): NodotsMoveState => {
-  const { board, moves, player } = state
+  const { board, player, moves } = state
 
   switch (state.kind) {
     case 'initialized':
@@ -227,15 +235,25 @@ export const move = (
 
       switch (originCheckercontainer.kind) {
         case 'point':
-          console.log(destination)
           if (destination.kind === 'off') {
-            return bearOff(
+            const result = bearOff(
               state,
               checkerToMove,
               activeMove,
               originCheckercontainer as Point,
               destination
             )
+            if (
+              board.off[player.color].checkers.length === CHECKERS_PER_PLAYER
+            ) {
+              return {
+                kind: 'won',
+                winner: player,
+                player,
+                board,
+                moves,
+              }
+            }
           }
           return pointToPoint(
             state,

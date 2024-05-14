@@ -92,6 +92,7 @@ interface NodotsGame {
     | 'confirming'
     | 'confirmed'
     | 'doubling'
+    | 'completed'
 
   boardStore: NodotsBoardStore
   players: NodotsPlayers
@@ -141,6 +142,13 @@ export interface Confirmed extends NodotsGame {
   moves: NodotsMoves
 }
 
+export interface Completed extends NodotsGame {
+  kind: 'completed'
+  activeColor: Color
+  roll: Roll
+  moves: NodotsMoves
+}
+
 export type NodotsGameState =
   | Initializing
   | RollingForStart
@@ -149,6 +157,7 @@ export type NodotsGameState =
   | Moving
   | Confirming
   | Confirmed
+  | Completed
 
 export const initializing = (players: NodotsPlayers): Initializing => {
   players.black.dice = generateDice(players.black)
@@ -286,7 +295,7 @@ export const double = (state: Rolled | Moving): Rolled | Moving => {
 export const moving = (
   state: Rolled | Moving,
   checkerId: string
-): Moving | Confirming => {
+): Moving | Confirming | Completed => {
   const { activeColor, players, boardStore, moves } = state
   const player = players[activeColor] as MovingPlayer
 

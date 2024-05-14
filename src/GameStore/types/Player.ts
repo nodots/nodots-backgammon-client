@@ -3,7 +3,13 @@ import { Dice } from './Dice'
 import { isBearOffing, isReentering, isMoving, NodotsMoveState } from './move'
 
 export type Player = {
-  kind: 'initializing' | 'waiting' | 'moving' | 'reentering' | 'bearing-off'
+  kind:
+    | 'initializing'
+    | 'waiting'
+    | 'moving'
+    | 'reentering'
+    | 'bearing-off'
+    | 'won'
   id: string
   username: string
   color: Color
@@ -23,6 +29,7 @@ export interface InitializingPlayer extends Player {
 export interface WaitingPlayer extends Player {
   kind: 'waiting'
 }
+
 export interface MovingPlayer extends Player {
   kind: 'moving'
   moveState: NodotsMoveState
@@ -38,12 +45,18 @@ export interface BearingOffPlayer extends Player {
   moveState: NodotsMoveState
 }
 
+export interface WinningPlayer extends Player {
+  kind: 'won'
+  moveState: NodotsMoveState
+}
+
 export type NodotsPlayer =
   | InitializingPlayer
   | MovingPlayer
   | WaitingPlayer
   | BearingOffPlayer
   | ReenteringPlayer
+  | WinningPlayer
 
 export interface NodotsPlayers {
   white: NodotsPlayer

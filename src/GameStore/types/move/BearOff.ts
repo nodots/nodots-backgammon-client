@@ -1,7 +1,9 @@
 import checker from 'vite-plugin-checker'
-import { NodotsMove, NodotsMoveState } from '.'
+import { Completed, Moved, Moving, NodotsMove, NodotsMoveState } from '.'
 import { Checker } from '../Checker'
 import { Checkercontainer, Off, Point } from '../Checkercontainer'
+import { CHECKERS_PER_PLAYER } from '..'
+import { WinningPlayer } from '../Player'
 
 export const bearOff = (
   state: NodotsMoveState,
@@ -9,7 +11,7 @@ export const bearOff = (
   activeMove: NodotsMove,
   origin: Point,
   destination: Checkercontainer
-): NodotsMoveState => {
+): Moved | Moving | Completed => {
   const { board, player, moves } = state
   if (!activeMove) {
     throw Error('No activeMove')
@@ -30,12 +32,17 @@ export const bearOff = (
   activeMove.from = updatedOrigin
   activeMove.to = updatedDestination
 
+  let winningPlayer: WinningPlayer | undefined = undefined
+  if (board.off[player.color].checkers.length === CHECKERS_PER_PLAYER) {
+    winningPlayer = player as WinningPlayer
+  }
+
   return {
-    kind: 'move',
+    kind: winningPlayer ? 'completed' : 'moved',
     activeMove,
     checkerToMove,
     board,
-    player,
+    player: winningPlayer ? winningPlayer : player,
     moves,
     origin: updatedOrigin,
     destination: updatedDestination,
