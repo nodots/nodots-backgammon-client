@@ -1,5 +1,5 @@
 import { Color, MoveDirection, NodotsGameState } from '.'
-import { Dice } from './Dice'
+import { NodotsDice } from './Dice'
 import { isBearOffing, isReentering, isMoving, NodotsMoveState } from './move'
 
 export type Player = {
@@ -13,7 +13,7 @@ export type Player = {
   id: string
   username: string
   color: Color
-  dice: Dice
+  dice: NodotsDice
   direction: MoveDirection
   pipCount: number
   automation: {

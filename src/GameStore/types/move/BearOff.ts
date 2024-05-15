@@ -1,9 +1,8 @@
-import checker from 'vite-plugin-checker'
 import { Completed, Moved, Moving, NodotsMove, NodotsMoveState } from '.'
 import { Checker } from '../Checker'
-import { Checkercontainer, Off, Point } from '../Checkercontainer'
+import { Checkercontainer, Point } from '../Checkercontainer'
 import { CHECKERS_PER_PLAYER } from '..'
-import { WinningPlayer } from '../Player'
+import { MovingPlayer, WinningPlayer } from '../Player'
 
 export const bearOff = (
   state: NodotsMoveState,
@@ -19,30 +18,34 @@ export const bearOff = (
   const originCheckers = origin.checkers.filter(
     (checker) => checker.id !== checkerToMove.id
   )
+
   const destinationCheckers = destination.checkers.concat(checkerToMove)
+
+  if (destinationCheckers.length === CHECKERS_PER_PLAYER) {
+    return {
+      ...state,
+      kind: 'completed',
+      winner: player as WinningPlayer,
+    }
+  }
 
   const updatedOrigin = board.points.find(
     (point) => point.id === origin.id
   ) as Point
   updatedOrigin.checkers = originCheckers
 
-  const updatedDestination = board.off[checkerToMove.color]
+  const updatedDestination = board.off[player.color]
   updatedDestination.checkers = destinationCheckers
 
   activeMove.from = updatedOrigin
   activeMove.to = updatedDestination
 
-  let winningPlayer: WinningPlayer | undefined = undefined
-  if (board.off[player.color].checkers.length === CHECKERS_PER_PLAYER) {
-    winningPlayer = player as WinningPlayer
-  }
-
   return {
-    kind: winningPlayer ? 'completed' : 'moved',
+    kind: 'moved',
     activeMove,
     checkerToMove,
     board,
-    player: winningPlayer ? winningPlayer : player,
+    player: player as MovingPlayer,
     moves,
     origin: updatedOrigin,
     destination: updatedDestination,

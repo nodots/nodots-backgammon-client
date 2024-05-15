@@ -32,3 +32,10 @@ export const BOARD_IMPORT_END_GAME: IBoardImport = [
   { position: 1, checkercount: 3 },
   { position: 'off', checkercount: 12 },
 ]
+
+export const BOARD_IMPORT_REENTER: IBoardImport = [
+  { position: 'bar', checkercount: 3 },
+  { position: 18, checkercount: 4 },
+  { position: 19, checkercount: 4 },
+  { position: 20, checkercount: 4 },
+]

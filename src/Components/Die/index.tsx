@@ -2,7 +2,7 @@ import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
 import NodotsGameStore from '../../GameStore'
-import { Color, NodotsGameState } from '../../GameStore/types'
+import { Color, Moving, NodotsGameState } from '../../GameStore/types'
 import { DieOrder } from '../../GameStore/types/Dice'
 
 const paths = [
@@ -21,17 +21,15 @@ interface Props {
   color: Color
 }
 
-const isActive = (activeColor: Color, color: Color) => activeColor === color
 // TODO: Show move state with dice
 function Die({ order, color, store }: Props) {
   const { state } = store
 
   const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log(state.kind)
+
     switch (state.kind) {
       case 'moving':
-        console.log('Why are we moving?')
         break
       case 'rolling':
         store.rolling(state)
@@ -40,6 +38,7 @@ function Die({ order, color, store }: Props) {
         store.confirming(state)
         break
       case 'confirmed':
+      case 'completed':
       default:
       //noop
     }
@@ -55,7 +54,7 @@ function Die({ order, color, store }: Props) {
   switch (store.state.kind) {
     case 'rolling-for-start':
     case 'initializing':
-      break
+      return <></>
     case 'rolling':
       return (
         store.state.activeColor === color && (
@@ -70,20 +69,18 @@ function Die({ order, color, store }: Props) {
           </Button>
         )
       )
+    case 'moving':
     case 'rolled':
     case 'confirmed':
-    case 'moving':
     case 'confirming':
+      const { moves, roll } = state as Moving // FIXME
       return (
         store.state.activeColor === color && (
           <Button className="die" onClick={rollHandler}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
               <g id="Layer_2" data-name="Layer 2">
                 <g id="Layer_1-2" data-name="Layer 1">
-                  <path
-                    d={paths[store.state.roll[order] - 1]}
-                    fill={fill(color)}
-                  />
+                  <path d={paths[roll[order] - 1]} fill={fill(color)} />
                 </g>
               </g>
             </svg>

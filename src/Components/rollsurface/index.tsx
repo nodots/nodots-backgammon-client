@@ -2,6 +2,7 @@ import { Container } from '@mui/material'
 import NodotsGameStore from '../../GameStore'
 import {
   Color,
+  Completed,
   Confirmed,
   Confirming,
   Moving,
@@ -14,7 +15,14 @@ import DiceSwitcher from './DiceSwitcher'
 
 interface Props {
   store: NodotsGameStore
-  state: RollingForStart | Rolling | Rolled | Confirming | Confirmed | Moving
+  state:
+    | RollingForStart
+    | Rolling
+    | Rolled
+    | Confirming
+    | Confirmed
+    | Moving
+    | Completed
   color: Color
 }
 

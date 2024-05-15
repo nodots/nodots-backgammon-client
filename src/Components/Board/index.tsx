@@ -36,6 +36,7 @@ function Board({ store, state }: Props) {
     case 'rolling':
     case 'rolled':
     case 'rolling-for-start':
+    case 'completed':
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>

@@ -1,6 +1,7 @@
 import { NodotsMove, NodotsMoveState, isBearOffing } from '.'
 import { Checker } from '../Checker'
 import { Checkercontainer, Point } from '../Checkercontainer'
+import { MovingPlayer } from '../Player'
 import { bearOff } from './BearOff'
 import { hit } from './Hit'
 
@@ -11,11 +12,16 @@ export const pointToPoint = (
   origin: Point,
   destination: Checkercontainer
 ): NodotsMoveState => {
-  const { board } = state
+  const { board, player } = state
 
   const originCheckers = (origin.checkers = origin.checkers.filter(
     (checker) => checker.id !== checkerToMove.id
   ))
+
+  if (isBearOffing(board, player)) {
+    return bearOff(state, checkerToMove, activeMove, origin, destination)
+  }
+
   const destinationCheckers = [...destination.checkers, checkerToMove]
 
   const updatedOrigin = board.points.find(
@@ -34,6 +40,7 @@ export const pointToPoint = (
   return {
     ...state,
     kind: 'move',
+    player: player as MovingPlayer,
     activeMove,
     checkerToMove,
     origin: updatedOrigin,

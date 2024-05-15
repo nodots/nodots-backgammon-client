@@ -4,12 +4,14 @@ import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
-import { MovingPlayer, NodotsPlayers } from './Player'
+import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
 import { NodotsMoves, Initialized, buildMoveMessage, move } from './move'
 import {
   BOARD_IMPORT_ALL_OFF,
   BOARD_IMPORT_BEAR_OFF,
+  BOARD_IMPORT_DEFAULT,
   BOARD_IMPORT_END_GAME,
+  BOARD_IMPORT_REENTER,
 } from '../board-setups'
 
 export const CHECKERS_PER_PLAYER = 15
@@ -147,6 +149,7 @@ export interface Completed extends NodotsGame {
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
+  winner: WinningPlayer
 }
 
 export type NodotsGameState =
@@ -314,12 +317,25 @@ export const moving = (
 
   const message = buildMoveMessage(player, moves)
 
-  return {
-    ...state,
-    kind: remainingMoves === 0 ? 'confirming' : 'moving',
-    boardStore: results.board,
-    moves: results.moves,
-    message,
+  if (results.kind === 'completed') {
+    const winner = player as unknown as WinningPlayer // FIXME
+
+    return {
+      ...state,
+      kind: 'completed',
+      winner,
+      message: {
+        game: `${winner.username} wins the game!`,
+      },
+    }
+  } else {
+    return {
+      ...state,
+      kind: remainingMoves === 0 ? 'confirming' : 'moving',
+      boardStore: results.board,
+      moves: results.moves,
+      message,
+    }
   }
 }
 

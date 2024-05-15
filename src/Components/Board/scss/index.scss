@@ -206,9 +206,10 @@ $board-padding: $point-padding * 2;
       flex-direction: column;
       margin: 5px;
       border-radius: $border-radius;
-      height: $checker-height * 1.8;
+      height: 8px * 20;
       width: $checker-height;
       margin: 15px 0px 15px 0px;
+      padding: 5px 0px 5px 0px;
       .checker {
         max-height: 8px;
         border-radius: 0 !important;
