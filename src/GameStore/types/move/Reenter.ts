@@ -1,24 +1,24 @@
-import { Moved, Moving, NodotsMove, NodotsMoveState } from '.'
-import { Checker } from '../Checker'
-import { Bar, Point } from '../Checkercontainer'
-import { hit } from './Hit'
+import { Moved, NodotsMovePayload } from '.'
+import { Point } from '../Checkercontainer'
+import { MovingPlayer } from '../Player'
 
-export const reenter = (
-  state: Moving,
-  checkerToMove: Checker,
-  activeMove: NodotsMove,
-  origin: Bar,
-  destination: Point
-): Moved => {
-  const { board } = state
-  console.log(origin)
-  console.log(destination.position)
+export const reenter = (payload: NodotsMovePayload): Moved => {
+  const { state, destination, origin, checker, move: activeMove } = payload
+  const { board, player } = state
+  console.log(origin.kind)
+  console.log(origin.checkers)
+
+  const reenteringPlayer = player as MovingPlayer
+  console.log(reenteringPlayer.color)
+
   const originCheckers = (origin.checkers = origin.checkers.filter(
-    (checker) => checker.id !== checkerToMove.id
+    (checker) => checker.id !== checker.id
   ))
-  const destinationCheckers = [...destination.checkers, checkerToMove]
+  console.log(originCheckers)
 
-  const updatedOrigin = board.bar[checkerToMove.color]
+  const destinationCheckers = [...destination.checkers, checker]
+
+  const updatedOrigin = board.bar[checker.color]
   updatedOrigin.checkers = originCheckers
 
   const updatedDestination = board.points.find(
@@ -32,10 +32,11 @@ export const reenter = (
   return {
     ...state,
     kind: 'moved',
-    activeMove,
-    checkerToMove,
+    move: activeMove,
+    checker,
     origin: updatedOrigin,
     destination: updatedDestination,
     board,
+    player: reenteringPlayer,
   }
 }

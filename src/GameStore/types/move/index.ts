@@ -1,7 +1,7 @@
 import { CHECKERS_PER_PLAYER, MoveDirection } from '..'
 import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
 import { Checker, getChecker } from '../Checker'
-import { Bar, Checkercontainer, Off, Point } from '../Checkercontainer'
+import { Checkercontainer, Off, Point } from '../Checkercontainer'
 import { DieValue } from '../Dice'
 import { NodotsMessage } from '../Message'
 import { MovingPlayer, NodotsPlayer, Player, WinningPlayer } from '../Player'
@@ -36,15 +36,15 @@ export interface Initialized extends Move {
 
 export interface Moving extends Move {
   kind: 'move'
-  activeMove: NodotsMove
-  checkerToMove: Checker
+  move: NodotsMove
+  checker: Checker
   origin: Checkercontainer
   destination: Checkercontainer
 }
 export interface Moved extends Move {
   kind: 'moved'
-  activeMove: NodotsMove
-  checkerToMove: Checker
+  move: NodotsMove
+  checker: Checker
   origin: Checkercontainer
   destination: Checkercontainer
 }
@@ -66,9 +66,7 @@ export const buildMoveMessage = (
   const lastMove = getLastMove(moves) as NodotsMove
   let msgString = `${player.username} moves `
   if (!lastMove || !lastMove.from) {
-    return {
-      game: 'No last move',
-    }
+    //noop
   } else {
     switch (lastMove.from.kind) {
       case 'point':
@@ -177,89 +175,94 @@ export const getOriginPointById = (
   return point
 }
 
-export const move = (
-  state: NodotsMoveState,
-  checkerId: string
-): NodotsMoveState => {
-  const { board, player, moves } = state
+export interface NodotsMovePayload {
+  state: NodotsMoveState
+  checker: Checker
+  origin: Checkercontainer
+  destination: Checkercontainer
+  moves: NodotsMove[]
+  move: NodotsMove
+}
 
-  const checkerToMove = getChecker(board, checkerId)
-  if (checkerToMove.color !== player.color) {
-    console.error(`Not ${player.username}'s checker`)
-    return state
-  }
-
-  const activeMove = getNextMove(moves) as NodotsMove
-  const originCheckercontainer = getCheckercontainers(board).find(
-    (checkercontainer) =>
-      checkercontainer.checkers.find((checker) => checker.id === checkerId)
-  ) as Checkercontainer
-
-  if (
-    board.bar[player.color].checkers.length > 0 &&
-    originCheckercontainer.kind !== 'bar'
-  ) {
+const isMoveSane = (payload: NodotsMovePayload): boolean => {
+  const { checker, origin, destination, state } = payload
+  const { board, player } = state
+  if (board.bar[player.color].checkers.length > 0 && origin.kind !== 'bar') {
     console.error(`${player.username} has checkers on the bar`)
-    return state
-  }
-
-  const destination = getDestinationForOrigin(
-    state,
-    originCheckercontainer,
-    activeMove
-  ) as Point | Off
-
-  if (!destination) {
-    throw Error(`No destination for ${JSON.stringify(origin)}`)
+    return false
   }
 
   if (
     destination &&
     destination.checkers &&
     destination.checkers.length > 1 &&
-    destination.checkers[0].color !== checkerToMove.color
+    destination.checkers[0].color !== checker.color
   ) {
     console.warn(`destination point occupied`)
-    return {
-      ...state,
-    }
+    return false
   }
 
+  if (checker.color !== player.color) {
+    console.error(`Not ${player.username}'s checker`)
+    return false
+  }
+
+  return true
+}
+
+const isMoveHit = (payload: NodotsMovePayload): boolean => {
+  const { checker, destination } = payload
+
   if (
-    destination &&
-    destination.checkers &&
     destination.checkers.length === 1 &&
-    destination.checkers[0].color !== checkerToMove.color &&
-    destination.kind !== 'off'
-  ) {
-    console.log('HIT!')
+    destination.checkers[0].color !== checker.color
+  )
+    return true
+
+  return false
+}
+
+export const move = (
+  state: NodotsMoveState,
+  checkerId: string
+): NodotsMoveState => {
+  const { board, player, moves } = state
+
+  const checker = getChecker(board, checkerId)
+  const activeMove = getNextMove(moves) as NodotsMove
+
+  const origin = getCheckercontainers(board).find((checkercontainer) =>
+    checkercontainer.checkers.find((checker) => checker.id === checkerId)
+  ) as Checkercontainer
+
+  const destination = getDestinationForOrigin(state, origin, activeMove) as
+    | Point
+    | Off
+
+  const payload: NodotsMovePayload = {
+    state,
+    checker,
+    origin,
+    destination,
+    moves,
+    move: activeMove,
+  }
+
+  if (!isMoveSane(payload)) {
+    return state
+  }
+
+  // This took a while to figure out: Hitting is really not part of move flow, it's its own thing.
+  // So, take care of it now and move on to the rest of the move.
+  if (isMoveHit(payload)) {
     hit(state, destination)
   }
 
-  switch (originCheckercontainer.kind) {
+  switch (origin.kind) {
     case 'point':
-      return pointToPoint(
-        state,
-        checkerToMove,
-        activeMove,
-        originCheckercontainer as Point,
-        destination
-      )
+      return pointToPoint(payload)
     case 'bar':
-      switch (state.kind) {
-        case 'initialized':
-        case 'moved':
-        case 'completed':
-          break
-        case 'move':
-          return reenter(
-            state,
-            checkerToMove,
-            activeMove,
-            originCheckercontainer as Bar,
-            destination as Point
-          )
-      }
+      return reenter(payload)
   }
   return state
 }

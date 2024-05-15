@@ -1,6 +1,6 @@
 import { Color, MoveDirection, NodotsGameState } from '.'
 import { NodotsDice } from './Dice'
-import { isBearOffing, isReentering, isMoving, NodotsMoveState } from './move'
+import { isBearOffing, isReentering, NodotsMoveState } from './move'
 
 export type Player = {
   kind:
@@ -79,11 +79,6 @@ export const getActivePlayer = (
     const activePlayer = untypedPlayer as ReenteringPlayer
     return activePlayer
   }
-
-  // if (isMoving(state)) {
-  //   const activePlayer = untypedPlayer as MovingPlayer
-  //   return activePlayer
-  // }
 
   const activePlayer = activeColor === 'black' ? players.black : players.white
 

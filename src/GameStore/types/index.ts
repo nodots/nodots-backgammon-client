@@ -173,8 +173,8 @@ export const initializing = (players: NodotsPlayers): Initializing => {
   }
 
   const boardStore = buildBoard(players, {
-    clockwise: BOARD_IMPORT_END_GAME,
-    counterclockwise: BOARD_IMPORT_END_GAME,
+    clockwise: BOARD_IMPORT_REENTER,
+    counterclockwise: BOARD_IMPORT_REENTER,
   })
 
   return {
@@ -202,6 +202,7 @@ export const rollingForStart = (state: Initializing): Rolling => {
   }
 }
 
+// TODO: Refactor to eliminate "undefined" via MoveState
 export const rolling = (state: Rolling): Rolled => {
   const { players, activeColor } = state
   const activePlayer = players[activeColor]

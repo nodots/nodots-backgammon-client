@@ -42,8 +42,8 @@ export const bearOff = (
 
   return {
     kind: 'moved',
-    activeMove,
-    checkerToMove,
+    move: activeMove,
+    checker: checkerToMove,
     board,
     player: player as MovingPlayer,
     moves,
