@@ -71,16 +71,16 @@ export const changeActiveColor = (activeColor: Color): Color =>
 export const getInactiveColor = (activeColor: Color): Color =>
   activeColor === 'black' ? 'white' : 'black'
 
-export interface ICheckercontainerImport {
+export interface NodotsCheckercontainerImport {
   position: CheckerboxPosition
   checkercount: number
 }
 
-export type IBoardImport = ICheckercontainerImport[]
+export type NodotsBoardImport = NodotsCheckercontainerImport[]
 
-export interface IBoardImports {
-  clockwise: IBoardImport
-  counterclockwise: IBoardImport
+export interface NodotsBoardImports {
+  clockwise: NodotsBoardImport
+  counterclockwise: NodotsBoardImport
 }
 
 interface NodotsGame {

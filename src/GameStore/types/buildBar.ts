@@ -1,4 +1,4 @@
-import { IBoardImports, ICheckercontainerImport, generateId } from '.'
+import { NodotsBoardImports, NodotsCheckercontainerImport, generateId } from '.'
 import { generateCheckersForCheckercontainerId } from './Checker'
 import { Bar } from './Checkercontainer'
 import {
@@ -9,7 +9,7 @@ import {
 
 export const buildBar = (
   players: NodotsPlayers,
-  boards: IBoardImports
+  boards: NodotsBoardImports
 ): { white: Bar; black: Bar } => {
   const clockwisePlayer = getClockwisePlayer(players)
   const counterclockwisePlayer = getCounterclockwisePlayer(players)
@@ -24,7 +24,7 @@ export const buildBar = (
 
   const clockwiseBar = clockwiseBoard.find(
     (cc) => cc.position === 'bar'
-  ) as unknown as ICheckercontainerImport
+  ) as unknown as NodotsCheckercontainerImport
 
   if (!clockwiseBar) {
     return {
@@ -47,7 +47,7 @@ export const buildBar = (
 
   const counterclockwiseBar = counterclockwiseBoard.find(
     (cc) => cc.position === 'bar'
-  ) as unknown as ICheckercontainerImport
+  ) as unknown as NodotsCheckercontainerImport
 
   const clockwiseId = generateId()
   const counterclockwiseId = generateId()

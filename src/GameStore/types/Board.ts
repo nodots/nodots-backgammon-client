@@ -1,9 +1,9 @@
 import { debug } from 'console'
 import {
   Color,
-  IBoardImport,
-  IBoardImports,
-  ICheckercontainerImport,
+  NodotsBoardImport,
+  NodotsBoardImports,
+  NodotsCheckercontainerImport,
   PointPosition,
   generateId,
 } from '.'
@@ -152,7 +152,7 @@ export interface NodotsBoardStore {
 
 const buildBar = (
   players: NodotsPlayers,
-  boards: IBoardImports
+  boards: NodotsBoardImports
 ): { white: Bar; black: Bar } => {
   const clockwisePlayer = getClockwisePlayer(players)
   const counterclockwisePlayer = getCounterclockwisePlayer(players)
@@ -222,7 +222,7 @@ const buildBar = (
 
 const buildOff = (
   players: NodotsPlayers,
-  boards: IBoardImports
+  boards: NodotsBoardImports
 ): { white: Off; black: Off } => {
   const clockwisePlayer = getClockwisePlayer(players)
   const counterclockwisePlayer = getCounterclockwisePlayer(players)
@@ -235,10 +235,10 @@ const buildOff = (
 
   const clockwiseOff = clockwiseBoard.find(
     (cc) => cc.position === 'off'
-  ) as unknown as ICheckercontainerImport
+  ) as unknown as NodotsCheckercontainerImport
   const counterclockwiseOff = counterclockwiseBoard.find(
     (cc) => cc.position === 'off'
-  ) as unknown as ICheckercontainerImport
+  ) as unknown as NodotsCheckercontainerImport
 
   const clockwiseId = generateId()
   const counterclockwiseId = generateId()
@@ -294,7 +294,7 @@ const buildOff = (
 
 export const buildBoard = (
   players: NodotsPlayers,
-  boardImports?: IBoardImports
+  boardImports?: NodotsBoardImports
 ): NodotsBoardStore => {
   let clockwiseBoardImport = BOARD_IMPORT_DEFAULT
   let counterclockwiseBoardImport = BOARD_IMPORT_DEFAULT
@@ -307,7 +307,7 @@ export const buildBoard = (
     counterclockwiseBoardImport = boardImports.counterclockwise
   }
 
-  const imports: IBoardImports = {
+  const imports: NodotsBoardImports = {
     clockwise: clockwiseBoardImport,
     counterclockwise: counterclockwiseBoardImport,
   }
