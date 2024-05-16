@@ -11,7 +11,7 @@ export interface Props {
   count?: number
 }
 
-function Checker({ checker, store }: Props) {
+function Checker({ checker, store, count }: Props) {
   const theme = useTheme()
 
   const handleDebugClick = (e: React.MouseEvent) => {
@@ -53,6 +53,7 @@ function Checker({ checker, store }: Props) {
       onClick={handleCheckerClick}
       onContextMenu={handleDebugClick}
     >
+      <span className="count">{count ? count : ''}</span>
       <span className="hidden">{checker.id}</span>
     </Button>
   )

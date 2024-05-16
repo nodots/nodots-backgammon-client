@@ -7,6 +7,7 @@ import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
 import { NodotsMoves, Initialized, buildMoveMessage, move } from './move'
 import {
+  BOARD_IMPORT_ALL_ACE,
   BOARD_IMPORT_ALL_OFF,
   BOARD_IMPORT_BEAR_OFF,
   BOARD_IMPORT_DEFAULT,
@@ -173,8 +174,8 @@ export const initializing = (players: NodotsPlayers): Initializing => {
   }
 
   const boardStore = buildBoard(players, {
-    clockwise: BOARD_IMPORT_DEFAULT,
-    counterclockwise: BOARD_IMPORT_DEFAULT,
+    clockwise: BOARD_IMPORT_ALL_ACE,
+    counterclockwise: BOARD_IMPORT_ALL_ACE,
   })
 
   return {

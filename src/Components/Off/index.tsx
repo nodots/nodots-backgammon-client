@@ -24,11 +24,11 @@ function Off({ store }: Props) {
   return (
     <div id="Off">
       <div className="checkercontainer counterclockwise">
-        {getCheckerComponents(store, counterclockwiseCheckers)}
+        {getCheckerComponents(store, counterclockwiseCheckers, 'off')}
       </div>
       <Cube store={store} />
       <div className="checkercontainer clockwise">
-        {getCheckerComponents(store, clockwiseCheckers)}
+        {getCheckerComponents(store, clockwiseCheckers, 'off')}
       </div>
     </div>
   )

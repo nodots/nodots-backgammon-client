@@ -7,12 +7,29 @@ import Checker from '../Checker'
 
 export const getCheckerComponents = (
   store: NodotsGameStore,
-  checkers: CheckerType[]
+  checkers: CheckerType[],
+  kind: 'point' | 'bar' | 'off'
 ) => {
   const checkerComponents: ReactElement[] = []
-  checkers.forEach((c) =>
-    checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
-  )
+  checkers.forEach((c, i) => {
+    if (kind === 'point') {
+      if (i <= 3) {
+        checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
+      }
+      if (i === 4) {
+        checkerComponents.push(
+          <Checker
+            key={c.id}
+            checker={c}
+            store={store}
+            count={checkers.length}
+          />
+        )
+      }
+    } else {
+      checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
+    }
+  })
   return checkerComponents
 }
 
@@ -27,7 +44,6 @@ export interface Props {
   checkers: CheckerType[]
 }
 
-// TODO: Handle display of > 6 checkers.
 function Point({ id, position, checkers, latitude, store }: Props) {
   const theme = useTheme()
   let className = 'point'
@@ -57,7 +73,7 @@ function Point({ id, position, checkers, latitude, store }: Props) {
         ></polygon>
       </svg>
       <div
-        className="checker-container"
+        className={`checker-container ${latitude}`}
         key={id}
         data-position-clockwise={position.clockwise}
         data-position-counterclockwise={position.counterclockwise}
@@ -66,7 +82,7 @@ function Point({ id, position, checkers, latitude, store }: Props) {
           <li>{position.clockwise}</li>
           <li>{position.counterclockwise}</li>
         </ul>
-        {getCheckerComponents(store, checkers)}
+        {getCheckerComponents(store, checkers, 'point')}
       </div>
     </div>
   )

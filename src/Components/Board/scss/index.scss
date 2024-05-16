@@ -128,6 +128,10 @@ $board-padding: $point-padding * 2;
   align-items: center;
   margin: 0px !important;
   padding: 0px !important;
+
+  &.south {
+    flex-direction: column-reverse;
+  }
 }
 
 .checker {
@@ -143,10 +147,18 @@ $board-padding: $point-padding * 2;
   height: $checker-height - 4px;
   width: $checker-height - 4px;
 
+  &:hover {
+    background-color: blue !important; // FIXME
+  }
+
   .checker-center {
     border-radius: 50% !important;
     width: $checker-height * 0.25;
     height: $checker-height * 0.25;
+  }
+
+  .count {
+    color: white;
   }
 
   &.highlight {

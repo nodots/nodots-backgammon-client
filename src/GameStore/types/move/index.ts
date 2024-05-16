@@ -124,14 +124,18 @@ export const getDestinationForOrigin = (
       const originPoint = origin as Point
       const delta = activeMove.dieValue * -1
       const dpp = originPoint.position[activeMove.direction] + delta
-      console.log('[getDestinationForOrigin] destinationPointPosition:', dpp)
       if (dpp <= 0) {
         return board.off[player.color]
-      } else {
-        return board.points.find(
+      } else if (dpp > 0) {
+        const d = board.points.find(
           (point) => point.position[player.direction] === dpp
         )
+        if (!d) {
+          return undefined
+        }
+        return d
       }
+      break
     case 'bar':
       const destinationPointPosition = 25 - activeMove.dieValue
       return state.board.points.find((point) => {

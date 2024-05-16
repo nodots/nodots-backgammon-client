@@ -15,9 +15,8 @@ export const pointToPoint = (
     (originChecker) => originChecker.id !== checker.id
   ))
 
-  if (isBearOffing(board, player)) {
+  if (isBearOffing(board, player) && payload.destination.kind === 'off')
     return bearOff(state, checker, move, point, destination)
-  }
 
   const destinationCheckers = [...destination.checkers, checker]
 
