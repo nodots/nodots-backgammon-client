@@ -1,5 +1,10 @@
 import { CHECKERS_PER_PLAYER, MoveDirection } from '..'
-import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
+import {
+  NodotsBoardStore,
+  getCheckercontainers,
+  getPipCounts,
+  getPoints,
+} from '../Board'
 import { Checker, getChecker } from '../Checker'
 import { Checkercontainer, Off, Point } from '../Checkercontainer'
 import { DieValue } from '../Dice'
@@ -11,13 +16,14 @@ import { reenter } from './Reenter'
 
 // TODO: Implement revert move
 // TODO: Implement forced moves
-
 export interface NodotsMove {
   checker: Checker | undefined
   from: Checkercontainer | undefined
   to: Checkercontainer | undefined
+  player: Player
   dieValue: DieValue
   direction: MoveDirection
+  completed: boolean
 }
 
 export type NodotsMoves =
@@ -49,15 +55,30 @@ export interface Moved extends Move {
   destination: Checkercontainer
 }
 
-export interface Completed {
+export interface Completed extends Move {
   kind: 'completed'
   winner: WinningPlayer
   board: NodotsBoardStore
-  player: Player
+  player: MovingPlayer
   moves: NodotsMoves
 }
 
-export type NodotsMoveState = Initialized | Moved | Moving | Completed
+export interface NoMove extends Move {
+  kind: 'no-move'
+  message: NodotsMessage
+}
+export interface Error extends Move {
+  kind: 'error'
+  message: NodotsMessage
+}
+
+export type NodotsMoveState =
+  | Initialized
+  | Moved
+  | Moving
+  | Completed
+  | Error
+  | NoMove
 
 export const buildMoveMessage = (
   player: NodotsPlayer,
@@ -103,7 +124,7 @@ export const getDestinationForOrigin = (
       const originPoint = origin as Point
       const delta = activeMove.dieValue * -1
       const dpp = originPoint.position[activeMove.direction] + delta
-
+      console.log('[getDestinationForOrigin] destinationPointPosition:', dpp)
       if (dpp <= 0) {
         return board.off[player.color]
       } else {
@@ -116,8 +137,9 @@ export const getDestinationForOrigin = (
       return state.board.points.find((point) => {
         return point.position[activeMove.direction] === destinationPointPosition
       }) as Point // FIXME
+    case 'off':
     default:
-      throw Error('Unknown situation')
+    //
   }
 }
 
@@ -225,8 +247,8 @@ const isMoveHit = (payload: NodotsMovePayload): boolean => {
 export const move = (
   state: NodotsMoveState,
   checkerId: string
-): NodotsMoveState => {
-  const { board, player, moves } = state
+): Moving | Moved | Completed | Error | NoMove => {
+  const { board, moves, player } = state
 
   const checker = getChecker(board, checkerId)
   const activeMove = getNextMove(moves) as NodotsMove
@@ -235,9 +257,18 @@ export const move = (
     checkercontainer.checkers.find((checker) => checker.id === checkerId)
   ) as Checkercontainer
 
-  const destination = getDestinationForOrigin(state, origin, activeMove) as
-    | Point
-    | Off
+  const destination = getDestinationForOrigin(state, origin, activeMove)
+
+  if (!destination) {
+    return {
+      ...state,
+      kind: 'no-move',
+      player: player as MovingPlayer,
+      message: {
+        game: `Could not find destination for origin`,
+      },
+    }
+  }
 
   const payload: NodotsMovePayload = {
     state,
@@ -249,7 +280,14 @@ export const move = (
   }
 
   if (!isMoveSane(payload)) {
-    return state
+    return {
+      ...state,
+      kind: 'error',
+      player: player as MovingPlayer,
+      message: {
+        game: `Move is not sane`,
+      },
+    }
   }
 
   // This took a while to figure out: Hitting is really not part of move flow, it's its own thing.
@@ -263,6 +301,7 @@ export const move = (
       return pointToPoint(payload)
     case 'bar':
       return reenter(payload)
+    default:
+      throw Error(`Unknown origin.kind ${origin.kind}`)
   }
-  return state
 }

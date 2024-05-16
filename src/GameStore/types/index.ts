@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { NodotsBoardStore, buildBoard } from './Board'
+import { NodotsBoardStore, buildBoard, getPipCounts } from './Board'
 import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
@@ -173,8 +173,8 @@ export const initializing = (players: NodotsPlayers): Initializing => {
   }
 
   const boardStore = buildBoard(players, {
-    clockwise: BOARD_IMPORT_REENTER,
-    counterclockwise: BOARD_IMPORT_REENTER,
+    clockwise: BOARD_IMPORT_DEFAULT,
+    counterclockwise: BOARD_IMPORT_DEFAULT,
   })
 
   return {
@@ -215,6 +215,8 @@ export const rolling = (state: Rolling): Rolled => {
       to: undefined,
       dieValue: roll[0],
       direction: activePlayer.direction,
+      player: activePlayer,
+      completed: false,
     },
     {
       checker: undefined,
@@ -222,6 +224,8 @@ export const rolling = (state: Rolling): Rolled => {
       to: undefined,
       dieValue: roll[1],
       direction: activePlayer.direction,
+      player: activePlayer,
+      completed: false,
     },
   ]
   if (roll[0] === roll[1]) {
@@ -231,6 +235,8 @@ export const rolling = (state: Rolling): Rolled => {
       to: undefined,
       dieValue: roll[0],
       direction: activePlayer.direction,
+      player: activePlayer,
+      completed: false,
     })
     moves.push({
       checker: undefined,
@@ -238,6 +244,8 @@ export const rolling = (state: Rolling): Rolled => {
       to: undefined,
       dieValue: roll[1],
       direction: activePlayer.direction,
+      player: activePlayer,
+      completed: false,
     })
   }
 
@@ -311,10 +319,13 @@ export const moving = (
   }
 
   const results = move(moveState, checkerId)
-
   const remainingMoves = results.moves.filter(
     (move) => move.from === undefined
   ).length
+
+  const pipCounts = getPipCounts(boardStore, players)
+  players.white.pipCount = pipCounts.white
+  players.black.pipCount = pipCounts.black
 
   const message = buildMoveMessage(player, moves)
 
@@ -325,6 +336,7 @@ export const moving = (
       ...state,
       kind: 'completed',
       winner,
+      players,
       message: {
         game: `${winner.username} wins the game!`,
       },
@@ -335,6 +347,7 @@ export const moving = (
       kind: remainingMoves === 0 ? 'confirming' : 'moving',
       boardStore: results.board,
       moves: results.moves,
+      players,
       message,
     }
   }

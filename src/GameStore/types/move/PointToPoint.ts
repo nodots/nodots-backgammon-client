@@ -1,18 +1,18 @@
-import { NodotsMove, NodotsMovePayload, NodotsMoveState, isBearOffing } from '.'
-import { Checker } from '../Checker'
-import { Checkercontainer, Point } from '../Checkercontainer'
+import { Completed, Moved, Moving, NodotsMovePayload, isBearOffing } from '.'
+import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 import { bearOff } from './BearOff'
-import { hit } from './Hit'
 
-export const pointToPoint = (payload: NodotsMovePayload): NodotsMoveState => {
+export const pointToPoint = (
+  payload: NodotsMovePayload
+): Moving | Moved | Completed => {
   const { state, checker, origin, destination, move } = payload
   const { board, player } = state
 
   const point = origin as Point
 
   const originCheckers = (origin.checkers = origin.checkers.filter(
-    (checker) => checker.id !== checker.id
+    (originChecker) => originChecker.id !== checker.id
   ))
 
   if (isBearOffing(board, player)) {

@@ -25,7 +25,7 @@ export const bearOff = (
     return {
       ...state,
       kind: 'completed',
-      winner: player as WinningPlayer,
+      winner: player as unknown as WinningPlayer, // FIXME
     }
   }
 

@@ -5,16 +5,12 @@ import { MovingPlayer } from '../Player'
 export const reenter = (payload: NodotsMovePayload): Moved => {
   const { state, destination, origin, checker, move: activeMove } = payload
   const { board, player } = state
-  console.log(origin.kind)
-  console.log(origin.checkers)
 
   const reenteringPlayer = player as MovingPlayer
-  console.log(reenteringPlayer.color)
 
   const originCheckers = (origin.checkers = origin.checkers.filter(
-    (checker) => checker.id !== checker.id
+    (originChecker) => originChecker.id !== checker.id
   ))
-  console.log(originCheckers)
 
   const destinationCheckers = [...destination.checkers, checker]
 
