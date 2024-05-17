@@ -26,8 +26,8 @@ const whitePlayer: InitializingPlayer = {
     move: false,
   },
   dice: [
-    { color: 'white', order: 0, value: 1 },
-    { color: 'white', order: 1, value: 1 },
+    { kind: 'inactive', color: 'white', order: 0, value: 1 },
+    { kind: 'inactive', color: 'white', order: 1, value: 1 },
   ],
 }
 
@@ -43,8 +43,8 @@ const blackPlayer: InitializingPlayer = {
     move: false,
   },
   dice: [
-    { color: 'black', order: 0, value: 1 },
-    { color: 'black', order: 1, value: 1 },
+    { kind: 'inactive', color: 'black', order: 0, value: 1 },
+    { kind: 'inactive', color: 'black', order: 1, value: 1 },
   ],
 }
 

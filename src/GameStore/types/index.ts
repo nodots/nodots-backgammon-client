@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid'
 import { NodotsBoardStore, buildBoard, getPipCounts } from './Board'
 import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
-import { Roll, generateDice, rollDice } from './Dice'
+import { DieValue, Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
 import { NodotsMoves, Initialized, buildMoveMessage, move } from './move'
@@ -188,7 +188,7 @@ export const initializing = (players: NodotsPlayers): Initializing => {
 
 export const rollingForStart = (state: Initializing): Rolling => {
   const { players } = state
-  const activeColor = Math.random() >= 0.5 ? 'black' : 'white'
+  const activeColor = Math.random() >= 0.5 ? 'black' : 'black'
   const activePlayer = players[activeColor]
   activePlayer.kind = 'moving'
   const message = {
@@ -208,7 +208,7 @@ export const rolling = (state: Rolling): Rolled => {
   const { players, activeColor } = state
   const activePlayer = players[activeColor]
 
-  const roll = rollDice()
+  const roll = [1 as DieValue, 1 as DieValue] //rollDice()
   const moves: NodotsMoves = [
     {
       checker: undefined,
