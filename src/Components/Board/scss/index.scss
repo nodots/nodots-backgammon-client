@@ -148,7 +148,7 @@ $board-padding: $point-padding * 2;
   width: $checker-height - 4px;
 
   &:hover {
-    background-color: blue !important; // FIXME
+    background-color: #004433 !important; // FIXME
   }
 
   .checker-center {
