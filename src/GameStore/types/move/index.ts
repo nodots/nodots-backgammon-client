@@ -1,10 +1,5 @@
 import { CHECKERS_PER_PLAYER, MoveDirection } from '..'
-import {
-  NodotsBoardStore,
-  getCheckercontainers,
-  getPipCounts,
-  getPoints,
-} from '../Board'
+import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
 import { Checker, getChecker } from '../Checker'
 import { Checkercontainer, Off, Point } from '../Checkercontainer'
 import { DieValue } from '../Dice'
@@ -93,10 +88,10 @@ export const buildMoveMessage = (
       case 'point':
         const fromPoint = lastMove.from as Point
         msgString += ` from ${fromPoint.position[player.direction]}`
-        // if (lastMoveTo.kind === 'point') {
-        //   const toPoint = lastMoveTo as Point
-        //   msgString += ` to ${toPoint.position[player.direction]}`
-        // }
+        if (lastMove.to && lastMove.to.kind === 'point') {
+          const toPoint = lastMove.to as Point
+          msgString += ` to ${toPoint.position[player.direction]}`
+        }
         break
       case 'bar':
         msgString += ` bar to ${lastMove.dieValue}`
@@ -112,6 +107,24 @@ export const buildMoveMessage = (
     game: msgString,
   }
 }
+
+const getMostDistantCheckerPosition = (
+  state: NodotsMoveState,
+  origin: Point
+) => {
+  const { board, player } = state
+  if (board.off[player.color].checkers.length > 0) return 25
+  board.points.sort(
+    (a, b) => a.position[player.direction] - b.position[player.direction]
+  )
+  board.points.map((point) => console.log(point.position))
+}
+
+export const canBearOff = (
+  state: NodotsMoveState,
+  origin: Point,
+  activeMove: NodotsMove
+) => {}
 
 export const getDestinationForOrigin = (
   state: NodotsMoveState,

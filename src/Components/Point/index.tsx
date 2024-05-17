@@ -13,10 +13,10 @@ export const getCheckerComponents = (
   const checkerComponents: ReactElement[] = []
   checkers.forEach((c, i) => {
     if (kind === 'point') {
-      if (i <= 3) {
+      if (i <= 4) {
         checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
       }
-      if (i === 4) {
+      if (i === 5) {
         checkerComponents.push(
           <Checker
             key={c.id}

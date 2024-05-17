@@ -174,8 +174,8 @@ export const initializing = (players: NodotsPlayers): Initializing => {
   }
 
   const boardStore = buildBoard(players, {
-    clockwise: BOARD_IMPORT_ALL_ACE,
-    counterclockwise: BOARD_IMPORT_ALL_ACE,
+    clockwise: BOARD_IMPORT_DEFAULT,
+    counterclockwise: BOARD_IMPORT_DEFAULT,
   })
 
   return {
@@ -255,9 +255,9 @@ export const rolling = (state: Rolling): Rolled => {
   }
 
   const message = {
-    game: `${activePlayer.username} roll: ${roll[0]} ${roll[1]}.${
-      isDouble() ? '**' : ''
-    } ROLLING => `,
+    game: `${activePlayer.username} rolls ${roll[0]} ${roll[1]}${
+      isDouble() ? '*' : ''
+    }`,
     debug: `MOVES: ${moves.map((move) => move.dieValue)}`,
   }
 
@@ -285,7 +285,7 @@ export const switchDice = (state: Rolled): Rolled => {
     kind: 'rolled',
     roll: newRoll,
     message: {
-      game: `${activePlayer.username} switchDice ${newRoll[0]} ${newRoll[1]} ROLLED => `,
+      game: `${activePlayer.username} switches dice to ${newRoll[0]} ${newRoll[1]}`,
     },
   }
 }

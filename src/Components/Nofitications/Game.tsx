@@ -17,7 +17,7 @@ function GameNotifications({ store, severity }: Props) {
           variant="outlined"
           severity={severity ? severity : 'info'}
         >
-          {state.message?.game} <strong>{state.kind}</strong>
+          {state.message?.game}
         </Alert>
       )}
     </div>

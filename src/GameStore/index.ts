@@ -40,7 +40,7 @@ class NodotsGameStore {
   }
 
   @action
-  moving(state: Moving, checkerId: string) {
+  moving(state: Moving | Rolled, checkerId: string) {
     this.state = moving(state, checkerId)
   }
 
