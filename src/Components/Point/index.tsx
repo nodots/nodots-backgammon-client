@@ -27,7 +27,7 @@ export const getCheckerComponents = (
         )
       }
     } else {
-      // noop
+      checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
     }
   })
   return checkerComponents

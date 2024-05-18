@@ -1,4 +1,5 @@
-import { Completed, Moved, Moving, NodotsMovePayload, isBearOffing } from '.'
+import { Completed, Moved, Moving, NodotsMovePayload } from '.'
+import { isBearOffing } from './BearOff'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 import { bearOff } from './BearOff'
@@ -38,7 +39,7 @@ export const pointToPoint = (
     kind: 'move',
     player: player as MovingPlayer,
     move: move,
-    checker: checker,
+    checker,
     origin: updatedOrigin,
     destination: updatedDestination,
     board,

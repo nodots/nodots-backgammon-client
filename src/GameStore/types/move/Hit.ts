@@ -1,6 +1,6 @@
 import { NodotsMoveState } from '.'
 import { Checker } from '../Checker'
-import { Checkercontainer, Point } from '../Checkercontainer'
+import { Checkercontainer } from '../Checkercontainer'
 
 export const hit = (
   state: NodotsMoveState,

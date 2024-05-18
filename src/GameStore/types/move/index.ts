@@ -1,4 +1,4 @@
-import { CHECKERS_PER_PLAYER, MoveDirection } from '..'
+import { MoveDirection } from '..'
 import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
 import { Checker, getChecker } from '../Checker'
 import { Checkercontainer, Off, Point } from '../Checkercontainer'
@@ -42,6 +42,7 @@ export interface Moving extends Move {
   origin: Checkercontainer
   destination: Checkercontainer
 }
+
 export interface Moved extends Move {
   kind: 'moved'
   move: NodotsMove
@@ -190,6 +191,7 @@ export const canBearOff = (
   }
 }
 
+// This is the most important function in the application
 export const getDestinationForOrigin = (
   state: NodotsMoveState,
   origin: Checkercontainer,
@@ -201,8 +203,10 @@ export const getDestinationForOrigin = (
       const originPoint = origin as Point
       const delta = activeMove.dieValue * -1
       const dpp = originPoint.position[activeMove.direction] + delta
-      if (canBearOff(state, originPoint, activeMove)) {
-        console.log(canBearOff)
+      // A player bears off a checker by rolling a number that corresponds to the point on which the checker resides,
+      //    and then removing that checker from the board. Thus, rolling a 6 permits the player to remove a checker from the six point.
+
+      if (dpp === 0) {
         return board.off[player.color]
       }
       // else if (dpp > 0) {
@@ -231,27 +235,6 @@ export const getLastMove = (moves: NodotsMoves) =>
 
 export const getNextMove = (moves: NodotsMoves) =>
   moves.find((move) => move.from === undefined)
-
-export const isBearOffing = (
-  board: NodotsBoardStore,
-  player: Player
-): boolean => {
-  const homeBoardPoints = board.points.filter(
-    (point) => point.position[player.direction] <= 6
-  )
-  const homeBoardCheckerCount = homeBoardPoints
-    .map((point) =>
-      point.checkers.length > 0 && point.checkers[0].color === player.color
-        ? point.checkers.length
-        : 0
-    )
-    .reduce((a, b) => a + b, 0)
-
-  const offCheckerCount = board.off[player.color].checkers.length
-  const checkerCount = homeBoardCheckerCount + offCheckerCount
-  // -1 because the checker that is in play isn't counted?
-  return checkerCount === CHECKERS_PER_PLAYER - 1 ? true : false
-}
 
 export const isReentering = (
   board: NodotsBoardStore,
