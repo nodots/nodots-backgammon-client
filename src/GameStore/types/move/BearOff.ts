@@ -56,7 +56,7 @@ export const bearOff = (
   if (destinationCheckers.length === CHECKERS_PER_PLAYER) {
     return {
       ...state,
-      kind: 'completed',
+      kind: 'move-completed',
       winner: player as unknown as WinningPlayer, // FIXME
     }
   }
@@ -73,7 +73,7 @@ export const bearOff = (
   activeMove.to = updatedDestination
 
   return {
-    kind: 'moved',
+    kind: 'move-moved',
     move: activeMove,
     checker: checkerToMove,
     board,

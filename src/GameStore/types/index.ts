@@ -313,7 +313,7 @@ export const moving = (
   const player = players[activeColor] as MovingPlayer
 
   const moveState: MoveInitialized = {
-    kind: 'initialized',
+    kind: 'move-initialized',
     player,
     moves,
     board: boardStore,
@@ -330,7 +330,7 @@ export const moving = (
 
   const message = buildMoveMessage(player, moves)
 
-  if (results.kind === 'completed') {
+  if (results.kind === 'move-completed') {
     const winner = player as unknown as WinningPlayer // FIXME
 
     return {

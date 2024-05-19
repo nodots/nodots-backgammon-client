@@ -109,86 +109,21 @@ export const buildMoveMessage = (
   }
 }
 
-const getMostDistantCheckerPosition = (state: NodotsMoveState) => {
-  const { board, player } = state
-  if (board.bar[player.color].checkers.length > 0)
-    return board.bar[player.color]
-
-  const pointSort = (a: Point, b: Point, direction: MoveDirection): boolean => {
-    return direction === 'clockwise'
-      ? a.position[direction] > b.position[direction]
-      : a.position[direction] < b.position[direction]
-  }
-
-  const sortPointsByDirection = (
-    points: Point[],
-    direction: MoveDirection
-  ): Point[] => {
-    points.sort((a, b) =>
-      a.position[direction] > b.position[direction] ? -1 : 1
-    )
-    return points
-  }
-
-  const sortedPoints = sortPointsByDirection(board.points, player.direction)
-
-  const mostDistantPosition = sortedPoints.find(
+const getMostDistantOccupiedPointPosition = (
+  board: NodotsBoardStore,
+  player: NodotsPlayer
+) => {
+  if (board.bar[player.color].checkers.length > 0) return 25 // Player is on the bar
+  const occupiedPoints = board.points.filter(
     (point) =>
-      point.checkers.filter((checker) => checker.color === player.color)
-        .length > 0
+      point.checkers.length > 0 && point.checkers[0].color === player.color
   )
 
-  return mostDistantPosition as Checkercontainer
-}
-
-export const canBearOff = (
-  state: NodotsMoveState,
-  origin: Point,
-  activeMove: NodotsMove
-) => {
-  const { player } = state
-  const mostDistantPosition = getMostDistantCheckerPosition(state)
-  switch (mostDistantPosition.kind) {
-    case 'bar':
-      return false
-    case 'point':
-    default:
-      const mostDistantOccupiedPoint = mostDistantPosition as Point
-      const mostDistantOccupiedPointPosition =
-        mostDistantOccupiedPoint.position[activeMove.direction]
-      const originPointPosition = origin.position[player.direction]
-
-      console.log(
-        'mostDistantOccupiedPointPosition',
-        mostDistantOccupiedPointPosition
-      )
-      console.log('originPointPosition', originPointPosition)
-      console.log('dieValue', activeMove.dieValue)
-
-      if (origin.checkers.length === 0) {
-        console.warn(
-          'Cannot bear off because there are no checkers on this point. Should never happen'
-        )
-        return false
-      }
-
-      if (origin.checkers[0].color !== player.color) {
-        console.warn(
-          'Cannot bear off because this is not the active players checker. Should never happen'
-        )
-        return false
-      }
-
-      if (mostDistantOccupiedPointPosition > 6) {
-        console.warn(
-          'Cannot bear off because there is not in the home board: ',
-          mostDistantOccupiedPointPosition
-        )
-        return false
-      } // checkers out of home board
-
-      return true
-  }
+  const mostDistantPoint =
+    player.direction === 'clockwise'
+      ? occupiedPoints[occupiedPoints.length - 1]
+      : occupiedPoints[0]
+  return mostDistantPoint.position[player.direction]
 }
 
 // This is the most important function in the application
@@ -202,30 +137,40 @@ export const getDestinationForOrigin = (
     case 'point':
       const originPoint = origin as Point
       const delta = activeMove.dieValue * -1
-      const dpp = originPoint.position[activeMove.direction] + delta
-      // A player bears off a checker by rolling a number that corresponds to the point on which the checker resides,
-      //    and then removing that checker from the board. Thus, rolling a 6 permits the player to remove a checker from the six point.
+      let destinationPointPosition =
+        originPoint.position[player.direction] + delta
 
-      if (dpp === 0) {
+      const mostDistantPointPosition = getMostDistantOccupiedPointPosition(
+        board,
+        player
+      )
+
+      if (destinationPointPosition === 0) {
+        return board.off[player.color]
+      } else if (destinationPointPosition > 0) {
+        const d = board.points.find(
+          (point) =>
+            point.position[player.direction] === destinationPointPosition
+        )
+        if (!d) {
+          return undefined
+        }
+        return d
+      } else if (
+        destinationPointPosition < 0 &&
+        originPoint.position[player.direction] * -1 < mostDistantPointPosition
+      ) {
         return board.off[player.color]
       }
-      // else if (dpp > 0) {
-      //   const d = board.points.find(
-      //     (point) => point.position[player.direction] === dpp
-      //   )
-      //   if (!d) {
-      //     return undefined
-      //   }
-      //   return d
-      // }
       break
     case 'bar':
-      const destinationPointPosition = 25 - activeMove.dieValue
+      destinationPointPosition = 25 - activeMove.dieValue
       return state.board.points.find((point) => {
         return point.position[activeMove.direction] === destinationPointPosition
       }) as Point // FIXME
     case 'off':
     default:
+      break
     //
   }
 }
