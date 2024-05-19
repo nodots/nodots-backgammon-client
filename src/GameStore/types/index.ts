@@ -5,7 +5,7 @@ import { Cube, CubeValue } from './Cube'
 import { DieValue, Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
-import { NodotsMoves, Initialized, buildMoveMessage, move } from './move'
+import { NodotsMoves, MoveInitialized, buildMoveMessage, move } from './move'
 import {
   BOARD_IMPORT_ALL_ACE,
   BOARD_IMPORT_ALL_OFF,
@@ -312,7 +312,7 @@ export const moving = (
   const { activeColor, players, boardStore, moves } = state
   const player = players[activeColor] as MovingPlayer
 
-  const moveState: Initialized = {
+  const moveState: MoveInitialized = {
     kind: 'initialized',
     player,
     moves,

@@ -1,4 +1,4 @@
-import { Completed, Moved, Moving, NodotsMovePayload } from '.'
+import { MoveCompleted, MoveMoved, MoveMoving, NodotsMovePayload } from '.'
 import { isBearOffing } from './BearOff'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
@@ -6,7 +6,7 @@ import { bearOff } from './BearOff'
 
 export const pointToPoint = (
   payload: NodotsMovePayload
-): Moving | Moved | Completed => {
+): MoveMoving | MoveMoved | MoveCompleted => {
   const { state, checker, origin, destination, move } = payload
   const { board, player } = state
 

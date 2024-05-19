@@ -25,56 +25,56 @@ export type NodotsMoves =
   | [NodotsMove, NodotsMove]
   | [NodotsMove, NodotsMove, NodotsMove, NodotsMove]
 
-interface Move {
+interface MoveState {
   player: MovingPlayer
   board: NodotsBoardStore
   moves: NodotsMoves
 }
 
-export interface Initialized extends Move {
-  kind: 'initialized'
+export interface MoveInitialized extends MoveState {
+  kind: 'move-initialized'
 }
 
-export interface Moving extends Move {
-  kind: 'move'
+export interface MoveMoving extends MoveState {
+  kind: 'move-moving'
   move: NodotsMove
   checker: Checker
   origin: Checkercontainer
   destination: Checkercontainer
 }
 
-export interface Moved extends Move {
-  kind: 'moved'
+export interface MoveMoved extends MoveState {
+  kind: 'move-moved'
   move: NodotsMove
   checker: Checker
   origin: Checkercontainer
   destination: Checkercontainer
 }
 
-export interface Completed extends Move {
-  kind: 'completed'
+export interface MoveCompleted extends MoveState {
+  kind: 'move-completed'
   winner: WinningPlayer
   board: NodotsBoardStore
   player: MovingPlayer
   moves: NodotsMoves
 }
 
-export interface NoMove extends Move {
-  kind: 'no-move'
+export interface MoveNoMove extends MoveState {
+  kind: 'move-no-move'
   message: NodotsMessage
 }
-export interface Error extends Move {
-  kind: 'error'
+export interface MoveError extends MoveState {
+  kind: 'move-error'
   message: NodotsMessage
 }
 
 export type NodotsMoveState =
-  | Initialized
-  | Moved
-  | Moving
-  | Completed
-  | Error
-  | NoMove
+  | MoveInitialized
+  | MoveMoved
+  | MoveMoving
+  | MoveCompleted
+  | MoveError
+  | MoveNoMove
 
 export const buildMoveMessage = (
   player: NodotsPlayer,
@@ -241,17 +241,6 @@ export const isReentering = (
   player: Player
 ): boolean => (board.bar[player.color].checkers.length > 0 ? true : false)
 
-export const isMoving = (moveState: NodotsMoveState): boolean => {
-  switch (moveState.kind) {
-    case 'initialized':
-      return false
-    case 'move':
-      return true
-    default:
-      return false
-  }
-}
-
 export const getOriginPointById = (
   board: NodotsBoardStore,
   id: string
@@ -313,7 +302,7 @@ const isMoveHit = (payload: NodotsMovePayload): boolean => {
 export const move = (
   state: NodotsMoveState,
   checkerId: string
-): Moving | Moved | Completed | Error | NoMove => {
+): MoveMoving | MoveMoved | MoveCompleted | MoveError | MoveNoMove => {
   const { board, moves, player } = state
 
   const checker = getChecker(board, checkerId)
@@ -328,7 +317,7 @@ export const move = (
   if (!destination) {
     return {
       ...state,
-      kind: 'no-move',
+      kind: 'move-no-move',
       player: player as MovingPlayer,
       message: {
         game: `Could not find destination for origin`,
@@ -348,7 +337,7 @@ export const move = (
   if (!isMoveSane(payload)) {
     return {
       ...state,
-      kind: 'error',
+      kind: 'move-error',
       player: player as MovingPlayer,
       message: {
         game: `Move is not sane`,

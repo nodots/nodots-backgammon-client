@@ -1,4 +1,10 @@
-import { Completed, Moved, Moving, NodotsMove, NodotsMoveState } from '.'
+import {
+  MoveCompleted,
+  MoveMoved,
+  MoveMoving,
+  NodotsMove,
+  NodotsMoveState,
+} from '.'
 import { Checker } from '../Checker'
 import { Checkercontainer, Point } from '../Checkercontainer'
 import { CHECKERS_PER_PLAYER } from '..'
@@ -36,7 +42,7 @@ export const bearOff = (
   activeMove: NodotsMove,
   origin: Point,
   destination: Checkercontainer
-): Moved | Moving | Completed => {
+): MoveMoved | MoveMoving | MoveCompleted => {
   const { board, player, moves } = state
   if (!activeMove) {
     throw Error('No activeMove')

@@ -1,8 +1,8 @@
-import { Moved, NodotsMovePayload } from '.'
+import { MoveMoved, NodotsMovePayload } from '.'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
-export const reenter = (payload: NodotsMovePayload): Moved => {
+export const reenter = (payload: NodotsMovePayload): MoveMoved => {
   const { state, destination, origin, checker, move: activeMove } = payload
   const { board, player } = state
 
