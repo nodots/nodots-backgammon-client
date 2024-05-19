@@ -72,9 +72,9 @@ class GamePage extends Component {
   render() {
     return (
       <>
-        <div id="GameControls">
+        {/* <div id="GameControls">
           <Button onClick={this.saveGame}>Save Game</Button>
-        </div>
+        </div> */}
         <Paper id="GameContainer">
           <GameNotifications store={this.store} />
           <BoardComponent store={this.store} state={this.store.state} />
