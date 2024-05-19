@@ -7,7 +7,6 @@ import {
   Rolled,
   Rolling,
   confirming,
-  debugging,
   initializing,
   moving,
   rolling,
@@ -47,11 +46,6 @@ class NodotsGameStore {
   @action
   confirming(state: Confirming) {
     this.state = confirming(state)
-  }
-
-  @action
-  debugging(state: NodotsGameState, messageText: string) {
-    this.state = debugging(state, messageText)
   }
 }
 

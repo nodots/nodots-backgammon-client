@@ -53,7 +53,6 @@ export const getDestinationForOrigin = (
     case 'off':
     default:
       break
-    //
   }
 }
 
@@ -121,6 +120,7 @@ export const isMoveSane = (payload: NodotsMovePayload): boolean => {
 
   return true
 }
+
 export const isMoveHit = (payload: NodotsMovePayload): boolean => {
   const { checker, destination } = payload
 

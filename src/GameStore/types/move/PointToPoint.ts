@@ -1,8 +1,8 @@
 import { MoveCompleted, MoveMoved, MoveMoving, NodotsMovePayload } from '.'
-import { isBearOffing } from './helpers'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 import { bearOff } from './BearOff'
+import { isBearOffing } from './helpers'
 
 export const pointToPoint = (
   payload: NodotsMovePayload

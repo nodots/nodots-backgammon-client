@@ -8,8 +8,12 @@ import { MovingPlayer, Player, WinningPlayer } from '../Player'
 import { hit } from './Hit'
 import { pointToPoint } from './PointToPoint'
 import { reenter } from './Reenter'
-import { isMoveSane, isMoveHit } from './helpers'
-import { getNextMove, getDestinationForOrigin } from './helpers'
+import {
+  getDestinationForOrigin,
+  getNextMove,
+  isMoveHit,
+  isMoveSane,
+} from './helpers'
 
 // TODO: Implement revert move
 // TODO: Implement forced moves
@@ -106,7 +110,7 @@ export const move = (
     return {
       ...state,
       kind: 'move-no-move',
-      player: player as MovingPlayer,
+      player: player as MovingPlayer, // FIXME
       message: {
         game: `Could not find destination for origin`,
       },

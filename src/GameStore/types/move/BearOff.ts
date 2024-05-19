@@ -5,9 +5,9 @@ import {
   NodotsMove,
   NodotsMoveState,
 } from '.'
+import { CHECKERS_PER_PLAYER } from '..'
 import { Checker } from '../Checker'
 import { Checkercontainer, Point } from '../Checkercontainer'
-import { CHECKERS_PER_PLAYER } from '..'
 import { MovingPlayer, WinningPlayer } from '../Player'
 
 // If there is no checker on the point indicated by the roll, the player must make a legal move using a checker on a

@@ -2,11 +2,16 @@ import { v4 as uuid } from 'uuid'
 import { BOARD_IMPORT_DEFAULT } from '../board-setups'
 import { NodotsBoardStore, buildBoard, getPipCounts } from './Board'
 import { Checker } from './Checker'
-import { Cube, CubeValue } from './Cube'
+import { Cube } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
-import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
-import { MoveInitialized, NodotsMoves, move } from './move'
+import {
+  MovingPlayer,
+  NodotsPlayer,
+  NodotsPlayers,
+  WinningPlayer,
+} from './Player'
+import { MoveInitialized, NodotsMove, NodotsMoves, move } from './move'
 import { buildMoveMessage } from './Message'
 
 export const CHECKERS_PER_PLAYER = 15
@@ -178,7 +183,7 @@ export const initializing = (players: NodotsPlayers): Initializing => {
 
 export const rollingForStart = (state: Initializing): Rolling => {
   const { players } = state
-  const activeColor = Math.random() >= 0.5 ? 'black' : 'black'
+  const activeColor = Math.random() >= 0.5 ? 'black' : 'white'
   const activePlayer = players[activeColor]
   activePlayer.kind = 'moving'
   const message = {
@@ -193,13 +198,9 @@ export const rollingForStart = (state: Initializing): Rolling => {
   }
 }
 
-// TODO: Refactor to eliminate "undefined" via MoveState
-export const rolling = (state: Rolling): Rolled => {
-  const { players, activeColor } = state
-  const activePlayer = players[activeColor]
-
-  const roll = rollDice()
-  const moves: NodotsMoves = [
+// Refactor to eliminate undefineds and fix type issue with return
+const buildMoves = (roll: Roll, activePlayer: NodotsPlayer): NodotsMoves => {
+  const moves = [
     {
       checker: undefined,
       from: undefined,
@@ -239,16 +240,18 @@ export const rolling = (state: Rolling): Rolled => {
       completed: false,
     })
   }
+  return moves
+}
+
+export const rolling = (state: Rolling): Rolled => {
+  const { players, activeColor } = state
+  const activePlayer = players[activeColor]
+
+  const roll = rollDice()
+  const moves = buildMoves(roll, activePlayer)
 
   const isDouble = () => {
     return roll[0] === roll[1] ? true : false
-  }
-
-  const message = {
-    game: `${activePlayer.username} rolls ${roll[0]} ${roll[1]}${
-      isDouble() ? '*' : ''
-    }`,
-    debug: `MOVES: ${moves.map((move) => move.dieValue)}`,
   }
 
   return {
@@ -256,7 +259,6 @@ export const rolling = (state: Rolling): Rolled => {
     kind: 'game-rolled',
     roll,
     moves,
-    message,
   }
 }
 
@@ -276,21 +278,6 @@ export const switchDice = (state: Rolled): Rolled => {
     roll: newRoll,
     message: {
       game: `${activePlayer.username} switches dice to ${newRoll[0]} ${newRoll[1]}`,
-    },
-  }
-}
-
-export const double = (state: Rolled | Moving): Rolled | Moving => {
-  const { players, activeColor, cube } = state
-  const activePlayer = players[activeColor]
-
-  cube.value = cube.value !== 64 ? ((cube.value * 2) as CubeValue) : cube.value
-  return {
-    ...state,
-    cube,
-    message: {
-      game: `${activePlayer.username} doubles to ${cube.value}`,
-      debug: activeColor,
     },
   }
 }
@@ -351,17 +338,5 @@ export const confirming = (state: Confirming): Rolling => {
     ...state,
     kind: 'game-rolling',
     activeColor: changeActiveColor(activeColor),
-  }
-}
-
-export const debugging = (
-  state: NodotsGameState,
-  messageText: string
-): NodotsGameState => {
-  return {
-    ...state,
-    message: {
-      debug: `${messageText}`,
-    },
   }
 }

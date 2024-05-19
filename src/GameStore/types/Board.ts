@@ -1,7 +1,6 @@
 import { debug } from 'console'
 import {
   Color,
-  NodotsBoardImport,
   NodotsBoardImports,
   NodotsCheckercontainerImport,
   PointPosition,
@@ -425,7 +424,7 @@ export const getPipCounts = (
   }
 
   const clockwisePlayer = getClockwisePlayer(players)
-  const counterclockwisePlayer = getCounterclockwisePlayer(players)
+
   board.points.map((point) => {
     if (point.checkers.length > 0) {
       const color = point.checkers[0].color
