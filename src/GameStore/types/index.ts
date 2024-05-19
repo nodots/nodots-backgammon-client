@@ -1,19 +1,13 @@
 import { v4 as uuid } from 'uuid'
+import { BOARD_IMPORT_DEFAULT } from '../board-setups'
 import { NodotsBoardStore, buildBoard, getPipCounts } from './Board'
 import { Checker } from './Checker'
 import { Cube, CubeValue } from './Cube'
-import { DieValue, Roll, generateDice, rollDice } from './Dice'
+import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
-import { NodotsMoves, MoveInitialized, buildMoveMessage, move } from './move'
-import {
-  BOARD_IMPORT_ALL_ACE,
-  BOARD_IMPORT_ALL_OFF,
-  BOARD_IMPORT_BEAR_OFF,
-  BOARD_IMPORT_DEFAULT,
-  BOARD_IMPORT_END_GAME,
-  BOARD_IMPORT_REENTER,
-} from '../board-setups'
+import { MoveInitialized, NodotsMoves, move } from './move'
+import { buildMoveMessage } from './Message'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -69,8 +63,6 @@ export type MoveDirection = 'clockwise' | 'counterclockwise'
 export const generateId = (): string => uuid()
 export const changeActiveColor = (activeColor: Color): Color =>
   activeColor === 'black' ? 'white' : 'black'
-export const getInactiveColor = (activeColor: Color): Color =>
-  activeColor === 'black' ? 'white' : 'black'
 
 export interface NodotsCheckercontainerImport {
   position: CheckerboxPosition
@@ -87,14 +79,12 @@ export interface NodotsBoardImports {
 interface NodotsGame {
   kind:
     | 'game-initializing'
-    | 'ready'
     | 'game-rolling-for-start'
     | 'game-rolling'
     | 'game-rolled'
     | 'game-moving'
     | 'game-confirming'
     | 'game-confirmed'
-    | 'doubling'
     | 'game-completed'
 
   boardStore: NodotsBoardStore

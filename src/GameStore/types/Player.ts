@@ -1,7 +1,8 @@
 import { Color, MoveDirection, NodotsGameState } from '.'
 import { NodotsDice } from './Dice'
-import { isReentering, NodotsMoveState } from './move'
-import { isBearOffing } from './move/BearOff'
+import { NodotsMoveState } from './move'
+import { isReentering } from './move/helpers'
+import { isBearOffing } from './move/helpers'
 
 export type Player = {
   kind:
