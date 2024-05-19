@@ -6,6 +6,7 @@ import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
 } from '../../GameStore/types/Player'
+import { Paper } from '@mui/material'
 
 export interface Props {
   store: NodotsGameStore
@@ -23,13 +24,13 @@ function Off({ store }: Props) {
     boardStore.off[counterclockwiseColor].checkers
   return (
     <div id="Off">
-      <div className="checkercontainer counterclockwise">
+      <Paper className="checkercontainer counterclockwise">
         {getCheckerComponents(store, counterclockwiseCheckers, 'off')}
-      </div>
+      </Paper>
       <Cube store={store} />
-      <div className="checkercontainer clockwise">
+      <Paper className="checkercontainer clockwise">
         {getCheckerComponents(store, clockwiseCheckers, 'off')}
-      </div>
+      </Paper>
     </div>
   )
 }
