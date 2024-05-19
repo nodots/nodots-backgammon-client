@@ -2,7 +2,7 @@
 // @import '../../../theme/partials/colors';
 @import '../../../theme/partials/borders';
 
-$checker-height: 80px;
+$checker-height: 90px;
 $point-padding: $checker-height * 0.1;
 $board-padding: $point-padding * 2;
 
@@ -21,6 +21,10 @@ $board-padding: $point-padding * 2;
   top: 0;
   left: 0;
 }
+
+// #GameControls {
+//   color: red;
+// }
 
 #GameContainer {
   display: flex;

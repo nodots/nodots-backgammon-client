@@ -1,18 +1,11 @@
-import { Paper } from '@mui/material'
+import { Button, Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
 import NodotsGameStore from '../../GameStore'
-import {
-  Initializing,
-  generateId,
-  rollingForStart,
-} from '../../GameStore/types'
+import { generateId, rollingForStart } from '../../GameStore/types'
 import { InitializingPlayer, Player } from '../../GameStore/types/Player'
 import BoardComponent from '../../components/Board'
 import GameNotifications from '../../components/Nofitications/Game'
-import Bar from '../../components/Bar'
-import Off from '../../components/Off'
-import Quadrant from '../../components/Quadrant'
 
 const whitePlayer: InitializingPlayer = {
   kind: 'initializing',
@@ -51,6 +44,16 @@ const blackPlayer: InitializingPlayer = {
 class GamePage extends Component {
   private store: NodotsGameStore
 
+  saveGame = () => {
+    const gameData = JSON.stringify(this.store)
+    const blob = new Blob([gameData], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.download = 'nodots-backgammon-game.json'
+    link.href = url
+    link.click()
+  }
+
   constructor(props: {} | Readonly<{}>) {
     super(props)
     this.store = new NodotsGameStore({ white: whitePlayer, black: blackPlayer })
@@ -68,11 +71,15 @@ class GamePage extends Component {
 
   render() {
     return (
-      <Paper id="GameContainer">
-        <GameNotifications store={this.store} />
-        <BoardComponent store={this.store} state={this.store.state} />
-        {/* <DebugNotifications store={this.store} /> */}
-      </Paper>
+      <>
+        <div id="GameControls">
+          <Button onClick={this.saveGame}>Save Game</Button>
+        </div>
+        <Paper id="GameContainer">
+          <GameNotifications store={this.store} />
+          <BoardComponent store={this.store} state={this.store.state} />
+        </Paper>
+      </>
     )
   }
 }
