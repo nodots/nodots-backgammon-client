@@ -34,8 +34,9 @@ export const BOARD_IMPORT_END_GAME: NodotsBoardImport = [
 ]
 
 export const BOARD_IMPORT_REENTER: NodotsBoardImport = [
-  { position: 'bar', checkercount: 3 },
-  { position: 18, checkercount: 4 },
+  { position: 'bar', checkercount: 1 },
+  { position: 3, checkercount: 3 },
   { position: 19, checkercount: 4 },
   { position: 20, checkercount: 4 },
+  { position: 24, checkercount: 3 },
 ]

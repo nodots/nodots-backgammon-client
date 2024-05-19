@@ -28,15 +28,15 @@ interface Props {
 
 function Board({ store, state }: Props) {
   switch (state.kind) {
-    case 'initializing':
+    case 'game-initializing':
       return <></>
-    case 'confirming':
-    case 'confirmed':
-    case 'moving':
-    case 'rolling':
-    case 'rolled':
-    case 'rolling-for-start':
-    case 'completed':
+    case 'game-confirming':
+    case 'game-confirmed':
+    case 'game-moving':
+    case 'game-rolling':
+    case 'game-rolled':
+    case 'game-rolling-for-start':
+    case 'game-completed':
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>

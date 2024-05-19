@@ -27,7 +27,7 @@ export const reenter = (payload: NodotsMovePayload): MoveMoved => {
 
   return {
     ...state,
-    kind: 'moved',
+    kind: 'move-moved',
     move: activeMove,
     checker,
     origin: updatedOrigin,

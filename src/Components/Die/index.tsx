@@ -29,16 +29,16 @@ function Die({ order, color, store }: Props) {
     e.preventDefault()
 
     switch (state.kind) {
-      case 'moving':
+      case 'game-moving':
         break
-      case 'rolling':
+      case 'game-rolling':
         store.rolling(state)
         break
-      case 'confirming':
+      case 'game-confirming':
         store.confirming(state)
         break
-      case 'confirmed':
-      case 'completed':
+      case 'game-confirmed':
+      case 'game-completed':
       default:
       //noop
     }
@@ -52,10 +52,10 @@ function Die({ order, color, store }: Props) {
   }
 
   switch (store.state.kind) {
-    case 'rolling-for-start':
-    case 'initializing':
+    case 'game-rolling-for-start':
+    case 'game-initializing':
       return <></>
-    case 'rolling':
+    case 'game-rolling':
       return (
         store.state.activeColor === color && (
           <Button className="die" onClick={rollHandler}>
@@ -69,10 +69,10 @@ function Die({ order, color, store }: Props) {
           </Button>
         )
       )
-    case 'moving':
-    case 'rolled':
-    case 'confirmed':
-    case 'confirming':
+    case 'game-moving':
+    case 'game-rolled':
+    case 'game-confirmed':
+    case 'game-confirming':
       const { moves, roll } = state as Moving // FIXME
       return (
         store.state.activeColor === color && (

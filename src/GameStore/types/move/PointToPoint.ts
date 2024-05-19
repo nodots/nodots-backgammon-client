@@ -36,7 +36,7 @@ export const pointToPoint = (
 
   return {
     ...state,
-    kind: 'move',
+    kind: 'move-moved',
     player: player as MovingPlayer,
     move: move,
     checker,

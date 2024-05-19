@@ -86,16 +86,16 @@ export interface NodotsBoardImports {
 
 interface NodotsGame {
   kind:
-    | 'initializing'
+    | 'game-initializing'
     | 'ready'
-    | 'rolling-for-start'
-    | 'rolling'
-    | 'rolled'
-    | 'moving'
-    | 'confirming'
-    | 'confirmed'
+    | 'game-rolling-for-start'
+    | 'game-rolling'
+    | 'game-rolled'
+    | 'game-moving'
+    | 'game-confirming'
+    | 'game-confirmed'
     | 'doubling'
-    | 'completed'
+    | 'game-completed'
 
   boardStore: NodotsBoardStore
   players: NodotsPlayers
@@ -104,49 +104,49 @@ interface NodotsGame {
 }
 
 export interface Initializing extends NodotsGame {
-  kind: 'initializing'
+  kind: 'game-initializing'
 }
 
 export interface RollingForStart extends NodotsGame {
-  kind: 'rolling-for-start'
+  kind: 'game-rolling-for-start'
   activeColor: Color
 }
 
 export interface Rolling extends NodotsGame {
-  kind: 'rolling'
+  kind: 'game-rolling'
   activeColor: Color
 }
 
 export interface Rolled extends NodotsGame {
-  kind: 'rolled'
+  kind: 'game-rolled'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
 }
 
 export interface Moving extends NodotsGame {
-  kind: 'moving'
+  kind: 'game-moving'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
 }
 
 export interface Confirming extends NodotsGame {
-  kind: 'confirming'
+  kind: 'game-confirming'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
 }
 
 export interface Confirmed extends NodotsGame {
-  kind: 'confirmed'
+  kind: 'game-confirmed'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
 }
 
 export interface Completed extends NodotsGame {
-  kind: 'completed'
+  kind: 'game-completed'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
@@ -179,7 +179,7 @@ export const initializing = (players: NodotsPlayers): Initializing => {
   })
 
   return {
-    kind: 'initializing',
+    kind: 'game-initializing',
     players,
     boardStore,
     cube,
@@ -197,7 +197,7 @@ export const rollingForStart = (state: Initializing): Rolling => {
 
   return {
     ...state,
-    kind: 'rolling',
+    kind: 'game-rolling',
     activeColor,
     message,
   }
@@ -208,7 +208,7 @@ export const rolling = (state: Rolling): Rolled => {
   const { players, activeColor } = state
   const activePlayer = players[activeColor]
 
-  const roll = [1 as DieValue, 1 as DieValue] //rollDice()
+  const roll = rollDice()
   const moves: NodotsMoves = [
     {
       checker: undefined,
@@ -263,7 +263,7 @@ export const rolling = (state: Rolling): Rolled => {
 
   return {
     ...state,
-    kind: 'rolled',
+    kind: 'game-rolled',
     roll,
     moves,
     message,
@@ -282,7 +282,7 @@ export const switchDice = (state: Rolled): Rolled => {
 
   return {
     ...state,
-    kind: 'rolled',
+    kind: 'game-rolled',
     roll: newRoll,
     message: {
       game: `${activePlayer.username} switches dice to ${newRoll[0]} ${newRoll[1]}`,
@@ -335,7 +335,7 @@ export const moving = (
 
     return {
       ...state,
-      kind: 'completed',
+      kind: 'game-completed',
       winner,
       players,
       message: {
@@ -345,7 +345,7 @@ export const moving = (
   } else {
     return {
       ...state,
-      kind: remainingMoves === 0 ? 'confirming' : 'moving',
+      kind: remainingMoves === 0 ? 'game-confirming' : 'game-moving',
       boardStore: results.board,
       moves: results.moves,
       players,
@@ -359,7 +359,7 @@ export const confirming = (state: Confirming): Rolling => {
 
   return {
     ...state,
-    kind: 'rolling',
+    kind: 'game-rolling',
     activeColor: changeActiveColor(activeColor),
   }
 }

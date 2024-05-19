@@ -17,7 +17,7 @@ function Cube({ store }: Props) {
 
   const clickHandler = (e: React.MouseEvent) => {
     e.preventDefault()
-    double(cube.value)
+    console.warn('Double not implemented')
   }
 
   return (

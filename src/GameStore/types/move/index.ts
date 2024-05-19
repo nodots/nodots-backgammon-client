@@ -137,37 +137,42 @@ export const getDestinationForOrigin = (
     case 'point':
       const originPoint = origin as Point
       const delta = activeMove.dieValue * -1
-      let destinationPointPosition =
-        originPoint.position[player.direction] + delta
+      const dpp = originPoint.position[player.direction] + delta
 
       const mostDistantPointPosition = getMostDistantOccupiedPointPosition(
         board,
         player
       )
 
-      if (destinationPointPosition === 0) {
+      if (dpp === 0) {
         return board.off[player.color]
-      } else if (destinationPointPosition > 0) {
+      } else if (dpp > 0) {
         const d = board.points.find(
-          (point) =>
-            point.position[player.direction] === destinationPointPosition
+          (point) => point.position[player.direction] === dpp
         )
         if (!d) {
           return undefined
         }
         return d
       } else if (
-        destinationPointPosition < 0 &&
-        originPoint.position[player.direction] * -1 < mostDistantPointPosition
+        dpp < 0 &&
+        originPoint.position[player.direction] * -1 > mostDistantPointPosition
       ) {
         return board.off[player.color]
       }
       break
     case 'bar':
-      destinationPointPosition = 25 - activeMove.dieValue
-      return state.board.points.find((point) => {
-        return point.position[activeMove.direction] === destinationPointPosition
+      const reentryPosition = 25 - activeMove.dieValue
+      const reentryPoint = state.board.points.find((point) => {
+        return point.position[activeMove.direction] === reentryPosition
       }) as Point // FIXME
+      if (
+        reentryPoint.checkers.length > 1 &&
+        reentryPoint.checkers[0].color !== player.color
+      ) {
+        return undefined
+      }
+      return reentryPoint
     case 'off':
     default:
       break

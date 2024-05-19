@@ -24,13 +24,14 @@ function Checker({ checker, store, count }: Props) {
     const checker = e.currentTarget
 
     switch (store.state.kind) {
-      case 'rolled':
-      case 'moving':
+      case 'game-rolled':
+      case 'game-moving':
         store.moving(store.state, checker.id)
         break
-      case 'rolling':
-      case 'confirming':
-      case 'rolling-for-start':
+      case 'game-rolling':
+      case 'game-confirming':
+      case 'game-rolling-for-start':
+      default:
         break
     }
   }

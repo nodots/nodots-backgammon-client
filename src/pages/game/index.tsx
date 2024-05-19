@@ -55,13 +55,13 @@ class GamePage extends Component {
     super(props)
     this.store = new NodotsGameStore({ white: whitePlayer, black: blackPlayer })
     switch (this.store.state.kind) {
-      case 'initializing':
+      case 'game-initializing':
         this.store.state = rollingForStart(this.store.state)
         break
-      case 'confirming':
-      case 'moving':
-      case 'rolling':
-      case 'rolling-for-start':
+      case 'game-confirming':
+      case 'game-moving':
+      case 'game-rolling':
+      case 'game-rolling-for-start':
         break
     }
   }
