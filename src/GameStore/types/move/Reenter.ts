@@ -2,8 +2,9 @@ import { MoveMoved, NodotsMovePayload } from '.'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
+// FIXME: reenter doesn't handle reentry failures correctly
 export const reenter = (payload: NodotsMovePayload): MoveMoved => {
-  const { state, destination, origin, checker, move: activeMove } = payload
+  const { state, destination, origin, checker, move } = payload
   const { board, player } = state
   const reenteringPlayer = player as MovingPlayer
 
@@ -19,13 +20,13 @@ export const reenter = (payload: NodotsMovePayload): MoveMoved => {
   ) as Point // FIXME
   updatedDestination.checkers = destinationCheckers
 
-  activeMove.from = updatedOrigin
-  activeMove.to = updatedDestination
+  move.from = updatedOrigin
+  move.to = updatedDestination
 
   return {
     ...state,
     kind: 'move-moved',
-    move: activeMove,
+    move,
     checker,
     origin: updatedOrigin,
     destination: updatedDestination,

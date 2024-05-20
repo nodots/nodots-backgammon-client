@@ -3,6 +3,7 @@ import {
   MoveMoved,
   MoveMoving,
   NodotsMove,
+  NodotsMovePayload,
   NodotsMoveState,
 } from '.'
 import { CHECKERS_PER_PLAYER } from '..'
@@ -10,26 +11,20 @@ import { Checker } from '../Checker'
 import { Checkercontainer, Point } from '../Checkercontainer'
 import { MovingPlayer, WinningPlayer } from '../Player'
 
-// If there is no checker on the point indicated by the roll, the player must make a legal move using a checker on a
-//    higher-numbered point. If there are no checkers on higher-numbered points, the player is permitted (and required) to remove a checker from the highest point on which one of his checkers resides. A player is under no obligation to bear off if he can make an otherwise legal move.
-
 export const bearOff = (
-  state: NodotsMoveState,
-  checkerToMove: Checker,
-  activeMove: NodotsMove,
-  origin: Point,
-  destination: Checkercontainer
+  payload: NodotsMovePayload
 ): MoveMoved | MoveMoving | MoveCompleted => {
-  const { board, player, moves } = state
-  if (!activeMove) {
+  console.log('BEAR OFF')
+  const { state, checker, origin, destination, move, moves } = payload
+  const { board, player } = state
+  if (!move) {
     throw Error('No activeMove')
   }
-  const originCheckers = origin.checkers.filter(
-    (checker) => checker.id !== checkerToMove.id
-  )
+  const originCheckers = origin.checkers.filter((c) => c.id !== checker.id)
 
-  const destinationCheckers = destination.checkers.concat(checkerToMove)
+  const destinationCheckers = destination.checkers.concat(checker)
 
+  // TODO: Move to to game store
   if (destinationCheckers.length === CHECKERS_PER_PLAYER) {
     return {
       ...state,
@@ -46,16 +41,18 @@ export const bearOff = (
   const updatedDestination = board.off[player.color]
   updatedDestination.checkers = destinationCheckers
 
-  activeMove.from = updatedOrigin
-  activeMove.to = updatedDestination
+  move.from = updatedOrigin
+  move.to = updatedDestination
 
   return {
     kind: 'move-moved',
-    move: activeMove,
-    checker: checkerToMove,
+    move,
+    // FIXME: Again, TS compiler is insisting there must be 4 moves in the array.
+    //@ts-ignore
+    moves,
+    checker,
     board,
     player: player as MovingPlayer,
-    moves,
     origin: updatedOrigin,
     destination: updatedDestination,
   }

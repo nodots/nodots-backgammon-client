@@ -5,6 +5,7 @@ import { Checkercontainer } from '../Checkercontainer'
 import { DieValue } from '../Dice'
 import { NodotsMessage } from '../Message'
 import { MovingPlayer, Player, WinningPlayer } from '../Player'
+import { bearOff } from './BearOff'
 import { hit } from './Hit'
 import { pointToPoint } from './PointToPoint'
 import { reenter } from './Reenter'
@@ -145,7 +146,13 @@ export const move = (
 
   switch (origin.kind) {
     case 'point':
-      return pointToPoint(payload)
+      switch (destination.kind) {
+        case 'point':
+          return pointToPoint(payload)
+        case 'off':
+        default:
+          return bearOff(payload)
+      }
     case 'bar':
       return reenter(payload)
     default:

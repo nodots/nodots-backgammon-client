@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { BOARD_IMPORT_DEFAULT } from '../board-setups'
+import { BOARD_IMPORT_DEFAULT, BOARD_IMPORT_END_GAME } from '../board-setups'
 import { NodotsBoardStore, buildBoard, getPipCounts } from './Board'
 import { Checker } from './Checker'
 import { Cube } from './Cube'
@@ -13,6 +13,7 @@ import {
 } from './Player'
 import { MoveInitialized, NodotsMove, NodotsMoves, move } from './move'
 import { buildMoveMessage } from './Message'
+import { saveMoveResults } from './move/helpers'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -240,6 +241,8 @@ const buildMoves = (roll: Roll, activePlayer: NodotsPlayer): NodotsMoves => {
       completed: false,
     })
   }
+  // FIXME: TS compiler says that this must return 4 NodotsMoves, not 2 OR 4.
+  // @ts-ignore
   return moves
 }
 
@@ -249,10 +252,6 @@ export const rolling = (state: Rolling): Rolled => {
 
   const roll = rollDice()
   const moves = buildMoves(roll, activePlayer)
-
-  const isDouble = () => {
-    return roll[0] === roll[1] ? true : false
-  }
 
   return {
     ...state,
@@ -297,6 +296,8 @@ export const moving = (
   }
 
   const results = move(moveState, checkerId)
+  saveMoveResults(results.moves)
+
   const remainingMoves = results.moves.filter(
     (move) => move.from === undefined
   ).length

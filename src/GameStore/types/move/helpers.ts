@@ -33,9 +33,13 @@ export const getDestinationForOrigin = (
         return d
       } else if (
         dpp < 0 &&
-        originPoint.position[player.direction] * -1 > mostDistantPointPosition
+        originPoint.position[player.direction] > mostDistantPointPosition * -1
       ) {
         return board.off[player.color]
+      } else {
+        console.error('Could not find destination:')
+        console.error('destinationPointPosition:', dpp)
+        console.error('mostDistantPointPosition:', mostDistantPointPosition)
       }
       break
     case 'bar':
@@ -151,4 +155,17 @@ export const isBearOffing = (
   const offCheckerCount = board.off[player.color].checkers.length
   const checkerCount = homeBoardCheckerCount + offCheckerCount + 1 // +1 to include checker in play
   return checkerCount === CHECKERS_PER_PLAYER ? true : false
+}
+
+export const saveMoveResults = (moves: NodotsMoves) => {
+  console.log('[saveMoveResults] moves:', moves)
+  const currentMoves = localStorage.getItem('nodotsGameHistory')
+  if (!currentMoves) {
+    localStorage.setItem('nodotsGameHistory', JSON.stringify([moves]))
+  } else {
+    const currentMovesObject = JSON.parse(currentMoves)
+    console.log('[saveMoveResults] currentMovesObject:', currentMovesObject)
+    currentMovesObject.push(moves)
+    console.log('[saveMoveResults] updatedMovesObject:', currentMovesObject)
+  }
 }

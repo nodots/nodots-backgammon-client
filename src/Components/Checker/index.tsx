@@ -50,6 +50,7 @@ function Checker({ checker, store, count }: Props) {
         backgroundColor: getBackgroundColor(checker.color),
         borderColor: theme.palette.background.default,
       }}
+      variant="outlined"
       data-color={checker.color}
       onClick={handleCheckerClick}
       onContextMenu={handleDebugClick}

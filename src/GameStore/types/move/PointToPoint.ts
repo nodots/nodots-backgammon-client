@@ -1,8 +1,6 @@
 import { MoveCompleted, MoveMoved, MoveMoving, NodotsMovePayload } from '.'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
-import { bearOff } from './BearOff'
-import { isBearOffing } from './helpers'
 
 export const pointToPoint = (
   payload: NodotsMovePayload
@@ -10,14 +8,9 @@ export const pointToPoint = (
   const { state, checker, origin, destination, move } = payload
   const { board, player } = state
 
-  const point = origin as Point
-
   const originCheckers = (origin.checkers = origin.checkers.filter(
     (originChecker) => originChecker.id !== checker.id
   ))
-
-  if (isBearOffing(board, player) && payload.destination.kind === 'off')
-    return bearOff(state, checker, move, point, destination)
 
   const destinationCheckers = [...destination.checkers, checker]
 
