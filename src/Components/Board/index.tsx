@@ -42,48 +42,40 @@ function Board({ store, state }: Props) {
           <Paper id="West" className="board-half" elevation={1}>
             <Quadrant
               store={store}
-              boardStore={store.state.boardStore}
+              boardStore={store.state.board}
               latitude="north"
               longitude="west"
               start={13}
-              points={
-                store.state.boardStore.points.slice(12, 18) as QuadrantPoints
-              }
+              points={store.state.board.points.slice(12, 18) as QuadrantPoints}
             />
             <Rollsurface store={store} state={state} color="black" />
             <Quadrant
               store={store}
-              boardStore={store.state.boardStore}
+              boardStore={store.state.board}
               latitude="south"
               longitude="west"
               start={7}
-              points={
-                store.state.boardStore.points.slice(6, 12) as QuadrantPoints
-              }
+              points={store.state.board.points.slice(6, 12) as QuadrantPoints}
             />
           </Paper>
           <Bar store={store} />
           <Paper id="East" className="board-half" elevation={1}>
             <Quadrant
               store={store}
-              boardStore={store.state.boardStore}
+              boardStore={store.state.board}
               latitude="north"
               longitude="east"
               start={19}
-              points={
-                store.state.boardStore.points.slice(18, 24) as QuadrantPoints
-              }
+              points={store.state.board.points.slice(18, 24) as QuadrantPoints}
             />
             <Rollsurface store={store} state={state} color="white" />
             <Quadrant
               store={store}
-              boardStore={store.state.boardStore}
+              boardStore={store.state.board}
               latitude="south"
               longitude="east"
               start={1}
-              points={
-                store.state.boardStore.points.slice(0, 6) as QuadrantPoints
-              }
+              points={store.state.board.points.slice(0, 6) as QuadrantPoints}
             />
           </Paper>
           <Off store={store} />

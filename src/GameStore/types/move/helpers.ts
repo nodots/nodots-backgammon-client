@@ -1,7 +1,9 @@
 import { NodotsMove, NodotsMovePayload, NodotsMoveState, NodotsMoves } from '.'
-import { CHECKERS_PER_PLAYER } from '..'
+import { CHECKERS_PER_PLAYER, NodotsGameState } from '..'
+import game from '../../../pages/game'
 import { NodotsBoardStore, getPoints } from '../Board'
 import { Checkercontainer, Off, Point } from '../Checkercontainer'
+import { Roll } from '../Dice'
 import { NodotsPlayer, Player } from '../Player'
 
 export const getDestinationForOrigin = (
@@ -157,15 +159,63 @@ export const isBearOffing = (
   return checkerCount === CHECKERS_PER_PLAYER ? true : false
 }
 
-export const saveMoveResults = (moves: NodotsMoves) => {
-  console.log('[saveMoveResults] moves:', moves)
-  const currentMoves = localStorage.getItem('nodotsGameHistory')
-  if (!currentMoves) {
-    localStorage.setItem('nodotsGameHistory', JSON.stringify([moves]))
+export const saveGameState = (state: NodotsGameState) => {
+  let gameStateResource = localStorage.getItem('nodots-game-state')
+  if (!gameStateResource) {
+    localStorage.setItem('nodots-game-state', JSON.stringify(state))
   } else {
-    const currentMovesObject = JSON.parse(currentMoves)
-    console.log('[saveMoveResults] currentMovesObject:', currentMovesObject)
-    currentMovesObject.push(moves)
-    console.log('[saveMoveResults] updatedMovesObject:', currentMovesObject)
+    const gameStateResourceObjArray: NodotsGameState[] =
+      JSON.parse(gameStateResource)
+    //    gameStateResourceObjArray.push(state)
   }
+}
+
+// Refactor to eliminate undefineds and fix type issue with return
+export const buildMoves = (
+  roll: Roll,
+  activePlayer: NodotsPlayer
+): NodotsMoves => {
+  const moves = [
+    {
+      checker: undefined,
+      from: undefined,
+      to: undefined,
+      dieValue: roll[0],
+      direction: activePlayer.direction,
+      player: activePlayer,
+      completed: false,
+    },
+    {
+      checker: undefined,
+      from: undefined,
+      to: undefined,
+      dieValue: roll[1],
+      direction: activePlayer.direction,
+      player: activePlayer,
+      completed: false,
+    },
+  ]
+  if (roll[0] === roll[1]) {
+    moves.push({
+      checker: undefined,
+      from: undefined,
+      to: undefined,
+      dieValue: roll[0],
+      direction: activePlayer.direction,
+      player: activePlayer,
+      completed: false,
+    })
+    moves.push({
+      checker: undefined,
+      from: undefined,
+      to: undefined,
+      dieValue: roll[1],
+      direction: activePlayer.direction,
+      player: activePlayer,
+      completed: false,
+    })
+  }
+  // FIXME: TS compiler says that this must return 4 NodotsMoves, not 2 OR 4.
+  // @ts-ignore
+  return moves
 }

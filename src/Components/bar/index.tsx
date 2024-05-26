@@ -13,7 +13,7 @@ export interface Props {
 
 function Bar({ store }: Props) {
   const { state } = store
-  const { players, boardStore } = state
+  const { players, board: boardStore } = state
   const clockwisePlayer = getClockwisePlayer(players)
   const clockwiseColor = clockwisePlayer.color
   const clockwiseCheckers = boardStore.bar[clockwiseColor].checkers

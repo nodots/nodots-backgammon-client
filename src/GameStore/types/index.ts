@@ -5,15 +5,11 @@ import { Checker } from './Checker'
 import { Cube } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
-import {
-  MovingPlayer,
-  NodotsPlayer,
-  NodotsPlayers,
-  WinningPlayer,
-} from './Player'
+import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
 import { MoveInitialized, NodotsMove, NodotsMoves, move } from './move'
 import { buildMoveMessage } from './Message'
-import { saveMoveResults } from './move/helpers'
+import { saveGameState } from './move/helpers'
+import { buildMoves } from './move/helpers'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -93,7 +89,7 @@ interface NodotsGame {
     | 'game-confirmed'
     | 'game-completed'
 
-  boardStore: NodotsBoardStore
+  board: NodotsBoardStore
   players: NodotsPlayers
   cube: Cube
   message?: NodotsMessage
@@ -169,17 +165,19 @@ export const initializing = (players: NodotsPlayers): Initializing => {
     owner: undefined,
   }
 
-  const boardStore = buildBoard(players, {
+  const board = buildBoard(players, {
     clockwise: BOARD_IMPORT_DEFAULT,
     counterclockwise: BOARD_IMPORT_DEFAULT,
   })
 
-  return {
+  const results: Initializing = {
     kind: 'game-initializing',
     players,
-    boardStore,
+    board,
     cube,
   }
+  saveGameState(results)
+  return results
 }
 
 export const rollingForStart = (state: Initializing): Rolling => {
@@ -191,59 +189,14 @@ export const rollingForStart = (state: Initializing): Rolling => {
     game: `${activePlayer.username} wins the opening roll`,
   }
 
-  return {
+  const results: Rolling = {
     ...state,
     kind: 'game-rolling',
     activeColor,
     message,
   }
-}
-
-// Refactor to eliminate undefineds and fix type issue with return
-const buildMoves = (roll: Roll, activePlayer: NodotsPlayer): NodotsMoves => {
-  const moves = [
-    {
-      checker: undefined,
-      from: undefined,
-      to: undefined,
-      dieValue: roll[0],
-      direction: activePlayer.direction,
-      player: activePlayer,
-      completed: false,
-    },
-    {
-      checker: undefined,
-      from: undefined,
-      to: undefined,
-      dieValue: roll[1],
-      direction: activePlayer.direction,
-      player: activePlayer,
-      completed: false,
-    },
-  ]
-  if (roll[0] === roll[1]) {
-    moves.push({
-      checker: undefined,
-      from: undefined,
-      to: undefined,
-      dieValue: roll[0],
-      direction: activePlayer.direction,
-      player: activePlayer,
-      completed: false,
-    })
-    moves.push({
-      checker: undefined,
-      from: undefined,
-      to: undefined,
-      dieValue: roll[1],
-      direction: activePlayer.direction,
-      player: activePlayer,
-      completed: false,
-    })
-  }
-  // FIXME: TS compiler says that this must return 4 NodotsMoves, not 2 OR 4.
-  // @ts-ignore
-  return moves
+  saveGameState(results)
+  return results
 }
 
 export const rolling = (state: Rolling): Rolled => {
@@ -253,12 +206,15 @@ export const rolling = (state: Rolling): Rolled => {
   const roll = rollDice()
   const moves = buildMoves(roll, activePlayer)
 
-  return {
+  const results: Rolled = {
     ...state,
     kind: 'game-rolled',
     roll,
     moves,
   }
+
+  saveGameState(results)
+  return results
 }
 
 export const switchDice = (state: Rolled): Rolled => {
@@ -271,7 +227,7 @@ export const switchDice = (state: Rolled): Rolled => {
   moves[0].dieValue = newRoll[0]
   moves[1].dieValue = newRoll[1]
 
-  return {
+  const results: Rolled = {
     ...state,
     kind: 'game-rolled',
     roll: newRoll,
@@ -279,13 +235,15 @@ export const switchDice = (state: Rolled): Rolled => {
       game: `${activePlayer.username} switches dice to ${newRoll[0]} ${newRoll[1]}`,
     },
   }
+  saveGameState(results)
+  return results
 }
 
 export const moving = (
   state: Rolled | Moving,
   checkerId: string
 ): Moving | Confirming | Completed => {
-  const { activeColor, players, boardStore, moves } = state
+  const { activeColor, players, board: boardStore, moves } = state
   const player = players[activeColor] as MovingPlayer
 
   const moveState: MoveInitialized = {
@@ -295,19 +253,18 @@ export const moving = (
     board: boardStore,
   }
 
-  const results = move(moveState, checkerId, players)
-  saveMoveResults(results.moves)
+  const moveResults = move(moveState, checkerId, players)
 
-  const remainingMoves = results.moves.filter(
+  const remainingMoves = moveResults.moves.filter(
     (move) => move.from === undefined
   ).length
 
   const message = buildMoveMessage(player, moves)
 
-  if (results.kind === 'move-completed') {
+  if (moveResults.kind === 'move-completed') {
     const winner = player as unknown as WinningPlayer // FIXME
 
-    return {
+    const results: Completed = {
       ...state,
       kind: 'game-completed',
       winner,
@@ -316,24 +273,31 @@ export const moving = (
         game: `${winner.username} wins the game!`,
       },
     }
+    saveGameState(results)
+    return results
   } else {
-    return {
+    const results: Moving | Confirming = {
       ...state,
       kind: remainingMoves === 0 ? 'game-confirming' : 'game-moving',
-      boardStore: results.board,
-      moves: results.moves,
+      board: moveResults.board,
+      moves: moveResults.moves,
       players,
       message,
     }
+    saveGameState(results)
+    return results
   }
 }
 
 export const confirming = (state: Confirming): Rolling => {
   const { activeColor } = state
 
-  return {
+  const results: Rolling = {
     ...state,
     kind: 'game-rolling',
     activeColor: changeActiveColor(activeColor),
   }
+
+  saveGameState(results)
+  return results
 }

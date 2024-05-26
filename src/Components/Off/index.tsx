@@ -14,7 +14,7 @@ export interface Props {
 
 function Off({ store }: Props) {
   const { state } = store
-  const { players, boardStore } = state
+  const { players, board: boardStore } = state
   const clockwisePlayer = getClockwisePlayer(players)
   const clockwiseColor = clockwisePlayer.color
   const clockwiseCheckers = boardStore.off[clockwiseColor].checkers

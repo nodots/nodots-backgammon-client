@@ -77,12 +77,12 @@ export const getActivePlayer = (
 ): Player => {
   const untypedPlayer = players[activeColor]
 
-  if (isBearOffing(state.boardStore, untypedPlayer)) {
+  if (isBearOffing(state.board, untypedPlayer)) {
     const activePlayer = untypedPlayer as BearingOffPlayer
     return activePlayer
   }
 
-  if (isReentering(state.boardStore, untypedPlayer)) {
+  if (isReentering(state.board, untypedPlayer)) {
     const activePlayer = untypedPlayer as ReenteringPlayer
     return activePlayer
   }
