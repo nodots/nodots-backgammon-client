@@ -112,10 +112,10 @@ export const move = (
   if (!destination) {
     return {
       ...state,
-      kind: 'move-no-move',
-      player: player as MovingPlayer, // FIXME
+      kind: 'move-error',
+      player: player as MovingPlayer,
       message: {
-        game: `Could not find destination for origin`,
+        game: `Could not find destination`,
       },
     }
   }

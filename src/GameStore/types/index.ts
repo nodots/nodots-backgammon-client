@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { BOARD_IMPORT_DEFAULT, BOARD_IMPORT_END_GAME } from '../board-setups'
+import { BOARD_IMPORT_DEFAULT } from '../board-setups'
 import { NodotsBoardStore, buildBoard, getPipCounts } from './Board'
 import { Checker } from './Checker'
 import { Cube } from './Cube'
@@ -156,6 +156,9 @@ export type NodotsGameState =
   | Completed
 
 export const initializing = (players: NodotsPlayers): Initializing => {
+  // reset stored state. Next iteration needs to recognize game/match ids
+  // resetGameState()
+
   players.black.dice = generateDice(players.black)
   players.white.dice = generateDice(players.black)
 

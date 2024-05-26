@@ -1,5 +1,4 @@
 import { MoveMoved, NodotsMovePayload } from '.'
-import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
@@ -7,7 +6,7 @@ import { MovingPlayer } from '../Player'
 export const reenter = (payload: NodotsMovePayload): MoveMoved => {
   const { state, destination, origin, checker, move, players } = payload
   const { board, player } = state
-  const reenteringPlayer = player as MovingPlayer
+  const reenteringPlayer = player as MovingPlayer // FIXME
 
   const originCheckers = (origin.checkers = origin.checkers.filter(
     (originChecker) => originChecker.id !== checker.id

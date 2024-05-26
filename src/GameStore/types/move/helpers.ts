@@ -1,10 +1,11 @@
 import { NodotsMove, NodotsMovePayload, NodotsMoveState, NodotsMoves } from '.'
 import { CHECKERS_PER_PLAYER, NodotsGameState } from '..'
-import game from '../../../pages/game'
 import { NodotsBoardStore, getPoints } from '../Board'
 import { Checkercontainer, Off, Point } from '../Checkercontainer'
 import { Roll } from '../Dice'
 import { NodotsPlayer, Player } from '../Player'
+
+export const gameStateKey = 'nodots-game-state'
 
 export const getDestinationForOrigin = (
   state: NodotsMoveState,
@@ -159,14 +160,17 @@ export const isBearOffing = (
   return checkerCount === CHECKERS_PER_PLAYER ? true : false
 }
 
+export const resetGameState = () => localStorage.removeItem(gameStateKey)
+
 export const saveGameState = (state: NodotsGameState) => {
-  let gameStateResource = localStorage.getItem('nodots-game-state')
+  let gameStateResource = localStorage.getItem(gameStateKey)
   if (!gameStateResource) {
-    localStorage.setItem('nodots-game-state', JSON.stringify(state))
+    console.warn('No gameStateResource')
+    localStorage.setItem(gameStateKey, JSON.stringify([state]))
   } else {
     const gameStateResourceObjArray: NodotsGameState[] =
       JSON.parse(gameStateResource)
-    //    gameStateResourceObjArray.push(state)
+    gameStateResourceObjArray.push(state)
   }
 }
 
