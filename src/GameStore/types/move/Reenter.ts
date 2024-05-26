@@ -1,10 +1,11 @@
 import { MoveMoved, NodotsMovePayload } from '.'
+import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
 // FIXME: reenter doesn't handle reentry failures correctly
 export const reenter = (payload: NodotsMovePayload): MoveMoved => {
-  const { state, destination, origin, checker, move } = payload
+  const { state, destination, origin, checker, move, players } = payload
   const { board, player } = state
   const reenteringPlayer = player as MovingPlayer
 

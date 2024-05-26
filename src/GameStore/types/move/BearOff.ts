@@ -7,15 +7,14 @@ import {
   NodotsMoveState,
 } from '.'
 import { CHECKERS_PER_PLAYER } from '..'
-import { Checker } from '../Checker'
-import { Checkercontainer, Point } from '../Checkercontainer'
+import { Point } from '../Checkercontainer'
 import { MovingPlayer, WinningPlayer } from '../Player'
 
 export const bearOff = (
   payload: NodotsMovePayload
 ): MoveMoved | MoveMoving | MoveCompleted => {
   console.log('BEAR OFF')
-  const { state, checker, origin, destination, move, moves } = payload
+  const { state, checker, origin, destination, move, moves, players } = payload
   const { board, player } = state
   if (!move) {
     throw Error('No activeMove')

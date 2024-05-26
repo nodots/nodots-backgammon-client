@@ -4,7 +4,7 @@ import { Checker, getChecker } from '../Checker'
 import { Checkercontainer } from '../Checkercontainer'
 import { DieValue } from '../Dice'
 import { NodotsMessage } from '../Message'
-import { MovingPlayer, Player, WinningPlayer } from '../Player'
+import { MovingPlayer, NodotsPlayers, Player, WinningPlayer } from '../Player'
 import { bearOff } from './BearOff'
 import { hit } from './Hit'
 import { pointToPoint } from './PointToPoint'
@@ -90,11 +90,13 @@ export interface NodotsMovePayload {
   destination: Checkercontainer
   moves: NodotsMove[]
   move: NodotsMove
+  players: NodotsPlayers
 }
 
 export const move = (
   state: NodotsMoveState,
-  checkerId: string
+  checkerId: string,
+  players: NodotsPlayers
 ): MoveMoving | MoveMoved | MoveCompleted | MoveError | MoveNoMove => {
   const { board, moves, player } = state
 
@@ -125,6 +127,7 @@ export const move = (
     destination,
     moves,
     move: activeMove,
+    players,
   }
 
   if (!isMoveSane(payload)) {

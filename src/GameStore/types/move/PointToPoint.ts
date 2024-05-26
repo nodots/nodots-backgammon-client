@@ -1,11 +1,12 @@
 import { MoveCompleted, MoveMoved, MoveMoving, NodotsMovePayload } from '.'
+import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
 export const pointToPoint = (
   payload: NodotsMovePayload
 ): MoveMoving | MoveMoved | MoveCompleted => {
-  const { state, checker, origin, destination, move } = payload
+  const { state, checker, origin, destination, move, players } = payload
   const { board, player } = state
 
   const originCheckers = (origin.checkers = origin.checkers.filter(
@@ -26,6 +27,10 @@ export const pointToPoint = (
 
   move.from = updatedOrigin
   move.to = updatedDestination
+
+  const pipCounts = getPipCounts(board, players)
+  players.black.pipCount = pipCounts.black
+  players.white.pipCount = pipCounts.white
 
   return {
     ...state,

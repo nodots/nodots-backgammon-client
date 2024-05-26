@@ -295,16 +295,12 @@ export const moving = (
     board: boardStore,
   }
 
-  const results = move(moveState, checkerId)
+  const results = move(moveState, checkerId, players)
   saveMoveResults(results.moves)
 
   const remainingMoves = results.moves.filter(
     (move) => move.from === undefined
   ).length
-
-  const pipCounts = getPipCounts(boardStore, players)
-  players.white.pipCount = pipCounts.white
-  players.black.pipCount = pipCounts.black
 
   const message = buildMoveMessage(player, moves)
 

@@ -61,8 +61,13 @@ export type NodotsPlayer =
   | WinningPlayer
 
 export interface NodotsPlayers {
-  white: NodotsPlayer
   black: NodotsPlayer
+  white: NodotsPlayer
+}
+
+export interface NodotsPipCounts {
+  black: number
+  white: number
 }
 
 export const getActivePlayer = (
