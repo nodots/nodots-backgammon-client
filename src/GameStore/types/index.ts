@@ -220,7 +220,7 @@ export const rolling = (state: Rolling): Rolled => {
   return results
 }
 
-export const switchDice = (state: Rolled): Rolled => {
+export const switchingDice = (state: Rolled): Rolled => {
   const { players, roll, activeColor, moves } = state
   const activePlayer = players[activeColor]
 

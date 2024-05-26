@@ -11,7 +11,7 @@ import {
   moving,
   rolling,
   rollingForStart,
-  switchDice,
+  switchingDice,
 } from './types'
 import { NodotsPlayers } from './types/Player'
 
@@ -35,7 +35,7 @@ class NodotsGameStore {
 
   @action
   switchDice(state: Rolled) {
-    this.state = switchDice(state)
+    this.state = switchingDice(state)
   }
 
   @action
