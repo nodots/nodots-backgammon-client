@@ -14,12 +14,18 @@ import {
   switchingDice,
 } from './types'
 import { NodotsPlayers } from './types/Player'
+import { resetGameState } from './types/move/helpers'
 
 class NodotsGameStore {
   state: NodotsGameState
 
   constructor(players: NodotsPlayers) {
+    const ts = new Date().toLocaleTimeString()
+    console.log(
+      `${ts}: NodotsGameStore Constructor for ${players.black.id} & ${players.white.id}`
+    )
     makeAutoObservable(this)
+    resetGameState()
     this.state = initializing(players)
   }
 

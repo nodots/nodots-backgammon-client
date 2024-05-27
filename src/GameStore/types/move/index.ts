@@ -70,6 +70,7 @@ export interface MoveNoMove extends MoveState {
   kind: 'move-no-move'
   message: NodotsMessage
 }
+
 export interface MoveError extends MoveState {
   kind: 'move-error'
   message: NodotsMessage
@@ -119,6 +120,8 @@ export const move = (
       },
     }
   }
+
+  checker.checkercontainerId = destination.id
 
   const payload: NodotsMovePayload = {
     state,

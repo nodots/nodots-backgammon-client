@@ -6,6 +6,7 @@ import { generateId, rollingForStart } from '../../GameStore/types'
 import { InitializingPlayer } from '../../GameStore/types/Player'
 import BoardComponent from '../../components/Board'
 import GameNotifications from '../../components/Nofitications/Game'
+import MoveNotifications from '../../components/Nofitications/Move'
 
 const whitePlayer: InitializingPlayer = {
   kind: 'initializing',
@@ -78,6 +79,7 @@ class GamePage extends Component {
         <Paper id="GameContainer">
           <GameNotifications store={this.store} />
           <BoardComponent store={this.store} state={this.store.state} />
+          <MoveNotifications state={this.store.state} />
         </Paper>
       </>
     )

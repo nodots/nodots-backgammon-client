@@ -62,6 +62,12 @@ $board-padding: $point-padding * 2;
   }
 }
 
+#MoveNotifications {
+  position: absolute;
+  top: 120px;
+  right: 120px;
+}
+
 .cube {
   width: $checker-height * 0.75;
   height: $checker-height * 0.75;

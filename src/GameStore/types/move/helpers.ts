@@ -165,16 +165,19 @@ export const resetGameState = () => localStorage.removeItem(gameStateKey)
 export const saveGameState = (state: NodotsGameState) => {
   let gameStateResource = localStorage.getItem(gameStateKey)
   if (!gameStateResource) {
-    console.warn('No gameStateResource')
     localStorage.setItem(gameStateKey, JSON.stringify([state]))
   } else {
     const gameStateResourceObjArray: NodotsGameState[] =
       JSON.parse(gameStateResource)
     gameStateResourceObjArray.push(state)
+    localStorage.setItem(
+      gameStateKey,
+      JSON.stringify(gameStateResourceObjArray)
+    )
   }
 }
 
-// Refactor to eliminate undefineds and fix type issue with return
+// TODO: Refactor to eliminate undefineds and fix type issue with return
 export const buildMoves = (
   roll: Roll,
   activePlayer: NodotsPlayer

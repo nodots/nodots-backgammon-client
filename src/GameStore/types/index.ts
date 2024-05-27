@@ -88,7 +88,7 @@ interface NodotsGame {
     | 'game-confirming'
     | 'game-confirmed'
     | 'game-completed'
-
+  id: string
   board: NodotsBoardStore
   players: NodotsPlayers
   cube: Cube
@@ -175,6 +175,7 @@ export const initializing = (players: NodotsPlayers): Initializing => {
 
   const results: Initializing = {
     kind: 'game-initializing',
+    id: generateId(),
     players,
     board,
     cube,
