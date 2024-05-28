@@ -57,15 +57,6 @@ export interface MoveMoved extends MoveState {
   origin: Checkercontainer
   destination: Checkercontainer
 }
-
-export interface MoveCompleted extends MoveState {
-  kind: 'move-completed'
-  winner: WinningPlayer
-  board: NodotsBoardStore
-  player: MovingPlayer
-  moves: NodotsMoves
-}
-
 export interface MoveNoMove extends MoveState {
   kind: 'move-no-move'
   message: NodotsMessage
@@ -80,7 +71,6 @@ export type NodotsMoveState =
   | MoveInitialized
   | MoveMoved
   | MoveMoving
-  | MoveCompleted
   | MoveError
   | MoveNoMove
 
@@ -98,7 +88,7 @@ export const move = (
   state: NodotsMoveState,
   checkerId: string,
   players: NodotsPlayers
-): MoveMoving | MoveMoved | MoveCompleted | MoveError | MoveNoMove => {
+): MoveMoving | MoveMoved | MoveError | MoveNoMove => {
   const { board, moves, player } = state
 
   const checker = getChecker(board, checkerId)
@@ -154,7 +144,8 @@ export const move = (
     case 'point':
       switch (destination.kind) {
         case 'point':
-          return pointToPoint(payload)
+          const newMoveState = pointToPoint(payload)
+          return newMoveState
         case 'off':
         default:
           return bearOff(payload)

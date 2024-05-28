@@ -34,10 +34,9 @@ function Die({ order, color, store }: Props) {
       case 'game-rolling':
         store.rolling(state)
         break
-      case 'game-confirming':
+      case 'game-confirming-play':
         store.confirming(state)
         break
-      case 'game-confirmed':
       case 'game-completed':
       default:
       //noop
@@ -71,9 +70,9 @@ function Die({ order, color, store }: Props) {
       )
     case 'game-moving':
     case 'game-rolled':
-    case 'game-confirmed':
-    case 'game-confirming':
-      const { moves, roll } = state as Moving // FIXME
+    case 'game-dice-switched':
+    case 'game-confirming-play':
+      const { roll } = state as Moving // FIXME
       return (
         store.state.activeColor === color && (
           <Button className="die" onClick={rollHandler}>

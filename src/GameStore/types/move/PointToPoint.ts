@@ -1,11 +1,12 @@
-import { MoveCompleted, MoveMoved, MoveMoving, NodotsMovePayload } from '.'
+import { Mode } from '@mui/icons-material'
+import { MoveMoved, MoveMoving, NodotsMovePayload } from '.'
 import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
 export const pointToPoint = (
   payload: NodotsMovePayload
-): MoveMoving | MoveMoved | MoveCompleted => {
+): MoveMoving | MoveMoved => {
   const { state, checker, origin, destination, move, players } = payload
   const { board, player } = state
 
@@ -27,6 +28,7 @@ export const pointToPoint = (
 
   move.from = updatedOrigin
   move.to = updatedDestination
+  move.completed = true
 
   const pipCounts = getPipCounts(board, players)
   players.black.pipCount = pipCounts.black

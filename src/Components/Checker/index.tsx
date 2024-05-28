@@ -26,10 +26,11 @@ function Checker({ checker, store, count }: Props) {
     switch (store.state.kind) {
       case 'game-rolled':
       case 'game-moving':
+      case 'game-dice-switched':
         store.moving(store.state, checker.id)
         break
       case 'game-rolling':
-      case 'game-confirming':
+      case 'game-confirming-play':
       case 'game-rolling-for-start':
       default:
         break

@@ -14,12 +14,12 @@ function DiceSwitcher({ store, color }: Props) {
 
   const switchDiceHandler = () => {
     switch (store.state.kind) {
-      case 'game-confirming':
-      case 'game-confirmed':
+      case 'game-confirming-play':
       case 'game-initializing':
       case 'game-rolling':
       case 'game-moving':
         break
+      case 'game-dice-switched':
       case 'game-rolled':
         store.switchDice(store.state)
         break
@@ -31,10 +31,7 @@ function DiceSwitcher({ store, color }: Props) {
   }
 
   switch (store.state.kind) {
-    case 'game-rolling-for-start':
-    case 'game-rolling':
-    case 'game-initializing':
-      return <></>
+    case 'game-dice-switched':
     case 'game-rolled':
       return (
         store.state.activeColor === color && (
@@ -43,6 +40,11 @@ function DiceSwitcher({ store, color }: Props) {
           </div>
         )
       )
+    case 'game-rolling-for-start':
+    case 'game-rolling':
+    case 'game-initializing':
+    default:
+      return <></>
   }
 }
 

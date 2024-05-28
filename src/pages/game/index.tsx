@@ -5,8 +5,9 @@ import NodotsGameStore from '../../GameStore'
 import { generateId, rollingForStart } from '../../GameStore/types'
 import { InitializingPlayer } from '../../GameStore/types/Player'
 import BoardComponent from '../../components/Board'
-import GameNotifications from '../../components/Nofitications/Game'
-import MoveNotifications from '../../components/Nofitications/Move'
+import GameNotifications from '../../components/Notifications/Game'
+import EventNotificationComponents from '../../components/Notifications/Events'
+import GameHistory from '../../components/Notifications/GameHistory'
 
 const whitePlayer: InitializingPlayer = {
   kind: 'initializing',
@@ -62,7 +63,7 @@ class GamePage extends Component {
       case 'game-initializing':
         this.store.state = rollingForStart(this.store.state)
         break
-      case 'game-confirming':
+      case 'game-confirming-play':
       case 'game-moving':
       case 'game-rolling':
       case 'game-rolling-for-start':
@@ -77,9 +78,9 @@ class GamePage extends Component {
           <Button onClick={this.saveGame}>Save Game</Button>
         </div> */}
         <Paper id="GameContainer">
-          <GameNotifications store={this.store} />
+          {/* <GameNotifications store={this.store} /> */}
           <BoardComponent store={this.store} state={this.store.state} />
-          <MoveNotifications state={this.store.state} />
+          <GameHistory />
         </Paper>
       </>
     )

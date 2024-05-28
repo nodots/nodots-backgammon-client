@@ -1,12 +1,12 @@
 import { v4 as uuid } from 'uuid'
 import { BOARD_IMPORT_DEFAULT } from '../board-setups'
-import { NodotsBoardStore, buildBoard, getPipCounts } from './Board'
+import { NodotsBoardStore, buildBoard } from './Board'
 import { Checker } from './Checker'
 import { Cube } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
-import { MoveInitialized, NodotsMove, NodotsMoves, move } from './move'
+import { MoveInitialized, NodotsMoves, move } from './move'
 import { buildMoveMessage } from './Message'
 import { saveGameState } from './move/helpers'
 import { buildMoves } from './move/helpers'
@@ -84,9 +84,11 @@ interface NodotsGame {
     | 'game-rolling-for-start'
     | 'game-rolling'
     | 'game-rolled'
+    | 'game-dice-switched'
     | 'game-moving'
-    | 'game-confirming'
-    | 'game-confirmed'
+    | 'game-moved'
+    | 'game-confirming-play'
+    | 'game-play-confirmed'
     | 'game-completed'
   id: string
   board: NodotsBoardStore
@@ -116,6 +118,13 @@ export interface Rolled extends NodotsGame {
   moves: NodotsMoves
 }
 
+export interface DiceSwitched extends NodotsGame {
+  kind: 'game-dice-switched'
+  activeColor: Color
+  roll: Roll
+  moves: NodotsMoves
+}
+
 export interface Moving extends NodotsGame {
   kind: 'game-moving'
   activeColor: Color
@@ -123,15 +132,22 @@ export interface Moving extends NodotsGame {
   moves: NodotsMoves
 }
 
-export interface Confirming extends NodotsGame {
-  kind: 'game-confirming'
+export interface Moved extends NodotsGame {
+  kind: 'game-moved'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
 }
 
-export interface Confirmed extends NodotsGame {
-  kind: 'game-confirmed'
+export interface ConfirmingPlay extends NodotsGame {
+  kind: 'game-confirming-play'
+  activeColor: Color
+  roll: Roll
+  moves: NodotsMoves
+}
+
+export interface PlayConfirmed extends NodotsGame {
+  kind: 'game-play-confirmed'
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
@@ -150,9 +166,10 @@ export type NodotsGameState =
   | RollingForStart
   | Rolling
   | Rolled
+  | DiceSwitched
   | Moving
-  | Confirming
-  | Confirmed
+  | ConfirmingPlay
+  | PlayConfirmed
   | Completed
 
 export const initializing = (players: NodotsPlayers): Initializing => {
@@ -221,7 +238,9 @@ export const rolling = (state: Rolling): Rolled => {
   return results
 }
 
-export const switchingDice = (state: Rolled): Rolled => {
+export const switchingDice = (
+  state: Rolled | DiceSwitched
+): DiceSwitched | Rolled => {
   const { players, roll, activeColor, moves } = state
   const activePlayer = players[activeColor]
 
@@ -231,9 +250,9 @@ export const switchingDice = (state: Rolled): Rolled => {
   moves[0].dieValue = newRoll[0]
   moves[1].dieValue = newRoll[1]
 
-  const results: Rolled = {
+  const results: DiceSwitched = {
     ...state,
-    kind: 'game-rolled',
+    kind: 'game-dice-switched',
     roll: newRoll,
     message: {
       game: `${activePlayer.username} switches dice to ${newRoll[0]} ${newRoll[1]}`,
@@ -244,17 +263,17 @@ export const switchingDice = (state: Rolled): Rolled => {
 }
 
 export const moving = (
-  state: Rolled | Moving,
+  state: Rolled | Moving | DiceSwitched,
   checkerId: string
-): Moving | Confirming | Completed => {
-  const { activeColor, players, board: boardStore, moves } = state
+): Moving | ConfirmingPlay | Completed => {
+  const { activeColor, players, board, moves } = state
   const player = players[activeColor] as MovingPlayer
 
   const moveState: MoveInitialized = {
     kind: 'move-initialized',
     player,
     moves,
-    board: boardStore,
+    board,
   }
 
   const moveResults = move(moveState, checkerId, players)
@@ -265,7 +284,8 @@ export const moving = (
 
   const message = buildMoveMessage(player, moves)
 
-  if (moveResults.kind === 'move-completed') {
+  // FIXME: This is still in the wrong place.
+  if (board.off[player.color].checkers.length === CHECKERS_PER_PLAYER) {
     const winner = player as unknown as WinningPlayer // FIXME
 
     const results: Completed = {
@@ -280,9 +300,9 @@ export const moving = (
     saveGameState(results)
     return results
   } else {
-    const results: Moving | Confirming = {
+    const results: Moving | ConfirmingPlay = {
       ...state,
-      kind: remainingMoves === 0 ? 'game-confirming' : 'game-moving',
+      kind: remainingMoves === 0 ? 'game-confirming-play' : 'game-moving',
       board: moveResults.board,
       moves: moveResults.moves,
       players,
@@ -293,7 +313,7 @@ export const moving = (
   }
 }
 
-export const confirming = (state: Confirming): Rolling => {
+export const confirming = (state: ConfirmingPlay): Rolling => {
   const { activeColor } = state
 
   const results: Rolling = {

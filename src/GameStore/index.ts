@@ -1,6 +1,7 @@
 import { action, makeAutoObservable } from 'mobx'
 import {
-  Confirming,
+  ConfirmingPlay,
+  DiceSwitched,
   Initializing,
   Moving,
   NodotsGameState,
@@ -40,17 +41,17 @@ class NodotsGameStore {
   }
 
   @action
-  switchDice(state: Rolled) {
+  switchDice(state: Rolled | DiceSwitched) {
     this.state = switchingDice(state)
   }
 
   @action
-  moving(state: Moving | Rolled, checkerId: string) {
+  moving(state: Moving | Rolled | DiceSwitched, checkerId: string) {
     this.state = moving(state, checkerId)
   }
 
   @action
-  confirming(state: Confirming) {
+  confirming(state: ConfirmingPlay) {
     this.state = confirming(state)
   }
 }

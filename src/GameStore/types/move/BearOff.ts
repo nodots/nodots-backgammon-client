@@ -1,11 +1,11 @@
-import { MoveCompleted, MoveMoved, MoveMoving, NodotsMovePayload } from '.'
+import { GameCompleted, MoveMoved, MoveMoving, NodotsMovePayload } from '.'
 import { CHECKERS_PER_PLAYER } from '..'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer, WinningPlayer } from '../Player'
 
 export const bearOff = (
   payload: NodotsMovePayload
-): MoveMoved | MoveMoving | MoveCompleted => {
+): MoveMoved | MoveMoving | GameCompleted => {
   const { state, checker, origin, destination, move, moves, players } = payload
   const { board, player } = state
   if (!move) {

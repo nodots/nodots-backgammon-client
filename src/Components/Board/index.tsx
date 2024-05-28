@@ -30,13 +30,14 @@ function Board({ store, state }: Props) {
   switch (state.kind) {
     case 'game-initializing':
       return <></>
-    case 'game-confirming':
-    case 'game-confirmed':
+    case 'game-confirming-play':
     case 'game-moving':
     case 'game-rolling':
     case 'game-rolled':
     case 'game-rolling-for-start':
     case 'game-completed':
+    case 'game-dice-switched':
+    case 'game-play-confirmed':
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>

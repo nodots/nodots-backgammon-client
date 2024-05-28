@@ -3,12 +3,13 @@ import NodotsGameStore from '../../GameStore'
 import {
   Color,
   Completed,
-  Confirmed,
-  Confirming,
+  PlayConfirmed,
+  ConfirmingPlay,
   Moving,
   Rolled,
   Rolling,
   RollingForStart,
+  DiceSwitched,
 } from '../../GameStore/types'
 import Die from '../Die'
 import DiceSwitcher from './DiceSwitcher'
@@ -16,11 +17,12 @@ import DiceSwitcher from './DiceSwitcher'
 interface Props {
   store: NodotsGameStore
   state:
+    | DiceSwitched
     | RollingForStart
     | Rolling
     | Rolled
-    | Confirming
-    | Confirmed
+    | ConfirmingPlay
+    | PlayConfirmed
     | Moving
     | Completed
   color: Color
