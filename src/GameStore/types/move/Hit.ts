@@ -12,5 +12,6 @@ export const hit = (
   const hitChecker = target.checkers.pop() as Checker
   state.board.bar[hitChecker.color].checkers.push(hitChecker)
 
+  // FIXME: Need to return updated state
   return state
 }

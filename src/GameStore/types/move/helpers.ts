@@ -1,11 +1,16 @@
 import { NodotsMove, NodotsMovePayload, NodotsMoveState, NodotsMoves } from '.'
-import { CHECKERS_PER_PLAYER, NodotsGameState } from '..'
+import {
+  CHECKERS_PER_PLAYER,
+  ConfirmingPlay,
+  Moving,
+  NodotsGameState,
+  generateTimestamp,
+} from '..'
+import { NodotsGameStateHistoryEvent } from '..'
 import { NodotsBoardStore, getPoints } from '../Board'
 import { Checkercontainer, Off, Point } from '../Checkercontainer'
 import { Roll } from '../Dice'
 import { NodotsPlayer, Player } from '../Player'
-
-export const gameStateKey = 'nodots-game-state'
 
 export const getDestinationForOrigin = (
   state: NodotsMoveState,
@@ -79,12 +84,6 @@ const getMostDistantOccupiedPointPosition = (
       : occupiedPoints[0]
   return mostDistantPoint.position[player.direction]
 }
-
-export const getLastMove = (moves: NodotsMoves) =>
-  moves.find((move) => move.to !== undefined)
-
-export const getNextMove = (moves: NodotsMoves) =>
-  moves.find((move) => move.from === undefined)
 
 export const isReentering = (
   board: NodotsBoardStore,
@@ -160,23 +159,6 @@ export const isBearOffing = (
   return checkerCount === CHECKERS_PER_PLAYER ? true : false
 }
 
-export const resetGameState = () => localStorage.removeItem(gameStateKey)
-
-export const saveGameState = (state: NodotsGameState) => {
-  let gameStateResource = localStorage.getItem(gameStateKey)
-  if (!gameStateResource) {
-    localStorage.setItem(gameStateKey, JSON.stringify([state]))
-  } else {
-    const gameStateResourceObjArray: NodotsGameState[] =
-      JSON.parse(gameStateResource)
-    gameStateResourceObjArray.push(state)
-    localStorage.setItem(
-      gameStateKey,
-      JSON.stringify(gameStateResourceObjArray)
-    )
-  }
-}
-
 // TODO: Refactor to eliminate undefineds and fix type issue with return
 export const buildMoves = (
   roll: Roll,
@@ -226,3 +208,68 @@ export const buildMoves = (
   // @ts-ignore
   return moves
 }
+
+export const gameStateKey = 'nodots-game-state'
+const getGameStateKey = (gameId: string) => `${gameStateKey}-${gameId}`
+
+export const resetGameState = (gameId: string): void =>
+  localStorage.removeItem(getGameStateKey(gameId))
+
+export const saveGameState = (state: NodotsGameState): void => {
+  const gameStateKey = getGameStateKey(state.id)
+  const gameStateHistoryEvent: NodotsGameStateHistoryEvent = {
+    timestamp: generateTimestamp(),
+    state: state,
+  }
+
+  switch (state.kind) {
+    case 'game-initializing':
+      localStorage.setItem(
+        gameStateKey,
+        JSON.stringify([gameStateHistoryEvent])
+      )
+      break
+    default:
+      const gameHistory = localStorage.getItem(gameStateKey)
+      if (gameHistory) {
+        const gameHistoryObj = JSON.parse(gameHistory)
+        const event: NodotsGameStateHistoryEvent = {
+          timestamp: generateTimestamp(),
+          state,
+        }
+        gameHistoryObj.push(event)
+        localStorage.setItem(gameStateKey, JSON.stringify(gameHistoryObj))
+      }
+      break
+  }
+}
+
+export const getGameHistory = (
+  gameId: string
+): NodotsGameStateHistoryEvent[] => {
+  console.log(gameId)
+  const gameStateKey = getGameStateKey(gameId)
+  console.log(gameStateKey)
+  // const currentGameHistory = localStorage.getItem(gameStateKey)
+  // console.log(currentGameHistory)
+  return []
+  // localStorage.getItem(getGameStateKey(gameId))
+  //   ? JSON.parse(localStorage.getItem(getGameStateKey(gameId)) as string)
+  //   : []
+}
+
+export type ActiveMoveState = Moving | ConfirmingPlay
+export const getCurrentPlay = (state: ActiveMoveState): NodotsMove[] => {
+  console.log('[Move Helpers] getCurrentPlay state:', state)
+  return []
+}
+
+export const getLastMove = (
+  state: Moving | ConfirmingPlay
+): NodotsMove | undefined => {
+  console.log('[Move Helpers] getLastMove state:', state)
+  return undefined
+}
+
+export const getNextMove = (moves: NodotsMoves) =>
+  moves.find((move) => move.from === undefined)

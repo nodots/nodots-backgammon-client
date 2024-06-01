@@ -1,4 +1,4 @@
-import { MoveDirection } from '..'
+import { MoveDirection, generateTimestamp } from '..'
 import { NodotsBoardStore, getCheckercontainers } from '../Board'
 import { Checker, getChecker } from '../Checker'
 import { Checkercontainer } from '../Checkercontainer'
@@ -26,6 +26,7 @@ export interface NodotsMove {
   dieValue: DieValue
   direction: MoveDirection
   completed: boolean
+  timestamp: string
 }
 
 export type NodotsMoves =
@@ -90,9 +91,12 @@ export const move = (
   players: NodotsPlayers
 ): MoveMoving | MoveMoved | MoveError | MoveNoMove => {
   const { board, moves, player } = state
+  console.log('[GameStore] types/move state.kind:', state.kind)
+  console.log('[GameStore] types/move checkerId:', checkerId)
 
   const checker = getChecker(board, checkerId)
   const activeMove = getNextMove(moves) as NodotsMove
+  console.log('[GameStore] types/move activeMove:', activeMove)
 
   const origin = getCheckercontainers(board).find((checkercontainer) =>
     checkercontainer.checkers.find((checker) => checker.id === checkerId)

@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react'
-import { DiceSwitched, Rolled } from '../../../GameStore/types'
+import { DiceSwitched, Rolled } from '../../GameStore/types'
 import { Card } from '@mui/material'
 
 interface Props {
   state: Rolled | DiceSwitched
 }
 
-function DiceSwitcherEvents({ state }: Props) {
+function Events({ state }: Props) {
   const { activeColor, players } = state
   const activePlayer = players[activeColor]
   const buildMessage = () => {
@@ -26,4 +26,4 @@ function DiceSwitcherEvents({ state }: Props) {
   )
 }
 
-export default observer(DiceSwitcherEvents)
+export default observer(Events)

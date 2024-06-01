@@ -22,9 +22,9 @@ $board-padding: $point-padding * 2;
   left: 0;
 }
 
-// #GameControls {
-//   color: red;
-// }
+#RevertMoveButton {
+  cursor: pointer;
+}
 
 #GameContainer {
   display: flex;

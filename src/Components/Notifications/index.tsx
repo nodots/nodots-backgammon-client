@@ -1,11 +1,8 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
-import { gameStateKey } from '../../../GameStore/types/move/helpers'
-import { NodotsGameState, generateId } from '../../../GameStore/types'
+import { gameStateKey } from '../../GameStore/types/move/helpers'
+import { NodotsGameState, generateId } from '../../GameStore/types'
 import { useEffect, useState } from 'react'
-import { moveSyntheticComments } from 'typescript'
-import { move } from '../../../GameStore/types/move'
-import { Point } from '../../../GameStore/types/Checkercontainer'
 
 const parseHistoryEntry = (entry: NodotsGameState) => {
   switch (entry.kind) {

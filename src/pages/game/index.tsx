@@ -5,9 +5,7 @@ import NodotsGameStore from '../../GameStore'
 import { generateId, rollingForStart } from '../../GameStore/types'
 import { InitializingPlayer } from '../../GameStore/types/Player'
 import BoardComponent from '../../components/Board'
-import GameNotifications from '../../components/Notifications/Game'
-import EventNotificationComponents from '../../components/Notifications/Events'
-import GameHistory from '../../components/Notifications/GameHistory'
+import GameHistory from '../../components/Notifications'
 
 const whitePlayer: InitializingPlayer = {
   kind: 'initializing',

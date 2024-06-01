@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { Rolled, Rolling } from '../../../GameStore/types'
+import { Rolled, Rolling } from '../../GameStore/types'
 import { Card } from '@mui/material'
 
 interface Props {

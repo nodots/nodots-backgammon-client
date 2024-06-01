@@ -23,6 +23,7 @@ interface Props {
 
 // TODO: Show move state with dice
 function Die({ order, color, store }: Props) {
+  const theme = useTheme()
   const { state } = store
 
   const rollHandler = async (e: React.MouseEvent) => {
@@ -43,7 +44,6 @@ function Die({ order, color, store }: Props) {
     }
   }
 
-  const theme = useTheme()
   const fill = (color: Color) => {
     return color === 'white'
       ? theme.palette.secondary.light

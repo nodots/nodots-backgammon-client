@@ -6,6 +6,7 @@ import {
 import PipCount from '../PipCount'
 import NodotsGameStore from '../../GameStore'
 import { getCheckerComponents } from '../Point'
+import RevertMove from '../RevertMove'
 
 export interface Props {
   store: NodotsGameStore
@@ -26,6 +27,9 @@ function Bar({ store }: Props) {
       <PipCount player={counterclockwisePlayer} />
       <div className="checkerbox counterclockwise">
         {getCheckerComponents(store, clockwiseCheckers, 'bar')}
+      </div>
+      <div>
+        <RevertMove store={store} />
       </div>
       <div className="checkerbox clockwise">
         {getCheckerComponents(store, counterclockwiseCheckers, 'bar')}

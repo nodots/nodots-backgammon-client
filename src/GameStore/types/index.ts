@@ -8,7 +8,7 @@ import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
 import { MoveInitialized, NodotsMoves, move } from './move'
 import { buildMoveMessage } from './Message'
-import { saveGameState } from './move/helpers'
+import { getCurrentPlay, saveGameState } from './move/helpers'
 import { buildMoves } from './move/helpers'
 
 export const CHECKERS_PER_PLAYER = 15
@@ -63,9 +63,14 @@ export type Color = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 
 export const generateId = (): string => uuid()
+export const generateTimestamp = (): string => new Date().toISOString()
 export const changeActiveColor = (activeColor: Color): Color =>
   activeColor === 'black' ? 'white' : 'black'
 
+export interface NodotsGameStateHistoryEvent {
+  timestamp: string
+  state: NodotsGameState
+}
 export interface NodotsCheckercontainerImport {
   position: CheckerboxPosition
   checkercount: number
@@ -324,4 +329,13 @@ export const confirming = (state: ConfirmingPlay): Rolling => {
 
   saveGameState(results)
   return results
+}
+
+export const reverting = (
+  state: Moving | ConfirmingPlay
+): Moving | ConfirmingPlay => {
+  console.log('Reverting')
+  console.log(state)
+  // getCurrentPlay(state)
+  return state
 }

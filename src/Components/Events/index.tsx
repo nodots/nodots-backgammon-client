@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../../GameStore'
-import CheckerEvents from './CheckerEvents'
-import DiceEvents from './DiceEvents'
-import DiceSwitcherEvents from './DiceSwitcherEvents'
+import NodotsGameStore from '../../GameStore'
+import CheckerEvents from '../Checker/Events/Notification'
+import DiceEvents from '../Dice/Events'
+import DiceSwitcherEvents from '../DiceSwitcher/Events'
 
 interface Props {
   store: NodotsGameStore
@@ -12,6 +12,7 @@ function EventNotifications({ store }: Props) {
   const buildEventMessage = () => {
     const gameState = store.state.kind
     let messageContent = `${gameState.toString()} missing Event Notification Component`
+    console.log('[EventNotifications]:', store.state.kind)
     switch (store.state.kind) {
       case 'game-moving':
       case 'game-confirming-play':

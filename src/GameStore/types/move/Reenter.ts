@@ -1,4 +1,5 @@
 import { MoveMoved, NodotsMovePayload } from '.'
+import { generateTimestamp } from '..'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
@@ -21,6 +22,8 @@ export const reenter = (payload: NodotsMovePayload): MoveMoved => {
 
   move.from = updatedOrigin
   move.to = updatedDestination
+  move.completed = true
+  move.timestamp = generateTimestamp()
 
   return {
     ...state,

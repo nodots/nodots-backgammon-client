@@ -13,9 +13,9 @@ import {
   rolling,
   rollingForStart,
   switchingDice,
+  reverting,
 } from './types'
 import { NodotsPlayers } from './types/Player'
-import { resetGameState } from './types/move/helpers'
 
 class NodotsGameStore {
   state: NodotsGameState
@@ -26,7 +26,6 @@ class NodotsGameStore {
       `${ts}: NodotsGameStore Constructor for ${players.black.id} & ${players.white.id}`
     )
     makeAutoObservable(this)
-    resetGameState()
     this.state = initializing(players)
   }
 
@@ -53,6 +52,11 @@ class NodotsGameStore {
   @action
   confirming(state: ConfirmingPlay) {
     this.state = confirming(state)
+  }
+
+  @action
+  reverting(state: Moving | ConfirmingPlay) {
+    this.state = reverting(state)
   }
 }
 

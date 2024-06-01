@@ -3,6 +3,7 @@ import { MoveMoved, MoveMoving, NodotsMovePayload } from '.'
 import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
+import { generateTimestamp } from '..'
 
 export const pointToPoint = (
   payload: NodotsMovePayload
@@ -29,6 +30,7 @@ export const pointToPoint = (
   move.from = updatedOrigin
   move.to = updatedDestination
   move.completed = true
+  move.timestamp = generateTimestamp()
 
   const pipCounts = getPipCounts(board, players)
   players.black.pipCount = pipCounts.black

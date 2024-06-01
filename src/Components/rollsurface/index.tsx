@@ -11,8 +11,8 @@ import {
   RollingForStart,
   DiceSwitched,
 } from '../../GameStore/types'
-import Die from '../Die'
-import DiceSwitcher from './DiceSwitcher'
+import Die from '../Dice'
+import DiceSwitcher from '../DiceSwitcher'
 
 interface Props {
   store: NodotsGameStore
