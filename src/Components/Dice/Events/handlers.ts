@@ -1,0 +1,49 @@
+import NodotsGameStore from '../../../GameStore'
+import { NodotsActiveDie, NodotsDie } from '../../../GameStore/types/Dice'
+
+export class DiceEventHandler {
+  public die: NodotsDie
+  public store: NodotsGameStore
+
+  constructor(die: NodotsDie, store: NodotsGameStore) {
+    this.die = die
+    this.store = store
+  }
+
+  click = (e: React.MouseEvent) => {
+    console.log('[DiceEventHandler] click e:', e)
+    console.log('[DiceEventHandler] click die:', this.die)
+    console.log('[DiceEventHandler] click store:', this.store)
+
+    switch (this.store.state.kind) {
+      case 'game-rolling':
+        console.warn(
+          `[DiceEventHandler] ${this.store.state.kind} NOT IMPLEMENTED`
+        )
+        break
+      case 'game-confirming-play':
+        console.warn(
+          `[DiceEventHandler] ${this.store.state.kind} NOT IMPLEMENTED`
+        )
+        break
+
+      default:
+        console.warn(
+          '[DiceEventHandler] state in which I have no business:',
+          this.store.state.kind
+        )
+    }
+  }
+
+  doubleClick = (e: React.MouseEvent) => {
+    console.warn('[DiceEventHandler NOT IMPLEMENTED] doubleclick e:', e)
+    console.warn(
+      '[DiceEventHandler NOT IMPLEMENTED] doubleclick die:',
+      this.die
+    )
+    console.warn(
+      '[DiceEventHandler NOT IMPLEMENTED] doubleclick store:',
+      this.store
+    )
+  }
+}
