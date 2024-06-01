@@ -18,7 +18,7 @@ interface Props {
   state: Moving | ConfirmingPlay
 }
 
-function CheckerEvents({ state }: Props) {
+function CheckerEventsNotification({ state }: Props) {
   const { activeColor, players, kind } = state
   console.log('[CheckerEvents]:', state.kind)
   const activePlayer = players[activeColor]
@@ -34,4 +34,4 @@ function CheckerEvents({ state }: Props) {
   return <Card>{buildMessage()}</Card>
 }
 
-export default observer(CheckerEvents)
+export default observer(CheckerEventsNotification)

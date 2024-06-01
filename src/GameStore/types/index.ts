@@ -8,7 +8,7 @@ import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
 import { MoveInitialized, NodotsMoves, move } from './move'
 import { buildMoveMessage } from './Message'
-import { getCurrentPlay, saveGameState } from './move/helpers'
+import { saveGameState } from './move/helpers'
 import { buildMoves } from './move/helpers'
 
 export const CHECKERS_PER_PLAYER = 15
@@ -287,7 +287,7 @@ export const moving = (
     (move) => move.from === undefined
   ).length
 
-  const message = buildMoveMessage(player, moves)
+  const message = buildMoveMessage()
 
   // FIXME: This is still in the wrong place.
   if (board.off[player.color].checkers.length === CHECKERS_PER_PLAYER) {

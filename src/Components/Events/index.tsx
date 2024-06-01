@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import CheckerEvents from '../Checker/Events/Notification'
-import DiceEvents from '../Dice/Events'
+import DiceEvents from '../Dice/Events/Events'
 import DiceSwitcherEvents from '../DiceSwitcher/Events'
 
 interface Props {
