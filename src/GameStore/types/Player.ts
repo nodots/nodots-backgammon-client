@@ -48,7 +48,7 @@ export interface BearingOffPlayer extends Player {
 }
 
 export interface WinningPlayer extends Player {
-  kind: 'won'
+  kind: 'won' // FIXME: 'winning'
   moveState: NodotsMoveState
 }
 

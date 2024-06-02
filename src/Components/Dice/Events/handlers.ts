@@ -1,5 +1,5 @@
 import NodotsGameStore from '../../../GameStore'
-import { NodotsActiveDie, NodotsDie } from '../../../GameStore/types/Dice'
+import { NodotsDie } from '../../../GameStore/types/Dice'
 
 export class DiceEventHandler {
   public die: NodotsDie
@@ -17,14 +17,10 @@ export class DiceEventHandler {
 
     switch (this.store.state.kind) {
       case 'game-rolling':
-        console.warn(
-          `[DiceEventHandler] ${this.store.state.kind} NOT IMPLEMENTED`
-        )
+        this.store.rolling(this.store.state)
         break
       case 'game-confirming-play':
-        console.warn(
-          `[DiceEventHandler] ${this.store.state.kind} NOT IMPLEMENTED`
-        )
+        this.store.confirming(this.store.state)
         break
 
       default:

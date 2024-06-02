@@ -14,25 +14,25 @@ interface Die {
 interface InactiveDie extends Die {
   kind: 'inactive'
 }
+
 interface ActiveDie extends Die {
   kind: 'active'
 }
 
 export type NodotsDie = InactiveDie | ActiveDie
-
 export type NodotsDice = [NodotsDie, NodotsDie]
 
 export const generateDice = (player: Player) => {
   const die1: InactiveDie = {
     kind: 'inactive',
-    order: 0,
     color: player.color,
+    order: 0,
     value: 1,
   }
   const die2: InactiveDie = {
     kind: 'inactive',
-    order: 1,
     color: player.color,
+    order: 1,
     value: 1,
   }
   const dice: NodotsDice = [die1, die2]

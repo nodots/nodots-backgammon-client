@@ -390,10 +390,12 @@ export const getBars = (board: NodotsBoardStore): Bar[] => [
   board.bar.white,
   board.bar.black,
 ]
+
 export const getOffs = (board: NodotsBoardStore): Off[] => [
   board.off.white,
   board.off.black,
 ]
+
 export const getCheckercontainers = (
   board: NodotsBoardStore
 ): Checkercontainer[] => {

@@ -23,7 +23,7 @@ class NodotsGameStore {
   constructor(players: NodotsPlayers) {
     const ts = new Date().toLocaleTimeString()
     console.log(
-      `${ts}: NodotsGameStore Constructor for ${players.black.id} & ${players.white.id}`
+      `${ts}: [NodotsGameStore] Constructor for ${players.black.id} & ${players.white.id}`
     )
     makeAutoObservable(this)
     this.state = initializing(players)

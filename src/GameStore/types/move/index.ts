@@ -138,8 +138,9 @@ export const move = (
     }
   }
 
-  // This took a while to figure out: Hitting is really not part of move flow, it's its own thing.
+  // This took a while to figure out: Hitting is really not part of move flow; it's its own thing.
   // So, take care of it now and move on to the rest of the move.
+  // FIXME: Handle this in game history
   if (isMoveHit(payload)) {
     hit(state, destination)
   }

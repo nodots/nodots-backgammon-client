@@ -3,7 +3,9 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import NodotsGameStore from '../../GameStore'
 import { Color, Moving, NodotsGameState } from '../../GameStore/types'
-import { DieOrder } from '../../GameStore/types/Dice'
+import { DieOrder, NodotsDie } from '../../GameStore/types/Dice'
+import { CheckerEventHandler } from '../Checker/Events/handlers'
+import { DiceEventHandler } from './Events/handlers'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -23,26 +25,35 @@ interface Props {
 
 // TODO: Show move state with dice
 function Die({ order, color, store }: Props) {
+  const die: NodotsDie = {
+    kind: 'inactive',
+    color,
+    order,
+    value: 1,
+  }
+  const eventHandler = React.useRef<DiceEventHandler>(
+    new DiceEventHandler(die, store)
+  ).current
   const theme = useTheme()
   const { state } = store
 
-  const rollHandler = async (e: React.MouseEvent) => {
-    e.preventDefault()
+  // const rollHandler = async (e: React.MouseEvent) => {
+  //   e.preventDefault()
 
-    switch (state.kind) {
-      case 'game-moving':
-        break
-      case 'game-rolling':
-        store.rolling(state)
-        break
-      case 'game-confirming-play':
-        store.confirming(state)
-        break
-      case 'game-completed':
-      default:
-      //noop
-    }
-  }
+  //   switch (state.kind) {
+  //     case 'game-moving':
+  //       break
+  //     case 'game-rolling':
+  //       store.rolling(state)
+  //       break
+  //     case 'game-confirming-play':
+  //       store.confirming(state)
+  //       break
+  //     case 'game-completed':
+  //     default:
+  //     //noop
+  //   }
+  // }
 
   const fill = (color: Color) => {
     return color === 'white'
@@ -57,7 +68,7 @@ function Die({ order, color, store }: Props) {
     case 'game-rolling':
       return (
         store.state.activeColor === color && (
-          <Button className="die" onClick={rollHandler}>
+          <Button className="die" onClick={eventHandler.click}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
               <g id="Layer_2" data-name="Layer 2">
                 <g id="Layer_1-2" data-name="Layer 1">
@@ -75,7 +86,7 @@ function Die({ order, color, store }: Props) {
       const { roll } = state as Moving // FIXME
       return (
         store.state.activeColor === color && (
-          <Button className="die" onClick={rollHandler}>
+          <Button className="die" onClick={eventHandler.click}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
               <g id="Layer_2" data-name="Layer 2">
                 <g id="Layer_1-2" data-name="Layer 1">
