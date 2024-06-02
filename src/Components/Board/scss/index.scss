@@ -36,12 +36,18 @@ $board-padding: $point-padding * 2;
   justify-content: flex-start;
 }
 
-#MoveHistoryContainer {
+#HUDContainer {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   max-width: 420px;
   margin: 20px auto;
   padding: 20px;
   height: $checker-height * 12;
+
+  .hud-card {
+    margin-bottom: 12px;
+  }
 }
 
 #GameNotificationsContainer {

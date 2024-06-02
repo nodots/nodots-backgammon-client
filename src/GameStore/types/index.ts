@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid'
 import { BOARD_IMPORT_DEFAULT } from '../board-setups'
 import { NodotsBoardStore, buildBoard } from './Board'
 import { Checker } from './Checker'
-import { Cube } from './Cube'
+import { Cube, double } from './Cube'
 import { Roll, generateDice, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
@@ -89,6 +89,8 @@ interface NodotsGame {
     | 'game-rolling-for-start'
     | 'game-rolling'
     | 'game-rolled'
+    | 'game-doubling'
+    | 'game-doubled'
     | 'game-dice-switched'
     | 'game-moving'
     | 'game-moved'
@@ -121,6 +123,18 @@ export interface Rolled extends NodotsGame {
   activeColor: Color
   roll: Roll
   moves: NodotsMoves
+}
+
+export interface Doubling extends NodotsGame {
+  kind: 'game-doubling'
+  activeColor: Color
+  roll: Roll
+}
+
+export interface Doubled extends NodotsGame {
+  kind: 'game-doubled'
+  activeColor: Color
+  roll: Roll
 }
 
 export interface DiceSwitched extends NodotsGame {
@@ -171,6 +185,8 @@ export type NodotsGameState =
   | RollingForStart
   | Rolling
   | Rolled
+  | Doubling
+  | Doubled
   | DiceSwitched
   | Moving
   | ConfirmingPlay
@@ -237,6 +253,19 @@ export const rolling = (state: Rolling): Rolled => {
     kind: 'game-rolled',
     roll,
     moves,
+  }
+
+  saveGameState(results)
+  return results
+}
+
+export const doubling = (state: Rolling): Rolling => {
+  const { cube } = state
+  cube.value = double(cube)
+  const results: Rolling = {
+    ...state,
+    kind: 'game-rolling',
+    cube,
   }
 
   saveGameState(results)

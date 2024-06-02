@@ -18,6 +18,7 @@ export class CheckerEventHandler {
     switch (this.store.state.kind) {
       case 'game-rolled':
       case 'game-moving':
+      case 'game-dice-switched':
         console.log(
           `[CheckerEventHandler] ${this.store.state.kind} calling moving`
         )

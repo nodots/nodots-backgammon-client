@@ -37,24 +37,6 @@ function Die({ order, color, store }: Props) {
   const theme = useTheme()
   const { state } = store
 
-  // const rollHandler = async (e: React.MouseEvent) => {
-  //   e.preventDefault()
-
-  //   switch (state.kind) {
-  //     case 'game-moving':
-  //       break
-  //     case 'game-rolling':
-  //       store.rolling(state)
-  //       break
-  //     case 'game-confirming-play':
-  //       store.confirming(state)
-  //       break
-  //     case 'game-completed':
-  //     default:
-  //     //noop
-  //   }
-  // }
-
   const fill = (color: Color) => {
     return color === 'white'
       ? theme.palette.secondary.light
@@ -81,9 +63,12 @@ function Die({ order, color, store }: Props) {
       )
     case 'game-moving':
     case 'game-rolled':
+    case 'game-doubled':
+    case 'game-doubling':
     case 'game-dice-switched':
     case 'game-confirming-play':
-      const { roll } = state as Moving // FIXME
+      // @ts-ignore FIXME there is a problem with doubling states here (I think)
+      const { roll } = state
       return (
         store.state.activeColor === color && (
           <Button className="die" onClick={eventHandler.click}>

@@ -83,7 +83,7 @@ function GameHistory() {
   }, []) // Empty dependency array ensures this effect runs once on mount
 
   return (
-    <Paper id="MoveHistoryContainer" elevation={2}>
+    <Paper id="GameHistory" elevation={2}>
       <ul>{gameHistory.map((h) => parseHistoryEntry(h))}</ul>
     </Paper>
   )

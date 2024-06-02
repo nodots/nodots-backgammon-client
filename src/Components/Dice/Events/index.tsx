@@ -1,26 +1,32 @@
 import { observer } from 'mobx-react'
-import { Rolled, Rolling } from '../../../GameStore/types'
+import { NodotsGameState, Rolled, Rolling } from '../../../GameStore/types'
 import { Card } from '@mui/material'
+import HUDCard from '../../HUD/HUDCard'
 
 interface Props {
-  state: Rolling | Rolled
+  state: NodotsGameState
 }
 
-function DiceEvents({ state }: Props) {
-  const { activeColor, players, kind } = state
-  const activePlayer = players[activeColor]
+function DiceEventsNotification({ state }: Props) {
+  const { players, kind } = state
   const buildMessage = () => {
     switch (kind) {
       case 'game-rolled':
-        const { roll } = state
-        return `${activePlayer.username} rolls ${roll[0]}:${roll[1]}`
       case 'game-rolling':
+      case 'game-rolling-for-start':
+        return kind
+      case 'game-doubling':
+      case 'game-confirming-play':
+      case 'game-moving':
+      case 'game-completed':
+      case 'game-dice-switched':
+      case 'game-initializing':
+      case 'game-play-confirmed':
       default:
-        console.error(`invalid state ${kind}`)
-      //noop
+        return ''
     }
   }
-  return <Card>{buildMessage()}</Card>
+  return <HUDCard eventSource="dice" message={buildMessage()} />
 }
 
-export default observer(DiceEvents)
+export default observer(DiceEventsNotification)

@@ -10,6 +10,8 @@ import {
   Rolling,
   RollingForStart,
   DiceSwitched,
+  Doubling,
+  Doubled,
 } from '../../GameStore/types'
 import Die from '../Dice'
 import DiceSwitcher from '../DiceSwitcher'
@@ -23,6 +25,8 @@ interface Props {
     | Rolled
     | ConfirmingPlay
     | PlayConfirmed
+    | Doubling
+    | Doubled
     | Moving
     | Completed
   color: Color

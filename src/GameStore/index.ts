@@ -8,6 +8,7 @@ import {
   Rolled,
   Rolling,
   confirming,
+  doubling,
   initializing,
   moving,
   rolling,
@@ -37,6 +38,11 @@ class NodotsGameStore {
   @action
   rolling(state: Rolling) {
     this.state = rolling(state)
+  }
+
+  @action
+  doubling(state: Rolling) {
+    this.state = doubling(state)
   }
 
   @action

@@ -2,28 +2,24 @@ import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
 import NodotsGameStore from '../../GameStore'
-import { CubeValue } from '../../GameStore/types/Cube'
+import { CubeEventHandler } from './Events/handlers'
 
 interface Props {
   store: NodotsGameStore
 }
 
-export const double = (value: CubeValue) =>
-  value !== 64 ? ((value * 2) as CubeValue) : value
-
 function Cube({ store }: Props) {
   const { cube } = store.state
   const theme = useTheme()
-
-  const clickHandler = (e: React.MouseEvent) => {
-    e.preventDefault()
-    console.warn('Double not implemented')
-  }
+  const eventHandler = React.useRef<CubeEventHandler>(
+    new CubeEventHandler(cube, store)
+  ).current
 
   return (
     <Button
       className="cube"
-      onClick={clickHandler}
+      onClick={eventHandler.click}
+      onDoubleClick={eventHandler.doubleClick}
       sx={{ color: theme.palette.info.main }}
     >
       {cube.value}

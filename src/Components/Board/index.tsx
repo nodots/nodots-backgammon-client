@@ -38,6 +38,8 @@ function Board({ store, state }: Props) {
     case 'game-completed':
     case 'game-dice-switched':
     case 'game-play-confirmed':
+    case 'game-doubled':
+    case 'game-doubling':
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>
