@@ -116,6 +116,7 @@ export interface RollingForStart extends NodotsGame {
 export interface Rolling extends NodotsGame {
   kind: 'game-rolling'
   activeColor: Color
+  roll: Roll
 }
 
 export interface Rolled extends NodotsGame {
@@ -236,6 +237,7 @@ export const rollingForStart = (state: Initializing): Rolling => {
     kind: 'game-rolling',
     activeColor,
     message,
+    roll: [1, 1], // FIXME
   }
   saveGameState(results)
   return results
@@ -259,13 +261,14 @@ export const rolling = (state: Rolling): Rolled => {
   return results
 }
 
-export const doubling = (state: Rolling): Rolling => {
-  const { cube } = state
+export const doubling = (state: Rolling): Doubled => {
+  const { cube, roll } = state
   cube.value = double(cube)
-  const results: Rolling = {
+  const results: Doubled = {
     ...state,
-    kind: 'game-rolling',
+    kind: 'game-doubled',
     cube,
+    roll,
   }
 
   saveGameState(results)
