@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
+import NodotsGameStore from '../../../GameStore'
 import Cube from '../Cube'
 import { getCheckerComponents } from '../Point'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
-} from '../../GameStore/types/Player'
+} from '../../../GameStore/types/Player'
 import { Paper } from '@mui/material'
 
 export interface Props {

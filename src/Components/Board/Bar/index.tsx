@@ -2,9 +2,9 @@ import { observer } from 'mobx-react'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
-} from '../../GameStore/types/Player'
-import PipCount from '../PipCount'
-import NodotsGameStore from '../../GameStore'
+} from '../../../GameStore/types/Player'
+import PipCount from '../../PipCount'
+import NodotsGameStore from '../../../GameStore'
 import { getCheckerComponents } from '../Point'
 import RevertMove from '../RevertMove'
 

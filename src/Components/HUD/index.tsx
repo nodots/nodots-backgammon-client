@@ -1,9 +1,9 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
-import CheckerEventsNotification from '../Checker/Events'
-import DiceEventsNotification from '../Dice/Events'
-import CubeEventsNotification from '../Cube/Events'
-import DiceSwitcherEventsNotification from '../DiceSwitcher/Events'
+import CheckerEventsNotification from '../Board/Checker/Events'
+import DiceEventsNotification from '../Board/Dice/Events'
+import CubeEventsNotification from '../Board/Cube/Events'
+import DiceSwitcherEventsNotification from '../Board/DiceSwitcher/Events'
 import NodotsGameStore from '../../GameStore'
 
 interface Props {

@@ -1,5 +1,5 @@
 import { Container } from '@mui/material'
-import NodotsGameStore from '../../GameStore'
+import NodotsGameStore from '../../../GameStore'
 import {
   Color,
   Completed,
@@ -12,9 +12,9 @@ import {
   DiceSwitched,
   Doubling,
   Doubled,
-} from '../../GameStore/types'
-import Die from '../Dice'
-import DiceSwitcher from '../Board/DiceSwitcher'
+} from '../../../GameStore/types'
+import Die from '../../Dice'
+import DiceSwitcher from '../DiceSwitcher'
 
 interface Props {
   store: NodotsGameStore

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
-import CheckerEventsNotification from '../Checker/Events'
+import CheckerEventsNotification from '../Board/Checker/Events'
 
 interface Props {
   store: NodotsGameStore

@@ -216,32 +216,33 @@ export const resetGameState = (gameId: string): void =>
   localStorage.removeItem(getGameStateKey(gameId))
 
 export const saveGameState = (state: NodotsGameState): void => {
-  const gameStateKey = getGameStateKey(state.id)
-  const gameStateHistoryEvent: NodotsGameStateHistoryEvent = {
-    timestamp: generateTimestamp(),
-    state: state,
-  }
+  console.warn('[Move Helpers NOT IMPLEMENTED] saveGameState')
+  // const gameStateKey = getGameStateKey(state.id)
+  // const gameStateHistoryEvent: NodotsGameStateHistoryEvent = {
+  //   timestamp: generateTimestamp(),
+  //   state: state,
+  // }
 
-  switch (state.kind) {
-    case 'game-initializing':
-      localStorage.setItem(
-        gameStateKey,
-        JSON.stringify([gameStateHistoryEvent])
-      )
-      break
-    default:
-      const gameHistory = localStorage.getItem(gameStateKey)
-      if (gameHistory) {
-        const gameHistoryObj = JSON.parse(gameHistory)
-        const event: NodotsGameStateHistoryEvent = {
-          timestamp: generateTimestamp(),
-          state,
-        }
-        gameHistoryObj.push(event)
-        localStorage.setItem(gameStateKey, JSON.stringify(gameHistoryObj))
-      }
-      break
-  }
+  // switch (state.kind) {
+  //   case 'game-initializing':
+  //     localStorage.setItem(
+  //       gameStateKey,
+  //       JSON.stringify([gameStateHistoryEvent])
+  //     )
+  //     break
+  //   default:
+  //     const gameHistory = localStorage.getItem(gameStateKey)
+  //     if (gameHistory) {
+  //       const gameHistoryObj = JSON.parse(gameHistory)
+  //       const event: NodotsGameStateHistoryEvent = {
+  //         timestamp: generateTimestamp(),
+  //         state,
+  //       }
+  //       gameHistoryObj.push(event)
+  //       localStorage.setItem(gameStateKey, JSON.stringify(gameHistoryObj))
+  //     }
+  //     break
+  // }
 }
 
 export const getGameHistory = (

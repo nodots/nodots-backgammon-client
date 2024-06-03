@@ -1,5 +1,5 @@
-import NodotsGameStore from '../../../GameStore'
-import { NodotsDie } from '../../../GameStore/types/Dice'
+import NodotsGameStore from '../../../../GameStore'
+import { NodotsDie } from '../../../../GameStore/types/Dice'
 
 export class DiceEventHandler {
   public die: NodotsDie

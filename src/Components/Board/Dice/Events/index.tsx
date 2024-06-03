@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
-import { NodotsGameState, Rolled, Rolling } from '../../../GameStore/types'
+import { NodotsGameState, Rolled, Rolling } from '../../../../GameStore/types'
 import { Card } from '@mui/material'
-import HUDCard from '../../HUD/HUDCard'
+import HUDCard from '../../../HUD/HUDCard'
 
 interface Props {
   state: NodotsGameState

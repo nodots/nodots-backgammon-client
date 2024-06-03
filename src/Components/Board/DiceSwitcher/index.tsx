@@ -2,8 +2,8 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt'
 import { useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
-import NodotsGameStore from '../../GameStore'
-import { Color } from '../../GameStore/types'
+import NodotsGameStore from '../../../GameStore'
+import { Color } from '../../../GameStore/types'
 import { DiceSwitcherEventHandler } from './Events/handlers'
 
 interface Props {

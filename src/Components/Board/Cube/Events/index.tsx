@@ -1,15 +1,13 @@
 import { observer } from 'mobx-react'
-import { NodotsGameState } from '../../../GameStore/types'
-import { CubeEventHandler } from './handlers'
-import NodotsGameStore from '../../../GameStore'
-import HUDCard from '../../HUD/HUDCard'
+import { NodotsGameState } from '../../../../GameStore/types'
+import HUDCard from '../../../HUD/HUDCard'
 
 interface Props {
   state: NodotsGameState
 }
 
 function CubeEventsNotification({ state }: Props) {
-  const { players, kind } = state
+  const { kind } = state
   const buildMessage = () => {
     switch (kind) {
       case 'game-doubled':
