@@ -47,6 +47,25 @@ $board-padding: $point-padding * 2;
 
   .hud-card {
     margin-bottom: 12px;
+
+    &.two-column {
+      display: flex;
+      flex-direction: row;
+
+      .player-pips {
+        flex-grow: 1;
+        font-size: 2em;
+        text-align: center;
+        justify-items: center;
+        margin: 5px;
+        &.white {
+          background-color: #ccc;
+        }
+        &.black {
+          background-color: #004433;
+        }
+      }
+    }
   }
 }
 
