@@ -80,6 +80,15 @@ class GamePage extends Component {
           <BoardComponent store={this.store} state={this.store.state} />
           <HUDComponent store={this.store} />
         </Paper>
+        <footer>
+          <div>
+            Copyright &copy; {new Date().getFullYear()} Nodots Backgammon. All
+            Rights Reserved.
+          </div>
+          <div>
+            <a href="mailto:backgammon@nodots.com">backgammon@nodots.com</a>
+          </div>
+        </footer>
       </>
     )
   }

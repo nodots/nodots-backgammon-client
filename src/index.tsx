@@ -5,13 +5,13 @@ import { Auth0Provider } from '@auth0/auth0-react'
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
-  // <Auth0Provider
-  //   domain="dev-8ykjldydiqcf2hqu.us.auth0.com"
-  //   clientId="qdkexB56guy3NFhWL3hH1vqB2zqDMwtk"
-  //   authorizationParams={{
-  //     redirect_uri: 'http://127.0.0.1:5173/sign-in',
-  //   }}
-  // >
-  <App />
-  // </Auth0Provider>
+  <Auth0Provider
+    domain="dev-8ykjldydiqcf2hqu.us.auth0.com"
+    clientId="qdkexB56guy3NFhWL3hH1vqB2zqDMwtk"
+    authorizationParams={{
+      redirect_uri: 'http://127.0.0.1:5173/sign-in',
+    }}
+  >
+    <App />
+  </Auth0Provider>
 )
