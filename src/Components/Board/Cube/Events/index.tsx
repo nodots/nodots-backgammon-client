@@ -13,7 +13,7 @@ function CubeEventsNotification({ state }: Props) {
       case 'game-doubled':
       case 'game-doubling':
       case 'game-rolling':
-        return kind
+        return `[CubeEvent] ${kind} NOT IMPLEMENTED`
       case 'game-rolled':
       case 'game-rolling-for-start':
       case 'game-confirming-play':
@@ -22,7 +22,7 @@ function CubeEventsNotification({ state }: Props) {
       case 'game-dice-switched':
       case 'game-initializing':
       case 'game-play-confirmed':
-        return ''
+        return `[CubeEvent2] ${kind} NOT IMPLEMENTED`
     }
   }
   return <HUDCard eventSource="cube" message={buildMessage()} />

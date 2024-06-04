@@ -4,6 +4,7 @@ import {
   ConfirmingPlay,
   Moving,
   NodotsGameState,
+  generateId,
   generateTimestamp,
 } from '..'
 import { NodotsGameStateHistoryEvent } from '..'
@@ -166,6 +167,7 @@ export const buildMoves = (
 ): NodotsMoves => {
   const moves = [
     {
+      id: generateId(),
       checker: undefined,
       from: undefined,
       to: undefined,
@@ -175,6 +177,7 @@ export const buildMoves = (
       completed: false,
     },
     {
+      id: generateId(),
       checker: undefined,
       from: undefined,
       to: undefined,
@@ -186,6 +189,7 @@ export const buildMoves = (
   ]
   if (roll[0] === roll[1]) {
     moves.push({
+      id: generateId(),
       checker: undefined,
       from: undefined,
       to: undefined,
@@ -195,6 +199,7 @@ export const buildMoves = (
       completed: false,
     })
     moves.push({
+      id: generateId(),
       checker: undefined,
       from: undefined,
       to: undefined,

@@ -47,6 +47,7 @@ $board-padding: $point-padding * 2;
 
   .hud-card {
     margin-bottom: 12px;
+    overflow: hidden;
 
     &.two-column {
       display: flex;
@@ -65,6 +66,23 @@ $board-padding: $point-padding * 2;
         &.black {
           background-color: rgba(0, 95, 134);
         }
+      }
+    }
+
+    &.scrollable {
+      overflow-y: scroll;
+    }
+
+    .move-history-table {
+      overflow: scroll;
+      max-height: 300px;
+    }
+
+    .hud-card-title {
+      .MuiCardHeader-title {
+        text-transform: capitalize;
+        font-size: 1rem;
+        font-weight: 500;
       }
     }
   }

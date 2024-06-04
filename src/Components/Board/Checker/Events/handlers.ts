@@ -1,5 +1,5 @@
-import NodotsGameStore from '../../../GameStore'
-import { Checker } from '../../../GameStore/types/Checker'
+import NodotsGameStore from '../../../../GameStore'
+import { Checker } from '../../../../GameStore/types/Checker'
 
 export class CheckerEventHandler {
   public checker: Checker

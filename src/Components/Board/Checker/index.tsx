@@ -1,8 +1,8 @@
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
-import { Color } from '../../GameStore/types'
-import { Checker as CheckerType } from '../../GameStore/types/Checker'
+import NodotsGameStore from '../../../GameStore'
+import { Color } from '../../../GameStore/types'
+import { Checker as CheckerType } from '../../../GameStore/types/Checker'
 import { CheckerEventHandler } from './Events/handlers'
 import React from 'react'
 

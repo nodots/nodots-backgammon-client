@@ -19,6 +19,7 @@ import {
 // TODO: Implement revert move
 // TODO: Implement forced moves
 export interface NodotsMove {
+  id: string
   checker: Checker | undefined
   from: Checkercontainer | undefined
   to: Checkercontainer | undefined

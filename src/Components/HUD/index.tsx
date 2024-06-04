@@ -3,7 +3,9 @@ import { observer } from 'mobx-react'
 import CheckerEventsNotification from '../Board/Checker/Events'
 import CubeEventsNotification from '../Board/Cube/Events'
 import DiceEventsNotification from '../Board/Dice/Events'
+import PlayerEventNotification from '../Player/Events'
 import DiceSwitcherEventsNotification from '../Board/DiceSwitcher/Events'
+import GameWinProbabilityNotification from '../Board/Events'
 import NodotsGameStore from '../../GameStore'
 import PipCountNotification from './PipCountNotification'
 
@@ -15,10 +17,12 @@ function HUDComponent({ store }: Props) {
   return (
     <Paper id="HUDContainer" elevation={2}>
       <PipCountNotification state={store.state} />
+      <GameWinProbabilityNotification state={store.state} />
+      <PlayerEventNotification state={store.state} />
       <DiceEventsNotification state={store.state} />
-      <CheckerEventsNotification state={store.state} />
+      {/* <CheckerEventsNotification state={store.state} />
       <CubeEventsNotification state={store.state} />
-      <DiceSwitcherEventsNotification state={store.state} />
+      <DiceSwitcherEventsNotification state={store.state} /> */}
     </Paper>
   )
 }

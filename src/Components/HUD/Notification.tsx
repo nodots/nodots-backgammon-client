@@ -9,13 +9,17 @@ interface Props {
 
 function Notification({ player }: Props) {
   const theme = useTheme()
-  const backgroundColor = (color: Color) => {
+  const getBackgroundColor = (color: Color) => {
     return color === 'white'
-      ? theme.palette.secondary.light
-      : theme.palette.secondary.dark
+      ? theme.palette.secondary.light.toString()
+      : theme.palette.secondary.dark.toString()
   }
+  const backgroundColor = getBackgroundColor(player.color)
   return (
-    <Card className={`player-pips ${player.color}`} sx={{ backgroundColor }}>
+    <Card
+      className={`player-pips ${player.color}`}
+      sx={{ backgroundColor: backgroundColor }}
+    >
       {player.pipCount}
     </Card>
   )
