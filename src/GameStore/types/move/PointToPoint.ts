@@ -45,5 +45,6 @@ export const pointToPoint = (
     origin: updatedOrigin,
     destination: updatedDestination,
     board,
+    players,
   }
 }

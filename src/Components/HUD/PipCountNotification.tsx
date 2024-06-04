@@ -10,7 +10,7 @@ interface Props {
 function PipCountNotification({ state }: Props) {
   const { players } = state
   return (
-    <Card className="hud-card two-column" elevation={4}>
+    <Card className="hud-card two-column short" elevation={4}>
       <Notification player={players.black} />
       <Notification player={players.white} />
     </Card>

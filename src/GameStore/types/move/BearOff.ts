@@ -1,5 +1,6 @@
 import { MoveMoved, MoveMoving, NodotsMovePayload } from '.'
 import { generateTimestamp } from '..'
+import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer, WinningPlayer } from '../Player'
 
@@ -24,6 +25,10 @@ export const bearOff = (payload: NodotsMovePayload): MoveMoved | MoveMoving => {
   move.completed = true
   move.timestamp = generateTimestamp()
 
+  const pipCounts = getPipCounts(board, players)
+  players.black.pipCount = pipCounts.black
+  players.white.pipCount = pipCounts.white
+
   return {
     kind: 'move-moved',
     move,
@@ -35,5 +40,6 @@ export const bearOff = (payload: NodotsMovePayload): MoveMoved | MoveMoving => {
     player: player as MovingPlayer,
     origin: updatedOrigin,
     destination: updatedDestination,
+    players,
   }
 }

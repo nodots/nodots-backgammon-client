@@ -13,7 +13,7 @@ import {
   Doubling,
   Doubled,
 } from '../../../GameStore/types'
-import Die from '../../Dice'
+import Die from '../Dice'
 import DiceSwitcher from '../DiceSwitcher'
 
 interface Props {

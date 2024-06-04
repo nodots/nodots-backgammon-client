@@ -1,5 +1,6 @@
 import { MoveMoved, NodotsMovePayload } from '.'
 import { generateTimestamp } from '..'
+import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
@@ -25,6 +26,10 @@ export const reenter = (payload: NodotsMovePayload): MoveMoved => {
   move.completed = true
   move.timestamp = generateTimestamp()
 
+  const pipCounts = getPipCounts(board, players)
+  players.black.pipCount = pipCounts.black
+  players.white.pipCount = pipCounts.white
+
   return {
     ...state,
     kind: 'move-moved',
@@ -34,5 +39,6 @@ export const reenter = (payload: NodotsMovePayload): MoveMoved => {
     destination: updatedDestination,
     board,
     player: reenteringPlayer,
+    players,
   }
 }

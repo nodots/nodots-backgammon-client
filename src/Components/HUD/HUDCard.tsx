@@ -8,7 +8,7 @@ interface Props {
 
 function HUDCard({ eventSource, message }: Props) {
   return (
-    <Card className="hud-card" elevation={4}>
+    <Card className="hud-card" elevation={3}>
       <CardHeader
         title={eventSource}
         titleTypographyProps={{ textTransform: 'capitalize' }}

@@ -57,7 +57,9 @@ export interface MoveMoved extends MoveState {
   checker: Checker
   origin: Checkercontainer
   destination: Checkercontainer
+  players: NodotsPlayers
 }
+
 export interface MoveNoMove extends MoveState {
   kind: 'move-no-move'
   message: NodotsMessage
