@@ -1,7 +1,8 @@
+import checker from 'vite-plugin-checker'
 import { MoveDirection, generateTimestamp } from '..'
 import { NodotsBoardStore, getCheckercontainers } from '../Board'
 import { Checker, getChecker } from '../Checker'
-import { Checkercontainer } from '../Checkercontainer'
+import { Bar, Checkercontainer, Off, Point } from '../Checkercontainer'
 import { DieValue } from '../Dice'
 import { NodotsMessage } from '../Message'
 import { MovingPlayer, NodotsPlayers, Player, WinningPlayer } from '../Player'
@@ -12,6 +13,7 @@ import { reenter } from './Reenter'
 import {
   getDestinationForOrigin,
   getNextMove,
+  getOriginsForColor,
   isMoveHit,
   isMoveSane,
 } from './helpers'
@@ -52,8 +54,8 @@ export interface MoveMoving extends MoveState {
   destination: Checkercontainer
 }
 
-export interface MoveMoved extends MoveState {
-  kind: 'move-moved'
+export interface MoveMovedSucceded extends MoveState {
+  kind: 'move-moved-succeded'
   move: NodotsMove
   checker: Checker
   origin: Checkercontainer
@@ -61,8 +63,8 @@ export interface MoveMoved extends MoveState {
   players: NodotsPlayers
 }
 
-export interface MoveNoMove extends MoveState {
-  kind: 'move-no-move'
+export interface MoveMovedFailed extends MoveState {
+  kind: 'move-moved-failed'
   message: NodotsMessage
 }
 
@@ -73,10 +75,10 @@ export interface MoveError extends MoveState {
 
 export type NodotsMoveState =
   | MoveInitialized
-  | MoveMoved
   | MoveMoving
+  | MoveMovedSucceded
+  | MoveMovedFailed
   | MoveError
-  | MoveNoMove
 
 export interface NodotsMovePayload {
   state: NodotsMoveState
@@ -88,11 +90,17 @@ export interface NodotsMovePayload {
   players: NodotsPlayers
 }
 
+export interface PossibleMove {
+  origin: Checkercontainer // FIXME
+  destination: Checkercontainer
+}
+export type PossibleMoves = PossibleMove[]
+
 export const move = (
   state: NodotsMoveState,
   checkerId: string,
   players: NodotsPlayers
-): MoveMoving | MoveMoved | MoveError | MoveNoMove => {
+): MoveMoving | MoveMovedSucceded | MoveError | MoveMovedFailed => {
   const { board, moves, player } = state
   console.log('[GameStore] types/move state.kind:', state.kind)
   console.log('[GameStore] types/move checkerId:', checkerId)
@@ -100,6 +108,54 @@ export const move = (
   const checker = getChecker(board, checkerId)
   const activeMove = getNextMove(moves) as NodotsMove
   console.log('[GameStore] types/move activeMove:', activeMove)
+
+  const possibleMoves: PossibleMoves = []
+
+  const origins = getOriginsForColor(board, player.color)
+
+  origins.map((origin) => {
+    const destination = getDestinationForOrigin(state, origin, activeMove)
+    if (destination) {
+      const possibleMove: PossibleMove = {
+        origin,
+        destination,
+      }
+      possibleMoves.push(possibleMove)
+    }
+  })
+
+  possibleMoves.map((pm) => {
+    if (pm.origin.kind === 'point') {
+      const originPoint = pm.origin as Point
+      if (pm.destination.kind === 'point') {
+        const destinationPoint = pm.destination as Point
+        console.log(
+          originPoint.position[player.direction],
+          destinationPoint.position[player.direction]
+        )
+      } else if (pm.destination.kind === 'off') {
+        const destinationOff = pm.destination as Off
+        console.log(
+          originPoint.position[player.direction],
+          destinationOff.position
+        )
+      }
+    } else if (pm.origin.kind === 'bar' && pm.origin.checkers.length > 0) {
+      const originBar = pm.origin
+      const destinationPoint = pm.destination as Point
+      console.log(originBar.kind, destinationPoint.position[player.direction])
+    }
+  })
+
+  if (possibleMoves.length === 0) {
+    return {
+      ...state,
+      kind: 'move-moved-failed',
+      message: {
+        game: 'No move',
+      },
+    }
+  }
 
   const origin = getCheckercontainers(board).find((checkercontainer) =>
     checkercontainer.checkers.find((checker) => checker.id === checkerId)

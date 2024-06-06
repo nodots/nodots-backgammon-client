@@ -3,7 +3,7 @@ import { BOARD_IMPORT_DEFAULT } from '../board-setups'
 import { NodotsBoardStore, buildBoard } from './Board'
 import { Checker } from './Checker'
 import { Cube, double } from './Cube'
-import { Roll, generateDice, rollDice } from './Dice'
+import { Roll, generateDice, rollDice, rollDiceWithMoves } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
 import { MoveInitialized, NodotsMoves, move } from './move'
@@ -244,17 +244,16 @@ export const rollingForStart = (state: Initializing): Rolling => {
 }
 
 export const rolling = (state: Rolling): Rolled => {
-  const { players, activeColor } = state
+  const { players, board, activeColor } = state
   const activePlayer = players[activeColor]
 
-  const roll = rollDice()
-  const moves = buildMoves(roll, activePlayer)
+  const rollResults = rollDiceWithMoves(board, activePlayer)
 
   const results: Rolled = {
     ...state,
     kind: 'game-rolled',
-    roll,
-    moves,
+    roll: rollResults.roll,
+    moves: rollResults.moves as NodotsMoves,
   }
 
   saveGameState(results)

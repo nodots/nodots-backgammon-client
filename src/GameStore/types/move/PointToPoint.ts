@@ -1,5 +1,5 @@
 import { Mode } from '@mui/icons-material'
-import { MoveMoved, MoveMoving, NodotsMovePayload } from '.'
+import { MoveMovedSucceded, MoveMoving, NodotsMovePayload } from '.'
 import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
@@ -7,7 +7,7 @@ import { generateTimestamp } from '..'
 
 export const pointToPoint = (
   payload: NodotsMovePayload
-): MoveMoving | MoveMoved => {
+): MoveMoving | MoveMovedSucceded => {
   const { state, checker, origin, destination, move, players } = payload
   const { board, player } = state
 

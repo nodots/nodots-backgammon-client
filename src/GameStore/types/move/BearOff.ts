@@ -1,10 +1,12 @@
-import { MoveMoved, MoveMoving, NodotsMovePayload } from '.'
+import { MoveMovedSucceded, MoveMoving, NodotsMovePayload } from '.'
 import { generateTimestamp } from '..'
 import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer, WinningPlayer } from '../Player'
 
-export const bearOff = (payload: NodotsMovePayload): MoveMoved | MoveMoving => {
+export const bearOff = (
+  payload: NodotsMovePayload
+): MoveMovedSucceded | MoveMoving => {
   const { state, checker, origin, destination, move, moves, players } = payload
   const { board, player } = state
   if (!move) {

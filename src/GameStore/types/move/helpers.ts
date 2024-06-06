@@ -1,6 +1,7 @@
 import { NodotsMove, NodotsMovePayload, NodotsMoveState, NodotsMoves } from '.'
 import {
   CHECKERS_PER_PLAYER,
+  Color,
   ConfirmingPlay,
   Moving,
   NodotsGameState,
@@ -8,10 +9,23 @@ import {
   generateTimestamp,
 } from '..'
 import { NodotsGameStateHistoryEvent } from '..'
-import { NodotsBoardStore, getPoints } from '../Board'
-import { Checkercontainer, Off, Point } from '../Checkercontainer'
+import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
+import { Bar, Checkercontainer, Off, Point } from '../Checkercontainer'
 import { Roll } from '../Dice'
 import { NodotsPlayer, Player } from '../Player'
+
+export const getOriginsForColor = (
+  board: NodotsBoardStore,
+  color: Color
+): Checkercontainer[] => {
+  return board.bar[color].checkers.length > 0
+    ? [board.bar[color]]
+    : getCheckercontainers(board).filter(
+        (checkercontainer) =>
+          checkercontainer.checkers.length > 0 &&
+          checkercontainer.checkers[0].color === color
+      )
+}
 
 export const getDestinationForOrigin = (
   state: NodotsMoveState,
@@ -30,7 +44,7 @@ export const getDestinationForOrigin = (
         player
       )
 
-      if (dpp === 0) {
+      if (dpp === 0 && isBearOffing(board, player)) {
         return board.off[player.color]
       } else if (dpp > 0) {
         const d = board.points.find(
@@ -39,7 +53,14 @@ export const getDestinationForOrigin = (
         if (!d) {
           return undefined
         }
-        return d
+        if (
+          d.checkers.length < 2 ||
+          d.checkers[0].color === activeMove.player.color
+        ) {
+          return d
+        } else {
+          return undefined
+        }
       } else if (
         dpp < 0 &&
         originPoint.position[player.direction] > mostDistantPointPosition * -1

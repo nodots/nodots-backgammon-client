@@ -1,10 +1,10 @@
-import { MoveMoved, NodotsMovePayload } from '.'
+import { MoveMovedSucceded, NodotsMovePayload } from '.'
 import { generateTimestamp } from '..'
 import { getPipCounts } from '../Board'
 import { Point } from '../Checkercontainer'
 import { MovingPlayer } from '../Player'
 
-export const reenter = (payload: NodotsMovePayload): MoveMoved => {
+export const reenter = (payload: NodotsMovePayload): MoveMovedSucceded => {
   const { state, destination, origin, checker, move, players } = payload
   const { board, player } = state
   const reenteringPlayer = player as MovingPlayer // FIXME
@@ -32,7 +32,7 @@ export const reenter = (payload: NodotsMovePayload): MoveMoved => {
 
   return {
     ...state,
-    kind: 'move-moved',
+    kind: 'move-moved-succeded',
     move,
     checker,
     origin: updatedOrigin,

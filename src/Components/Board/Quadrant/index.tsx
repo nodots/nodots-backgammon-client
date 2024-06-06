@@ -8,7 +8,7 @@ import {
 } from '../../../GameStore/types/Board'
 import { Point } from '../../../GameStore/types/Checkercontainer'
 import PointComponent from '../Point'
-import PointLabels from '../Point/PointLabels'
+import PointLabels from '../PointLabels'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
