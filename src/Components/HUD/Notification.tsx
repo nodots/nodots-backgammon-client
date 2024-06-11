@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react'
-import { Player } from '../../GameStore/types/Player'
+import { NodotsPlayer } from '../../GameStore/types/Player'
 import { Card, Chip, useTheme } from '@mui/material'
 import { Color } from '../../GameStore/types'
 
 interface Props {
-  player: Player
+  player: NodotsPlayer
 }
 
 function Notification({ player }: Props) {

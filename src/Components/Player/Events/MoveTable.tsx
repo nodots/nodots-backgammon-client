@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { NodotsMove } from '../../../GameStore/types/move'
+import { NodotsMove } from '../../../GameStore/types/Play/move'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { Box } from '@mui/material'
 import { Bar, Off, Point } from '../../../GameStore/types/Checkercontainer'

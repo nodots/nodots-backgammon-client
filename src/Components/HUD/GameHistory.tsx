@@ -1,6 +1,6 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
-import { gameStateKey } from '../../GameStore/types/move/helpers'
+import { gameStateKey } from '../../GameStore/types/Play/move/helpers'
 import { NodotsGameState, generateId } from '../../GameStore/types'
 import { useEffect, useState } from 'react'
 
@@ -13,7 +13,7 @@ const parseHistoryEntry = (entry: NodotsGameState) => {
     case 'game-moving':
       let { players, activeColor, moves } = entry
       let activePlayer = players[activeColor]
-      const activeMove = moves.find((move) => !move.completed)
+      const activeMove = moves.find((move) => !move.status)
       if (activeMove) {
         return <li key={generateId()}>{activePlayer.username} moves from </li>
       }

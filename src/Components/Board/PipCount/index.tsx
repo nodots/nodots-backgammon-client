@@ -1,10 +1,10 @@
 import { Chip, SxProps, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
-import { Color } from '../../GameStore/types'
-import { Player } from '../../GameStore/types/Player'
+import { Color } from '../../../GameStore/types'
+import { NodotsPlayer } from '../../../GameStore/types/Player'
 
 interface Props {
-  player: Player
+  player: NodotsPlayer
 }
 
 function PipCount({ player }: Props) {

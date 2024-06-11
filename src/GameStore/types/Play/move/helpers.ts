@@ -1,18 +1,24 @@
-import { NodotsMove, NodotsMovePayload, NodotsMoveState, NodotsMoves } from '.'
+import {
+  MoveInitializing,
+  NodotsMove,
+  NodotsMovePayload,
+  NodotsMoveState,
+} from '.'
 import {
   CHECKERS_PER_PLAYER,
   Color,
-  ConfirmingPlay,
-  Moving,
+  GameConfirmingPlay,
+  GameMoving,
   NodotsGameState,
   generateId,
   generateTimestamp,
-} from '..'
-import { NodotsGameStateHistoryEvent } from '..'
-import { NodotsBoardStore, getCheckercontainers, getPoints } from '../Board'
-import { Bar, Checkercontainer, Off, Point } from '../Checkercontainer'
-import { Roll } from '../Dice'
-import { NodotsPlayer, Player } from '../Player'
+} from '../..'
+import { NodotsGameStateHistoryEvent } from '../..'
+import { NodotsBoardStore, getCheckercontainers, getPoints } from '../../Board'
+import { Bar, Checkercontainer, Off, Point } from '../../Checkercontainer'
+import { DieValue, Roll } from '../../Dice'
+import { NodotsPlayer } from '../../Player'
+import { pointToPoint } from './PointToPoint'
 
 export const getOriginsForColor = (
   board: NodotsBoardStore,
@@ -28,54 +34,40 @@ export const getOriginsForColor = (
 }
 
 export const getDestinationForOrigin = (
-  state: NodotsMoveState,
+  board: NodotsBoardStore,
+  player: NodotsPlayer,
   origin: Checkercontainer,
-  activeMove: NodotsMove
+  dieValue: DieValue
 ): Off | Point | undefined => {
-  const { board, player } = state
+  const mostDistantPointPosition = getMostDistantOccupiedPointPosition(
+    board,
+    player
+  )
   switch (origin.kind) {
     case 'point':
       const originPoint = origin as Point
-      const delta = activeMove.dieValue * -1
-      const dpp = originPoint.position[player.direction] + delta
-
-      const mostDistantPointPosition = getMostDistantOccupiedPointPosition(
-        board,
-        player
+      const opp = originPoint.position[player.direction]
+      const delta = dieValue * -1
+      const dpp = opp + delta
+      const destinationPoint = board.points.find(
+        (point) => point.position[player.direction] === dpp
       )
 
-      if (dpp === 0 && isBearOffing(board, player)) {
-        return board.off[player.color]
-      } else if (dpp > 0) {
-        const d = board.points.find(
-          (point) => point.position[player.direction] === dpp
-        )
-        if (!d) {
-          return undefined
-        }
-        if (
-          d.checkers.length < 2 ||
-          d.checkers[0].color === activeMove.player.color
-        ) {
-          return d
-        } else {
-          return undefined
-        }
-      } else if (
-        dpp < 0 &&
-        originPoint.position[player.direction] > mostDistantPointPosition * -1
-      ) {
-        return board.off[player.color]
+      if (!destinationPoint) {
+        return undefined
       } else {
-        console.error('Could not find destination:')
-        console.error('destinationPointPosition:', dpp)
-        console.error('mostDistantPointPosition:', mostDistantPointPosition)
+        if (
+          destinationPoint.checkers.length < 2 ||
+          destinationPoint.checkers[0].color === player.color
+        ) {
+          return destinationPoint
+        }
       }
       break
     case 'bar':
-      const reentryPosition = 25 - activeMove.dieValue
-      const reentryPoint = state.board.points.find((point) => {
-        return point.position[activeMove.direction] === reentryPosition
+      const reentryPosition = 25 - dieValue
+      const reentryPoint = board.points.find((point) => {
+        return point.position[player.direction] === reentryPosition
       }) as Point // FIXME
       if (
         reentryPoint.checkers.length > 1 &&
@@ -109,7 +101,7 @@ const getMostDistantOccupiedPointPosition = (
 
 export const isReentering = (
   board: NodotsBoardStore,
-  player: Player
+  player: NodotsPlayer
 ): boolean => (board.bar[player.color].checkers.length > 0 ? true : false)
 
 export const getOriginPointById = (
@@ -163,7 +155,7 @@ export const isMoveHit = (payload: NodotsMovePayload): boolean => {
 
 export const isBearOffing = (
   board: NodotsBoardStore,
-  player: Player
+  player: NodotsPlayer
 ): boolean => {
   const homeBoardPoints = board.points.filter(
     (point) => point.position[player.direction] <= 6
@@ -181,60 +173,6 @@ export const isBearOffing = (
   return checkerCount === CHECKERS_PER_PLAYER ? true : false
 }
 
-// TODO: Refactor to eliminate undefineds and fix type issue with return
-export const buildMoves = (
-  roll: Roll,
-  activePlayer: NodotsPlayer
-): NodotsMoves => {
-  const moves = [
-    {
-      id: generateId(),
-      checker: undefined,
-      from: undefined,
-      to: undefined,
-      dieValue: roll[0],
-      direction: activePlayer.direction,
-      player: activePlayer,
-      completed: false,
-    },
-    {
-      id: generateId(),
-      checker: undefined,
-      from: undefined,
-      to: undefined,
-      dieValue: roll[1],
-      direction: activePlayer.direction,
-      player: activePlayer,
-      completed: false,
-    },
-  ]
-  if (roll[0] === roll[1]) {
-    moves.push({
-      id: generateId(),
-      checker: undefined,
-      from: undefined,
-      to: undefined,
-      dieValue: roll[0],
-      direction: activePlayer.direction,
-      player: activePlayer,
-      completed: false,
-    })
-    moves.push({
-      id: generateId(),
-      checker: undefined,
-      from: undefined,
-      to: undefined,
-      dieValue: roll[1],
-      direction: activePlayer.direction,
-      player: activePlayer,
-      completed: false,
-    })
-  }
-  // FIXME: TS compiler says that this must return 4 NodotsMoves, not 2 OR 4.
-  // @ts-ignore
-  return moves
-}
-
 export const gameStateKey = 'nodots-game-state'
 const getGameStateKey = (gameId: string) => `${gameStateKey}-${gameId}`
 
@@ -242,13 +180,12 @@ export const resetGameState = (gameId: string): void =>
   localStorage.removeItem(getGameStateKey(gameId))
 
 export const saveGameState = (state: NodotsGameState): void => {
-  console.warn('[Move Helpers NOT IMPLEMENTED] saveGameState')
+  // console.warn('[Move Helpers NOT IMPLEMENTED] saveGameState')
   // const gameStateKey = getGameStateKey(state.id)
   // const gameStateHistoryEvent: NodotsGameStateHistoryEvent = {
   //   timestamp: generateTimestamp(),
   //   state: state,
   // }
-
   // switch (state.kind) {
   //   case 'game-initializing':
   //     localStorage.setItem(
@@ -277,26 +214,56 @@ export const getGameHistory = (
   console.log(gameId)
   const gameStateKey = getGameStateKey(gameId)
   console.log(gameStateKey)
-  // const currentGameHistory = localStorage.getItem(gameStateKey)
-  // console.log(currentGameHistory)
   return []
-  // localStorage.getItem(getGameStateKey(gameId))
-  //   ? JSON.parse(localStorage.getItem(getGameStateKey(gameId)) as string)
-  //   : []
 }
 
-export type ActiveMoveState = Moving | ConfirmingPlay
+export type ActiveMoveState = GameMoving | GameConfirmingPlay
 export const getCurrentPlay = (state: ActiveMoveState): NodotsMove[] => {
   console.log('[Move Helpers] getCurrentPlay state:', state)
   return []
 }
 
 export const getLastMove = (
-  state: Moving | ConfirmingPlay
+  state: GameMoving | GameConfirmingPlay
 ): NodotsMove | undefined => {
   console.log('[Move Helpers] getLastMove state:', state)
   return undefined
 }
 
-export const getNextMove = (moves: NodotsMoves) =>
-  moves.find((move) => move.from === undefined)
+export const getPlaysForRoll = (
+  board: NodotsBoardStore,
+  roll: Roll,
+  activeColor: Color
+) => {}
+
+export const buildMove = (
+  state: NodotsGameState,
+  player: NodotsPlayer,
+  dieValue: DieValue
+): MoveInitializing => {
+  return {
+    ...state,
+    id: generateId(),
+    kind: 'move-initializing',
+    isAuto: player.automation.move,
+    isForced: false,
+    player,
+    direction: player.direction,
+    dieValue,
+    timestamp: generateTimestamp(),
+  }
+}
+
+export const buildMoves = (
+  state: NodotsGameState,
+  player: NodotsPlayer,
+  roll: Roll
+): MoveInitializing[] => {
+  const moveCount = roll[0] === roll[1] ? 4 : 2
+  const moves: MoveInitializing[] = []
+  for (let i = 0; i < moveCount; i++) {
+    const move = buildMove(state, player, roll[i % 2])
+    moves.push(move)
+  }
+  return moves
+}

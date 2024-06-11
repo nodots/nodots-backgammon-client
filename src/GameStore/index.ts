@@ -1,21 +1,21 @@
 import { action, makeAutoObservable } from 'mobx'
 import {
-  ConfirmingPlay,
-  DiceSwitched,
-  Initializing,
-  Moving,
+  GameConfirmingPlay,
+  GameDiceSwitched,
+  GameInitializing,
+  GameMoving,
   NodotsGameState,
-  Rolled,
-  Rolling,
+  GameRolled,
+  GameRolling,
   confirming,
   doubling,
   initializing,
   moving,
   rolling,
   rollingForStart,
-  switchingDice,
   reverting,
 } from './types'
+import { switchingDice } from './types/Play'
 import { NodotsPlayers } from './types/Player'
 
 class NodotsGameStore {
@@ -31,37 +31,37 @@ class NodotsGameStore {
   }
 
   @action
-  rollForStart(state: Initializing) {
+  rollForStart(state: GameInitializing) {
     this.state = rollingForStart(state)
   }
 
   @action
-  rolling(state: Rolling) {
+  rolling(state: GameRolling) {
     this.state = rolling(state)
   }
 
   @action
-  doubling(state: Rolling) {
+  doubling(state: GameRolling) {
     this.state = doubling(state)
   }
 
   @action
-  switchDice(state: Rolled | DiceSwitched) {
+  switchDice(state: GameRolled | GameDiceSwitched) {
     this.state = switchingDice(state)
   }
 
   @action
-  moving(state: Moving | Rolled | DiceSwitched, checkerId: string) {
+  moving(state: GameMoving | GameRolled | GameDiceSwitched, checkerId: string) {
     this.state = moving(state, checkerId)
   }
 
   @action
-  confirming(state: ConfirmingPlay) {
+  confirming(state: GameConfirmingPlay) {
     this.state = confirming(state)
   }
 
   @action
-  reverting(state: Moving | ConfirmingPlay) {
+  reverting(state: GameMoving | GameConfirmingPlay) {
     this.state = reverting(state)
   }
 }

@@ -1,6 +1,6 @@
 import { NodotsBoardStore } from '../../types/Board'
 import { Roll } from '../../types/Dice'
-import { Player } from '../../types/Player'
+import { NodotsPlayer } from '../../types/Player'
 
 const black = 'o'
 const white = 'x'
@@ -128,7 +128,7 @@ const printPlayerBoard = (player: string, board: BgApiPlayerBoard) => {
 export const BgWebApi_getTurnAnalytics = async (
   board: NodotsBoardStore,
   roll: Roll,
-  players: { white: Player; black: Player }
+  players: { white: NodotsPlayer; black: NodotsPlayer }
 ): Promise<BgWebApi_TurnAnalysis[] | void> => {
   console.log(
     '[BgWebApi_getTurnAnalytics] BgWebApi_getTurnAnalytics roll:',
@@ -147,7 +147,7 @@ export const BgWebApi_getTurnAnalytics = async (
 function buildTurnAnalysisPayload(
   board: NodotsBoardStore,
   roll: Roll,
-  players: { white: Player; black: Player }
+  players: { white: NodotsPlayer; black: NodotsPlayer }
 ): BgApiPayload {
   const activePlayer = players.white.active ? players.white : players.black
   const activeColor = activePlayer.color
@@ -223,8 +223,8 @@ function buildTurnAnalysisPayload(
       const counterClockwisePosition = p.positionCounterClockwise
       const clockwisePosition = p.positionClockwise
 
-      let clockwisePlayer: Player | undefined = undefined
-      let counterClockwisePlayer: Player | undefined = undefined
+      let clockwisePlayer: NodotsPlayer | undefined = undefined
+      let counterClockwisePlayer: NodotsPlayer | undefined = undefined
       clockwisePlayer =
         players.white.direction === 'clockwise' ? players.white : players.black
       counterClockwisePlayer =

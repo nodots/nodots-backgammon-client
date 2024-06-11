@@ -3,7 +3,7 @@ import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
 } from '../../../GameStore/types/Player'
-import PipCount from '../../PipCount'
+import PipCount from '../PipCount'
 import NodotsGameStore from '../../../GameStore'
 import { getCheckerComponents } from '../Point'
 import RevertMove from '../RevertMove'

@@ -1,29 +1,35 @@
-import { MoveMovedSucceded, NodotsMovePayload } from '.'
-import { generateTimestamp } from '..'
-import { getPipCounts } from '../Board'
-import { Point } from '../Checkercontainer'
-import { MovingPlayer } from '../Player'
+import { Mode } from '@mui/icons-material'
+import { MoveMovedSucceded, MoveMoving, NodotsMovePayload } from '.'
+import { getPipCounts } from '../../Board'
+import { Point } from '../../Checkercontainer'
+import { MovingPlayer } from '../../Player'
+import { generateTimestamp } from '../..'
 
-export const reenter = (payload: NodotsMovePayload): MoveMovedSucceded => {
-  const { state, destination, origin, checker, move, players } = payload
+export const pointToPoint = (
+  payload: NodotsMovePayload
+): MoveMoving | MoveMovedSucceded => {
+  const { state, checker, origin, destination, move, players } = payload
   const { board, player } = state
-  const reenteringPlayer = player as MovingPlayer // FIXME
 
   const originCheckers = (origin.checkers = origin.checkers.filter(
     (originChecker) => originChecker.id !== checker.id
   ))
-  const updatedOrigin = board.bar[checker.color]
-  updatedOrigin.checkers = originCheckers
 
   const destinationCheckers = [...destination.checkers, checker]
+
+  const updatedOrigin = board.points.find(
+    (point) => point.id === origin.id
+  ) as Point
+  updatedOrigin.checkers = originCheckers
+
   const updatedDestination = board.points.find(
     (point) => point.id === destination.id
-  ) as Point // FIXME
+  ) as Point
   updatedDestination.checkers = destinationCheckers
 
   move.from = updatedOrigin
   move.to = updatedDestination
-  move.completed = true
+  move.status = true
   move.timestamp = generateTimestamp()
 
   const pipCounts = getPipCounts(board, players)
@@ -33,12 +39,12 @@ export const reenter = (payload: NodotsMovePayload): MoveMovedSucceded => {
   return {
     ...state,
     kind: 'move-moved-succeded',
-    move,
+    player: player as MovingPlayer,
+    move: move,
     checker,
     origin: updatedOrigin,
     destination: updatedDestination,
     board,
-    player: reenteringPlayer,
     players,
   }
 }

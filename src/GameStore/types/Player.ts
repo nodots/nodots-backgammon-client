@@ -1,8 +1,8 @@
 import { Color, MoveDirection, NodotsGameState } from '.'
 import { NodotsDice } from './Dice'
-import { NodotsMoveState } from './move'
-import { isReentering } from './move/helpers'
-import { isBearOffing } from './move/helpers'
+import { NodotsMoveState } from './Play/move'
+import { isReentering } from './Play/move/helpers'
+import { isBearOffing } from './Play/move/helpers'
 
 export type Player = {
   kind:
@@ -74,7 +74,7 @@ export const getActivePlayer = (
   state: NodotsGameState,
   activeColor: Color,
   players: NodotsPlayers
-): Player => {
+): NodotsPlayer => {
   const untypedPlayer = players[activeColor]
 
   if (isBearOffing(state.board, untypedPlayer)) {
@@ -103,7 +103,7 @@ export const getCounterclockwisePlayer = (
 export const getPlayerForMoveDirection = (
   players: NodotsPlayers,
   direction: MoveDirection
-): Player =>
+): NodotsPlayer =>
   direction === 'clockwise'
     ? getClockwisePlayer(players)
     : getCounterclockwisePlayer(players)

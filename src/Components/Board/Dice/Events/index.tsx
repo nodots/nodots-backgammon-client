@@ -1,5 +1,9 @@
 import { observer } from 'mobx-react'
-import { NodotsGameState, Rolled, Rolling } from '../../../../GameStore/types'
+import {
+  NodotsGameState,
+  GameRolled,
+  GameRolling,
+} from '../../../../GameStore/types'
 import { BarChart } from '@mui/x-charts/BarChart'
 import HUDCard from '../../../HUD/HUDCard'
 import { useTheme } from '@mui/material'

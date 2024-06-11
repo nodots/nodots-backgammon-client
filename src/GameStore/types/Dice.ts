@@ -1,9 +1,13 @@
-import { NodotsPlayer, Player } from './Player'
-import { Color, Rolling, generateId, generateTimestamp } from '.'
-import { getDestinationForOrigin, getOriginsForColor } from './move/helpers'
+import { NodotsPlayer } from './Player'
+import { Color, GameRolling, generateId, generateTimestamp } from '.'
+import {
+  getDestinationForOrigin,
+  getOriginsForColor,
+} from './Play/move/helpers'
 import { NodotsBoardStore } from './Board'
-import { NodotsMove, PossibleMoves } from './move'
+import { NodotsMove, NodotsMovePayload, PossibleMoves } from './Play/move'
 import NodotsGameStore from '..'
+import { Point } from './Checkercontainer'
 
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type DieOrder = 0 | 1
@@ -26,7 +30,7 @@ interface ActiveDie extends Die {
 export type NodotsDie = InactiveDie | ActiveDie
 export type NodotsDice = [NodotsDie, NodotsDie]
 
-export const generateDice = (player: Player) => {
+export const generateDice = (player: NodotsPlayer) => {
   const die1: InactiveDie = {
     kind: 'inactive',
     color: player.color,
@@ -46,66 +50,4 @@ export const generateDice = (player: Player) => {
 const roll = (): DieValue => (Math.floor(Math.random() * 6) + 1) as DieValue
 
 export const rollDice = (): Roll => [roll(), roll()]
-
-export const rollDiceWithMoves = (
-  board: NodotsBoardStore,
-  player: NodotsPlayer
-) => {
-  const roll = rollDice()
-  const origins = getOriginsForColor(board, player.color)
-
-  const moves: NodotsMove[] = []
-
-  const move1: NodotsMove = {
-    id: generateId(),
-    dieValue: roll[0],
-    player,
-    direction: player.direction,
-    from: undefined,
-    to: undefined,
-    checker: undefined,
-    completed: false,
-    timestamp: generateTimestamp(),
-  }
-  const move2: NodotsMove = {
-    id: generateId(),
-    dieValue: roll[1],
-    player,
-    direction: player.direction,
-    from: undefined,
-    to: undefined,
-    checker: undefined,
-    completed: false,
-    timestamp: generateTimestamp(),
-  }
-
-  moves.push(move1)
-  moves.push(move2)
-
-  if (roll[0] === roll[1]) {
-    const move3: NodotsMove = {
-      id: generateId(),
-      dieValue: roll[0],
-      player,
-      direction: player.direction,
-      from: undefined,
-      to: undefined,
-      checker: undefined,
-      completed: false,
-      timestamp: generateTimestamp(),
-    }
-    const move4: NodotsMove = {
-      id: generateId(),
-      dieValue: roll[1],
-      player,
-      direction: player.direction,
-      from: undefined,
-      to: undefined,
-      checker: undefined,
-      completed: false,
-      timestamp: generateTimestamp(),
-    }
-    moves.concat(move3, move4)
-  }
-  return { roll, moves }
-}
+export const isDoubles = (roll: Roll) => roll[0] === roll[1]

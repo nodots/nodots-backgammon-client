@@ -3,13 +3,17 @@ import { BOARD_IMPORT_DEFAULT } from '../board-setups'
 import { NodotsBoardStore, buildBoard } from './Board'
 import { Checker } from './Checker'
 import { Cube, double } from './Cube'
-import { Roll, generateDice, rollDice, rollDiceWithMoves } from './Dice'
+import { Roll, generateDice, isDoubles, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
 import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
-import { MoveInitialized, NodotsMoves, move } from './move'
+import { MoveInitializing, NodotsMoveState, move } from './Play/move'
 import { buildMoveMessage } from './Message'
-import { saveGameState } from './move/helpers'
-import { buildMoves } from './move/helpers'
+import {
+  buildMoves,
+  getPlaysForRoll as getPlayOptionsForRoll,
+  saveGameState as saveGameState,
+} from './Play/move/helpers'
+import { NodotsPlay } from './Play'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -101,100 +105,104 @@ interface NodotsGame {
   board: NodotsBoardStore
   players: NodotsPlayers
   cube: Cube
+  plays: NodotsPlay[]
   message?: NodotsMessage
 }
 
-export interface Initializing extends NodotsGame {
+export interface GameInitializing extends NodotsGame {
   kind: 'game-initializing'
 }
 
-export interface RollingForStart extends NodotsGame {
+export interface GameRollingForStart extends NodotsGame {
   kind: 'game-rolling-for-start'
   activeColor: Color
 }
 
-export interface Rolling extends NodotsGame {
+export interface GameRolling extends NodotsGame {
   kind: 'game-rolling'
   activeColor: Color
   roll: Roll
 }
 
-export interface Rolled extends NodotsGame {
+export interface GameRolled extends NodotsGame {
   kind: 'game-rolled'
   activeColor: Color
   roll: Roll
-  moves: NodotsMoves
+  plays: NodotsPlay[]
 }
 
-export interface Doubling extends NodotsGame {
+export interface GameDoubling extends NodotsGame {
   kind: 'game-doubling'
   activeColor: Color
   roll: Roll
+  plays: NodotsPlay[]
 }
 
-export interface Doubled extends NodotsGame {
+export interface GameDoubled extends NodotsGame {
   kind: 'game-doubled'
   activeColor: Color
   roll: Roll
+  cube: Cube
+  plays: NodotsPlay[]
 }
 
-export interface DiceSwitched extends NodotsGame {
+export interface GameDiceSwitched extends NodotsGame {
   kind: 'game-dice-switched'
   activeColor: Color
   roll: Roll
-  moves: NodotsMoves
+  plays: NodotsPlay[]
 }
 
-export interface Moving extends NodotsGame {
+export interface GameMoving extends NodotsGame {
   kind: 'game-moving'
   activeColor: Color
   roll: Roll
-  moves: NodotsMoves
+  plays: NodotsPlay[]
 }
 
-export interface Moved extends NodotsGame {
+export interface GameMoved extends NodotsGame {
   kind: 'game-moved'
   activeColor: Color
   roll: Roll
-  moves: NodotsMoves
+  plays: NodotsPlay[]
 }
 
-export interface ConfirmingPlay extends NodotsGame {
+export interface GameConfirmingPlay extends NodotsGame {
   kind: 'game-confirming-play'
   activeColor: Color
   roll: Roll
-  moves: NodotsMoves
+  plays: NodotsPlay[]
 }
 
-export interface PlayConfirmed extends NodotsGame {
+export interface GamePlayConfirmed extends NodotsGame {
   kind: 'game-play-confirmed'
   activeColor: Color
   roll: Roll
-  moves: NodotsMoves
+  plays: NodotsPlay[]
 }
 
-export interface Completed extends NodotsGame {
+export interface GameCompleted extends NodotsGame {
   kind: 'game-completed'
   activeColor: Color
   roll: Roll
-  moves: NodotsMoves
+  plays: NodotsPlay[]
   winner: WinningPlayer
 }
 
 export type NodotsGameState =
-  | Initializing
-  | RollingForStart
-  | Rolling
-  | Rolled
-  | Doubling
-  | Doubled
-  | DiceSwitched
-  | Moving
-  | ConfirmingPlay
-  | PlayConfirmed
-  | Completed
+  | GameInitializing
+  | GameRollingForStart
+  | GameRolling
+  | GameRolled
+  | GameDoubling
+  | GameDoubled
+  | GameDiceSwitched
+  | GameMoving
+  | GameConfirmingPlay
+  | GamePlayConfirmed
+  | GameCompleted
 
-export const initializing = (players: NodotsPlayers): Initializing => {
+export const initializing = (players: NodotsPlayers): GameInitializing => {
   // reset stored state. Next iteration needs to recognize game/match ids
   // resetGameState()
 
@@ -212,27 +220,28 @@ export const initializing = (players: NodotsPlayers): Initializing => {
     counterclockwise: BOARD_IMPORT_DEFAULT,
   })
 
-  const results: Initializing = {
+  const results: GameInitializing = {
     kind: 'game-initializing',
     id: generateId(),
     players,
     board,
     cube,
+    plays: [],
   }
   saveGameState(results)
   return results
 }
 
-export const rollingForStart = (state: Initializing): Rolling => {
+export const rollingForStart = (state: GameInitializing): GameRolling => {
   const { players } = state
-  const activeColor = Math.random() >= 0.5 ? 'black' : 'white'
+  const activeColor = Math.random() >= 0.5 ? 'black' : 'black'
   const activePlayer = players[activeColor]
   activePlayer.kind = 'moving'
   const message = {
     game: `${activePlayer.username} wins the opening roll`,
   }
 
-  const results: Rolling = {
+  const results: GameRolling = {
     ...state,
     kind: 'game-rolling',
     activeColor,
@@ -243,27 +252,38 @@ export const rollingForStart = (state: Initializing): Rolling => {
   return results
 }
 
-export const rolling = (state: Rolling): Rolled => {
-  const { players, board, activeColor } = state
-  const activePlayer = players[activeColor]
+export const rolling = (state: GameRolling): GameRolled => {
+  const { activeColor, board, players } = state
+  const player = players[activeColor]
 
-  const rollResults = rollDiceWithMoves(board, activePlayer)
+  const roll = rollDice()
 
-  const results: Rolled = {
-    ...state,
-    kind: 'game-rolled',
-    roll: rollResults.roll,
-    moves: rollResults.moves as NodotsMoves,
+  const moves = buildMoves(state, player, roll)
+
+  const play: NodotsPlay = {
+    id: generateId(),
+    kind: 'play-initializing',
+    player,
+    roll,
+    isAuto: player.automation.move,
+    isForced: false,
+    analysis: { options: [] },
+    moves,
   }
 
-  saveGameState(results)
-  return results
+  const game: GameRolled = {
+    ...state,
+    kind: 'game-rolled',
+    roll,
+    plays: [play],
+  }
+  return game
 }
 
-export const doubling = (state: Rolling): Doubled => {
+export const doubling = (state: GameRolling): GameDoubled => {
   const { cube, roll } = state
   cube.value = double(cube)
-  const results: Doubled = {
+  const results: GameDoubled = {
     ...state,
     kind: 'game-doubled',
     cube,
@@ -274,85 +294,85 @@ export const doubling = (state: Rolling): Doubled => {
   return results
 }
 
-export const switchingDice = (
-  state: Rolled | DiceSwitched
-): DiceSwitched | Rolled => {
-  const { players, roll, activeColor, moves } = state
-  const activePlayer = players[activeColor]
-
-  if (roll[0] === roll[1]) return state
-
-  const newRoll: Roll = [roll[1], roll[0]]
-  moves[0].dieValue = newRoll[0]
-  moves[1].dieValue = newRoll[1]
-
-  const results: DiceSwitched = {
-    ...state,
-    kind: 'game-dice-switched',
-    roll: newRoll,
-    message: {
-      game: `${activePlayer.username} switches dice to ${newRoll[0]} ${newRoll[1]}`,
-    },
-  }
-  saveGameState(results)
-  return results
-}
-
 export const moving = (
-  state: Rolled | Moving | DiceSwitched,
+  state: GameRolled | GameMoving | GameDiceSwitched,
   checkerId: string
-): Moving | ConfirmingPlay | Completed => {
-  const { activeColor, players, board, moves } = state
+): GameMoving | GameConfirmingPlay | GameCompleted => {
+  const { activeColor, players, board, plays } = state
   const player = players[activeColor] as MovingPlayer
+  const play = plays[plays.length - 1]
+  console.log(player)
+  console.log(play)
 
-  const moveState: MoveInitialized = {
-    kind: 'move-initialized',
-    player,
-    moves,
-    board,
+  const moveResults = move(play, checkerId, board, players)
+  console.log(moveResults)
+
+  return {
+    ...state,
+    kind: 'game-moving',
   }
 
-  const moveResults = move(moveState, checkerId, players)
+  // export type NodotsPlay = {
+  //   id: string
+  //   kind:
+  //     | 'play-initializing'
+  //     | 'play-active'
+  //     | 'play-completed-partial'
+  //     | 'play-completed-success'
+  //   player: NodotsPlayer
+  //   roll: Roll
+  //   isAuto: boolean
+  //   isForced: boolean
+  //   analysis: {
+  //     options: []
+  //   }
+  //   moves: NodotsMove[] // FIXME: this should either be an array of 2 or 4 moves
+  // }
 
-  const remainingMoves = moveResults.moves.filter(
-    (move) => move.from === undefined
-  ).length
+  // const moveResults = move(play, state, checkerId, players)
 
-  const message = buildMoveMessage()
+  // if (!moveResults) {
+  //   throw Error('No move results')
+  // }
 
-  // FIXME: This is still in the wrong place.
-  if (board.off[player.color].checkers.length === CHECKERS_PER_PLAYER) {
-    const winner = player as unknown as WinningPlayer // FIXME
+  // const remainingMoves = moveResults.moves.filter(
+  //   (move) => move.from === undefined
+  // ).length
 
-    const results: Completed = {
-      ...state,
-      kind: 'game-completed',
-      winner,
-      players,
-      message: {
-        game: `${winner.username} wins the game!`,
-      },
-    }
-    saveGameState(results)
-    return results
-  } else {
-    const results: Moving | ConfirmingPlay = {
-      ...state,
-      kind: remainingMoves === 0 ? 'game-confirming-play' : 'game-moving',
-      board: moveResults.board,
-      moves: moveResults.moves,
-      players,
-      message,
-    }
-    saveGameState(results)
-    return results
-  }
+  // const message = buildMoveMessage()
+
+  // // FIXME: This is still in the wrong place.
+  // if (board.off[player.color].checkers.length === CHECKERS_PER_PLAYER) {
+  //   const winner = player as unknown as WinningPlayer // FIXME
+
+  //   const results: GameCompleted = {
+  //     ...state,
+  //     kind: 'game-completed',
+  //     winner,
+  //     players,
+  //     message: {
+  //       game: `${winner.username} wins the game!`,
+  //     },
+  //   }
+  //   saveGameState(results)
+  //   return results
+  // } else {
+  //   const results: GameMoving | GameConfirmingPlay = {
+  //     ...state,
+  //     kind: remainingMoves === 0 ? 'game-confirming-play' : 'game-moving',
+  //     board: moveResults.board,
+  //     players,
+  //     message,
+  //   }
+  //   saveGameState(results)
+  //   return results
+  // }
 }
 
-export const confirming = (state: ConfirmingPlay): Rolling => {
+export const confirming = (state: GameConfirmingPlay): GameRolling => {
   const { activeColor } = state
 
-  const results: Rolling = {
+  const results: GameRolling = {
     ...state,
     kind: 'game-rolling',
     activeColor: changeActiveColor(activeColor),
@@ -363,8 +383,8 @@ export const confirming = (state: ConfirmingPlay): Rolling => {
 }
 
 export const reverting = (
-  state: Moving | ConfirmingPlay
-): Moving | ConfirmingPlay => {
+  state: GameMoving | GameConfirmingPlay
+): GameMoving | GameConfirmingPlay => {
   console.log('Reverting')
   console.log(state)
   // getCurrentPlay(state)

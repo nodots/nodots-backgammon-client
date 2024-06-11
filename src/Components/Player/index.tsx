@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { Player as PlayerType } from '../../GameStore/types/Player'
+import { NodotsPlayer as PlayerType } from '../../GameStore/types/Player'
 import de from '../../i18n/de'
 
 interface Props {

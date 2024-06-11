@@ -1,5 +1,5 @@
-import { NodotsMoves, NodotsMove } from './move'
-import { getLastMove } from './move/helpers'
+import { NodotsMoves, NodotsMove } from './Play/move'
+import { getLastMove } from './Play/move/helpers'
 
 import { Point } from './Checkercontainer'
 import { NodotsPlayer } from './Player'
@@ -14,7 +14,7 @@ export interface NodotsMessage {
 }
 
 export const buildMoveMessage = () => {
-  console.warn('[GameStore NOT IMPLEMENTED] types/Message buildMoveMessage')
+  // console.warn('[GameStore NOT IMPLEMENTED] types/Message buildMoveMessage')
   return undefined
 }
 // export const buildMoveMessage = (

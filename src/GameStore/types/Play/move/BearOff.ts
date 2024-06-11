@@ -1,8 +1,8 @@
 import { MoveMovedSucceded, MoveMoving, NodotsMovePayload } from '.'
-import { generateTimestamp } from '..'
-import { getPipCounts } from '../Board'
-import { Point } from '../Checkercontainer'
-import { MovingPlayer, WinningPlayer } from '../Player'
+import { generateTimestamp } from '../..'
+import { getPipCounts } from '../../Board'
+import { Point } from '../../Checkercontainer'
+import { MovingPlayer, WinningPlayer } from '../../Player'
 
 export const bearOff = (
   payload: NodotsMovePayload
@@ -24,7 +24,7 @@ export const bearOff = (
 
   move.from = updatedOrigin
   move.to = updatedDestination
-  move.completed = true
+  move.status = true
   move.timestamp = generateTimestamp()
 
   const pipCounts = getPipCounts(board, players)

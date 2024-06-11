@@ -2,16 +2,16 @@ import { Container } from '@mui/material'
 import NodotsGameStore from '../../../GameStore'
 import {
   Color,
-  Completed,
-  PlayConfirmed,
-  ConfirmingPlay,
-  Moving,
-  Rolled,
-  Rolling,
-  RollingForStart,
-  DiceSwitched,
-  Doubling,
-  Doubled,
+  GameCompleted,
+  GamePlayConfirmed,
+  GameConfirmingPlay,
+  GameMoving,
+  GameRolled,
+  GameRolling,
+  GameRollingForStart,
+  GameDiceSwitched,
+  GameDoubling,
+  GameDoubled,
 } from '../../../GameStore/types'
 import Die from '../Dice'
 import DiceSwitcher from '../DiceSwitcher'
@@ -19,16 +19,16 @@ import DiceSwitcher from '../DiceSwitcher'
 interface Props {
   store: NodotsGameStore
   state:
-    | DiceSwitched
-    | RollingForStart
-    | Rolling
-    | Rolled
-    | ConfirmingPlay
-    | PlayConfirmed
-    | Doubling
-    | Doubled
-    | Moving
-    | Completed
+    | GameDiceSwitched
+    | GameRollingForStart
+    | GameRolling
+    | GameRolled
+    | GameConfirmingPlay
+    | GamePlayConfirmed
+    | GameDoubling
+    | GameDoubled
+    | GameMoving
+    | GameCompleted
   color: Color
 }
 

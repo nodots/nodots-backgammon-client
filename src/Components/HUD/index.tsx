@@ -17,8 +17,8 @@ function HUDComponent({ store }: Props) {
   return (
     <Paper id="HUDContainer" elevation={2}>
       <PipCountNotification state={store.state} />
-      <GameWinProbabilityNotification state={store.state} />
       <PlayerEventNotification state={store.state} />
+      <GameWinProbabilityNotification state={store.state} />
       <DiceEventsNotification state={store.state} />
       {/* <CheckerEventsNotification state={store.state} />
       <CubeEventsNotification state={store.state} />

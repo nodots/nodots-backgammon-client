@@ -11,10 +11,6 @@ export class DiceEventHandler {
   }
 
   click = (e: React.MouseEvent) => {
-    console.log('[DiceEventHandler] click e:', e)
-    console.log('[DiceEventHandler] click die:', this.die)
-    console.log('[DiceEventHandler] click store:', this.store)
-
     switch (this.store.state.kind) {
       case 'game-rolling':
         this.store.rolling(this.store.state)
