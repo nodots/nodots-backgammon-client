@@ -1,18 +1,15 @@
 import { observer } from 'mobx-react'
 import { LineChart } from '@mui/x-charts/LineChart'
-import { NodotsGameState } from '../../../GameStore/types'
 import HUDCard from '../../HUD/HUDCard'
-import { NodotsPipCounts } from '../../../GameStore/types/Player'
-import React from 'react'
 import { useTheme } from '@mui/material'
+import { NodotsGame } from '../../../stores/Game'
 
 interface Props {
-  state: NodotsGameState
+  store: NodotsGame
 }
 
-function GameWinProbabilityNotification({ state }: Props) {
+function GameWinProbabilityNotification({ store }: Props) {
   const theme = useTheme()
-  const { kind } = state
   const buildGraph = () => {
     const blackProbability = [50, 50, 60, 70, 75, 80, 90, 100]
     const whiteProbability = [50, 50, 40, 30, 25, 20, 10, 0]
@@ -32,20 +29,7 @@ function GameWinProbabilityNotification({ state }: Props) {
   }
   const graph = buildGraph()
   const buildMessage = () => {
-    switch (kind) {
-      case 'game-confirming-play':
-      case 'game-moving':
-        return kind
-      case 'game-completed':
-      case 'game-dice-switched':
-      case 'game-play-confirmed':
-      case 'game-rolled':
-      case 'game-rolling':
-      case 'game-initializing':
-      case 'game-rolling-for-start':
-      default:
-        break
-    }
+    return 'buildMessage not implemented for GameWinProbabilityNotification'
   }
 
   return (

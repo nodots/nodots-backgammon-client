@@ -1,14 +1,14 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
-import NodotsGameStore from '../../GameStore'
-import { generateId, rollingForStart } from '../../GameStore/types'
-import { InitializingPlayer } from '../../GameStore/types/Player'
+import { generateId } from '../../stores/Types'
+import { NodotsPlayers, PlayerInitializing } from '../../stores/Player/Types'
 import BoardComponent from '../../components/Board'
 import HUDComponent from '../../components/HUD'
+import { NodotsGame } from '../../stores/Game'
 
-const whitePlayer: InitializingPlayer = {
-  kind: 'initializing',
+const whitePlayer: PlayerInitializing = {
+  kind: 'player-initializing',
   id: generateId(),
   color: 'white',
   username: 'White Stripes',
@@ -24,8 +24,8 @@ const whitePlayer: InitializingPlayer = {
   ],
 }
 
-const blackPlayer: InitializingPlayer = {
-  kind: 'initializing',
+const blackPlayer: PlayerInitializing = {
+  kind: 'player-initializing',
   id: generateId(),
   color: 'black',
   username: 'Black Messiah',
@@ -41,32 +41,14 @@ const blackPlayer: InitializingPlayer = {
   ],
 }
 
-class GamePage extends Component {
-  private store: NodotsGameStore
+const players: NodotsPlayers = { white: whitePlayer, black: blackPlayer }
 
-  saveGame = () => {
-    const gameData = JSON.stringify(this.store)
-    const blob = new Blob([gameData], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.download = 'nodots-backgammon-game.json'
-    link.href = url
-    link.click()
-  }
+class GamePage extends Component {
+  private store: NodotsGame
 
   constructor(props: {} | Readonly<{}>) {
     super(props)
-    this.store = new NodotsGameStore({ white: whitePlayer, black: blackPlayer })
-    switch (this.store.state.kind) {
-      case 'game-initializing':
-        this.store.state = rollingForStart(this.store.state)
-        break
-      case 'game-confirming-play':
-      case 'game-moving':
-      case 'game-rolling':
-      case 'game-rolling-for-start':
-        break
-    }
+    this.store = new NodotsGame(players)
   }
 
   render() {
@@ -77,7 +59,7 @@ class GamePage extends Component {
         </div> */}
         <Paper id="GameContainer">
           {/* <GameNotifications store={this.store} /> */}
-          <BoardComponent store={this.store} state={this.store.state} />
+          <BoardComponent store={this.store} />
           <HUDComponent store={this.store} />
         </Paper>
         <footer>

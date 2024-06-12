@@ -1,15 +1,15 @@
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
-import NodotsGameStore from '../../GameStore'
 import { CubeEventHandler } from './Events/handlers'
+import { NodotsGame } from '../../../stores/Game'
 
 interface Props {
-  store: NodotsGameStore
+  store: NodotsGame
 }
 
 function Cube({ store }: Props) {
-  const { cube } = store.state
+  const { cube } = store
   const theme = useTheme()
   const eventHandler = React.useRef<CubeEventHandler>(
     new CubeEventHandler(cube, store)

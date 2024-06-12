@@ -2,12 +2,13 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt'
 import { useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
-import NodotsGameStore from '../../../GameStore'
-import { Color } from '../../../GameStore/types'
+
 import { DiceSwitcherEventHandler } from './Events/handlers'
+import { NodotsGame } from '../../../stores/Game'
+import { Color } from '../../../stores/Types'
 
 interface Props {
-  store: NodotsGameStore
+  store: NodotsGame
   color: Color
 }
 
@@ -17,25 +18,7 @@ function DiceSwitcher({ store, color }: Props) {
   ).current
   const theme = useTheme()
 
-  switch (store.state.kind) {
-    case 'game-dice-switched':
-    case 'game-rolled':
-      return (
-        store.state.activeColor === color && (
-          <div
-            className={`dice-switcher ${color}`}
-            onClick={eventHandler.click}
-          >
-            <SyncAltIcon sx={{ fill: theme.palette.secondary.light }} />
-          </div>
-        )
-      )
-    case 'game-rolling-for-start':
-    case 'game-rolling':
-    case 'game-initializing':
-    default:
-      return <></>
-  }
+  return <SyncAltIcon sx={{ fill: theme.palette.secondary.light }} />
 }
 
 export default observer(DiceSwitcher)

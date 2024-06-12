@@ -1,27 +1,25 @@
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../../GameStore'
 import Cube from '../Cube'
 import { getCheckerComponents } from '../Point'
+import { Paper } from '@mui/material'
+import { NodotsGame } from '../../../stores/Game'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
-} from '../../../GameStore/types/Player'
-import { Paper } from '@mui/material'
+} from '../../../stores/Player/helpers'
 
 export interface Props {
-  store: NodotsGameStore
+  store: NodotsGame
 }
 
 function Off({ store }: Props) {
-  const { state } = store
-  const { players, board: boardStore } = state
+  const { players, board } = store
   const clockwisePlayer = getClockwisePlayer(players)
   const clockwiseColor = clockwisePlayer.color
-  const clockwiseCheckers = boardStore.off[clockwiseColor].checkers
+  const clockwiseCheckers = board.off[clockwiseColor].checkers
   const counterclockwisePlayer = getCounterclockwisePlayer(players)
   const counterclockwiseColor = counterclockwisePlayer.color
-  const counterclockwiseCheckers =
-    boardStore.off[counterclockwiseColor].checkers
+  const counterclockwiseCheckers = board.off[counterclockwiseColor].checkers
   return (
     <div id="Off">
       <Paper className="checkercontainer counterclockwise">

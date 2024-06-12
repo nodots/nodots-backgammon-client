@@ -1,38 +1,16 @@
 import { observer } from 'mobx-react'
-import {
-  NodotsGameState,
-  GameRolled,
-  GameRolling,
-} from '../../../../GameStore/types'
+
 import { BarChart } from '@mui/x-charts/BarChart'
 import HUDCard from '../../../HUD/HUDCard'
 import { useTheme } from '@mui/material'
+import { NodotsGame } from '../../../../stores/Game'
 
 interface Props {
-  state: NodotsGameState
+  store: NodotsGame
 }
 
-function DiceEventsNotification({ state }: Props) {
+function DiceEventsNotification({ store }: Props) {
   const theme = useTheme()
-  const { players, kind } = state
-
-  const buildMessage = () => {
-    switch (kind) {
-      case 'game-rolled':
-      case 'game-rolling':
-      case 'game-rolling-for-start':
-        return kind
-      case 'game-doubling':
-      case 'game-confirming-play':
-      case 'game-moving':
-      case 'game-completed':
-      case 'game-dice-switched':
-      case 'game-initializing':
-      case 'game-play-confirmed':
-      default:
-        return ''
-    }
-  }
 
   const whiteRolls = 18
   const blackRolls = 18

@@ -1,11 +1,11 @@
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
-import NodotsGameStore from '../../../GameStore'
-import { Color, GameMoving, NodotsGameState } from '../../../GameStore/types'
-import { DieOrder, NodotsDie } from '../../../GameStore/types/Dice'
 import { CheckerEventHandler } from '../Checker/Events/handlers'
 import { DiceEventHandler } from './Events/handlers'
+import { NodotsGame } from '../../../stores/Game'
+import { DieOrder, NodotsDie } from '../../../stores/Game/types/Dice'
+import { Color } from '../../../stores/Types'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -17,8 +17,7 @@ const paths = [
 ]
 
 interface Props {
-  store: NodotsGameStore
-  state: NodotsGameState
+  store: NodotsGame
   order: DieOrder
   color: Color
 }
@@ -35,7 +34,6 @@ function Die({ order, color, store }: Props) {
     new DiceEventHandler(die, store)
   ).current
   const theme = useTheme()
-  const { state } = store
 
   const fill = (color: Color) => {
     return color === 'white'
@@ -43,46 +41,17 @@ function Die({ order, color, store }: Props) {
       : theme.palette.secondary.dark
   }
 
-  switch (store.state.kind) {
-    case 'game-rolling-for-start':
-    case 'game-initializing':
-      return <></>
-    case 'game-rolling':
-      return (
-        store.state.activeColor === color && (
-          <Button className="die" onClick={eventHandler.click}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-              <g id="Layer_2" data-name="Layer 2">
-                <g id="Layer_1-2" data-name="Layer 1">
-                  <path d={paths[0]} fill={fill(color)} />
-                </g>
-              </g>
-            </svg>
-          </Button>
-        )
-      )
-    case 'game-moving':
-    case 'game-rolled':
-    case 'game-doubled':
-    case 'game-doubling':
-    case 'game-dice-switched':
-    case 'game-confirming-play':
-      // @ts-ignore FIXME there is a problem with doubling states here (I think)
-      const { roll } = state
-      return (
-        store.state.activeColor === color && (
-          <Button className="die" onClick={eventHandler.click}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-              <g id="Layer_2" data-name="Layer 2">
-                <g id="Layer_1-2" data-name="Layer 1">
-                  <path d={paths[roll[order] - 1]} fill={fill(color)} />
-                </g>
-              </g>
-            </svg>
-          </Button>
-        )
-      )
-  }
+  return (
+    <Button className="die" onClick={eventHandler.click}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <g id="Layer_2" data-name="Layer 2">
+          <g id="Layer_1-2" data-name="Layer 1">
+            <path d={paths[0]} fill={fill(color)} />
+          </g>
+        </g>
+      </svg>
+    </Button>
+  )
 }
 
 export default observer(Die)

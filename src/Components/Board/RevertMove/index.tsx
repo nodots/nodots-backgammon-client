@@ -1,38 +1,22 @@
 import { observer } from 'mobx-react'
 import HistoryIcon from '@mui/icons-material/History'
-import NodotsGameStore from '../../GameStore'
 import { useTheme } from '@mui/material'
+import { NodotsGame } from '../../../stores/Game'
 
 interface Props {
-  store: NodotsGameStore
+  store: NodotsGame
 }
 
 function RevertMove({ store }: Props) {
   const theme = useTheme()
 
-  const handleRevertMove = () => {
-    switch (store.state.kind) {
-      case 'game-moving':
-      case 'game-confirming-play':
-        store.reverting(store.state)
-        break
-      case 'game-initializing':
-      default:
-        break
-    }
-  }
+  const handleRevertMove = () => {}
 
-  switch (store.state.kind) {
-    case 'game-moving':
-    case 'game-confirming-play':
-      return (
-        <div onClick={handleRevertMove} id="RevertMoveButton">
-          <HistoryIcon sx={{ fill: theme.palette.info.main }} />
-        </div>
-      )
-    default:
-      return <></>
-  }
+  return (
+    <div onClick={handleRevertMove} id="RevertMoveButton">
+      <HistoryIcon sx={{ fill: theme.palette.info.main }} />
+    </div>
+  )
 }
 
 export default observer(RevertMove)

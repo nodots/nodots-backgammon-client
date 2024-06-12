@@ -1,20 +1,15 @@
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../../GameStore'
-import { generateId } from '../../../GameStore/types'
-import {
-  Latitude,
-  Longitude,
-  NodotsBoardStore,
-} from '../../../GameStore/types/Board'
-import { Point } from '../../../GameStore/types/Checkercontainer'
 import PointComponent from '../Point'
 import PointLabels from '../PointLabels'
+import { Point } from '../../../stores/Game/types/Checkercontainer'
+import { NodotsGame } from '../../../stores/Game'
+import { Latitude, Longitude } from '../../../stores/Game/types/Board'
+import { generateId } from '../../../stores/Types'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
 export interface Props {
-  store: NodotsGameStore
-  boardStore: NodotsBoardStore
+  store: NodotsGame
   latitude: Latitude
   longitude: Longitude
   start: number

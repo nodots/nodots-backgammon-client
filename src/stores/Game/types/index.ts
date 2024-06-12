@@ -1,19 +1,13 @@
 import { v4 as uuid } from 'uuid'
-import { BOARD_IMPORT_DEFAULT } from '../board-setups'
-import { NodotsBoardStore, buildBoard } from './Board'
-import { Checker } from './Checker'
-import { Cube, double } from './Cube'
+import { BOARD_IMPORT_DEFAULT } from '../../../board-setups'
+import { NodotsBoard, buildBoard } from './Board'
+import { NodotsChecker } from './Checker'
+import { NodotsCube, double } from './Cube'
 import { Roll, generateDice, isDoubles, rollDice } from './Dice'
 import { NodotsMessage } from './Message'
-import { MovingPlayer, NodotsPlayers, WinningPlayer } from './Player'
-import { MoveInitializing, NodotsMoveState, move } from './Play/move'
-import { buildMoveMessage } from './Message'
-import {
-  buildMoves,
-  getPlaysForRoll as getPlayOptionsForRoll,
-  saveGameState as saveGameState,
-} from './Play/move/helpers'
-import { NodotsPlay } from './Play'
+import { NodotsPlayers, PlayerPlaying, PlayerWinning } from '../../Player/Types'
+import { NodotsPlay } from '../../Play/Types'
+import { buildMoves, saveGameState } from '../../Move/helpers'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -43,21 +37,21 @@ export type PointPosition =
   | 24
 
 export type PlayerCheckers = [
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker,
-  Checker
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker,
+  NodotsChecker
 ]
 
 export type CheckerboxPosition = PointPosition | 'bar' | 'off'
@@ -102,9 +96,9 @@ interface NodotsGame {
     | 'game-play-confirmed'
     | 'game-completed'
   id: string
-  board: NodotsBoardStore
+  board: NodotsBoard
   players: NodotsPlayers
-  cube: Cube
+  cube: NodotsCube
   plays: NodotsPlay[]
   message?: NodotsMessage
 }
@@ -142,7 +136,7 @@ export interface GameDoubled extends NodotsGame {
   kind: 'game-doubled'
   activeColor: Color
   roll: Roll
-  cube: Cube
+  cube: NodotsCube
   plays: NodotsPlay[]
 }
 
@@ -186,7 +180,7 @@ export interface GameCompleted extends NodotsGame {
   activeColor: Color
   roll: Roll
   plays: NodotsPlay[]
-  winner: WinningPlayer
+  winner: PlayerWinning
 }
 
 export type NodotsGameState =
@@ -209,7 +203,7 @@ export const initializing = (players: NodotsPlayers): GameInitializing => {
   players.black.dice = generateDice(players.black)
   players.white.dice = generateDice(players.black)
 
-  const cube: Cube = {
+  const cube: NodotsCube = {
     id: generateId(),
     value: 2,
     owner: undefined,
@@ -235,8 +229,7 @@ export const initializing = (players: NodotsPlayers): GameInitializing => {
 export const rollingForStart = (state: GameInitializing): GameRolling => {
   const { players } = state
   const activeColor = Math.random() >= 0.5 ? 'black' : 'black'
-  const activePlayer = players[activeColor]
-  activePlayer.kind = 'moving'
+  const activePlayer = players[activeColor] as PlayerPlaying
   const message = {
     game: `${activePlayer.username} wins the opening roll`,
   }
@@ -254,7 +247,7 @@ export const rollingForStart = (state: GameInitializing): GameRolling => {
 
 export const rolling = (state: GameRolling): GameRolled => {
   const { activeColor, board, players } = state
-  const player = players[activeColor]
+  const player = players[activeColor] as PlayerPlaying
 
   const roll = rollDice()
 
@@ -262,7 +255,6 @@ export const rolling = (state: GameRolling): GameRolled => {
 
   const play: NodotsPlay = {
     id: generateId(),
-    kind: 'play-initializing',
     player,
     roll,
     isAuto: player.automation.move,
@@ -299,13 +291,8 @@ export const moving = (
   checkerId: string
 ): GameMoving | GameConfirmingPlay | GameCompleted => {
   const { activeColor, players, board, plays } = state
-  const player = players[activeColor] as MovingPlayer
+  const player = players[activeColor] as PlayerPlaying
   const play = plays[plays.length - 1]
-  console.log(player)
-  console.log(play)
-
-  const moveResults = move(play, checkerId, board, players)
-  console.log(moveResults)
 
   return {
     ...state,

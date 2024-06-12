@@ -1,27 +1,25 @@
 import { observer } from 'mobx-react'
+import PipCount from '../PipCount'
+import { getCheckerComponents } from '../Point'
+import RevertMove from '../RevertMove'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
-} from '../../../GameStore/types/Player'
-import PipCount from '../PipCount'
-import NodotsGameStore from '../../../GameStore'
-import { getCheckerComponents } from '../Point'
-import RevertMove from '../RevertMove'
+} from '../../../stores/Player/helpers'
+import { NodotsGame } from '../../../stores/Game'
 
 export interface Props {
-  store: NodotsGameStore
+  store: NodotsGame
 }
 
 function Bar({ store }: Props) {
-  const { state } = store
-  const { players, board: boardStore } = state
+  const { players, board } = store
   const clockwisePlayer = getClockwisePlayer(players)
   const clockwiseColor = clockwisePlayer.color
-  const clockwiseCheckers = boardStore.bar[clockwiseColor].checkers
+  const clockwiseCheckers = board.bar[clockwiseColor].checkers
   const counterclockwisePlayer = getCounterclockwisePlayer(players)
   const counterclockwiseColor = counterclockwisePlayer.color
-  const counterclockwiseCheckers =
-    boardStore.bar[counterclockwiseColor].checkers
+  const counterclockwiseCheckers = board.bar[counterclockwiseColor].checkers
   return (
     <div id="Bar">
       <PipCount player={counterclockwisePlayer} />

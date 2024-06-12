@@ -1,37 +1,14 @@
 import { observer } from 'mobx-react'
-import { NodotsGameState } from '../../../GameStore/types'
 import HUDCard from '../../HUD/HUDCard'
-import { useTheme } from '@mui/material'
-import MoveTable from './MoveTable'
+import { NodotsGame } from '../../../stores/Game'
 
 interface Props {
-  state: NodotsGameState
+  store: NodotsGame
 }
 
-function PlayerEventNotification({ state }: Props) {
-  const theme = useTheme()
-  const { kind } = state
-
+function PlayerEventNotification({ store }: Props) {
   const buildMessage = () => {
-    switch (kind) {
-      case 'game-confirming-play':
-      case 'game-play-confirmed':
-      case 'game-moving':
-      case 'game-completed':
-      case 'game-dice-switched':
-      case 'game-rolled':
-      case 'game-play-confirmed':
-        return <MoveTable moves={state.moves ? state.moves : []} />
-      case 'game-doubling':
-      case 'game-doubled':
-      case 'game-initializing':
-      case 'game-rolling':
-      case 'game-rolling-for-start':
-        return <p>Roll dice to initialize game</p>
-      default:
-        console.warn(`[PlayerEventNotification]: unknown state ${kind}`)
-        break
-    }
+    return 'buildMessage not implemented for PlayerEventNotification'
   }
 
   return (

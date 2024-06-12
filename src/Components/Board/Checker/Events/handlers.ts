@@ -1,11 +1,11 @@
-import NodotsGameStore from '../../../../GameStore'
-import { Checker } from '../../../../GameStore/types/Checker'
+import { NodotsGame } from '../../../../stores/Game'
+import { NodotsChecker } from '../../../../stores/Game/types/Checker'
 
 export class CheckerEventHandler {
-  public checker: Checker
-  public store: NodotsGameStore
+  public checker: NodotsChecker
+  public store: NodotsGame
 
-  constructor(checker: Checker, store: NodotsGameStore) {
+  constructor(checker: NodotsChecker, store: NodotsGame) {
     this.checker = checker
     this.store = store
   }
@@ -14,22 +14,6 @@ export class CheckerEventHandler {
     console.log('[CheckerEventHandler] click e:', e)
     console.log('[CheckerEventHandler] click checker:', this.checker)
     console.log('[CheckerEventHandler] click store:', this.store)
-
-    switch (this.store.state.kind) {
-      case 'game-rolled':
-      case 'game-moving':
-      case 'game-dice-switched':
-        console.log(
-          `[CheckerEventHandler] ${this.store.state.kind} calling moving`
-        )
-        this.store.moving(this.store.state, this.checker.id)
-        break
-      default:
-        console.warn(
-          '[CheckerEventHandler] state in which I have no business:',
-          this.store.state.kind
-        )
-    }
   }
 
   doubleClick = (e: React.MouseEvent) => {

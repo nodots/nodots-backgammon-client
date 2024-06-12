@@ -1,10 +1,10 @@
 import { Color, PointPosition } from '.'
-import { Checker } from './Checker'
+import { NodotsChecker } from './Checker'
 
 export type Checkercontainer = {
   id: string
   kind: string
-  checkers: Checker[]
+  checkers: NodotsChecker[]
 }
 
 export interface Point extends Checkercontainer {

@@ -1,27 +1,27 @@
 import {
-  MoveInitializing,
-  NodotsMove,
-  NodotsMovePayload,
-  NodotsMoveState,
-} from '.'
-import {
   CHECKERS_PER_PLAYER,
   Color,
   GameConfirmingPlay,
   GameMoving,
   NodotsGameState,
+  NodotsGameStateHistoryEvent,
   generateId,
   generateTimestamp,
-} from '../..'
-import { NodotsGameStateHistoryEvent } from '../..'
-import { NodotsBoardStore, getCheckercontainers, getPoints } from '../../Board'
-import { Bar, Checkercontainer, Off, Point } from '../../Checkercontainer'
-import { DieValue, Roll } from '../../Dice'
-import { NodotsPlayer } from '../../Player'
-import { pointToPoint } from './PointToPoint'
+} from '../../stores/Types'
+
+import { Point } from '../Game/types/Checkercontainer'
+import {
+  NodotsBoard,
+  getCheckercontainers,
+  getPoints,
+} from '../Game/types/Board'
+import { Checkercontainer, Off } from '../Game/types/Checkercontainer'
+import { DieValue, Roll } from '../Game/types/Dice'
+import { NodotsPlayer } from '../Player/Types'
+import { MoveInitializing, NodotsMove, NodotsMovePayload } from './Types'
 
 export const getOriginsForColor = (
-  board: NodotsBoardStore,
+  board: NodotsBoard,
   color: Color
 ): Checkercontainer[] => {
   return board.bar[color].checkers.length > 0
@@ -34,7 +34,7 @@ export const getOriginsForColor = (
 }
 
 export const getDestinationForOrigin = (
-  board: NodotsBoardStore,
+  board: NodotsBoard,
   player: NodotsPlayer,
   origin: Checkercontainer,
   dieValue: DieValue
@@ -83,7 +83,7 @@ export const getDestinationForOrigin = (
 }
 
 const getMostDistantOccupiedPointPosition = (
-  board: NodotsBoardStore,
+  board: NodotsBoard,
   player: NodotsPlayer
 ) => {
   if (board.bar[player.color].checkers.length > 0) return 25 // Player is on the bar
@@ -100,14 +100,11 @@ const getMostDistantOccupiedPointPosition = (
 }
 
 export const isReentering = (
-  board: NodotsBoardStore,
+  board: NodotsBoard,
   player: NodotsPlayer
 ): boolean => (board.bar[player.color].checkers.length > 0 ? true : false)
 
-export const getOriginPointById = (
-  board: NodotsBoardStore,
-  id: string
-): Point => {
+export const getOriginPointById = (board: NodotsBoard, id: string): Point => {
   const point = getPoints(board).find((point) => point.id === id)
   if (!point) {
     throw new Error(`Could not find point for id ${id}`)
@@ -154,7 +151,7 @@ export const isMoveHit = (payload: NodotsMovePayload): boolean => {
 }
 
 export const isBearOffing = (
-  board: NodotsBoardStore,
+  board: NodotsBoard,
   player: NodotsPlayer
 ): boolean => {
   const homeBoardPoints = board.points.filter(
@@ -231,7 +228,7 @@ export const getLastMove = (
 }
 
 export const getPlaysForRoll = (
-  board: NodotsBoardStore,
+  board: NodotsBoard,
   roll: Roll,
   activeColor: Color
 ) => {}
