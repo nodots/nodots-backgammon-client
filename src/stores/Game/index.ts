@@ -4,7 +4,8 @@ import { NodotsPlay } from '../Play/Types'
 import { NodotsCube } from './types/Cube'
 import { Roll } from './types/Dice'
 import { NodotsMessage } from './types/Message'
-import { Color, generateId } from '../Types'
+import { Color } from '@mui/material'
+import { generateId } from './types'
 
 export class NodotsGame {
   players: NodotsPlayers

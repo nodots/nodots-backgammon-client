@@ -4,7 +4,7 @@ import PointLabels from '../PointLabels'
 import { Point } from '../../../stores/Game/types/Checkercontainer'
 import { NodotsGame } from '../../../stores/Game'
 import { Latitude, Longitude } from '../../../stores/Game/types/Board'
-import { generateId } from '../../../stores/Types'
+import { generateId } from '../../../stores/Game/types'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 

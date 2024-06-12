@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
-import { generateId } from '../../stores/Types'
+import { generateId } from '../../stores/Game/types'
 import { NodotsPlayers, PlayerInitializing } from '../../stores/Player/Types'
 import BoardComponent from '../../components/Board'
 import HUDComponent from '../../components/HUD'

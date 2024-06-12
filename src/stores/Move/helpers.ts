@@ -1,14 +1,3 @@
-import {
-  CHECKERS_PER_PLAYER,
-  Color,
-  GameConfirmingPlay,
-  GameMoving,
-  NodotsGameState,
-  NodotsGameStateHistoryEvent,
-  generateId,
-  generateTimestamp,
-} from '../../stores/Types'
-
 import { Point } from '../Game/types/Checkercontainer'
 import {
   NodotsBoard,
@@ -19,6 +8,16 @@ import { Checkercontainer, Off } from '../Game/types/Checkercontainer'
 import { DieValue, Roll } from '../Game/types/Dice'
 import { NodotsPlayer } from '../Player/Types'
 import { MoveInitializing, NodotsMove, NodotsMovePayload } from './Types'
+import {
+  CHECKERS_PER_PLAYER,
+  Color,
+  GameConfirmingPlay,
+  GameMoving,
+  NodotsGameState,
+  NodotsGameStateHistoryEvent,
+  generateId,
+  generateTimestamp,
+} from '../Game/types'
 
 export const getOriginsForColor = (
   board: NodotsBoard,
@@ -247,7 +246,6 @@ export const buildMove = (
     player,
     direction: player.direction,
     dieValue,
-    timestamp: generateTimestamp(),
   }
 }
 
