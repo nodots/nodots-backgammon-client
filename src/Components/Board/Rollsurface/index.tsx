@@ -1,8 +1,8 @@
 import { Container } from '@mui/material'
-import { Color } from '../../../stores/Types'
 import Die from '../Dice'
 import DiceSwitcher from '../DiceSwitcher'
 import { NodotsGame } from '../../../stores/Game'
+import { Color } from '../../../stores/Game/types'
 
 interface Props {
   store: NodotsGame
@@ -12,6 +12,7 @@ interface Props {
 const isActive = (activeColor: Color, color: Color) => activeColor === color
 
 function RollSurface({ store, color }: Props) {
+  console.log(color, store)
   return (
     <Container
       className="roll-surface"

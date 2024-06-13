@@ -1,13 +1,6 @@
-import { NodotsPlayer } from './Player'
-import { Color, GameRolling, generateId, generateTimestamp } from '.'
-import {
-  getDestinationForOrigin,
-  getOriginsForColor,
-} from './Play/move/helpers'
-import { NodotsBoardStore } from './Board'
-import { NodotsMove, NodotsMovePayload, PossibleMoves } from './Play/move'
-import NodotsGameStore from '..'
-import { Point } from './Checkercontainer'
+import { Color } from '.'
+import NodotsGameStore from '../..'
+import { NodotsPlayer, NodotsPlayers } from '../../Player/Types'
 
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type DieOrder = 0 | 1
@@ -17,6 +10,7 @@ interface Die {
   color: Color
   value: DieValue
   order: DieOrder
+  roll: () => void
 }
 
 interface InactiveDie extends Die {
@@ -25,6 +19,7 @@ interface InactiveDie extends Die {
 
 interface ActiveDie extends Die {
   kind: 'active'
+  roll: () => void
 }
 
 export type NodotsDie = InactiveDie | ActiveDie
@@ -36,12 +31,18 @@ export const generateDice = (player: NodotsPlayer) => {
     color: player.color,
     order: 0,
     value: 1,
+    roll: () => {
+      console.log('[Generate Dice] 0:1')
+    },
   }
   const die2: InactiveDie = {
     kind: 'inactive',
     color: player.color,
     order: 1,
     value: 1,
+    roll: () => {
+      console.log('[Generate Dice] 0:1')
+    },
   }
   const dice: NodotsDice = [die1, die2]
   return dice
@@ -51,3 +52,12 @@ const roll = (): DieValue => (Math.floor(Math.random() * 6) + 1) as DieValue
 
 export const rollDice = (): Roll => [roll(), roll()]
 export const isDoubles = (roll: Roll) => roll[0] === roll[1]
+
+export const rollForStart = (players: NodotsPlayers): NodotsPlayer => {
+  const whiteRoll = roll()
+  const blackRoll = roll()
+  if (whiteRoll === blackRoll) {
+    return rollForStart(players)
+  }
+  return blackRoll > whiteRoll ? players.black : players.white
+}

@@ -1,7 +1,11 @@
 import { MoveDirection, Color } from '../Game/types/index'
-import { NodotsDice } from '../Game/types/Dice'
+import { DieValue, NodotsDice } from '../Game/types/Dice'
 
-export interface NodotsPlayer {
+const roll = () => {
+  console.log('[Player] roll')
+}
+
+export type NodotsPlayer = {
   id: string
   username: string
   color: Color
@@ -12,6 +16,7 @@ export interface NodotsPlayer {
     move: boolean
     roll: boolean
   }
+  roll: () => DieValue
 }
 
 export interface NodotsPlayers {

@@ -11,9 +11,6 @@ import { MoveInitializing, NodotsMove, NodotsMovePayload } from './Types'
 import {
   CHECKERS_PER_PLAYER,
   Color,
-  GameConfirmingPlay,
-  GameMoving,
-  NodotsGameState,
   NodotsGameStateHistoryEvent,
   generateId,
   generateTimestamp,

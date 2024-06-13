@@ -1,30 +1,16 @@
-import NodotsGameStore from '../../../../GameStore'
-import { NodotsDie } from '../../../../GameStore/types/Dice'
+import NodotsGameStore from '../../../../stores'
+import { NodotsDie } from '../../../../stores/Game/types/Dice'
 
 export class DiceEventHandler {
   public die: NodotsDie
-  public store: NodotsGameStore
 
-  constructor(die: NodotsDie, store: NodotsGameStore) {
+  constructor(die: NodotsDie) {
     this.die = die
-    this.store = store
+    this.clickHandler = die.roll
   }
 
-  click = (e: React.MouseEvent) => {
-    switch (this.store.state.kind) {
-      case 'game-rolling':
-        this.store.rolling(this.store.state)
-        break
-      case 'game-confirming-play':
-        this.store.confirming(this.store.state)
-        break
-
-      default:
-        console.warn(
-          '[DiceEventHandler] state in which I have no business:',
-          this.store.state.kind
-        )
-    }
+  clickHandler = () => {
+    console.log(this.clickHandler)
   }
 
   doubleClick = (e: React.MouseEvent) => {
@@ -32,10 +18,6 @@ export class DiceEventHandler {
     console.warn(
       '[DiceEventHandler NOT IMPLEMENTED] doubleclick die:',
       this.die
-    )
-    console.warn(
-      '[DiceEventHandler NOT IMPLEMENTED] doubleclick store:',
-      this.store
     )
   }
 }

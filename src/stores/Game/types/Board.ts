@@ -1,4 +1,10 @@
-import { Color, NodotsBoardImports, PointPosition, generateId } from '.'
+import {
+  CheckerboxPosition,
+  Color,
+  NodotsBoardImports,
+  PointPosition,
+  generateId,
+} from '.'
 import { NodotsChecker, generateCheckersForCheckercontainerId } from './Checker'
 import { Bar, Checkercontainer, Off, Point } from './Checkercontainer'
 import { NodotsPlayers } from '../../Player/Types'
@@ -7,7 +13,6 @@ import {
   getCounterclockwisePlayer,
 } from '../../Player/helpers'
 import { BOARD_IMPORT_DEFAULT } from '../../../board-setups'
-import { CheckerboxPosition } from '../../Types'
 
 export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'

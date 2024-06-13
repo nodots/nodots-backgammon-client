@@ -42,11 +42,11 @@ $board-padding: $point-padding * 2;
   flex-grow: 1;
   max-width: 420px;
   margin: 20px 20px 20px 10px;
-  padding: 20px;
+  padding: 10px;
   height: $checker-height * 12;
 
   .hud-card {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     overflow: hidden;
 
     &.two-column {
@@ -59,13 +59,6 @@ $board-padding: $point-padding * 2;
         text-align: center;
         justify-items: center;
         margin: 5px;
-        height: 4vh;
-        &.white {
-          background-color: rgba(0, 169, 183);
-        }
-        &.black {
-          background-color: rgba(0, 95, 134);
-        }
       }
     }
 

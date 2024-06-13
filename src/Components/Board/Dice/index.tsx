@@ -1,11 +1,10 @@
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
-import { CheckerEventHandler } from '../Checker/Events/handlers'
 import { DiceEventHandler } from './Events/handlers'
 import { NodotsGame } from '../../../stores/Game'
 import { DieOrder, NodotsDie } from '../../../stores/Game/types/Dice'
-import { Color } from '../../../stores/Types'
+import { Color } from '../../../stores/Game/types'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -29,9 +28,10 @@ function Die({ order, color, store }: Props) {
     color,
     order,
     value: 1,
+    roll: () => console.log('[Dice Event Handler] store:', store),
   }
   const eventHandler = React.useRef<DiceEventHandler>(
-    new DiceEventHandler(die, store)
+    new DiceEventHandler(die)
   ).current
   const theme = useTheme()
 
@@ -42,7 +42,7 @@ function Die({ order, color, store }: Props) {
   }
 
   return (
-    <Button className="die" onClick={eventHandler.click}>
+    <Button className="die" onClick={eventHandler.clickHandler}>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
         <g id="Layer_2" data-name="Layer 2">
           <g id="Layer_1-2" data-name="Layer 1">

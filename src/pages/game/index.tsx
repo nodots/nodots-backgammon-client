@@ -44,11 +44,11 @@ const blackPlayer: PlayerInitializing = {
 const players: NodotsPlayers = { white: whitePlayer, black: blackPlayer }
 
 class GamePage extends Component {
-  private store: NodotsGame
+  private game: NodotsGame
 
   constructor(props: {} | Readonly<{}>) {
     super(props)
-    this.store = new NodotsGame(players)
+    this.game = new NodotsGame(players)
   }
 
   render() {
@@ -59,8 +59,8 @@ class GamePage extends Component {
         </div> */}
         <Paper id="GameContainer">
           {/* <GameNotifications store={this.store} /> */}
-          <BoardComponent store={this.store} />
-          <HUDComponent store={this.store} />
+          <BoardComponent store={this.game} />
+          <HUDComponent store={this.game} />
         </Paper>
         <footer>
           <div>

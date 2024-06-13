@@ -8,6 +8,7 @@ import { Color } from '@mui/material'
 import { generateId } from './types'
 
 export class NodotsGame {
+  activeStore: 'self' | 'players' | 'board' | 'cube' | 'play'
   players: NodotsPlayers
   board: NodotsBoard
   cube: NodotsCube
@@ -16,6 +17,7 @@ export class NodotsGame {
   constructor(players: NodotsPlayers) {
     this.players = players
     this.board = buildBoard(players)
+    this.activeStore = 'play'
     this.cube = {
       id: generateId(),
       value: 2,
@@ -25,25 +27,29 @@ export class NodotsGame {
   }
 }
 
-interface INodotsGame {
-  id: string
-  board: NodotsBoard
-  players: NodotsPlayers
-  cube: NodotsCube
-  plays: NodotsPlay[]
-  message?: NodotsMessage
-}
-
-export interface GameInitializing extends INodotsGame {
+export interface GameInitializing extends NodotsGame {
   kind: 'game-initializing'
+  activeStore: 'self'
 }
 
-export interface GameRollingForStart extends INodotsGame {
+export interface GameRollingForStart extends NodotsGame {
   kind: 'game-rolling-for-start'
   activeColor: Color
 }
 
-export interface GameCompleted extends INodotsGame {
+export interface GameRolling extends NodotsGame {
+  kind: 'game-rolling'
+  activeColor: Color
+}
+
+export interface GamePlaying extends NodotsGame {
+  kind: 'game-playing'
+  activeColor: Color
+  roll: Roll
+  plays: NodotsPlay[]
+}
+
+export interface GameCompleted extends NodotsGame {
   kind: 'game-completed'
   activeColor: Color
   roll: Roll
