@@ -19,10 +19,10 @@ function DiceSwitcher({ gameStore, color }: Props) {
     new DiceSwitcherEventHandler(gameStore.state)
   ).current
   const theme = useTheme()
-  console.log(
-    '[Component DiceSwitcher] gameStore.state.kind:',
-    gameStore.state.kind
-  )
+  // console.log(
+  //   '[Component: DiceSwitcher] gameStore.state.kind:',
+  //   gameStore.state.kind
+  // )
   switch (gameStore.state.kind) {
     case 'game-initializing':
     case 'game-ready':
@@ -32,11 +32,10 @@ function DiceSwitcher({ gameStore, color }: Props) {
     case 'game-playing':
       const gameState = gameStore.state as GamePlaying // FIXME
       const { playStore } = gameState
-      console.log(playStore)
-      console.log(
-        '[Component DiceSwitcher] playStore.state.kind:',
-        playStore.state.kind
-      )
+      // console.log(
+      //   '[Component: DiceSwitcher] playStore.state.kind:',
+      //   playStore.state.kind
+      // )
       switch (playStore.state.kind) {
         case 'play-rolling':
           return (

@@ -51,9 +51,9 @@ class GamePage extends Component {
 
   constructor(props: {} | Readonly<{}>) {
     super(props)
-    console.log('[GamePage] constructor')
+    // console.log('[GamePage] constructor')
     this.rootStore = new RootStore(players)
-    console.log(this.rootStore)
+    // console.log(this.rootStore)
   }
 
   render() {
@@ -64,7 +64,7 @@ class GamePage extends Component {
       case 'game-playing':
       case 'game-ready':
       case 'game-completed':
-        console.log(this.rootStore.gameStore.state)
+        // console.log(this.rootStore.gameStore.state)
 
         return (
           <>

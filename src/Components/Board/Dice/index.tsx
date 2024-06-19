@@ -23,10 +23,6 @@ interface Props {
   color: NodotsColor
 }
 
-const roll = (player: NodotsPlayer): Roll => {
-  return [1, 1]
-}
-
 // TODO: Show move state with dice
 function Die({ order, color, gameStore }: Props) {
   const die: NodotsDie = {
@@ -41,18 +37,22 @@ function Die({ order, color, gameStore }: Props) {
   const theme = useTheme()
 
   const clicker = () => {
-    console.log('[Component Dice] gameStore:', gameStore)
+    console.log('[Component: Dice] gameStore:', gameStore)
     switch (gameStore.state.kind) {
       case 'game-playing':
         const gameState = gameStore.state as GamePlaying //FIXME. Too much on client
+        const { activeColor, players } = gameState
+        const activePlayer = players[activeColor]
+        const dice = activePlayer.dice
+
         console.log(
-          '[Component Dice] clicker game-playing gameState:',
-          gameState
+          '[Component: Dice] clicker game-playing activePlayer:',
+          activePlayer
         )
         break
       default:
         console.warn(
-          `[Component Dice] clicker unexpected kind: ${gameStore.state.kind}`
+          `[Component: Dice] clicker unexpected kind: ${gameStore.state.kind}`
         )
     }
     eventHandler.clickHandler()
@@ -63,7 +63,8 @@ function Die({ order, color, gameStore }: Props) {
       ? theme.palette.secondary.light
       : theme.palette.secondary.dark
   }
-  console.log(gameStore.state.kind)
+
+  console.log('[Component: Dice] gameStore.state.kind:', gameStore.state.kind)
   switch (gameStore.state.kind) {
     case 'game-initializing':
     case 'game-rolling-for-start':
@@ -72,8 +73,16 @@ function Die({ order, color, gameStore }: Props) {
       return <></>
     case 'game-playing':
       const { playStore, activeColor } = gameStore.state as GamePlaying // FIXME
+      console.log(
+        '[Components: Dice] game-playing playStore.state.kind:',
+        playStore.state.kind
+      )
       switch (playStore.state.kind) {
         case 'play-initializing':
+        case 'play-confirming':
+        case 'play-dice-switched':
+        case 'play-doubling':
+        case 'play-moved':
           return <></>
         case 'play-rolling':
           return (
@@ -91,6 +100,7 @@ function Die({ order, color, gameStore }: Props) {
           )
         case 'play-moving':
           const playState = playStore.state as PlayMoving
+          console.log('[Component: Dice] play-moving playState:', playState)
 
           console.warn(
             '[Component] Dice play-moving playStore.state',

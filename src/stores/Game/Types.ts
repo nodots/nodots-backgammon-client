@@ -124,7 +124,8 @@ export type NodotsGameState =
   | GameCompleted
 
 export const initializing = (players: NodotsPlayers): GamePlaying => {
-  console.log('[GameStore] initializing')
+  console.log('[GameStore] initializing players:')
+  console.log(`\t${players.black.username} v ${players.white.username}`)
   const board = buildBoard(players)
   const cube: NodotsCube = {
     id: generateId(),
@@ -144,8 +145,9 @@ export const initializing = (players: NodotsPlayers): GamePlaying => {
 
 export const rollingForStart = (state: GameInitializing): GamePlaying => {
   const { id, players, board, cube } = state
-  console.log('[GameStore] rollingForStart')
   const winner = rollForStart(state.players)
+  console.log('[GameStore] rollingForStart winner:', winner)
+
   return {
     kind: 'game-playing',
     id,

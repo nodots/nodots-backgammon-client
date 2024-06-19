@@ -1,4 +1,4 @@
-import { NodotsGameStore } from '../../../../stores/Game/Types'
+import { NodotsGameStore } from '../../../../stores/Game/Store'
 import { NodotsChecker } from '../../../../stores/Game/types/Checker'
 
 export class CheckerEventHandler {
@@ -11,9 +11,9 @@ export class CheckerEventHandler {
   }
 
   click = (e: React.MouseEvent) => {
-    console.log('[CheckerEventHandler] click e:', e)
-    console.log('[CheckerEventHandler] click checker:', this.checker)
-    console.log('[CheckerEventHandler] click store:', this.store)
+    console.log('[Handler Checker] click e:', e)
+    console.log('[Handler Checker] click checker:', this.checker)
+    console.log('[Handler Checker] click store:', this.store)
   }
 
   doubleClick = (e: React.MouseEvent) => {
