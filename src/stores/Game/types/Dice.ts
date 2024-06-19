@@ -1,5 +1,5 @@
-import { Color } from '.'
-import NodotsGameStore from '../..'
+import { NodotsColor } from '../Types'
+import RootStore from '../..'
 import { NodotsPlayer, NodotsPlayers } from '../../Player/Types'
 
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
@@ -7,10 +7,9 @@ export type DieOrder = 0 | 1
 export type Roll = [DieValue, DieValue]
 
 interface Die {
-  color: Color
+  color: NodotsColor
   value: DieValue
   order: DieOrder
-  roll: () => void
 }
 
 interface InactiveDie extends Die {
@@ -19,7 +18,7 @@ interface InactiveDie extends Die {
 
 interface ActiveDie extends Die {
   kind: 'active'
-  roll: () => void
+  roll: () => Roll
 }
 
 export type NodotsDie = InactiveDie | ActiveDie
@@ -31,18 +30,12 @@ export const generateDice = (player: NodotsPlayer) => {
     color: player.color,
     order: 0,
     value: 1,
-    roll: () => {
-      console.log('[Generate Dice] 0:1')
-    },
   }
   const die2: InactiveDie = {
     kind: 'inactive',
     color: player.color,
     order: 1,
     value: 1,
-    roll: () => {
-      console.log('[Generate Dice] 0:1')
-    },
   }
   const dice: NodotsDice = [die1, die2]
   return dice

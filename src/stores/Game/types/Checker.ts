@@ -1,9 +1,9 @@
-import { Color, PlayerCheckers, generateId } from '.'
+import { NodotsColor, PlayerCheckers, generateId } from '../Types'
 import { NodotsBoard, getCheckers } from './Board'
 
 export interface NodotsChecker {
   id: string
-  color: Color
+  color: NodotsColor
   checkercontainerId: string
   highlight?: boolean
 }
@@ -22,14 +22,14 @@ export const getChecker = (board: NodotsBoard, id: string): NodotsChecker => {
 }
 
 export const generateChecker = (
-  color: Color,
+  color: NodotsColor,
   checkercontainerId: string
 ): NodotsChecker => {
   return { id: generateId(), color, checkercontainerId }
 }
 
 export const generateCheckersForCheckercontainerId = (
-  color: Color,
+  color: NodotsColor,
   checkercontainerId: string,
   count: number
 ): NodotsChecker[] => {

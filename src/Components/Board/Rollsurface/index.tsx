@@ -1,18 +1,20 @@
 import { Container } from '@mui/material'
 import Die from '../Dice'
 import DiceSwitcher from '../DiceSwitcher'
-import { NodotsGame } from '../../../stores/Game'
-import { Color } from '../../../stores/Game/types'
+import { NodotsColor } from '../../../stores/Game/Types'
+import { NodotsGameStore } from '../../../stores/Game/Store'
 
 interface Props {
-  store: NodotsGame
-  color: Color
+  gameStore: NodotsGameStore
+  color: NodotsColor
 }
 
-const isActive = (activeColor: Color, color: Color) => activeColor === color
+const isActive = (activeColor: NodotsColor, color: NodotsColor) =>
+  activeColor === color
 
-function RollSurface({ store, color }: Props) {
-  console.log(color, store)
+function RollSurface({ gameStore, color }: Props) {
+  console.log('[Component: Rollsurface] gameStore:', gameStore)
+  console.log('[Component: Rollsurface] color:', color)
   return (
     <Container
       className="roll-surface"
@@ -23,9 +25,9 @@ function RollSurface({ store, color }: Props) {
       }}
     >
       <div className="dice-container">
-        <Die order={0} color={color} store={store} />
-        <DiceSwitcher store={store} color={color} />
-        <Die order={1} color={color} store={store} />
+        <Die order={0} color={color} gameStore={gameStore} />
+        <DiceSwitcher gameStore={gameStore} color={color} />
+        <Die order={1} color={color} gameStore={gameStore} />
       </div>
     </Container>
   )

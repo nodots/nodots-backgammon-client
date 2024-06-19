@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react'
 import HUDCard from '../../HUD/HUDCard'
-import { NodotsGame } from '../../../stores/Game'
+import { NodotsGameStore } from '../../../stores/Game/Types'
 
 interface Props {
-  store: NodotsGame
+  store: NodotsGameStore
 }
 
 function PlayerEventNotification({ store }: Props) {

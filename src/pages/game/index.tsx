@@ -1,11 +1,14 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
-import { generateId } from '../../stores/Game/types'
-import { NodotsPlayers, PlayerInitializing } from '../../stores/Player/Types'
-import BoardComponent from '../../components/Board'
-import HUDComponent from '../../components/HUD'
-import { NodotsGame } from '../../stores/Game'
+import { generateId } from '../../stores/Game/Types'
+import Board from '../../components/Board'
+import RootStore from '../../stores'
+import {
+  PlayerInitializing,
+  NodotsPlayers,
+} from '../../stores/Game/Stores/Player/Types'
+import HUD from '../../components/HUD'
 
 const whitePlayer: PlayerInitializing = {
   kind: 'player-initializing',
@@ -44,35 +47,45 @@ const blackPlayer: PlayerInitializing = {
 const players: NodotsPlayers = { white: whitePlayer, black: blackPlayer }
 
 class GamePage extends Component {
-  private game: NodotsGame
+  private rootStore: RootStore
 
   constructor(props: {} | Readonly<{}>) {
     super(props)
-    this.game = new NodotsGame(players)
+    console.log('[GamePage] constructor')
+    this.rootStore = new RootStore(players)
+    console.log(this.rootStore)
   }
 
   render() {
-    return (
-      <>
-        {/* <div id="GameControls">
-          <Button onClick={this.saveGame}>Save Game</Button>
-        </div> */}
-        <Paper id="GameContainer">
-          {/* <GameNotifications store={this.store} /> */}
-          <BoardComponent store={this.game} />
-          <HUDComponent store={this.game} />
-        </Paper>
-        <footer>
-          <div>
-            Copyright &copy; {new Date().getFullYear()} Nodots Backgammon. All
-            Rights Reserved.
-          </div>
-          <div>
-            <a href="mailto:backgammon@nodots.com">backgammon@nodots.com</a>
-          </div>
-        </footer>
-      </>
-    )
+    switch (this.rootStore.gameStore.state.kind) {
+      case 'game-initializing':
+      case 'game-rolling-for-start':
+        return <></>
+      case 'game-playing':
+      case 'game-ready':
+      case 'game-completed':
+        console.log(this.rootStore.gameStore.state)
+
+        return (
+          <>
+            <Paper id="GameContainer">
+              <Board gameStore={this.rootStore.gameStore} />
+              <HUD store={this.rootStore} />
+            </Paper>
+            <footer>
+              <div>
+                Copyright &copy; {new Date().getFullYear()} Nodots Backgammon.
+                All Rights Reserved.
+              </div>
+              <div>
+                <a href="mailto:backgammon@nodots.com">backgammon@nodots.com</a>
+              </div>
+            </footer>
+          </>
+        )
+      default:
+        return <></>
+    }
   }
 }
 

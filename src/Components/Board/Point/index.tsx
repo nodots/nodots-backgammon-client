@@ -1,33 +1,37 @@
 import { useTheme } from '@mui/material'
 import { ReactElement } from 'react'
-import NodotsGameStore from '../../../GameStore'
-import { Latitude } from '../../../GameStore/types/Board'
-import { Checker as CheckerType } from '../../../GameStore/types/Checker'
 import Checker from '../Checker'
+import { NodotsChecker } from '../../../stores/Game/types/Checker'
+import { Latitude } from '../../../stores/Game/types/Board'
+import { NodotsGameStore } from '../../../stores/Game/Store'
 
 export const getCheckerComponents = (
-  store: NodotsGameStore,
-  checkers: CheckerType[],
+  gameStore: NodotsGameStore,
+  checkers: NodotsChecker[],
   kind: 'point' | 'bar' | 'off'
 ) => {
   const checkerComponents: ReactElement[] = []
   checkers.forEach((c, i) => {
     if (kind === 'point') {
       if (i <= 4) {
-        checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
+        checkerComponents.push(
+          <Checker key={c.id} checker={c} gameStore={gameStore} />
+        )
       }
       if (i === 5) {
         checkerComponents.push(
           <Checker
             key={c.id}
             checker={c}
-            store={store}
+            gameStore={gameStore}
             count={checkers.length}
           />
         )
       }
     } else {
-      checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
+      checkerComponents.push(
+        <Checker key={c.id} checker={c} gameStore={gameStore} />
+      )
     }
   })
   return checkerComponents
@@ -35,16 +39,16 @@ export const getCheckerComponents = (
 
 export interface Props {
   id: string
-  store: NodotsGameStore
+  gameStore: NodotsGameStore
   position: {
     clockwise: number
     counterclockwise: number
   }
   latitude: Latitude
-  checkers: CheckerType[]
+  checkers: NodotsChecker[]
 }
 
-function Point({ id, position, checkers, latitude, store }: Props) {
+function Point({ id, position, checkers, latitude, gameStore }: Props) {
   const theme = useTheme()
   let className = 'point'
 
@@ -82,7 +86,7 @@ function Point({ id, position, checkers, latitude, store }: Props) {
           <li>{position.clockwise}</li>
           <li>{position.counterclockwise}</li>
         </ul>
-        {getCheckerComponents(store, checkers, 'point')}
+        {getCheckerComponents(gameStore, checkers, 'point')}
       </div>
     </div>
   )

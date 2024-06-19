@@ -1,18 +1,19 @@
+import { NodotsBoardImports } from '.'
 import {
   CheckerboxPosition,
-  Color,
-  NodotsBoardImports,
+  NodotsColor,
   PointPosition,
   generateId,
-} from '.'
+} from '../Types'
 import { NodotsChecker, generateCheckersForCheckercontainerId } from './Checker'
 import { Bar, Checkercontainer, Off, Point } from './Checkercontainer'
-import { NodotsPlayers } from '../../Player/Types'
+
+import { BOARD_IMPORT_DEFAULT } from '../../../board-setups'
+import { NodotsPlayers } from '../Stores/Player/Types'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
-} from '../../Player/helpers'
-import { BOARD_IMPORT_DEFAULT } from '../../../board-setups'
+} from '../Stores/Player/helpers'
 
 export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'
@@ -414,7 +415,7 @@ export const getCheckers = (board: NodotsBoard): NodotsChecker[] => {
 
 export const getCheckersForColor = (
   board: NodotsBoard,
-  color: Color
+  color: NodotsColor
 ): NodotsChecker[] =>
   getCheckers(board).filter((checker) => checker.color === color)
 

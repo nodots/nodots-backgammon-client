@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react'
-
 import { BarChart } from '@mui/x-charts/BarChart'
 import HUDCard from '../../../HUD/HUDCard'
 import { useTheme } from '@mui/material'
-import { NodotsGame } from '../../../../stores/Game'
+import { NodotsGameStore } from '../../../../stores/Game/Store'
 
 interface Props {
-  store: NodotsGame
+  store: NodotsGameStore
 }
 
 function DiceEventsNotification({ store }: Props) {

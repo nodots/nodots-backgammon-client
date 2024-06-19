@@ -2,10 +2,10 @@ import { observer } from 'mobx-react'
 import { LineChart } from '@mui/x-charts/LineChart'
 import HUDCard from '../../HUD/HUDCard'
 import { useTheme } from '@mui/material'
-import { NodotsGame } from '../../../stores/Game'
+import { NodotsGameStore } from '../../../stores/Game/Types'
 
 interface Props {
-  store: NodotsGame
+  store: NodotsGameStore
 }
 
 function GameWinProbabilityNotification({ store }: Props) {

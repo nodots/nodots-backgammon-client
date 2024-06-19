@@ -1,25 +1,25 @@
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../../GameStore'
-import { Color } from '../../../GameStore/types'
-import { Checker as CheckerType } from '../../../GameStore/types/Checker'
 import { CheckerEventHandler } from './Events/handlers'
 import React from 'react'
+import { NodotsColor } from '../../../stores/Game/Types'
+import { NodotsChecker } from '../../../stores/Game/types/Checker'
+import { NodotsGameStore } from '../../../stores/Game/Store'
 
 export interface Props {
-  store: NodotsGameStore
-  checker: CheckerType
+  gameStore: NodotsGameStore
+  checker: NodotsChecker
   count?: number
 }
 
-function Checker({ checker, store, count }: Props) {
+function Checker({ checker, gameStore, count }: Props) {
   const eventHandler = React.useRef<CheckerEventHandler>(
-    new CheckerEventHandler(checker, store)
+    new CheckerEventHandler(checker, gameStore)
   ).current
 
   const theme = useTheme()
 
-  const getBackgroundColor = (color: Color) => {
+  const getBackgroundColor = (color: NodotsColor) => {
     return color === 'white'
       ? theme.palette.secondary.light
       : theme.palette.secondary.dark

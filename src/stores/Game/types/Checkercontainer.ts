@@ -1,4 +1,4 @@
-import { Color, PointPosition } from '.'
+import { NodotsColor, PointPosition } from '../Types'
 import { NodotsChecker } from './Checker'
 
 export type Checkercontainer = {
@@ -17,12 +17,12 @@ export interface Point extends Checkercontainer {
 
 export interface Bar extends Checkercontainer {
   kind: 'bar'
-  color: Color
+  color: NodotsColor
   position: 'bar'
 }
 
 export interface Off extends Checkercontainer {
   kind: 'off'
-  color: Color
+  color: NodotsColor
   position: 'off'
 }

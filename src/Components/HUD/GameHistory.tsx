@@ -1,16 +1,18 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
-import { gameStateKey } from '../../GameStore/types/Play/move/helpers'
-import { NodotsGameState, generateId } from '../../GameStore/types'
+
 import { useEffect, useState } from 'react'
+import { NodotsGameState, generateId } from '../../stores/Game/Types'
+import { gameStateKey } from '../../stores/Game/Stores/Move/helpers'
 
 const parseHistoryEntry = (entry: NodotsGameState) => {
+  const { plays } = entry
   switch (entry.kind) {
     case 'game-initializing':
     case 'game-rolling-for-start':
       break
     // move notifications are totally broken
-    case 'game-moving':
+    case 'game-playing':
       let { players, activeColor, moves } = entry
       let activePlayer = players[activeColor]
       const activeMove = moves.find((move) => !move.status)
@@ -24,39 +26,6 @@ const parseHistoryEntry = (entry: NodotsGameState) => {
           {entry.players[entry.activeColor].username} wins!
         </li>
       )
-    case 'game-confirming-play':
-      return (
-        <li key={generateId()}>
-          {entry.players[entry.activeColor].username} confirming play
-        </li>
-      )
-    case 'game-play-confirmed':
-      return (
-        <li key={generateId()}>
-          {entry.players[entry.activeColor].username} confirmed
-        </li>
-      )
-    case 'game-rolling':
-      return (
-        <li key={generateId()}>
-          {entry.players[entry.activeColor].username} rolling
-        </li>
-      )
-    case 'game-rolled':
-      return (
-        <li key={generateId()}>
-          {entry.players[entry.activeColor].username} rolled {entry.roll[0]}:
-          {entry.roll[1]}
-        </li>
-      )
-    case 'game-dice-switched':
-      return (
-        <li key={generateId()}>
-          {entry.players[entry.activeColor].username} switched dice{' '}
-          {entry.roll[0]}:{entry.roll[1]}
-        </li>
-      )
-
     default:
 
     //noop

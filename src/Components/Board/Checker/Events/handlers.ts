@@ -1,11 +1,11 @@
-import { NodotsGame } from '../../../../stores/Game'
+import { NodotsGameStore } from '../../../../stores/Game/Types'
 import { NodotsChecker } from '../../../../stores/Game/types/Checker'
 
 export class CheckerEventHandler {
   public checker: NodotsChecker
-  public store: NodotsGame
+  public store: NodotsGameStore
 
-  constructor(checker: NodotsChecker, store: NodotsGame) {
+  constructor(checker: NodotsChecker, store: NodotsGameStore) {
     this.checker = checker
     this.store = store
   }

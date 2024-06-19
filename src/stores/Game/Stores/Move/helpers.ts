@@ -8,13 +8,13 @@ import { Checkercontainer, Off } from '../Game/types/Checkercontainer'
 import { DieValue, Roll } from '../Game/types/Dice'
 import { NodotsPlayer } from '../Player/Types'
 import { MoveInitializing, NodotsMove, NodotsMovePayload } from './Types'
+import { NodotsGameStateHistoryEvent } from '../Game/types'
 import {
   CHECKERS_PER_PLAYER,
   Color,
-  NodotsGameStateHistoryEvent,
   generateId,
   generateTimestamp,
-} from '../Game/types'
+} from '../Game/Types'
 
 export const getOriginsForColor = (
   board: NodotsBoard,
@@ -172,7 +172,7 @@ const getGameStateKey = (gameId: string) => `${gameStateKey}-${gameId}`
 export const resetGameState = (gameId: string): void =>
   localStorage.removeItem(getGameStateKey(gameId))
 
-export const saveGameState = (state: NodotsGameState): void => {
+export const saveGameState = (gameState: NodotsGameState): void => {
   // console.warn('[Move Helpers NOT IMPLEMENTED] saveGameState')
   // const gameStateKey = getGameStateKey(state.id)
   // const gameStateHistoryEvent: NodotsGameStateHistoryEvent = {
@@ -230,7 +230,7 @@ export const getPlaysForRoll = (
 ) => {}
 
 export const buildMove = (
-  state: NodotsGameState,
+  gameState: NodotsGameState,
   player: NodotsPlayer,
   dieValue: DieValue
 ): MoveInitializing => {
@@ -247,7 +247,7 @@ export const buildMove = (
 }
 
 export const buildMoves = (
-  state: NodotsGameState,
+  gameState: NodotsGameState,
   player: NodotsPlayer,
   roll: Roll
 ): MoveInitializing[] => {

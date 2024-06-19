@@ -1,14 +1,19 @@
 import { observer } from 'mobx-react'
 import { Card } from '@mui/material'
 import Notification from './Notification'
-import { NodotsGame } from '../../stores/Game'
+import {
+  GameCompleted,
+  GamePlaying,
+  GameReady,
+  NodotsGameState,
+} from '../../stores/Game/Types'
 
 interface Props {
-  store: NodotsGame
+  state: GamePlaying | GameCompleted | GameReady
 }
 
-function PipCountNotification({ store }: Props) {
-  const { players } = store
+function PipCountNotification({ state }: Props) {
+  const { players } = state
   return (
     <Card className="hud-card two-column short" elevation={4}>
       <Notification player={players.black} />

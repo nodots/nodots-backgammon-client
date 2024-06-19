@@ -2,9 +2,11 @@ import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
 import { DiceEventHandler } from './Events/handlers'
-import { NodotsGame } from '../../../stores/Game'
-import { DieOrder, NodotsDie } from '../../../stores/Game/types/Dice'
-import { Color } from '../../../stores/Game/types'
+import { DieOrder, NodotsDie, Roll } from '../../../stores/Game/types/Dice'
+import { GamePlaying, NodotsColor } from '../../../stores/Game/Types'
+import { NodotsPlayer } from '../../../stores/Game/Stores/Player/Types'
+import { NodotsGameStore } from '../../../stores/Game/Store'
+import { PlayMoving } from '../../../stores/Game/Stores/Play/Types'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -16,42 +18,105 @@ const paths = [
 ]
 
 interface Props {
-  store: NodotsGame
+  gameStore: NodotsGameStore
   order: DieOrder
-  color: Color
+  color: NodotsColor
+}
+
+const roll = (player: NodotsPlayer): Roll => {
+  return [1, 1]
 }
 
 // TODO: Show move state with dice
-function Die({ order, color, store }: Props) {
+function Die({ order, color, gameStore }: Props) {
   const die: NodotsDie = {
     kind: 'inactive',
     color,
     order,
     value: 1,
-    roll: () => console.log('[Dice Event Handler] store:', store),
   }
   const eventHandler = React.useRef<DiceEventHandler>(
-    new DiceEventHandler(die)
+    new DiceEventHandler(die, gameStore)
   ).current
   const theme = useTheme()
 
-  const fill = (color: Color) => {
+  const clicker = () => {
+    console.log('[Component Dice] gameStore:', gameStore)
+    switch (gameStore.state.kind) {
+      case 'game-playing':
+        const gameState = gameStore.state as GamePlaying //FIXME. Too much on client
+        console.log(
+          '[Component Dice] clicker game-playing gameState:',
+          gameState
+        )
+        break
+      default:
+        console.warn(
+          `[Component Dice] clicker unexpected kind: ${gameStore.state.kind}`
+        )
+    }
+    eventHandler.clickHandler()
+  }
+
+  const fill = (color: NodotsColor) => {
     return color === 'white'
       ? theme.palette.secondary.light
       : theme.palette.secondary.dark
   }
+  console.log(gameStore.state.kind)
+  switch (gameStore.state.kind) {
+    case 'game-initializing':
+    case 'game-rolling-for-start':
+    case 'game-completed':
+    case 'game-ready':
+      return <></>
+    case 'game-playing':
+      const { playStore, activeColor } = gameStore.state as GamePlaying // FIXME
+      switch (playStore.state.kind) {
+        case 'play-initializing':
+          return <></>
+        case 'play-rolling':
+          return (
+            activeColor === color && (
+              <Button className="die" onClick={clicker}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                  <g id="Layer_2" data-name="Layer 2">
+                    <g id="Layer_1-2" data-name="Layer 1">
+                      <path d={paths[0]} fill={fill(color)} />
+                    </g>
+                  </g>
+                </svg>
+              </Button>
+            )
+          )
+        case 'play-moving':
+          const playState = playStore.state as PlayMoving
 
-  return (
-    <Button className="die" onClick={eventHandler.clickHandler}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-        <g id="Layer_2" data-name="Layer 2">
-          <g id="Layer_1-2" data-name="Layer 1">
-            <path d={paths[0]} fill={fill(color)} />
-          </g>
-        </g>
-      </svg>
-    </Button>
-  )
+          console.warn(
+            '[Component] Dice play-moving playStore.state',
+            playStore.state
+          )
+          return (
+            activeColor === color && (
+              <Button
+                className="die"
+                onClick={() => console.error('Not implemented')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                  <g id="Layer_2" data-name="Layer 2">
+                    <g id="Layer_1-2" data-name="Layer 1">
+                      <path
+                        d={paths[playState.roll[order] - 1]}
+                        fill={fill(color)}
+                      />
+                    </g>
+                  </g>
+                </svg>
+              </Button>
+            )
+          )
+      }
+  }
 }
 
 export default observer(Die)

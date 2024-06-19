@@ -1,4 +1,4 @@
-import { MoveDirection } from '../Game/types/index'
+import { MoveDirection } from '../Game/Types'
 import { NodotsBoard } from '../Game/types/Board'
 import { DieValue } from '../Game/types/Dice'
 import { NodotsPlayer, NodotsPlayers } from '../Player/Types'

@@ -3,7 +3,7 @@ import { NodotsGameState } from '../../../../GameStore/types'
 import HUDCard from '../../../HUD/HUDCard'
 
 interface Props {
-  state: NodotsGameState
+  gameState: NodotsGameState
 }
 
 function DiceSwitcherEventsNotification({ state }: Props) {
