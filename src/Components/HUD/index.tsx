@@ -7,11 +7,13 @@ import { observer } from 'mobx-react'
 import PipCountNotification from './PipCountNotification'
 import {
   GameCompleted,
-  GamePlaying,
+  GamePlaying_Moving,
+  GamePlaying_Rolling,
   NodotsGameState,
 } from '../../stores/Game/Types'
 import { NodotsGameStore } from '../../stores/Game/Store'
-import RootStore from '../../stores'
+import RootStore from '../../stores/RootStore'
+import StoresOverview from './StoresOverview'
 
 interface Props {
   store: RootStore
@@ -20,18 +22,14 @@ interface Props {
 function HUDComponent({ store }: Props) {
   const gameStore = store.gameStore
   switch (gameStore.state.kind) {
-    case 'game-playing':
-      const gameState = gameStore.state as GamePlaying // FIXME
-      const playState = gameState.playStore
+    case 'game-playing-rolling':
+    case 'game-playing-moving':
+      const gameState = gameStore.state as GamePlaying_Moving // FIXME
+      const playStore = gameStore.playStore
+      const playState = playStore?.playState
       return (
         <Paper id="HUDContainer" elevation={2}>
-          <h2>Root Store</h2>
-          <>{store.name}</>
-          <h2>Game Store</h2>
-          <h3>Current Game State</h3>
-          <>{store.gameStore.state.kind}</>
-          <h3>Current Play State</h3>
-          <>{playState.state.kind}</>
+          <StoresOverview store={store} />
           {/* <PipCountNotification state={state} /> */}
           {/* <PlayerEventNotification state={state} />
               <DiceEventsNotification state={state} /> */}
@@ -41,6 +39,7 @@ function HUDComponent({ store }: Props) {
         </Paper>
       )
     default:
+      return <></>
   }
 }
 

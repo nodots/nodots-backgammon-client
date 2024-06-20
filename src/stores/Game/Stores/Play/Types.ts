@@ -1,7 +1,7 @@
 import { NodotsColor, generateId } from '../../Types'
-import { Roll } from '../../types/Dice'
-import { NodotsMove } from '../Move/Types'
-import { PlayerPlaying, PlayerRolling } from '../Player/Types'
+import { DieValue, Roll } from '../../types/Dice'
+import { MoveInitializing, NodotsMove } from '../Move/Types'
+import { NodotsPlayer, PlayerMoving, PlayerRolling } from '../Player/Types'
 
 export interface NodotsPlay {
   kind:
@@ -22,23 +22,20 @@ export interface PlayInitializing extends NodotsPlay {
 export interface PlayRolling extends NodotsPlay {
   kind: 'play-rolling'
   activeColor: NodotsColor
-  player: PlayerPlaying | PlayerRolling
-  isAuto: boolean
+  player: PlayerMoving | PlayerRolling
+  moves: NodotsMove[]
 }
 
 export interface PlayDoubling extends NodotsPlay {
   kind: 'play-rolling'
   activeColor: NodotsColor
-  player: PlayerPlaying | PlayerRolling
-  isAuto: boolean
+  player: PlayerMoving | PlayerRolling
 }
 
 export interface PlayMoving extends NodotsPlay {
   kind: 'play-moving'
-  state: NodotsPlay
-  player: PlayerPlaying | PlayerRolling
+  player: PlayerMoving | PlayerRolling
   roll: Roll
-  isAuto: boolean
   isForced: boolean
   analysis: {
     options: []
@@ -48,30 +45,48 @@ export interface PlayMoving extends NodotsPlay {
 
 export interface PlayDiceSwitched extends NodotsPlay {
   kind: 'play-dice-switched'
-  activeColor: NodotsColor
+  player: PlayerMoving | PlayerRolling
   roll: Roll
-  plays: NodotsPlay[]
+  isForced: boolean
+  analysis: {
+    options: []
+  }
+  moves: NodotsMove[]
 }
 
 export interface PlayMoving extends NodotsPlay {
   kind: 'play-moving'
   activeColor: NodotsColor
   roll: Roll
-  plays: NodotsPlay[]
+  isForced: boolean
+  analysis: {
+    options: []
+  }
+  moves: NodotsMove[]
 }
 
+// Transition to this state when the destination of the final move is set,
+// i.e., second checker clicked.
 export interface PlayMoved extends NodotsPlay {
   kind: 'play-moved'
   activeColor: NodotsColor
   roll: Roll
-  plays: NodotsPlay[]
+  isForced: boolean
+  analysis: {
+    options: []
+  }
+  moves: NodotsMove[]
 }
 
 export interface PlayConfirming extends NodotsPlay {
   kind: 'play-confirming'
   activeColor: NodotsColor
   roll: Roll
-  plays: NodotsPlay[]
+  isForced: boolean
+  analysis: {
+    options: []
+  }
+  moves: NodotsMove[]
 }
 
 export type NodotsPlayState =
@@ -82,12 +97,40 @@ export type NodotsPlayState =
   | PlayDoubling
   | PlayConfirming
 
-export const initializing = (player: PlayerRolling): PlayRolling => {
+export const initializing = (
+  player: PlayerRolling,
+  roll: Roll
+): PlayRolling => {
+  const moves = buildMovesForRoll(roll, player)
+
   return {
     id: generateId(),
     kind: 'play-rolling',
     player,
     activeColor: player.color,
-    isAuto: player.automation.move,
+    moves,
   }
+}
+
+const buildMove = (
+  dieValue: DieValue,
+  player: NodotsPlayer
+): MoveInitializing => {
+  return {
+    id: generateId(),
+    kind: 'move-initializing',
+    dieValue,
+    isAuto: player.automation.move,
+    direction: player.direction,
+    isForced: false,
+  }
+}
+
+const buildMovesForRoll = (roll: Roll, player: NodotsPlayer): NodotsMove[] => {
+  const moves: NodotsMove[] = [
+    buildMove(roll[0], player),
+    buildMove(roll[1], player),
+  ]
+
+  return moves
 }

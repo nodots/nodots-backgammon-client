@@ -12,13 +12,13 @@ const parseHistoryEntry = (entry: NodotsGameState) => {
     case 'game-rolling-for-start':
       break
     // move notifications are totally broken
-    case 'game-playing':
-      let { players, activeColor, moves } = entry
-      let activePlayer = players[activeColor]
-      const activeMove = moves.find((move) => !move.status)
-      if (activeMove) {
-        return <li key={generateId()}>{activePlayer.username} moves from </li>
-      }
+    case 'game-playing-moving':
+      // let { players, activeColor, moves } = entry
+      // let activePlayer = players[activeColor]
+      // const activeMove = moves.find((move) => !move.status)
+      // if (activeMove) {
+      //   return <li key={generateId()}>{activePlayer.username} moves from </li>
+      // }
       break
     case 'game-completed':
       return (

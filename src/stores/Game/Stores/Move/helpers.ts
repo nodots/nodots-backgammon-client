@@ -1,24 +1,14 @@
-import { Point } from '../Game/types/Checkercontainer'
-import {
-  NodotsBoard,
-  getCheckercontainers,
-  getPoints,
-} from '../Game/types/Board'
-import { Checkercontainer, Off } from '../Game/types/Checkercontainer'
-import { DieValue, Roll } from '../Game/types/Dice'
+import { NodotsColor, CHECKERS_PER_PLAYER, NodotsGameState } from '../../Types'
+// import { NodotsGameStateHistoryEvent } from '../../types'
+import { NodotsBoard, getCheckercontainers, getPoints } from '../../types/Board'
+import { Checkercontainer, Off, Point } from '../../types/Checkercontainer'
+import { DieValue, Roll } from '../../types/Dice'
 import { NodotsPlayer } from '../Player/Types'
-import { MoveInitializing, NodotsMove, NodotsMovePayload } from './Types'
-import { NodotsGameStateHistoryEvent } from '../Game/types'
-import {
-  CHECKERS_PER_PLAYER,
-  Color,
-  generateId,
-  generateTimestamp,
-} from '../Game/Types'
+import { NodotsMove, MoveInitializing } from './Types'
 
 export const getOriginsForColor = (
   board: NodotsBoard,
-  color: Color
+  color: NodotsColor
 ): Checkercontainer[] => {
   return board.bar[color].checkers.length > 0
     ? [board.bar[color]]
@@ -108,43 +98,43 @@ export const getOriginPointById = (board: NodotsBoard, id: string): Point => {
   return point
 }
 
-export const isMoveSane = (payload: NodotsMovePayload): boolean => {
-  const { checker, origin, destination, state } = payload
-  const { board, player } = state
-  if (board.bar[player.color].checkers.length > 0 && origin.kind !== 'bar') {
-    console.error(`${player.username} has checkers on the bar`)
-    return false
-  }
+// export const isMoveSane = (payload: NodotsMovePayload): boolean => {
+//   const { checker, origin, destination, state } = payload
+//   const { board, player } = state
+//   if (board.bar[player.color].checkers.length > 0 && origin.kind !== 'bar') {
+//     console.error(`${player.username} has checkers on the bar`)
+//     return false
+//   }
 
-  if (
-    destination &&
-    destination.checkers &&
-    destination.checkers.length > 1 &&
-    destination.checkers[0].color !== checker.color
-  ) {
-    console.warn(`destination point occupied`)
-    return false
-  }
+//   if (
+//     destination &&
+//     destination.checkers &&
+//     destination.checkers.length > 1 &&
+//     destination.checkers[0].color !== checker.color
+//   ) {
+//     console.warn(`destination point occupied`)
+//     return false
+//   }
 
-  if (checker.color !== player.color) {
-    console.error(`Not ${player.username}'s checker`)
-    return false
-  }
+//   if (checker.color !== player.color) {
+//     console.error(`Not ${player.username}'s checker`)
+//     return false
+//   }
 
-  return true
-}
+//   return true
+// }
 
-export const isMoveHit = (payload: NodotsMovePayload): boolean => {
-  const { checker, destination } = payload
+// export const isMoveHit = (payload: NodotsMovePayload): boolean => {
+//   const { checker, destination } = payload
 
-  if (
-    destination.checkers.length === 1 &&
-    destination.checkers[0].color !== checker.color
-  )
-    return true
+//   if (
+//     destination.checkers.length === 1 &&
+//     destination.checkers[0].color !== checker.color
+//   )
+//     return true
 
-  return false
-}
+//   return false
+// }
 
 export const isBearOffing = (
   board: NodotsBoard,
@@ -173,7 +163,10 @@ export const resetGameState = (gameId: string): void =>
   localStorage.removeItem(getGameStateKey(gameId))
 
 export const saveGameState = (gameState: NodotsGameState): void => {
-  // console.warn('[Move Helpers NOT IMPLEMENTED] saveGameState')
+  console.warn(
+    '[Move Helpers NOT IMPLEMENTED] saveGameState gameState:',
+    gameState
+  )
   // const gameStateKey = getGameStateKey(state.id)
   // const gameStateHistoryEvent: NodotsGameStateHistoryEvent = {
   //   timestamp: generateTimestamp(),
@@ -201,61 +194,61 @@ export const saveGameState = (gameState: NodotsGameState): void => {
   // }
 }
 
-export const getGameHistory = (
-  gameId: string
-): NodotsGameStateHistoryEvent[] => {
-  console.log(gameId)
-  const gameStateKey = getGameStateKey(gameId)
-  console.log(gameStateKey)
-  return []
-}
+// export const getGameHistory = (
+//   gameId: string
+// ): NodotsGameStateHistoryEvent[] => {
+//   console.log(gameId)
+//   const gameStateKey = getGameStateKey(gameId)
+//   console.log(gameStateKey)
+//   return []
+// }
 
-export type ActiveMoveState = GameMoving | GameConfirmingPlay
-export const getCurrentPlay = (state: ActiveMoveState): NodotsMove[] => {
-  console.log('[Move Helpers] getCurrentPlay state:', state)
-  return []
-}
+// export type ActiveMoveState = GameMoving | GameConfirmingPlay
+// export const getCurrentPlay = (state: ActiveMoveState): NodotsMove[] => {
+//   console.log('[Move Helpers] getCurrentPlay state:', state)
+//   return []
+// }
 
-export const getLastMove = (
-  state: GameMoving | GameConfirmingPlay
-): NodotsMove | undefined => {
-  console.log('[Move Helpers] getLastMove state:', state)
-  return undefined
-}
+// export const getLastMove = (
+//   state: GameMoving | GameConfirmingPlay
+// ): NodotsMove | undefined => {
+//   console.log('[Move Helpers] getLastMove state:', state)
+//   return undefined
+// }
 
-export const getPlaysForRoll = (
-  board: NodotsBoard,
-  roll: Roll,
-  activeColor: Color
-) => {}
+// export const getPlaysForRoll = (
+//   board: NodotsBoard,
+//   roll: Roll,
+//   activeColor: NodotsColor
+// ) => {}
 
-export const buildMove = (
-  gameState: NodotsGameState,
-  player: NodotsPlayer,
-  dieValue: DieValue
-): MoveInitializing => {
-  return {
-    ...state,
-    id: generateId(),
-    kind: 'move-initializing',
-    isAuto: player.automation.move,
-    isForced: false,
-    player,
-    direction: player.direction,
-    dieValue,
-  }
-}
+// export const buildMove = (
+//   gameState: NodotsGameState,
+//   player: NodotsPlayer,
+//   dieValue: DieValue
+// ): MoveInitializing => {
+//   return {
+//     ...state,
+//     id: generateId(),
+//     kind: 'move-initializing',
+//     isAuto: player.automation.move,
+//     isForced: false,
+//     player,
+//     direction: player.direction,
+//     dieValue,
+//   }
+// }
 
-export const buildMoves = (
-  gameState: NodotsGameState,
-  player: NodotsPlayer,
-  roll: Roll
-): MoveInitializing[] => {
-  const moveCount = roll[0] === roll[1] ? 4 : 2
-  const moves: MoveInitializing[] = []
-  for (let i = 0; i < moveCount; i++) {
-    const move = buildMove(state, player, roll[i % 2])
-    moves.push(move)
-  }
-  return moves
-}
+// export const buildMoves = (
+//   gameState: NodotsGameState,
+//   player: NodotsPlayer,
+//   roll: Roll
+// ): MoveInitializing[] => {
+//   const moveCount = roll[0] === roll[1] ? 4 : 2
+//   const moves: MoveInitializing[] = []
+//   for (let i = 0; i < moveCount; i++) {
+//     const move = buildMove(state, player, roll[i % 2])
+//     moves.push(move)
+//   }
+//   return moves
+// }

@@ -1,47 +1,36 @@
 import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
-import { generateId } from '../../stores/Game/Types'
+import { GameInitializing, generateId } from '../../stores/Game/Types'
 import Board from '../../components/Board'
-import RootStore from '../../stores'
+import RootStore from '../../stores/RootStore'
 import {
   PlayerInitializing,
   NodotsPlayers,
 } from '../../stores/Game/Stores/Player/Types'
 import HUD from '../../components/HUD'
+import chalk from 'chalk'
 
 const whitePlayer: PlayerInitializing = {
   kind: 'player-initializing',
-  id: generateId(),
   color: 'white',
   username: 'White Stripes',
   direction: 'counterclockwise',
-  pipCount: 167,
   automation: {
     roll: true,
     move: false,
   },
-  dice: [
-    { kind: 'inactive', color: 'white', order: 0, value: 1 },
-    { kind: 'inactive', color: 'white', order: 1, value: 1 },
-  ],
 }
 
 const blackPlayer: PlayerInitializing = {
   kind: 'player-initializing',
-  id: generateId(),
   color: 'black',
   username: 'Black Messiah',
   direction: 'clockwise',
-  pipCount: 167,
   automation: {
     roll: true,
     move: false,
   },
-  dice: [
-    { kind: 'inactive', color: 'black', order: 0, value: 1 },
-    { kind: 'inactive', color: 'black', order: 1, value: 1 },
-  ],
 }
 
 const players: NodotsPlayers = { white: whitePlayer, black: blackPlayer }
@@ -51,9 +40,25 @@ class GamePage extends Component {
 
   constructor(props: {} | Readonly<{}>) {
     super(props)
-    // console.log('[GamePage] constructor')
+    console.log('[GamePage] constructor')
     this.rootStore = new RootStore(players)
-    // console.log(this.rootStore)
+    this.rootStore.gameStore.rollingForStart(
+      this.rootStore.gameStore.state as GameInitializing,
+      this.rootStore.gameStore.state.players
+    ) // FIXME
+    console.log(
+      chalk.bgBlue('[GamePage constructor]  rootStore:'),
+      this.rootStore
+    )
+    console.log(chalk.underline('[GamePage constructor] childStores'))
+    console.log(
+      chalk.bgGrey('\t[GamePage] constructor gameStore:'),
+      this.rootStore.gameStore
+    )
+    console.log(
+      chalk.bgGrey('\t[GamePage] constructor playerStores:'),
+      this.rootStore.gameStore.playerStores
+    )
   }
 
   render() {
@@ -61,7 +66,8 @@ class GamePage extends Component {
       case 'game-initializing':
       case 'game-rolling-for-start':
         return <></>
-      case 'game-playing':
+      case 'game-playing-rolling':
+      case 'game-playing-moving':
       case 'game-ready':
       case 'game-completed':
         // console.log(this.rootStore.gameStore.state)

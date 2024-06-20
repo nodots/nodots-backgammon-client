@@ -1,11 +1,13 @@
 import { makeAutoObservable } from 'mobx'
-import { NodotsPlay, initializing } from './Types'
-import { NodotsPlayer, PlayerPlaying, PlayerRolling } from '../Player/Types'
+import { NodotsPlayState, initializing } from './Types'
+import { PlayerRolling } from '../Player/Types'
+import { Roll } from '../../types/Dice'
 
 export class NodotsPlayStore {
-  state: NodotsPlay
-  constructor(player: PlayerRolling) {
+  playState: NodotsPlayState
+
+  constructor(player: PlayerRolling, roll: Roll) {
     makeAutoObservable(this)
-    this.state = initializing(player)
+    this.playState = initializing(player, roll)
   }
 }

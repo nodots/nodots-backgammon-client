@@ -1,43 +1,52 @@
-import { makeAutoObservable } from 'mobx'
-import { NodotsPlayers } from './Stores/Player/Types'
-import { GamePlaying, NodotsColor, NodotsGame, initializing } from './Types'
-import { Roll, rollDice } from './types/Dice'
+import chalk from 'chalk'
+import { action, makeAutoObservable } from 'mobx'
+import { NodotsPlayers, PlayerRolling } from './Stores/Player/Types'
+import {
+  GameInitializing,
+  GamePlaying_Rolling,
+  NodotsGameState,
+  initializing,
+  rollingForStart,
+} from './Types'
+import { NodotsPlayStore } from './Stores/Play/Store'
+import { NodotsPlayerStore } from './Stores/Player/Store'
+import { rolling } from './Stores/Player/Types'
 
 export class NodotsGameStore {
-  state: NodotsGame
+  state: NodotsGameState
+  playStore: NodotsPlayStore | undefined
+  playerStores: {
+    black: NodotsPlayerStore
+    white: NodotsPlayerStore
+  }
 
   constructor(players: NodotsPlayers) {
     makeAutoObservable(this)
     this.state = initializing(players)
+    console.log(chalk.underline('[Store: Game] state:'), this.state)
+    this.playStore = undefined // No plays until first dice roll
+    this.playerStores = {
+      black: new NodotsPlayerStore(players.black),
+      white: new NodotsPlayerStore(players.white),
+    }
   }
 
-  public roll = (color: NodotsColor): GamePlaying => {
-    switch (this.state.kind) {
-      case 'game-playing':
-        const gameState = this.state as GamePlaying // FIXME
-        console.log('[Game Store] gameState:', gameState)
-        const { id, activeColor, players, board, cube, playStore } = gameState
-        const activePlayer = players[activeColor]
-        console.log('[Game Store] activePlayer.dice', activePlayer.dice)
-        const roll: Roll = rollDice()
-        activePlayer.dice[0].value = roll[0]
-        activePlayer.dice[1].value = roll[1]
+  @action
+  rollingForStart(gameState: GameInitializing, players: NodotsPlayers) {
+    const newState = rollingForStart(gameState)
+    console.log(
+      chalk.redBright('[Store: Game] rollingForStart newState:'),
+      newState
+    )
+    this.state = newState
+  }
 
-        return {
-          kind: 'game-playing',
-          players,
-          playStore,
-          board,
-          cube,
-          activeColor,
-          id,
-        }
-      case 'game-completed':
-      case 'game-initializing':
-      case 'game-ready':
-      case 'game-rolling-for-start':
-        console.warn(`[Game Store] unexpected state ${this.state.kind}`)
-        throw Error(`[Game Store] unexpected state ${this.state.kind}`)
-    }
+  @action
+  rolling(gameState: GamePlaying_Rolling, playerState: PlayerRolling) {
+    const updatedPlayer = rolling(playerState)
+    console.log('[Store: Game] rolling updatedPlayer:', updatedPlayer)
+    const dice = updatedPlayer.dice
+    console.log('[Store: Game] rolling dice:', dice)
+    // this.playStore = new NodotsPlayStore(playerState, roll)
   }
 }

@@ -6,7 +6,11 @@ import Off, { Props as OffProps } from './Off'
 import Quadrant, { QuadrantPoints, Props as QuadrantProps } from './Quadrant'
 import Rollsurface from './Rollsurface'
 import './scss/index.scss'
-import { GamePlaying } from '../../stores/Game/Types'
+import {
+  GamePlaying_Moving,
+  GamePlaying_Rolling,
+  GameCompleted,
+} from '../../stores/Game/Types'
 
 export type Quadrants = [
   QuadrantProps,
@@ -31,8 +35,9 @@ function Board({ gameStore }: Props) {
     case 'game-completed':
     case 'game-rolling-for-start':
       return <></>
-    case 'game-playing':
-      const game = gameStore.state as GamePlaying // FIXME
+    case 'game-playing-moving':
+    case 'game-playing-rolling':
+      const game = gameStore.state as GamePlaying_Rolling // FIXME
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>

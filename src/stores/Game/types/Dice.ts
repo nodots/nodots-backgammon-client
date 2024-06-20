@@ -1,6 +1,5 @@
 import { NodotsColor } from '../Types'
-import RootStore from '../..'
-import { NodotsPlayer, NodotsPlayers } from '../../Player/Types'
+import { NodotsPlayer, NodotsPlayers } from '../Stores/Player/Types'
 
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type DieOrder = 0 | 1

@@ -16,7 +16,8 @@ function Cube({ gameStore }: Props) {
     case 'game-initializing':
     case 'game-rolling-for-start':
       return <></>
-    case 'game-playing':
+    case 'game-playing-rolling':
+    case 'game-playing-moving':
     case 'game-ready':
     case 'game-completed':
       const gameState = gameStore.state as GamePlaying // FIXME
