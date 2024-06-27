@@ -1,17 +1,22 @@
 import { NodotsBoard, buildBoard } from './types/Board'
 import { NodotsPlay, NodotsPlayState } from './Stores/Play/Types'
 import { NodotsCube } from './types/Cube'
-import { Roll, rollDice, rollForStart } from './types/Dice'
 import { v4 } from 'uuid'
 import { NodotsChecker } from './types/Checker'
-import {
-  NodotsPlayers,
-  PlayerMoving,
-  PlayerRolling,
-  PlayerWinning,
-} from './Stores/Player/Types'
-import { NodotsPlayStore } from './Stores/Play/Store'
+import { NodotsPlayers, PlayerWinning } from './Stores/Player/Types'
 import chalk from 'chalk'
+import {
+  NodotsPlayerDiceInactive,
+  NodotsPlayerDiceActive,
+  NodotsRoll,
+  initializing as initializingDice,
+  roll,
+  NodotsPlayersDiceInactive,
+  NodotsPlayersDiceWhite,
+  NodotsPlayersDiceBlack,
+} from './Stores/Dice/Types'
+import { NodotsDiceStore } from './Stores/Dice/Store'
+import { NodotsGameStore } from './Store'
 
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
@@ -84,6 +89,7 @@ export interface NodotsGame {
 export interface GameInitializing extends NodotsGame {
   kind: 'game-initializing'
   players: NodotsPlayers
+  dice: NodotsPlayersDiceInactive
   board: NodotsBoard
   cube: NodotsCube
 }
@@ -91,6 +97,7 @@ export interface GameInitializing extends NodotsGame {
 export interface GameRollingForStart extends NodotsGame {
   kind: 'game-rolling-for-start'
   players: NodotsPlayers
+  dice: NodotsPlayersDiceInactive
   board: NodotsBoard
   cube: NodotsCube
 }
@@ -98,6 +105,7 @@ export interface GameRollingForStart extends NodotsGame {
 export interface GameReady extends NodotsGame {
   kind: 'game-ready'
   players: NodotsPlayers
+  dice: NodotsPlayersDiceWhite | NodotsPlayersDiceBlack
   board: NodotsBoard
   cube: NodotsCube
   activeColor: NodotsColor
@@ -106,6 +114,7 @@ export interface GameReady extends NodotsGame {
 export interface GamePlaying_Rolling extends NodotsGame {
   kind: 'game-playing-rolling'
   players: NodotsPlayers
+  dice: NodotsPlayersDiceWhite | NodotsPlayersDiceBlack
   board: NodotsBoard
   cube: NodotsCube
   activeColor: NodotsColor
@@ -115,6 +124,7 @@ export interface GamePlaying_Rolling extends NodotsGame {
 export interface GamePlaying_Moving extends NodotsGame {
   kind: 'game-playing-moving'
   players: NodotsPlayers
+  dice: NodotsPlayersDiceWhite | NodotsPlayersDiceBlack
   board: NodotsBoard
   cube: NodotsCube
   activeColor: NodotsColor
@@ -125,7 +135,7 @@ export interface GameCompleted extends NodotsGame {
   activeColor: NodotsColor
   board: NodotsBoard
   cube: NodotsCube
-  roll: Roll
+  roll: NodotsRoll
   players: NodotsPlayers
   winner: PlayerWinning
 }
@@ -139,22 +149,32 @@ export type NodotsGameState =
   | GameCompleted
 
 export const initializing = (players: NodotsPlayers): GameRollingForStart => {
-  console.log('[GameStore] initializing players:')
-  console.log(
-    chalk.green(
-      `Bang a gong game is on!: ${players.black.username} v ${players.white.username})`
-    )
-  )
+  // console.log('[Store: Game] initializing players:')
+  // console.log(
+  //   chalk.green(
+  //     `Bang a gong, game is on for ${players.black.username} v ${players.white.username}`
+  //   )
+  // )
+  const id = generateId()
   const board = buildBoard(players)
   const cube: NodotsCube = {
     id: generateId(),
     value: 2,
     owner: undefined,
   }
+
+  const dice: NodotsPlayersDiceInactive = {
+    black: initializingDice('black'),
+    white: initializingDice('white'),
+  }
+
+  console.log('[Types: Game] initializing id:', id)
+
   return {
-    id: generateId(),
     kind: 'game-rolling-for-start',
+    id,
     players,
+    dice,
     board,
     cube,
     plays: [],
@@ -162,28 +182,84 @@ export const initializing = (players: NodotsPlayers): GameRollingForStart => {
 }
 
 export const rollingForStart = (
-  gameState: GameInitializing
+  gameStore: NodotsGameStore
 ): GamePlaying_Rolling => {
-  const winner = rollForStart(gameState.players)
-  console.log('[GameStore] rollingForStart winner:', winner)
-
-  return {
-    ...gameState,
-    kind: 'game-playing-rolling',
-    activeColor: winner.color,
+  const gameState = gameStore.state as GameRollingForStart
+  const whiteRoll = roll()
+  const blackRoll = roll()
+  if (whiteRoll === blackRoll) {
+    return rollingForStart(gameStore)
+  }
+  const activeColor = whiteRoll > blackRoll ? 'white' : 'black'
+  const diceStores = gameStore.diceStores
+  // console.log('[Types: Game] rollingForStart diceStores:', diceStores)
+  const activeDiceStore = diceStores[activeColor]
+  console.log(
+    '[Types: Game] preparing to call activeDiceStore setActive for:',
+    activeColor
+  )
+  activeDiceStore.setActive(
+    activeDiceStore.diceState as NodotsPlayerDiceInactive
+  )
+  if (
+    diceStores.black.diceState.kind === 'active' &&
+    diceStores.white.diceState.kind === 'active'
+  ) {
+    console.error(
+      `Both diceStates are active gameId: ${gameStore.state.id} whiteRoll = ${whiteRoll} blackRoll = ${blackRoll} activeColor = ${activeColor} gameStore:`,
+      gameStore
+    )
+  }
+  if (activeDiceStore.diceState.color === 'white') {
+    return {
+      ...gameState,
+      kind: 'game-playing-rolling',
+      activeColor,
+      dice: {
+        white: {
+          color: 'white',
+          kind: 'active',
+          dice: activeDiceStore.diceState.dice,
+        },
+        black: {
+          color: 'black',
+          kind: 'inactive',
+          dice: activeDiceStore.diceState.dice,
+        },
+      } as NodotsPlayersDiceWhite,
+    }
+  } else {
+    return {
+      ...gameState,
+      kind: 'game-playing-rolling',
+      activeColor,
+      dice: {
+        white: {
+          color: 'white',
+          kind: 'inactive',
+          dice: activeDiceStore.diceState.dice,
+        },
+        black: {
+          color: 'black',
+          kind: 'active',
+          dice: activeDiceStore.diceState.dice,
+        },
+      } as NodotsPlayersDiceBlack,
+    }
   }
 }
 
 export const rolling = (
   gameState: GamePlaying_Rolling,
-  player: PlayerRolling
+  diceStore: NodotsDiceStore
 ): GamePlaying_Moving => {
-  const { activeColor, players } = gameState
-  players[activeColor] = player as unknown as PlayerMoving // FIXME
-
+  const { activeColor, players, dice } = gameState
+  const activeDice = dice[activeColor] as NodotsPlayerDiceActive
+  // console.log('[Types: Game] rolling activeDice', activeDice)
   return {
     ...gameState,
     kind: 'game-playing-moving',
     players,
+    dice,
   }
 }

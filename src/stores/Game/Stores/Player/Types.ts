@@ -1,5 +1,4 @@
 import { NodotsColor, MoveDirection, generateId } from '../../Types'
-import { NodotsDice, Roll, generateDice, rollDice } from '../../types/Dice'
 
 export type NodotsPlayer = {
   username: string
@@ -29,22 +28,18 @@ export interface PlayerReady extends NodotsPlayer {
   kind: 'player-ready'
   id: string
   pipCount: number
-  dice: NodotsDice
 }
 
 export interface PlayerRolling extends NodotsPlayer {
   kind: 'player-rolling'
   id: string
   pipCount: number
-  dice: NodotsDice
-  roll: () => Roll
 }
 
 export interface PlayerMoving extends NodotsPlayer {
   kind: 'player-moving'
   id: string
   pipCount: number
-  dice: NodotsDice
 }
 
 export interface PlayerWinning extends NodotsPlayer {
@@ -68,7 +63,6 @@ export type NodotsPlayerState =
   | PlayerWinning
 
 export const initializing = (player: NodotsPlayer): PlayerReady => {
-  const dice = generateDice(player)
   return {
     kind: 'player-ready',
     id: generateId(),
@@ -77,22 +71,5 @@ export const initializing = (player: NodotsPlayer): PlayerReady => {
     direction: player.direction,
     automation: player.automation,
     pipCount: 167,
-    dice,
-  }
-}
-
-export const rolling = (playerState: PlayerRolling): PlayerMoving => {
-  console.log('[Type: Player] rolling playerState:', playerState.dice)
-  const roll = rollDice() // this is crap. Should be called from player
-  // playerState.dice[0].value = roll[0]
-  // playerState.dice[1].value = roll[1]
-  // console.log('[Type: Player] rolling dice:', dice)
-  // console.log('[Type: Player] rolling roll:', roll)
-  // dice[0].value = roll[0]
-  // dice[1].value = roll[1]
-  return {
-    ...playerState,
-    kind: 'player-moving',
-    dice: playerState.dice,
   }
 }

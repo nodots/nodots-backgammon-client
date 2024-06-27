@@ -5,39 +5,40 @@ export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type DieOrder = 0 | 1
 export type Roll = [DieValue, DieValue]
 
-interface Die {
+interface NodotsDie {
   color: NodotsColor
   value: DieValue
   order: DieOrder
 }
 
-interface InactiveDie extends Die {
-  kind: 'inactive'
+export type NodotsPlayerDice = {
+  dice: [NodotsDie, NodotsDie]
 }
-
-interface ActiveDie extends Die {
+export interface NodotsPlayerDiceActive extends NodotsPlayerDice {
   kind: 'active'
-  roll: () => Roll
+  dice: [NodotsDie, NodotsDie]
 }
 
-export type NodotsDie = InactiveDie | ActiveDie
-export type NodotsDice = [NodotsDie, NodotsDie]
+export interface NodotsPlayerDiceInactive extends NodotsPlayerDice {
+  kind: 'inactive'
+  dice: [NodotsDie, NodotsDie]
+}
 
-export const generateDice = (player: NodotsPlayer) => {
-  const die1: InactiveDie = {
-    kind: 'inactive',
-    color: player.color,
+export const generateDice = (color: NodotsColor): NodotsPlayerDiceInactive => {
+  const die1: NodotsDie = {
+    color,
     order: 0,
     value: 1,
   }
-  const die2: InactiveDie = {
-    kind: 'inactive',
-    color: player.color,
+  const die2: NodotsDie = {
+    color,
     order: 1,
     value: 1,
   }
-  const dice: NodotsDice = [die1, die2]
-  return dice
+  return {
+    kind: 'inactive',
+    dice: [die1, die2],
+  }
 }
 
 const roll = (): DieValue => (Math.floor(Math.random() * 6) + 1) as DieValue

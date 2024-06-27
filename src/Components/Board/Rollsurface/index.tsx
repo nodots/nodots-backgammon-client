@@ -1,5 +1,5 @@
 import { Container } from '@mui/material'
-import Die from '../Dice'
+import Dice from '../Dice'
 import DiceSwitcher from '../DiceSwitcher'
 import { NodotsColor } from '../../../stores/Game/Types'
 import { NodotsGameStore } from '../../../stores/Game/Store'
@@ -25,9 +25,7 @@ function RollSurface({ gameStore, color }: Props) {
       }}
     >
       <div className="dice-container">
-        <Die order={0} color={color} gameStore={gameStore} />
-        <DiceSwitcher gameStore={gameStore} color={color} />
-        <Die order={1} color={color} gameStore={gameStore} />
+        <Dice color={color} gameStore={gameStore} />
       </div>
     </Container>
   )

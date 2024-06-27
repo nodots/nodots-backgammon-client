@@ -2,9 +2,9 @@ import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
 import { DiceEventHandler } from './Events/handlers'
-import { DieOrder, NodotsDie } from '../../../stores/Game/types/Dice'
 import { NodotsGameStore } from '../../../stores/Game/Store'
 import { GamePlaying_Rolling, NodotsColor } from '../../../stores/Game/Types'
+import chalk from 'chalk'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -17,21 +17,11 @@ const paths = [
 
 interface Props {
   gameStore: NodotsGameStore
-  order: DieOrder
   color: NodotsColor
 }
 
 // TODO: Show move state with dice
-function Die({ order, color, gameStore }: Props) {
-  const die: NodotsDie = {
-    kind: 'inactive',
-    color,
-    order,
-    value: 1,
-  }
-  const eventHandler = React.useRef<DiceEventHandler>(
-    new DiceEventHandler(die, gameStore)
-  ).current
+function Dice({ color, gameStore }: Props) {
   const theme = useTheme()
 
   const fill = (color: NodotsColor) => {
@@ -40,20 +30,51 @@ function Die({ order, color, gameStore }: Props) {
       : theme.palette.secondary.dark
   }
 
-  const { activeColor } = gameStore.state as GamePlaying_Rolling // FIXME
-  return (
-    activeColor === color && (
-      <Button className="die" onClick={eventHandler.clickHandler}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-          <g id="Layer_2" data-name="Layer 2">
-            <g id="Layer_1-2" data-name="Layer 1">
-              <path d={paths[0]} fill={fill(color)} />
-            </g>
-          </g>
-        </svg>
-      </Button>
-    )
-  )
+  switch (gameStore.state.kind) {
+    case 'game-playing-rolling':
+      const diceStore = gameStore.diceStores[color]
+      const diceState = diceStore.diceState
+      console.log(
+        chalk.green.bold.underline(
+          `[Component: Dice] diceState ${diceState.color}:`
+        ),
+        diceState.kind
+      )
+      const eventHandler = React.useRef<DiceEventHandler>(
+        new DiceEventHandler(diceState, gameStore)
+      ).current
+
+      return (
+        gameStore.state.activeColor === color && (
+          <>
+            <Button className="die" onClick={eventHandler.clickHandler}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <g id="Layer_2" data-name="Layer 2">
+                  <g id="Layer_1-2" data-name="Layer 1">
+                    <path d={paths[0]} fill={fill(color)} />
+                  </g>
+                </g>
+              </svg>
+            </Button>
+            <Button className="die" onClick={eventHandler.clickHandler}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <g id="Layer_2" data-name="Layer 2">
+                  <g id="Layer_1-2" data-name="Layer 1">
+                    <path d={paths[0]} fill={fill(color)} />
+                  </g>
+                </g>
+              </svg>
+            </Button>
+          </>
+        )
+      )
+    case 'game-initializing':
+    case 'game-completed':
+    case 'game-playing-moving':
+    case 'game-ready':
+    case 'game-rolling-for-start':
+      return <>{gameStore.state.kind}</>
+  }
 }
 
-export default observer(Die)
+export default observer(Dice)

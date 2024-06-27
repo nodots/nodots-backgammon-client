@@ -1,52 +1,31 @@
-import chalk from 'chalk'
-import { action, makeAutoObservable } from 'mobx'
-import { NodotsPlayers, PlayerRolling } from './Stores/Player/Types'
-import {
-  GameInitializing,
-  GamePlaying_Rolling,
-  NodotsGameState,
-  initializing,
-  rollingForStart,
-} from './Types'
-import { NodotsPlayStore } from './Stores/Play/Store'
+import RootStoreModel from '../RootStore'
+import { NodotsGameState } from './Types'
 import { NodotsPlayerStore } from './Stores/Player/Store'
-import { rolling } from './Stores/Player/Types'
+
+// export interface INodotsGameStore {
+//   rootStore: RootStoreModel
+// }
 
 export class NodotsGameStore {
-  state: NodotsGameState
-  playStore: NodotsPlayStore | undefined
-  playerStores: {
-    black: NodotsPlayerStore
-    white: NodotsPlayerStore
-  }
+  private rootStore: RootStoreModel
 
-  constructor(players: NodotsPlayers) {
-    makeAutoObservable(this)
-    this.state = initializing(players)
-    console.log(chalk.underline('[Store: Game] state:'), this.state)
-    this.playStore = undefined // No plays until first dice roll
-    this.playerStores = {
-      black: new NodotsPlayerStore(players.black),
-      white: new NodotsPlayerStore(players.white),
-    }
-  }
-
-  @action
-  rollingForStart(gameState: GameInitializing, players: NodotsPlayers) {
-    const newState = rollingForStart(gameState)
-    console.log(
-      chalk.redBright('[Store: Game] rollingForStart newState:'),
-      newState
-    )
-    this.state = newState
-  }
-
-  @action
-  rolling(gameState: GamePlaying_Rolling, playerState: PlayerRolling) {
-    const updatedPlayer = rolling(playerState)
-    console.log('[Store: Game] rolling updatedPlayer:', updatedPlayer)
-    const dice = updatedPlayer.dice
-    console.log('[Store: Game] rolling dice:', dice)
-    // this.playStore = new NodotsPlayStore(playerState, roll)
+  constructor(rootStore: RootStoreModel) {
+    // console.log('[Store: Game] constructor')
+    this.rootStore = rootStore
+    console.log(rootStore)
   }
 }
+
+// @action
+// rollingForStart(gameStore: NodotsGameStore) {
+//   this.state = rollingForStart(gameStore)
+// }
+
+// @action
+// rolling(gameState: GamePlaying_Rolling, diceStore: NodotsDiceStore) {
+//   console.log('[Store: Game] rolling gameState:', gameState)
+//   console.log('[Store: Game] rolling diceStore:', diceStore)
+//   const newState = rolling(gameState, diceStore)
+//   // console.log('[Store: Game] rolling newState:', newState)
+//   this.state = newState
+// }

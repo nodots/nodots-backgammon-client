@@ -1,5 +1,4 @@
 import { NodotsColor, MoveDirection } from '../../Types'
-import { rollDice } from '../../types/Dice'
 import { NodotsPlayer, NodotsPlayers } from './Types'
 
 export const getActivePlayer = (
@@ -26,8 +25,3 @@ export const getPlayerForMoveDirection = (
   direction === 'clockwise'
     ? getClockwisePlayer(players)
     : getCounterclockwisePlayer(players)
-
-export const roll = (player: NodotsPlayer) => {
-  console.log('[Helper: Player] roll:', player)
-  return rollDice()
-}

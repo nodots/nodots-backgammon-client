@@ -8,7 +8,11 @@ import { HomePage } from './pages/home'
 import { SignIn } from './pages/registration/sign-in'
 import { SignUp } from './pages/registration/sign-up'
 import ProfilePage from './pages/profile'
+import RootStore from './stores/RootStore'
+import React from 'react'
+
 const App = () => {
+  console.log('[App] entry point')
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />

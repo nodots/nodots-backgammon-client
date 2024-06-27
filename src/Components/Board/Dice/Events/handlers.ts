@@ -1,27 +1,35 @@
 import { NodotsGameStore } from '../../../../stores/Game/Store'
+import {
+  NodotsPlayerDice,
+  NodotsPlayerDiceActive,
+} from '../../../../stores/Game/Stores/Dice/Types'
 import { PlayerRolling } from '../../../../stores/Game/Stores/Player/Types'
 import { GamePlaying_Rolling } from '../../../../stores/Game/Types'
-import { NodotsDie } from '../../../../stores/Game/types/Dice'
 
 export class DiceEventHandler {
-  public die: NodotsDie
+  public dice: NodotsPlayerDice
   public gameStore: NodotsGameStore
 
-  constructor(die: NodotsDie, gameStore: NodotsGameStore) {
-    this.die = die
+  constructor(dice: NodotsPlayerDice, gameStore: NodotsGameStore) {
+    this.dice = dice
     this.gameStore = gameStore
   }
 
   clickHandler = () => {
-    const gameState = this.gameStore.state
-    console.log('[Handler: DiceEvent] die:', this.die)
-    console.log('[Handler: DiceEvent] gameStore:', this.gameStore)
-    switch (gameState.kind) {
+    switch (this.gameStore.state.kind) {
       case 'game-playing-rolling':
-        const gameState = this.gameStore.state as GamePlaying_Rolling // FIXME
-        const { activeColor, players } = gameState
-        const activePlayer = players[activeColor] as PlayerRolling // FIXME
-        this.gameStore.rolling(gameState, activePlayer)
+        const gameState = this.gameStore.state
+        const activeColor = gameState.activeColor
+        const diceStore = this.gameStore.diceStores[activeColor]
+        const diceState = diceStore.diceState as NodotsPlayerDiceActive
+        console.log('[Handler: DiceEvent] diceStore:', diceStore)
+        console.log('[Handler: DiceEvent] diceState:', diceState)
+
+        diceStore.rollDice(diceState)
+        diceState.kind = 'active' // FIXME this is wrong
+
+        // const { diceStores } = this.gameStore
+        // this.gameStore.rolling(gameState, diceStore)
         break
       case 'game-playing-moving':
       case 'game-initializing':
@@ -29,8 +37,6 @@ export class DiceEventHandler {
       case 'game-rolling-for-start':
       case 'game-completed':
         break
-      default:
-        console.error(`Unexpected gameState ${this.gameStore.state.kind}`)
     }
   }
 
