@@ -1,86 +1,78 @@
-import { Button, Paper } from '@mui/material'
+import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
-import NodotsGameStore from '../../GameStore'
-import { generateId, rollingForStart } from '../../GameStore/types'
-import { InitializingPlayer, Player } from '../../GameStore/types/Player'
-import BoardComponent from '../../components/Board'
-import GameNotifications from '../../components/Nofitications/Game'
+import Board from '../../components/Board'
+import RootStore from '../../stores/RootStore'
+import {
+  PlayerInitializing,
+  NodotsPlayers,
+} from '../../stores/Game/Stores/Player/Types'
+import HUD from '../../components/HUD'
+import chalk from 'chalk'
+import { NodotsGameStore } from '../../stores/Game/Store'
+import React from 'react'
 
-const whitePlayer: InitializingPlayer = {
-  kind: 'initializing',
-  id: generateId(),
+const whitePlayer: PlayerInitializing = {
+  kind: 'player-initializing',
   color: 'white',
   username: 'White Stripes',
   direction: 'counterclockwise',
-  pipCount: 167,
   automation: {
     roll: true,
     move: false,
   },
-  dice: [
-    { kind: 'inactive', color: 'white', order: 0, value: 1 },
-    { kind: 'inactive', color: 'white', order: 1, value: 1 },
-  ],
 }
 
-const blackPlayer: InitializingPlayer = {
-  kind: 'initializing',
-  id: generateId(),
+const blackPlayer: PlayerInitializing = {
+  kind: 'player-initializing',
   color: 'black',
-  username: 'Black Messiah',
+  username: 'Black Sabbath',
   direction: 'clockwise',
-  pipCount: 167,
   automation: {
     roll: true,
     move: false,
   },
-  dice: [
-    { kind: 'inactive', color: 'black', order: 0, value: 1 },
-    { kind: 'inactive', color: 'black', order: 1, value: 1 },
-  ],
 }
 
-class GamePage extends Component {
-  private store: NodotsGameStore
+const players: NodotsPlayers = { white: whitePlayer, black: blackPlayer }
 
-  saveGame = () => {
-    const gameData = JSON.stringify(this.store)
-    const blob = new Blob([gameData], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.download = 'nodots-backgammon-game.json'
-    link.href = url
-    link.click()
-  }
+interface Props {
+  rootStore: RootStore
+}
+function GamePage({ rootStore }: Props) {
+  const [gameStore] = React.useState<NodotsGameStore>(
+    new NodotsGameStore(players)
+  )
 
-  constructor(props: {} | Readonly<{}>) {
-    super(props)
-    this.store = new NodotsGameStore({ white: whitePlayer, black: blackPlayer })
-    switch (this.store.state.kind) {
-      case 'game-initializing':
-        this.store.state = rollingForStart(this.store.state)
-        break
-      case 'game-confirming':
-      case 'game-moving':
-      case 'game-rolling':
-      case 'game-rolling-for-start':
-        break
-    }
-  }
+  switch (gameStore.state.kind) {
+    case 'game-initializing':
+    case 'game-rolling-for-start':
+      return <></>
+    case 'game-playing-rolling':
+    case 'game-playing-moving':
+    case 'game-ready':
+    case 'game-completed':
+      console.log(gameStore.state)
 
-  render() {
-    return (
-      <>
-        {/* <div id="GameControls">
-          <Button onClick={this.saveGame}>Save Game</Button>
-        </div> */}
-        <Paper id="GameContainer">
-          <GameNotifications store={this.store} />
-          <BoardComponent store={this.store} state={this.store.state} />
-        </Paper>
-      </>
-    )
+      return (
+        <>
+          <Paper id="GameContainer">
+            <Board gameStore={gameStore} />
+            <HUD store={rootStore} />
+          </Paper>
+          <footer>
+            <div>
+              Copyright &copy; {new Date().getFullYear()} Nodots Backgammon. All
+              Rights Reserved.
+            </div>
+            <div>
+              <a href="mailto:backgammon@nodots.com">backgammon@nodots.com</a>
+            </div>
+          </footer>
+        </>
+      )
+    default:
+      return <></>
   }
 }
 

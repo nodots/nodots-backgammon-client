@@ -22,16 +22,63 @@ $board-padding: $point-padding * 2;
   left: 0;
 }
 
-// #GameControls {
-//   color: red;
-// }
+#RevertMoveButton {
+  cursor: pointer;
+}
 
 #GameContainer {
   display: flex;
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1900px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+#HUDContainer {
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  margin: 130px auto;
+  flex-grow: 1;
+  max-width: 420px;
+  margin: 20px 20px 20px 10px;
+  padding: 10px;
+  height: $checker-height * 12;
+
+  .hud-card {
+    margin-bottom: 10px;
+    overflow: hidden;
+
+    &.two-column {
+      display: flex;
+      flex-direction: row;
+
+      .player-pips {
+        flex-grow: 1;
+        font-size: 2em;
+        text-align: center;
+        justify-items: center;
+        margin: 5px;
+      }
+    }
+
+    &.scrollable {
+      overflow-y: scroll;
+    }
+
+    .move-history-table {
+      overflow: scroll;
+      max-height: 300px;
+    }
+
+    .hud-card-title {
+      .MuiCardHeader-title {
+        text-transform: capitalize;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+    }
+  }
 }
 
 #GameNotificationsContainer {
@@ -60,6 +107,18 @@ $board-padding: $point-padding * 2;
     font-family: Arial, Helvetica, sans-serif !important;
     text-transform: uppercase;
   }
+}
+
+#EventNotifications {
+  position: absolute;
+  z-index: 10;
+  background-color: blue;
+  padding: 15px;
+  top: 80px;
+  right: 120px;
+  width: 400px;
+  height: 300px;
+  overflow-y: scroll;
 }
 
 .cube {
@@ -177,7 +236,7 @@ $board-padding: $point-padding * 2;
 #BoardContainer {
   display: flex;
   padding: $board-padding 0 $board-padding $board-padding;
-  margin: 20px auto;
+  margin: 20px 10px auto auto;
   .board-half {
     display: flex;
     margin: 0px;

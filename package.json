@@ -9,12 +9,15 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.5",
+    "@mui/x-charts": "^7.6.1",
+    "@mui/x-data-grid": "^7.6.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/react": "^18.2.11",
     "@types/react-dom": "^18.2.4",
+    "chalk": "^5.3.0",
     "immer": "^10.0.2",
     "mobx": "^6.12.3",
     "mobx-react": "^9.1.1",
@@ -37,7 +40,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "mobx/exhaustive-make-observable": ["error", { "autofixAnnotation": false }]
+    } 
   },
   "browserslist": {
     "production": [
@@ -55,7 +61,10 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/node": "^20.5.6",
     "@types/uuid": "^9.0.2",
+    "@typescript-eslint/parser": "^7.14.1",
     "@vitejs/plugin-react": "^4.0.4",
+    "eslint": "^8.57.0",
+    "eslint-plugin-mobx": "^0.0.10",
     "sass": "^1.63.3",
     "vite": "^4.4.9",
     "vite-plugin-svgr": "^3.2.0",
