@@ -11,13 +11,7 @@ Serious hobbyists anywhere in the world who want to up their game.
 - English
 - Arabic
 - Turkish
-
-## Competitors
-
-- BG Galaxy
-- XG
-- Backgammon Heroes
-- NextGammon
+- Greek
 
 ## Tech Requirements
 
