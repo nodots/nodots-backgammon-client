@@ -6,18 +6,12 @@ Nodots Backgammon is a React implementation of the oldest boardgame in the world
 
 Serious hobbyists anywhere in the world who want to up their game.
 
-### Likely Languages
+### Languages
 
 - English
 - Arabic
 - Turkish
-
-## Competitors
-
-- BG Galaxy
-- XG
-- Backgammon Heroes
-- NextGammon
+- Greek
 
 ## Tech Requirements
 
