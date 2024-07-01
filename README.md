@@ -27,4 +27,3 @@ Serious hobbyists anywhere in the world who want to up their game.
 
 ## Game Model
 
-<img alt="alt_text" src="./src/game_diagram.png" />
