@@ -54,17 +54,6 @@ export interface PlayDiceSwitched extends NodotsPlay {
   moves: NodotsMove[]
 }
 
-export interface PlayMoving extends NodotsPlay {
-  kind: 'play-moving'
-  activeColor: NodotsColor
-  roll: Roll
-  isForced: boolean
-  analysis: {
-    options: []
-  }
-  moves: NodotsMove[]
-}
-
 // Transition to this state when the destination of the final move is set,
 // i.e., second checker clicked.
 export interface PlayMoved extends NodotsPlay {
