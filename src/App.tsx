@@ -6,13 +6,11 @@ import './App.scss'
 import GamePage from './pages/game'
 import { HomePage } from './pages/home'
 import { SignIn } from './pages/registration/sign-in'
-import { SignUp } from './pages/registration/sign-up'
 import ProfilePage from './pages/profile'
-import RootStore from './stores/RootStore'
-import React from 'react'
+import { useStore } from './stores/RootStore'
 
 const App = () => {
-  console.log('[App] entry point')
+  const store = useStore()
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />

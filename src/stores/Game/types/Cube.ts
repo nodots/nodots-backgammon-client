@@ -1,4 +1,4 @@
-import { NodotsPlayer } from '../Stores/Player/Types'
+import { INodotsPlayer } from '../Stores/Player/Types'
 import { generateId } from '../Types'
 
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
@@ -6,7 +6,7 @@ export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 export interface NodotsCube {
   id: string
   value: CubeValue
-  owner: NodotsPlayer | undefined
+  owner: INodotsPlayer | undefined
 }
 
 export const buildCube = (): NodotsCube => {

@@ -3,8 +3,9 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import { DiceEventHandler } from './Events/handlers'
 import { NodotsGameStore } from '../../../stores/Game/Store'
-import { GamePlaying_Rolling, NodotsColor } from '../../../stores/Game/Types'
+import { GamePlayingRolling, NodotsColor } from '../../../stores/Game/Types'
 import chalk from 'chalk'
+import { useStore } from '../../../stores/RootStore'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -16,51 +17,58 @@ const paths = [
 ]
 
 interface Props {
-  gameStore: NodotsGameStore
   color: NodotsColor
 }
 
 // TODO: Show move state with dice
-function Dice({ color, gameStore }: Props) {
+function Dice({ color }: Props) {
+  const { gameStore } = useStore()
   const theme = useTheme()
-
+  const { diceStores } = gameStore
+  const diceStore = diceStores[color]
   const fill = (color: NodotsColor) => {
     return color === 'white'
       ? theme.palette.secondary.light
       : theme.palette.secondary.dark
   }
 
-  switch (gameStore.state.kind) {
+  switch (gameStore.gameState.kind) {
     case 'game-playing-rolling':
-      const diceStore = gameStore.diceStores[color]
-      const diceState = diceStore.diceState
-      console.log(
-        chalk.green.bold.underline(
-          `[Component: Dice] diceState ${diceState.color}:`
-        ),
-        diceState.kind
-      )
+      const diceState = gameStore.diceStores[color].diceState
       const eventHandler = React.useRef<DiceEventHandler>(
         new DiceEventHandler(diceState, gameStore)
       ).current
-
+      console.log(
+        `[Stores: Dice] Die 1 ${diceState.dice[0].id}:`,
+        diceState.dice[0].value
+      )
+      console.log(
+        `[Stores: Dice ${color}] Die 2 ${diceState.dice[1].id}:`,
+        diceState.dice[0].value
+      )
       return (
-        gameStore.state.activeColor === color && (
+        gameStore.gameState.activeColor === color && (
           <>
             <Button className="die" onClick={eventHandler.clickHandler}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                <g id="Layer_2" data-name="Layer 2">
-                  <g id="Layer_1-2" data-name="Layer 1">
-                    <path d={paths[0]} fill={fill(color)} />
+                <g id="ActiveDie1-Layer2" data-name="Layer 2">
+                  <g id="ActiveDie1-Layer1" data-name="Layer 1">
+                    <path
+                      d={paths[diceState.dice[0].value - 1]}
+                      fill={fill(color)}
+                    />
                   </g>
                 </g>
               </svg>
             </Button>
             <Button className="die" onClick={eventHandler.clickHandler}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                <g id="Layer_2" data-name="Layer 2">
-                  <g id="Layer_1-2" data-name="Layer 1">
-                    <path d={paths[0]} fill={fill(color)} />
+                <g id="ActiveDie2-Layer2" data-name="Layer 2">
+                  <g id="ActiveDie2-Layer1" data-name="Layer 1">
+                    <path
+                      d={paths[diceState.dice[1].value - 1]}
+                      fill={fill(color)}
+                    />
                   </g>
                 </g>
               </svg>
@@ -71,9 +79,9 @@ function Dice({ color, gameStore }: Props) {
     case 'game-initializing':
     case 'game-completed':
     case 'game-playing-moving':
-    case 'game-ready':
+    case 'game-initialized':
     case 'game-rolling-for-start':
-      return <>{gameStore.state.kind}</>
+      return <>{gameStore.gameState.kind}</>
   }
 }
 

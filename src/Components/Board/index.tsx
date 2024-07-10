@@ -7,10 +7,11 @@ import Quadrant, { QuadrantPoints, Props as QuadrantProps } from './Quadrant'
 import Rollsurface from './Rollsurface'
 import './scss/index.scss'
 import {
-  GamePlaying_Moving,
-  GamePlaying_Rolling,
+  GamePlayingMoving,
+  GamePlayingRolling,
   GameCompleted,
 } from '../../stores/Game/Types'
+import { useStore } from '../../stores/RootStore'
 
 export type Quadrants = [
   QuadrantProps,
@@ -25,19 +26,16 @@ export interface BoardDisplay {
   off: OffProps
 }
 
-interface Props {
-  gameStore: NodotsGameStore
-}
-
-function Board({ gameStore }: Props) {
-  switch (gameStore.state.kind) {
+function Board() {
+  const { gameStore } = useStore()
+  switch (gameStore.gameState.kind) {
     case 'game-initializing':
     case 'game-completed':
     case 'game-rolling-for-start':
       return <></>
     case 'game-playing-moving':
     case 'game-playing-rolling':
-      const game = gameStore.state as GamePlaying_Rolling // FIXME
+      const game = gameStore.gameState as GamePlayingRolling // FIXME
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>

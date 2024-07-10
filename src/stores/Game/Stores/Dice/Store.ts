@@ -1,30 +1,41 @@
-import { action, makeAutoObservable } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 import chalk from 'chalk'
 import { NodotsColor } from '../../Types'
 import {
   NodotsPlayerDiceActive,
   NodotsPlayerDiceInactive,
-  NodotsPlayerDiceState,
+  NodotsPlayersDiceBlack,
+  NodotsPlayersDiceInactive,
+  NodotsPlayersDiceWhite,
   initializing,
   rolling,
-  setActive,
+  setPlayersDiceActive,
 } from './Types'
+import { NodotsPlayers } from '../Player/Types'
 
 export class NodotsDiceStore {
-  diceState: NodotsPlayerDiceState
+  diceState:
+    | NodotsPlayersDiceBlack
+    | NodotsPlayersDiceWhite
+    | NodotsPlayersDiceInactive
 
   constructor(color: NodotsColor) {
-    this.diceState = initializing(color)
+    makeAutoObservable(this)
+    this.diceState = initializing()
   }
 
-  @action
-  setActive = (diceState: NodotsPlayerDiceInactive): void => {
-    console.log('[Stores: Dice] setActive color:', diceState.color)
-    this.diceState = setActive(diceState)
+  setPlayersDiceActive = (
+    diceState:
+      | NodotsPlayersDiceInactive
+      | NodotsPlayersDiceBlack
+      | NodotsPlayersDiceWhite,
+    color: NodotsColor
+  ): void => {
+    this.diceState = setPlayersDiceActive(diceState, color)
   }
 
-  @action
-  rollDice = (diceState: NodotsPlayerDiceActive) => {
-    this.diceState = rolling(diceState)
-  }
+  // rollDice = (diceState: NodotsPlayerDiceActive) => {
+  //   console.log('[Stores: Dice] rollDice diceState:', diceState)
+  //   this.diceState = rolling(diceState)
+  // }
 }

@@ -12,7 +12,7 @@ function RevertMove({ gameStore }: Props) {
 
   const handleRevertMove = () => {}
 
-  switch (gameStore.state.kind) {
+  switch (gameStore.gameState.kind) {
     case 'game-playing-moving':
       return (
         <div onClick={handleRevertMove} id="RevertMoveButton">

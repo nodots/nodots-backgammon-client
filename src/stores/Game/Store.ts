@@ -1,31 +1,54 @@
-import RootStoreModel from '../RootStore'
-import { NodotsGameState } from './Types'
-import { NodotsPlayerStore } from './Stores/Player/Store'
-
-// export interface INodotsGameStore {
-//   rootStore: RootStoreModel
-// }
+import { action, makeAutoObservable } from 'mobx'
+import RootStore from '../RootStore'
+import {
+  GameInitialized,
+  GameInitializing,
+  GamePlayingRolling,
+  GameRollingForStart,
+  NodotsGameState,
+  initializing,
+  rollingForStart,
+} from './Types'
+import { NodotsPlayersInitializing } from './Stores/Player/Types'
+import { rolling } from './Stores/Dice/Types'
+import { NodotsDiceStore } from './Stores/Dice/Store'
 
 export class NodotsGameStore {
-  private rootStore: RootStoreModel
+  rootStore: RootStore
+  gameState: NodotsGameState
+  diceStores: {
+    white: NodotsDiceStore
+    black: NodotsDiceStore
+  }
 
-  constructor(rootStore: RootStoreModel) {
-    // console.log('[Store: Game] constructor')
+  constructor(rootStore: RootStore) {
+    makeAutoObservable(this)
+    console.log(
+      '4.async [Stores: NodotsGameStore] constructor rootStore:',
+      rootStore
+    )
     this.rootStore = rootStore
-    console.log(rootStore)
+    this.gameState = initializing()
+    this.diceStores = {
+      black: new NodotsDiceStore('black'),
+      white: new NodotsDiceStore('white'),
+    }
+  }
+
+  rollingForStart(
+    gameState: GameInitialized,
+    diceStores: NodotsDiceStore,
+    players: NodotsPlayersInitializing
+  ) {
+    console.log(
+      '[Stores: Game] calling Store.rollingForStart gameState:',
+      gameState
+    )
+
+    this.gameState = rollingForStart(this.diceStores, gameState, players)
+    console.log(
+      '[Stores: Game] back from Store.rollingForStart NEW gameState:',
+      gameState
+    )
   }
 }
-
-// @action
-// rollingForStart(gameStore: NodotsGameStore) {
-//   this.state = rollingForStart(gameStore)
-// }
-
-// @action
-// rolling(gameState: GamePlaying_Rolling, diceStore: NodotsDiceStore) {
-//   console.log('[Store: Game] rolling gameState:', gameState)
-//   console.log('[Store: Game] rolling diceStore:', diceStore)
-//   const newState = rolling(gameState, diceStore)
-//   // console.log('[Store: Game] rolling newState:', newState)
-//   this.state = newState
-// }

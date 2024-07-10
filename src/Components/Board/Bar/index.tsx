@@ -6,14 +6,14 @@ import {
   getCounterclockwisePlayer,
 } from '../../../stores/Game/Stores/Player/helpers'
 import { NodotsGameStore } from '../../../stores/Game/Store'
-import { GamePlaying_Moving } from '../../../stores/Game/Types'
+import { GamePlayingMoving } from '../../../stores/Game/Types'
 
 export interface Props {
   gameStore: NodotsGameStore
 }
 
 function Bar({ gameStore }: Props) {
-  switch (gameStore.state.kind) {
+  switch (gameStore.gameState.kind) {
     case 'game-initializing':
     case 'game-rolling-for-start':
       return <></>
@@ -21,7 +21,7 @@ function Bar({ gameStore }: Props) {
     case 'game-playing-moving':
     case 'game-playing-rolling':
     case 'game-completed':
-      const gameState = gameStore.state as GamePlaying_Moving // FIXME
+      const gameState = gameStore.gameState as GamePlayingMoving // FIXME
       const { board, players } = gameState
 
       const clockwisePlayer = getClockwisePlayer(players)

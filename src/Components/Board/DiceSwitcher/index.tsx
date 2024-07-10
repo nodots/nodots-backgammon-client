@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import React from 'react'
 
 import { DiceSwitcherEventHandler } from './Events/handlers'
-import { GamePlaying_Rolling } from '../../../stores/Game/Types'
+import { GamePlayingRolling } from '../../../stores/Game/Types'
 import { NodotsColor } from '../../../stores/Game/Types'
 import { NodotsPlayState } from '../../../stores/Game/Stores/Play/Types'
 import { NodotsGameStore } from '../../../stores/Game/Store'
@@ -17,9 +17,9 @@ interface Props {
 function DiceSwitcher({ gameStore, color }: Props) {
   const theme = useTheme()
   const eventHandler = React.useRef<DiceSwitcherEventHandler>(
-    new DiceSwitcherEventHandler(gameStore.state)
+    new DiceSwitcherEventHandler(gameStore.gameState)
   ).current
-  const gameState = gameStore.state
+  const gameState = gameStore.gameState
   switch (gameState.kind) {
     case 'game-initializing':
     case 'game-completed':
@@ -28,7 +28,7 @@ function DiceSwitcher({ gameStore, color }: Props) {
     case 'game-rolling-for-start':
       return <></>
     case 'game-playing-rolling':
-      const state = gameStore.state as GamePlaying_Rolling
+      const state = gameStore.gameState as GamePlayingRolling
       const { activeColor } = state
 
       return (

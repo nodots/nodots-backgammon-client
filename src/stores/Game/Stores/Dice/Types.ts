@@ -1,20 +1,25 @@
-import { NodotsColor } from '../../Types'
-import { NodotsPlayers, NodotsPlayer } from '../Player/Types'
+import chalk from 'chalk'
+import { generateId, NodotsColor } from '../../Types'
+import { NodotsPlayers, INodotsPlayer } from '../Player/Types'
+import { NodotsDiceStore } from './Store'
 
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
 export type DieOrder = 0 | 1
 export type NodotsRoll = [DieValue, DieValue]
 
 interface NodotsDie {
+  id: string
   color: NodotsColor
   value: DieValue
   order: DieOrder
 }
 
 export type NodotsPlayerDice = {
+  id: string
   color: NodotsColor
   dice: [NodotsDie, NodotsDie]
 }
+
 export interface NodotsPlayerDiceActive extends NodotsPlayerDice {
   kind: 'active'
   dice: [NodotsDie, NodotsDie]
@@ -44,32 +49,33 @@ export type NodotsPlayersDiceInactive = {
   black: NodotsPlayerDiceInactive
 }
 
-export const initializing = (color: NodotsColor): NodotsPlayerDiceInactive => {
+const initializingPlayerDice = (
+  color: NodotsColor
+): NodotsPlayerDiceInactive => {
   const die1: NodotsDie = {
+    id: generateId(),
     color,
     order: 0,
     value: 1,
   }
   const die2: NodotsDie = {
+    id: generateId(),
     color,
     order: 1,
     value: 1,
   }
   return {
+    id: generateId(),
     kind: 'inactive',
     color,
     dice: [die1, die2],
   }
 }
 
-export const setActive = (
-  diceState: NodotsPlayerDiceInactive
-): NodotsPlayerDiceActive => {
-  // console.log('[Types: Dice] setActive diceState:', diceState)
+export const initializing = (): NodotsPlayersDiceInactive => {
   return {
-    ...diceState,
-    kind: 'active',
-    dice: [diceState.dice[0], diceState.dice[1]],
+    black: initializingPlayerDice('black'),
+    white: initializingPlayerDice('white'),
   }
 }
 
@@ -85,9 +91,48 @@ export const rolling = (
   const roll = rollDice()
   diceState.dice[0].value = roll[0]
   diceState.dice[1].value = roll[1]
+  console.log('[Types: Dice] rolling dice:', diceState.dice)
   return {
     ...diceState,
     kind: 'inactive',
     dice: [diceState.dice[0], diceState.dice[1]],
+  }
+}
+
+export const setPlayersDiceActive = (
+  diceState:
+    | NodotsPlayersDiceInactive
+    | NodotsPlayersDiceBlack
+    | NodotsPlayersDiceWhite,
+  color: NodotsColor
+): NodotsPlayersDiceBlack | NodotsPlayersDiceWhite => {
+  console.log('[Types: Dice ] setPlayersDiceActive color:', color)
+  console.log(
+    chalk.red('[Types: Dice ] setPlayersDiceActive diceState:'),
+    diceState
+  )
+  switch (color) {
+    case 'black':
+      return {
+        white: {
+          ...diceState.white,
+          kind: 'inactive',
+        },
+        black: {
+          ...diceState.black,
+          kind: 'active',
+        },
+      }
+    case 'white':
+      return {
+        white: {
+          ...diceState.white,
+          kind: 'active',
+        },
+        black: {
+          ...diceState.black,
+          kind: 'inactive',
+        },
+      }
   }
 }

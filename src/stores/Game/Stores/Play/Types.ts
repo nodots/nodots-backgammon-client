@@ -1,7 +1,7 @@
 import { NodotsColor, generateId } from '../../Types'
 import { DieValue, Roll } from '../../types/Dice'
 import { MoveInitializing, NodotsMove } from '../Move/Types'
-import { NodotsPlayer, PlayerMoving, PlayerRolling } from '../Player/Types'
+import { INodotsPlayer, PlayerMoving, PlayerRolling } from '../Player/Types'
 
 export interface NodotsPlay {
   kind:
@@ -103,7 +103,7 @@ export const initializing = (
 
 const buildMove = (
   dieValue: DieValue,
-  player: NodotsPlayer
+  player: INodotsPlayer
 ): MoveInitializing => {
   return {
     id: generateId(),
@@ -115,7 +115,7 @@ const buildMove = (
   }
 }
 
-const buildMovesForRoll = (roll: Roll, player: NodotsPlayer): NodotsMove[] => {
+const buildMovesForRoll = (roll: Roll, player: INodotsPlayer): NodotsMove[] => {
   const moves: NodotsMove[] = [
     buildMove(roll[0], player),
     buildMove(roll[1], player),

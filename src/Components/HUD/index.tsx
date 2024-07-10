@@ -7,29 +7,27 @@ import { observer } from 'mobx-react'
 import PipCountNotification from './PipCountNotification'
 import {
   GameCompleted,
-  GamePlaying_Moving,
-  GamePlaying_Rolling,
+  GamePlayingMoving,
+  GamePlayingRolling,
   NodotsGameState,
 } from '../../stores/Game/Types'
-import { NodotsGameStore } from '../../stores/Game/Store'
-import RootStore from '../../stores/RootStore'
+import RootStore, { useStore } from '../../stores/RootStore'
 import StoresOverview from './StoresOverview'
 
-interface Props {
-  store: RootStore
-}
-
-function HUDComponent({ store }: Props) {
-  const gameStore = store.gameStore
-  switch (gameStore.state.kind) {
+function HUDComponent() {
+  const { gameStore } = useStore()
+  const { diceStores } = gameStore
+  switch (gameStore.gameState.kind) {
     case 'game-playing-rolling':
     case 'game-playing-moving':
-      const gameState = gameStore.state as GamePlaying_Moving // FIXME
-      const playStore = gameStore.playStore
-      const playState = playStore?.playState
       return (
         <Paper id="HUDContainer" elevation={2}>
-          <StoresOverview store={store} />
+          {gameStore.gameState.kind}: {gameStore.gameState.activeColor}
+          <br />
+          Black Dice: {diceStores.black.diceState.kind}
+          <br />
+          White Dice: {diceStores.white.diceState.kind}
+          {/* <StoresOverview store={store} /> */}
           {/* <PipCountNotification state={state} /> */}
           {/* <PlayerEventNotification state={state} />
               <DiceEventsNotification state={state} /> */}
