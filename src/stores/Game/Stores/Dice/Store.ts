@@ -11,7 +11,7 @@ import {
   rolling,
   setPlayersDiceActive,
 } from './Types'
-import { NodotsPlayers } from '../Player/Types'
+import { INodotsPlayers } from '../Player/Types'
 
 export class NodotsDiceStore {
   diceState:

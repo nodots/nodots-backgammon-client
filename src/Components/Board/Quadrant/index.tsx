@@ -7,7 +7,8 @@ import {
   Longitude,
   NodotsBoard,
 } from '../../../stores/Game/types/Board'
-import { NodotsGame, generateId } from '../../../stores/Game/Types'
+import { NodotsGame } from '../../../stores/Game/Types'
+import { generateId } from '../../../stores/RootStore'
 import { NodotsGameStore } from '../../../stores/Game/Store'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]

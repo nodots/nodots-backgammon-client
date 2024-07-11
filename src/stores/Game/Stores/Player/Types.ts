@@ -1,10 +1,5 @@
-import {
-  NodotsColor,
-  MoveDirection,
-  generateId,
-  NodotsGameState,
-  GameRollingForStart,
-} from '../../Types'
+import { NodotsColor, MoveDirection } from '../../Types'
+import { generateId } from '../../../RootStore'
 
 export type INodotsPlayer = {
   id: string
@@ -18,17 +13,43 @@ export type INodotsPlayer = {
   pipCount: number
 }
 
+export interface INodotsPlayers {
+  black: INodotsPlayer
+  white: INodotsPlayer
+}
+
 export interface PlayerWaiting extends INodotsPlayer {
   kind: 'player-waiting'
+}
+
+export interface PlayerRolling extends INodotsPlayer {
+  kind: 'player-rolling'
 }
 export interface PlayerMoving extends INodotsPlayer {
   kind: 'player-moving'
 }
 
-export interface NodotsPlayers {
-  black: INodotsPlayer
-  white: INodotsPlayer
-}
+// export interface PlayerWinning extends INodotsPlayer {
+//   kind: 'player-winning'
+// }
+
+// interface PlayerLosing extends INodotsPlayer {
+//   kind: 'player-losing'
+// }
+
+// interface PlayerResigning extends INodotsPlayer {
+//   kind: 'player-resigning'
+// }
+
+export type NodotsPlayer =
+  | PlayerInitializing
+  | PlayerRollingForStart
+  | PlayerRolling
+  | PlayerMoving
+  | PlayerWaiting
+  // | PlayerResigning
+  | PlayerWinning
+// | PlayerLosing
 
 export interface NodotsPlayersInitializing {
   black: PlayerInitializing
@@ -62,6 +83,12 @@ export interface NodotsPlayersWhiteMoving {
 export type NodotsPlayersWhiteActive =
   | NodotsPlayersWhiteRolling
   | NodotsPlayersWhiteMoving
+
+export type NodotsPlayers =
+  | NodotsPlayersInitializing
+  | NodotsPlayersBlackActive
+  | NodotsPlayersWhiteActive
+
 export interface NodotsPipCounts {
   black: number
   white: number

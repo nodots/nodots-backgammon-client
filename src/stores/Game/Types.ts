@@ -1,5 +1,4 @@
 import chalk from 'chalk'
-import { v4 } from 'uuid'
 import {
   NodotsPlayerDice,
   NodotsPlayerDiceActive,
@@ -13,7 +12,7 @@ import {
 } from './Stores/Dice/Types'
 import { NodotsPlay } from './Stores/Play/Types'
 import {
-  NodotsPlayers,
+  INodotsPlayers,
   NodotsPlayersInitializing,
   PlayerWinning,
   setPlayersActive,
@@ -22,6 +21,7 @@ import { buildBoard, NodotsBoard } from './types/Board'
 import { NodotsChecker } from './types/Checker'
 import { buildCube, NodotsCube } from './types/Cube'
 import { NodotsDiceStore } from './Stores/Dice/Store'
+import { generateId } from '../RootStore'
 export const CHECKERS_PER_PLAYER = 15
 export type PointPosition =
   | 1
@@ -73,11 +73,6 @@ export type DestinationPosition = PointPosition | 'off'
 export type NodotsColor = 'black' | 'white'
 export type MoveDirection = 'clockwise' | 'counterclockwise'
 
-export const generateId = (): string => v4()
-export const generateTimestamp = (): string => new Date().toISOString()
-export const changeActiveColor = (activeColor: NodotsColor): NodotsColor =>
-  activeColor === 'black' ? 'white' : 'black'
-
 export interface NodotsGame {
   id: string
 }
@@ -100,7 +95,7 @@ export interface GameRollingForStart extends NodotsGame {
 
 export interface GamePlayingRolling extends NodotsGame {
   kind: 'game-playing-rolling'
-  players: NodotsPlayers
+  players: INodotsPlayers
   dice: NodotsPlayersDiceWhite | NodotsPlayersDiceBlack
   board: NodotsBoard
   cube: NodotsCube
@@ -110,7 +105,7 @@ export interface GamePlayingRolling extends NodotsGame {
 
 export interface GamePlayingMoving extends NodotsGame {
   kind: 'game-playing-moving'
-  players: NodotsPlayers
+  players: INodotsPlayers
   dice: NodotsPlayersDiceWhite | NodotsPlayersDiceBlack
   board: NodotsBoard
   cube: NodotsCube
@@ -124,7 +119,7 @@ export interface GameCompleted extends NodotsGame {
   board: NodotsBoard
   cube: NodotsCube
   roll: NodotsRoll
-  players: NodotsPlayers
+  players: INodotsPlayers
   winner: PlayerWinning
 }
 
@@ -136,10 +131,11 @@ export type NodotsGameState =
   | GamePlayingRolling
   | GameCompleted
 
-export const initializing = (): GameInitialized => {
+export const initializing = (players: INodotsPlayers): GameInitialized => {
   return {
     id: generateId(),
     kind: 'game-initialized',
+    players: initializingPlayers(players),
     dice: initializingPlayersDice(),
   }
 }
@@ -154,6 +150,7 @@ export const rollingForStart = (
 ): GamePlayingRolling => {
   //+++++++++++++ THIS IS THE HANDOFF POINT BETWEEN THE CLIENT AND THE GAME STORE
   // NEED TO TRANSFORM EXTERNAL PLAYER TO NODOTS PLAYER
+
   const whiteRoll = roll()
   const blackRoll = roll()
   if (whiteRoll === blackRoll) {
@@ -164,79 +161,20 @@ export const rollingForStart = (
     '[Types: Game] rollingForStart activePlayerColor:',
     activePlayerColor
   )
+  console.log('[Types: Game] rollingForStart players:', players)
   console.log('[Types: Game] rollingForStart gameState:', gameState)
 
-  const id = gameState.id
-  const cube = buildCube()
-  const board = buildBoard(players)
-  const diceStates = {
-    black: diceStores.black.diceState,
-    white: diceStores.white.diceState,
-  }
-  const updatedDice = setPlayersDiceActive(diceStates)
-  const updatedPlayers = setPlayersActive(activePlayerColor, players)
-  switch (activePlayerColor) {
-    case 'black':
-      const newStateBlack: GamePlayingRolling = {
-        kind: 'game-playing-rolling',
-        activeColor: activePlayerColor,
-        players: updatedPlayers,
-        dice: updatedDice,
-        id,
-        board,
-        cube,
-      }
-      return newStateBlack
+  // const id = gameState.id
+  // const cube = buildCube()
+  // const board = buildBoard(players)
+  // const diceStates = {
+  //   black: diceStores.black.diceState,
+  //   white: diceStores.white.diceState,
+  // }
 
-    case 'white':
-      const newStateWhite: GamePlayingRolling = {
-        kind: 'game-playing-rolling',
-        activeColor: activePlayerColor,
-        players: updatedPlayers,
-        id,
-        board,
-        cube,
-        dice: {
-          white: {
-            id: generateId(),
-            kind: 'active',
-            color: 'white',
-            dice: [
-              {
-                id: generateId(),
-                color: 'white',
-                order: 0,
-                value: 1,
-              },
-              {
-                id: generateId(),
-                color: 'white',
-                order: 1,
-                value: 1,
-              },
-            ],
-          },
-          black: {
-            id: generateId(),
-            kind: 'inactive',
-            color: 'black',
-            dice: [
-              {
-                id: generateId(),
-                color: 'black',
-                order: 0,
-                value: 1,
-              },
-              {
-                id: generateId(),
-                color: 'black',
-                order: 1,
-                value: 1,
-              },
-            ],
-          },
-        },
-      }
-      return newStateWhite
-  }
+  // return {
+  //   ...gameState,
+  //   kind: 'game-playing-rolling',
+
+  // }
 }

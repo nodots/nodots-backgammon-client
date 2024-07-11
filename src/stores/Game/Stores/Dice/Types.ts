@@ -1,6 +1,7 @@
 import chalk from 'chalk'
-import { generateId, NodotsColor } from '../../Types'
-import { NodotsPlayers, INodotsPlayer } from '../Player/Types'
+import { NodotsColor } from '../../Types'
+import { generateId } from '../../../RootStore'
+import { INodotsPlayers, INodotsPlayer } from '../Player/Types'
 import { NodotsDiceStore } from './Store'
 
 export type DieValue = 1 | 2 | 3 | 4 | 5 | 6
@@ -83,7 +84,7 @@ export const roll = (): DieValue =>
   (Math.floor(Math.random() * 6) + 1) as DieValue
 
 export const rollDice = (): NodotsRoll => [roll(), roll()]
-export const isDoubles = (roll: NodotsRoll) => roll[0] === roll[1]
+const isDoubles = (roll: NodotsRoll) => roll[0] === roll[1]
 
 export const rolling = (
   diceState: NodotsPlayerDiceActive

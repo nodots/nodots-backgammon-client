@@ -2,7 +2,8 @@ import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 
 import { useEffect, useState } from 'react'
-import { NodotsGameState, generateId } from '../../stores/Game/Types'
+import { NodotsGameState } from '../../stores/Game/Types'
+import { generateId } from '../../stores/RootStore'
 import { gameStateKey } from '../../stores/Game/Stores/Move/helpers'
 
 const parseHistoryEntry = (entry: NodotsGameState) => {

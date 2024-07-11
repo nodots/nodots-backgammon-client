@@ -1,10 +1,8 @@
 import { NodotsColor, CHECKERS_PER_PLAYER, NodotsGameState } from '../../Types'
-// import { NodotsGameStateHistoryEvent } from '../../types'
 import { NodotsBoard, getCheckercontainers, getPoints } from '../../types/Board'
 import { Checkercontainer, Off, Point } from '../../types/Checkercontainer'
-import { DieValue, Roll } from '../../types/Dice'
+import { DieValue } from '../Dice/Types'
 import { INodotsPlayer } from '../Player/Types'
-import { NodotsMove, MoveInitializing } from './Types'
 
 export const getOriginsForColor = (
   board: NodotsBoard,
@@ -156,13 +154,13 @@ export const isBearOffing = (
   return checkerCount === CHECKERS_PER_PLAYER ? true : false
 }
 
-export const gameStateKey = 'nodots-game-state'
+const gameStateKey = 'nodots-game-state'
 const getGameStateKey = (gameId: string) => `${gameStateKey}-${gameId}`
 
-export const resetGameState = (gameId: string): void =>
+const resetGameState = (gameId: string): void =>
   localStorage.removeItem(getGameStateKey(gameId))
 
-export const saveGameState = (gameState: NodotsGameState): void => {
+const saveGameState = (gameState: NodotsGameState): void => {
   console.warn(
     '[Move Helpers NOT IMPLEMENTED] saveGameState gameState:',
     gameState

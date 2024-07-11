@@ -1,5 +1,5 @@
 import { INodotsPlayer } from '../Stores/Player/Types'
-import { generateId } from '../Types'
+import { generateId } from '../../RootStore'
 
 export type CubeValue = 2 | 4 | 8 | 16 | 32 | 64
 

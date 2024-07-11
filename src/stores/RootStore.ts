@@ -1,19 +1,21 @@
-import { makeAutoObservable } from 'mobx'
+import { action, makeAutoObservable } from 'mobx'
 import { NodotsGameStore } from './Game/Store'
-import { generateId } from './Game/Types'
 import { createContext, useContext } from 'react'
+import { v4 } from 'uuid'
 
 class RootStore {
   id: string
   name: string
-  gameStore: NodotsGameStore
 
   constructor() {
     makeAutoObservable(this)
     console.log('2. [Stores: Root] constructor')
     this.id = generateId()
     this.name = 'Nodots Backgammon Root'
-    this.gameStore = new NodotsGameStore(this)
+  }
+
+  setGameStore() {
+    console.log('[RootStore] setGameStore', this)
   }
 }
 
@@ -29,3 +31,5 @@ export const useStore = () => {
 }
 
 export default RootStore
+export const generateId = (): string => v4()
+export const generateTimestamp = (): string => new Date().toISOString()

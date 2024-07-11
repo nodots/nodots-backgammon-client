@@ -1,4 +1,5 @@
-import { NodotsColor, generateId } from '../../Types'
+import { NodotsColor } from '../../Types'
+import { generateId } from '../../../RootStore'
 import { DieValue, Roll } from '../../types/Dice'
 import { MoveInitializing, NodotsMove } from '../Move/Types'
 import { INodotsPlayer, PlayerMoving, PlayerRolling } from '../Player/Types'

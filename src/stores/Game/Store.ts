@@ -9,9 +9,13 @@ import {
   initializing,
   rollingForStart,
 } from './Types'
-import { NodotsPlayersInitializing } from './Stores/Player/Types'
+import {
+  INodotsPlayers,
+  NodotsPlayersInitializing,
+} from './Stores/Player/Types'
 import { rolling } from './Stores/Dice/Types'
 import { NodotsDiceStore } from './Stores/Dice/Store'
+import { NodotsPlayerStore } from './Stores/Player/Store'
 
 export class NodotsGameStore {
   rootStore: RootStore
@@ -20,18 +24,26 @@ export class NodotsGameStore {
     white: NodotsDiceStore
     black: NodotsDiceStore
   }
+  playerStores: {
+    white: NodotsPlayerStore
+    black: NodotsPlayerStore
+  }
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: RootStore, players: INodotsPlayers) {
     makeAutoObservable(this)
     console.log(
       '4.async [Stores: NodotsGameStore] constructor rootStore:',
       rootStore
     )
     this.rootStore = rootStore
-    this.gameState = initializing()
+    this.gameState = initializing(players)
     this.diceStores = {
       black: new NodotsDiceStore('black'),
       white: new NodotsDiceStore('white'),
+    }
+    this.playerStores = {
+      black: new NodotsPlayerStore(players.black),
+      white: new NodotsPlayerStore(players.white),
     }
   }
 

@@ -1,15 +1,11 @@
 import { NodotsBoardImports } from '.'
-import {
-  CheckerboxPosition,
-  NodotsColor,
-  PointPosition,
-  generateId,
-} from '../Types'
-import { NodotsChecker, generateCheckersForCheckercontainerId } from './Checker'
+import { CheckerboxPosition, NodotsColor, PointPosition } from '../Types'
+import { generateId } from '../../RootStore'
+import { NodotsChecker, buildCheckersForCheckercontainerId } from './Checker'
 import { Bar, Checkercontainer, Off, Point } from './Checkercontainer'
 
 import { BOARD_IMPORT_DEFAULT } from '../../../board-setups'
-import { NodotsPlayers } from '../Stores/Player/Types'
+import { INodotsPlayers, NodotsPlayers } from '../Stores/Player/Types'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
@@ -184,6 +180,7 @@ const buildBar = (
   players: NodotsPlayers,
   boards: NodotsBoardImports
 ): { white: Bar; black: Bar } => {
+  console.log('[Types: Board] buildBar players:', players)
   const clockwisePlayer = getClockwisePlayer(players)
   const counterclockwisePlayer = getCounterclockwisePlayer(players)
 
@@ -201,13 +198,13 @@ const buildBar = (
   const clockwiseId = generateId()
   const counterclockwiseId = generateId()
 
-  const clockwiseCheckers = generateCheckersForCheckercontainerId(
+  const clockwiseCheckers = buildCheckersForCheckercontainerId(
     clockwiseColor,
     clockwiseId,
     clockwiseBar?.checkercount ? clockwiseBar.checkercount : 0
   )
 
-  const counterclockwiseCheckers = generateCheckersForCheckercontainerId(
+  const counterclockwiseCheckers = buildCheckersForCheckercontainerId(
     counterclockwiseColor,
     counterclockwiseId,
     counterclockwiseBar?.checkercount ? counterclockwiseBar.checkercount : 0
@@ -273,13 +270,13 @@ const buildOff = (
   const clockwiseId = generateId()
   const counterclockwiseId = generateId()
 
-  const clockwiseCheckers = generateCheckersForCheckercontainerId(
+  const clockwiseCheckers = buildCheckersForCheckercontainerId(
     clockwiseColor,
     clockwiseId,
     clockwiseOff?.checkercount ? clockwiseOff.checkercount : 0
   )
 
-  const counterclockwiseCheckers = generateCheckersForCheckercontainerId(
+  const counterclockwiseCheckers = buildCheckersForCheckercontainerId(
     counterclockwiseColor,
     counterclockwiseId,
     counterclockwiseOff?.checkercount ? counterclockwiseOff.checkercount : 0
@@ -329,6 +326,8 @@ export const buildBoard = (
   let clockwiseBoardImport: NodotsBoardImport = BOARD_IMPORT_DEFAULT
   let counterclockwiseBoardImport = BOARD_IMPORT_DEFAULT
 
+  console.log('[Types: Board] buildBoard players:', players)
+
   if (boardImports && boardImports.clockwise) {
     clockwiseBoardImport = boardImports.clockwise
   }
@@ -356,7 +355,7 @@ export const buildBoard = (
       if (checkerbox.position === clockwisePosition) {
         const checkercount = checkerbox.checkercount
         checkers.push(
-          ...generateCheckersForCheckercontainerId(
+          ...buildCheckersForCheckercontainerId(
             clockwiseColor,
             pointId,
             checkercount
@@ -370,7 +369,7 @@ export const buildBoard = (
         if (checkerbox.position === counterclockwisePosition) {
           const checkercount = checkerbox.checkercount
           checkers.push(
-            ...generateCheckersForCheckercontainerId(
+            ...buildCheckersForCheckercontainerId(
               counterclockwiseColor,
               pointId,
               checkercount
@@ -450,7 +449,7 @@ export const getCheckercontainer = (
   return container
 }
 
-export const getPipCounts = (board: NodotsBoard, players: NodotsPlayers) => {
+export const getPipCounts = (board: NodotsBoard, players: INodotsPlayers) => {
   const pipCounts = {
     white: board.bar.white.checkers.length * 24,
     black: board.bar.black.checkers.length * 24,
