@@ -13,6 +13,13 @@ import {
 } from './Types'
 import { INodotsPlayers } from '../Player/Types'
 
+export interface NodotsDiceStores {
+  white: NodotsDiceStore
+  black: NodotsDiceStore
+}
+
+export const initializingDiceStores = () =>
+  console.log('INITIALIZING DICE STORES')
 export class NodotsDiceStore {
   diceState:
     | NodotsPlayersDiceBlack

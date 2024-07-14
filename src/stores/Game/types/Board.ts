@@ -10,6 +10,7 @@ import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
 } from '../Stores/Player/helpers'
+import chalk from 'chalk'
 
 export type Latitude = 'north' | 'south'
 export type Longitude = 'east' | 'west'
@@ -180,15 +181,15 @@ const buildBar = (
   players: NodotsPlayers,
   boards: NodotsBoardImports
 ): { white: Bar; black: Bar } => {
-  console.log('[Types: Board] buildBar players:', players)
+  console.log(chalk.green('8. [Types: Board] buildBar players:', players))
   const clockwisePlayer = getClockwisePlayer(players)
   const counterclockwisePlayer = getCounterclockwisePlayer(players)
 
   const clockwiseBoard = boards.clockwise
   const counterclockwiseBoard = boards.counterclockwise
 
-  const clockwiseColor = clockwisePlayer.color
-  const counterclockwiseColor = counterclockwisePlayer.color
+  const clockwiseColor = clockwisePlayer.preferences.color
+  const counterclockwiseColor = counterclockwisePlayer.preferences.color
 
   const clockwiseBar = clockwiseBoard.find((cc) => cc.position === 'bar')
   const counterclockwiseBar = counterclockwiseBoard.find(
@@ -257,8 +258,8 @@ const buildOff = (
   const clockwiseBoard = boards.clockwise
   const counterclockwiseBoard = boards.counterclockwise
 
-  const clockwiseColor = clockwisePlayer.color
-  const counterclockwiseColor = counterclockwisePlayer.color
+  const clockwiseColor = clockwisePlayer.preferences.color
+  const counterclockwiseColor = counterclockwisePlayer.preferences.color
 
   const clockwiseOff = clockwiseBoard.find(
     (cc) => cc.position === 'off'
@@ -326,7 +327,7 @@ export const buildBoard = (
   let clockwiseBoardImport: NodotsBoardImport = BOARD_IMPORT_DEFAULT
   let counterclockwiseBoardImport = BOARD_IMPORT_DEFAULT
 
-  console.log('[Types: Board] buildBoard players:', players)
+  console.log(chalk.green('7. [Types: Board] buildBoard players:', players))
 
   if (boardImports && boardImports.clockwise) {
     clockwiseBoardImport = boardImports.clockwise
@@ -341,8 +342,9 @@ export const buildBoard = (
     counterclockwise: counterclockwiseBoardImport,
   }
   const tempPoints: Point[] = []
-  const clockwiseColor = getClockwisePlayer(players).color
-  const counterclockwiseColor = getCounterclockwisePlayer(players).color
+  const clockwiseColor = getClockwisePlayer(players).preferences.color
+  const counterclockwiseColor =
+    getCounterclockwisePlayer(players).preferences.color
 
   for (let i = 0; i < 24; i++) {
     const pointId = generateId()
@@ -449,7 +451,7 @@ export const getCheckercontainer = (
   return container
 }
 
-export const getPipCounts = (board: NodotsBoard, players: INodotsPlayers) => {
+export const getPipCounts = (board: NodotsBoard, players: NodotsPlayers) => {
   const pipCounts = {
     white: board.bar.white.checkers.length * 24,
     black: board.bar.black.checkers.length * 24,
@@ -461,7 +463,7 @@ export const getPipCounts = (board: NodotsBoard, players: INodotsPlayers) => {
     if (point.checkers.length > 0) {
       const color = point.checkers[0].color
 
-      if (color === clockwisePlayer.color) {
+      if (color === clockwisePlayer.preferences.color) {
         pipCounts[color] += point.position.clockwise * point.checkers.length
       } else {
         pipCounts[color] +=

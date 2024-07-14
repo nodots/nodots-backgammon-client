@@ -12,6 +12,7 @@ import {
 } from './Stores/Dice/Types'
 import { NodotsPlay } from './Stores/Play/Types'
 import {
+  initializingPlayers,
   INodotsPlayers,
   NodotsPlayersInitializing,
   PlayerWinning,
@@ -71,7 +72,7 @@ export type CheckerboxPosition = PointPosition | 'bar' | 'off'
 export type OriginPosition = PointPosition | 'bar'
 export type DestinationPosition = PointPosition | 'off'
 export type NodotsColor = 'black' | 'white'
-export type MoveDirection = 'clockwise' | 'counterclockwise'
+export type NodotsMoveDirection = 'clockwise' | 'counterclockwise'
 
 export interface NodotsGame {
   id: string
@@ -84,7 +85,11 @@ export interface GameInitializing extends NodotsGame {
 export interface GameInitialized extends NodotsGame {
   kind: 'game-initialized'
   dice: NodotsPlayersDiceInactive
+  players: NodotsPlayersInitializing
+  board: NodotsBoard
+  cube: NodotsCube
 }
+
 export interface GameRollingForStart extends NodotsGame {
   kind: 'game-rolling-for-start'
   players: NodotsPlayersInitializing
@@ -131,12 +136,89 @@ export type NodotsGameState =
   | GamePlayingRolling
   | GameCompleted
 
-export const initializing = (players: INodotsPlayers): GameInitialized => {
+export const initializing = (
+  externalPlayers: INodotsPlayers
+): GameInitialized => {
+  const dice: NodotsPlayersDiceInactive = {
+    black: {
+      id: generateId(),
+      kind: 'inactive',
+      color: 'black',
+      dice: [
+        {
+          id: generateId(),
+          color: 'black',
+          order: 0,
+          value: 1,
+        },
+        {
+          id: generateId(),
+          color: 'black',
+          order: 1,
+          value: 1,
+        },
+      ],
+    },
+    white: {
+      id: generateId(),
+      kind: 'inactive',
+      color: 'white',
+      dice: [
+        {
+          id: generateId(),
+          color: 'white',
+          order: 0,
+          value: 1,
+        },
+        {
+          id: generateId(),
+          color: 'white',
+          order: 1,
+          value: 1,
+        },
+      ],
+    },
+  }
+
+  console.log(chalk.green('5. [Types: Game]'), externalPlayers)
+
+  const transmogrifyPlayers = (
+    externalPlayers: INodotsPlayers
+  ): NodotsPlayersInitializing => {
+    console.log(
+      chalk.green(
+        '6. [Types: Game] nodotsPlayers. Transmogrifies an impotent id and preferences for username, color, a direction to move from an outside source into a NodotsPlayer (also think about how this works with multiple games). "Preference" is important. This is ultimately just how the user views the board. But also need to think about different board implementations: remote:remote:noaudience, remote:remote:audience, remote:local:audience (I do not think order of remote local matter. But that could be a big mistake)'
+      ),
+      externalPlayers
+    )
+
+    return {
+      kind: 'players-initializing',
+      black: {
+        ...externalPlayers.black,
+        id: generateId(),
+        kind: 'player-initializing',
+        pipCount: 167,
+      },
+      white: {
+        ...externalPlayers.white,
+        id: generateId(),
+        kind: 'player-initializing',
+        pipCount: 167,
+      },
+    }
+  }
+
+  const players = transmogrifyPlayers(externalPlayers)
+  const board = buildBoard(players)
+  const cube = buildCube()
   return {
     id: generateId(),
     kind: 'game-initialized',
-    players: initializingPlayers(players),
-    dice: initializingPlayersDice(),
+    dice,
+    players,
+    board,
+    cube,
   }
 }
 
@@ -150,31 +232,50 @@ export const rollingForStart = (
 ): GamePlayingRolling => {
   //+++++++++++++ THIS IS THE HANDOFF POINT BETWEEN THE CLIENT AND THE GAME STORE
   // NEED TO TRANSFORM EXTERNAL PLAYER TO NODOTS PLAYER
-
-  const whiteRoll = roll()
-  const blackRoll = roll()
-  if (whiteRoll === blackRoll) {
-    return rollingForStart(diceStores, gameState, players)
+  return {
+    ...gameState,
+    kind: 'game-playing-rolling',
+    activeColor: 'black',
+    players,
+    dice: {
+      white: {
+        id: generateId(),
+        kind: 'inactive',
+        color: 'white',
+        dice: [
+          {
+            id: generateId(),
+            color: 'white',
+            order: 0,
+            value: 1,
+          },
+          {
+            id: generateId(),
+            color: 'white',
+            order: 1,
+            value: 1,
+          },
+        ],
+      },
+      black: {
+        id: generateId(),
+        kind: 'active',
+        color: 'black',
+        dice: [
+          {
+            id: generateId(),
+            color: 'black',
+            order: 0,
+            value: 1,
+          },
+          {
+            id: generateId(),
+            color: 'black',
+            order: 1,
+            value: 1,
+          },
+        ],
+      },
+    },
   }
-  const activePlayerColor = blackRoll > whiteRoll ? 'black' : 'white'
-  console.log(
-    '[Types: Game] rollingForStart activePlayerColor:',
-    activePlayerColor
-  )
-  console.log('[Types: Game] rollingForStart players:', players)
-  console.log('[Types: Game] rollingForStart gameState:', gameState)
-
-  // const id = gameState.id
-  // const cube = buildCube()
-  // const board = buildBoard(players)
-  // const diceStates = {
-  //   black: diceStores.black.diceState,
-  //   white: diceStores.white.diceState,
-  // }
-
-  // return {
-  //   ...gameState,
-  //   kind: 'game-playing-rolling',
-
-  // }
 }

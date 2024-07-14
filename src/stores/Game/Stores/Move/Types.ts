@@ -1,4 +1,4 @@
-import { MoveDirection } from '../../Types'
+import { NodotsMoveDirection } from '../../Types'
 import { DieValue } from '../../types/Dice'
 
 export interface NodotsMove {
@@ -6,7 +6,7 @@ export interface NodotsMove {
   isAuto: boolean
   isForced: boolean
   dieValue: DieValue
-  direction: MoveDirection
+  direction: NodotsMoveDirection
 }
 
 export interface MoveInitializing extends NodotsMove {

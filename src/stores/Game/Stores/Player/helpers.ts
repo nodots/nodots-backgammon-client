@@ -1,4 +1,4 @@
-import { NodotsColor, MoveDirection } from '../../Types'
+import { NodotsColor, NodotsMoveDirection } from '../../Types'
 import {
   INodotsPlayer,
   INodotsPlayers,
@@ -25,7 +25,7 @@ export const getCounterclockwisePlayer = (
 
 export const getPlayerForMoveDirection = (
   players: NodotsPlayers,
-  direction: MoveDirection
+  direction: NodotsMoveDirection
 ): NodotsPlayer =>
   direction === 'clockwise'
     ? getClockwisePlayer(players)

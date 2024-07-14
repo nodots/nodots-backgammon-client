@@ -13,7 +13,7 @@ import {
   INodotsPlayers,
   NodotsPlayersInitializing,
 } from './Stores/Player/Types'
-import { rolling } from './Stores/Dice/Types'
+import chalk from 'chalk'
 import { NodotsDiceStore } from './Stores/Dice/Store'
 import { NodotsPlayerStore } from './Stores/Player/Store'
 
@@ -29,10 +29,16 @@ export class NodotsGameStore {
     black: NodotsPlayerStore
   }
 
+  // The entry point to the game logic. i.e., it's an interface
   constructor(rootStore: RootStore, players: INodotsPlayers) {
     makeAutoObservable(this)
     console.log(
-      '4.async [Stores: NodotsGameStore] constructor rootStore:',
+      chalk.underline.magenta(
+        "The entry point to the game logic. i.e., it's an interface "
+      )
+    )
+    console.log(
+      chalk.green('4. [Stores: NodotsGameStore] constructor rootStore:'),
       rootStore
     )
     this.rootStore = rootStore

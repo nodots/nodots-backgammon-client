@@ -1,14 +1,14 @@
-import { action, makeAutoObservable } from 'mobx'
-import { INodotsPlayer, NodotsPlayerState, initializing } from './Types'
+import { makeAutoObservable } from 'mobx'
+import { initializingPlayer, INodotsPlayer, NodotsPlayerState } from './Types'
 import chalk from 'chalk'
 
 export class NodotsPlayerStore {
   playerState: NodotsPlayerState
 
   constructor(player: INodotsPlayer) {
-    console.log(chalk.yellow('[Store: Player] constructor player:'), player)
+    console.log(chalk.green('9. [Store: Player] constructor player:'), player)
     makeAutoObservable(this)
-    this.playerState = initializing(player)
+    this.playerState = initializingPlayer(player)
   }
 }
 

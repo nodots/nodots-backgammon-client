@@ -1,16 +1,24 @@
-import { NodotsColor, MoveDirection } from '../../Types'
+import { NodotsColor, NodotsMoveDirection } from '../../Types'
 import { generateId } from '../../../RootStore'
+import L from 'i18n'
 
-export type INodotsPlayer = {
-  id: string
+export type NodotsLocale = 'en' | 'es'
+
+export interface INodotsPlayerPreferences {
   username: string
   color: NodotsColor
-  direction: MoveDirection
+  direction: NodotsMoveDirection
   automation: {
-    move: boolean
     roll: boolean
+    move: boolean
   }
-  pipCount: number
+}
+
+export type INodotsPlayer = {
+  externalId: string
+  email: string
+  locale: NodotsLocale
+  preferences: INodotsPlayerPreferences
 }
 
 export interface INodotsPlayers {
@@ -52,6 +60,7 @@ export type NodotsPlayer =
 // | PlayerLosing
 
 export interface NodotsPlayersInitializing {
+  kind: 'players-initializing'
   black: PlayerInitializing
   white: PlayerInitializing
 }
@@ -99,7 +108,19 @@ export interface PlayerWaiting extends INodotsPlayer {
 }
 
 export interface PlayerInitializing extends INodotsPlayer {
+  id: string
   kind: 'player-initializing'
+  email: string
+  pipCount: 167
+  preferences: {
+    username: string
+    color: NodotsColor
+    direction: NodotsMoveDirection
+    automation: {
+      roll: boolean
+      move: boolean
+    }
+  }
 }
 
 export interface PlayerRollingForStart extends INodotsPlayer {
@@ -130,15 +151,43 @@ export type NodotsPlayerState =
   | PlayerResiginging
   | PlayerWinning
 
-export const initializing = (player: INodotsPlayer): PlayerInitializing => {
+export const initializingPlayer = (
+  player: INodotsPlayer
+): PlayerInitializing => {
+  const { preferences, externalId, email, locale } = player
+  const { username, color, direction, automation } = preferences
+  const id = generateId()
+
+  const nodotsPreferences: INodotsPlayerPreferences = preferences && {
+    username: username ? username : `external-player-${id}`,
+    color: color ? color : 'black',
+    direction: direction ? direction : 'clockwise',
+    automation: automation
+      ? automation
+      : {
+          roll: false,
+          move: false,
+        },
+  }
+
   return {
     kind: 'player-initializing',
-    id: generateId(),
-    username: player.username,
-    color: player.color,
-    direction: player.direction,
-    automation: player.automation,
+    id,
+    externalId,
+    email,
+    locale,
+    preferences: nodotsPreferences,
     pipCount: 167,
+  }
+}
+
+export const initializingPlayers = (
+  players: INodotsPlayers
+): NodotsPlayersInitializing => {
+  return {
+    kind: 'players-initializing',
+    black: initializingPlayer(players.black),
+    white: initializingPlayer(players.white),
   }
 }
 

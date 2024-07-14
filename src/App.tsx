@@ -7,10 +7,8 @@ import GamePage from './pages/game'
 import { HomePage } from './pages/home'
 import { SignIn } from './pages/registration/sign-in'
 import ProfilePage from './pages/profile'
-import { useStore } from './stores/RootStore'
 
 const App = () => {
-  const store = useStore()
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />
