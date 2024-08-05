@@ -1,8 +1,8 @@
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
 import { useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
-import { Color } from '../../GameStore/types'
+import NodotsGameStore from '../../../GameStore'
+import { Color } from '../../../GameStore/types'
 
 interface Props {
   store: NodotsGameStore
