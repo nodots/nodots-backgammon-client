@@ -1,9 +1,9 @@
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
-import NodotsGameStore from '../../GameStore'
-import { Color } from '../../GameStore/types'
-import { Checker as CheckerType } from '../../GameStore/types/Checker'
+import NodotsGameStore from '../../../GameStore'
+import { Color } from '../../../GameStore/types'
+import { Checker as CheckerType } from '../../../GameStore/types/Checker'
 
 export interface Props {
   store: NodotsGameStore
