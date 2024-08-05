@@ -1,7 +1,7 @@
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import appTheme from './theme/theme'
-import GamePage from './Pages/GamePage'
+import GamePage from './Pages/Game'
 const App = () => {
   return (
     <ThemeProvider theme={appTheme}>
