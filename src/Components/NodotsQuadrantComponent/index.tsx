@@ -2,13 +2,13 @@ import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import { generateId } from '../../GameStore/types'
 import {
+  NodotsBoardStore,
   Latitude,
   Longitude,
-  NodotsBoardStore,
 } from '../../GameStore/types/Board'
 import { Point } from '../../GameStore/types/Checkercontainer'
-import NodotsPointLabelComponent from '../NodotsBoardComponent/NodotsPointLabelComponent'
 import NodotsPointComponent from '../NodotsBoardComponent/NodotsPointComponent'
+import NodotsPointLabelComponent from '../NodotsBoardComponent/NodotsPointLabelComponent'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 

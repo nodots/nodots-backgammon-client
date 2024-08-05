@@ -7,8 +7,9 @@ import {
   NodotsBoardStore,
 } from '../../../GameStore/types/Board'
 import { Point } from '../../../GameStore/types/Checkercontainer'
-import PointComponent from '../NodotsPointComponent'
-import PointLabels from '../NodotsPointLabelComponent'
+import NodotsPointLabelComponent from '../NodotsPointLabelComponent'
+import NodotsPointComponent from '../NodotsPointComponent'
+
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
 export interface Props {
@@ -29,10 +30,14 @@ function NodotsQuadrantComponent({
 }: Props) {
   return (
     <div className={`quadrant-container ${latitude} ${longitude}`}>
-      <PointLabels latitude={latitude} longitude={longitude} start={start} />
+      <NodotsPointLabelComponent
+        latitude={latitude}
+        longitude={longitude}
+        start={start}
+      />
       <div className={`quadrant ${latitude} ${longitude}`}>
         {points.map((p) => (
-          <PointComponent
+          <NodotsPointComponent
             id={generateId()}
             store={store}
             checkers={p.checkers}
