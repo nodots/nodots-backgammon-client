@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.1",
     "@cutting/svg": "^4.54.9",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -16,16 +15,14 @@
     "@types/react": "^18.2.11",
     "@types/react-dom": "^18.2.4",
     "aws-amplify": "^6.4.3",
-    "immer": "^10.0.2",
-    "mobx": "^6.12.3",
+    "mobx": "^6.13.1",
     "mobx-react": "^9.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
     "typesafe-i18n": "^5.26.2",
     "uuid": "^9.0.0",
-    "vite-plugin-checker": "^0.6.2",
-    "web-vitals": "^2.1.4"
+    "vite-plugin-checker": "^0.6.2"
   },
   "scripts": {
     "start": "vite --host --open",
