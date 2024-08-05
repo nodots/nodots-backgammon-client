@@ -6,8 +6,8 @@ import './scss/index.scss'
 import { Checkercontainer, Point } from '../../GameStore/types/Checkercontainer'
 import Quadrant from '../Quadrant'
 import RollSurface from '../RollSurface'
-import Bar from '../Bar'
-import Off from '../Off'
+// import Bar from '../Bar'
+// import Off from '../Off'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
