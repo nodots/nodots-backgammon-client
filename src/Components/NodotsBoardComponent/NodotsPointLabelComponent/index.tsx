@@ -19,7 +19,11 @@ const getLabels = (start: number) => {
   return <>{labels}</>
 }
 
-const PointLabels: React.FC<Props> = ({ latitude, longitude, start }) => {
+const NodotsPointLabelComponent: React.FC<Props> = ({
+  latitude,
+  longitude,
+  start,
+}) => {
   const theme = useTheme()
   return (
     <div
@@ -33,5 +37,7 @@ const PointLabels: React.FC<Props> = ({ latitude, longitude, start }) => {
     </div>
   )
 }
-
-export default PointLabels
+// REMINDER: If we ever want to make these do something, needs
+// to be an observer or use whatever other state mgmt we are using
+// at that time
+export default NodotsPointLabelComponent

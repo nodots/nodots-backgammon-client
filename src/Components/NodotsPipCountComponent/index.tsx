@@ -7,7 +7,7 @@ interface Props {
   player: Player
 }
 
-function PipCount({ player }: Props) {
+function NodotsPipCountComponent({ player }: Props) {
   const theme = useTheme()
   const getStyles = (color: Color): SxProps =>
     color === 'black'
@@ -23,4 +23,4 @@ function PipCount({ player }: Props) {
   )
 }
 
-export default observer(PipCount)
+export default observer(NodotsPipCountComponent)

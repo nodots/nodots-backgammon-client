@@ -3,7 +3,7 @@ import { ReactElement } from 'react'
 import NodotsGameStore from '../../GameStore'
 import { Latitude } from '../../GameStore/types/Board'
 import { Checker as CheckerType } from '../../GameStore/types/Checker'
-import Checker from '../Checker'
+import NodotsCheckerComponent from '../NodotsCheckerComponent/component'
 
 export const getCheckerComponents = (
   store: NodotsGameStore,
@@ -14,11 +14,13 @@ export const getCheckerComponents = (
   checkers.forEach((c, i) => {
     if (kind === 'point') {
       if (i <= 4) {
-        checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
+        checkerComponents.push(
+          <NodotsCheckerComponent key={c.id} checker={c} store={store} />
+        )
       }
       if (i === 5) {
         checkerComponents.push(
-          <Checker
+          <NodotsCheckerComponent
             key={c.id}
             checker={c}
             store={store}
@@ -27,7 +29,9 @@ export const getCheckerComponents = (
         )
       }
     } else {
-      checkerComponents.push(<Checker key={c.id} checker={c} store={store} />)
+      checkerComponents.push(
+        <NodotsCheckerComponent key={c.id} checker={c} store={store} />
+      )
     }
   })
   return checkerComponents
@@ -44,7 +48,13 @@ export interface Props {
   checkers: CheckerType[]
 }
 
-function Point({ id, position, checkers, latitude, store }: Props) {
+function NodotsPointComponent({
+  id,
+  position,
+  checkers,
+  latitude,
+  store,
+}: Props) {
   const theme = useTheme()
   let className = 'point'
 
@@ -88,4 +98,4 @@ function Point({ id, position, checkers, latitude, store }: Props) {
   )
 }
 
-export default Point
+export default NodotsPointComponent

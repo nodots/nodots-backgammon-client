@@ -11,7 +11,7 @@ export interface Props {
   count?: number
 }
 
-function Checker({ checker, store, count }: Props) {
+function NodotsCheckerComponent({ checker, store, count }: Props) {
   const theme = useTheme()
 
   const handleDebugClick = (e: React.MouseEvent) => {
@@ -61,4 +61,4 @@ function Checker({ checker, store, count }: Props) {
   )
 }
 
-export default observer(Checker)
+export default observer(NodotsCheckerComponent)

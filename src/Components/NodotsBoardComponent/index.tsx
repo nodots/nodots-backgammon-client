@@ -4,10 +4,10 @@ import NodotsGameStore from '../../GameStore'
 import { NodotsGameState } from '../../GameStore/types'
 import './scss/index.scss'
 import { Checkercontainer, Point } from '../../GameStore/types/Checkercontainer'
-import Quadrant from '../Quadrant'
-import RollSurface from '../RollSurface'
-// import Bar from '../Bar'
-// import Off from '../Off'
+import NodotsQuadrantComponent from './NodotsQuadrantComponent'
+import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
+import NodotsBarComponent from './NodotsBarComponent'
+import Off from './NodotsOffComponent'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
@@ -56,7 +56,7 @@ function Board({ store, state }: Props) {
       return (
         <Paper id="BoardContainer" elevation={2}>
           <Paper id="West" className="board-half" elevation={1}>
-            <Quadrant
+            <NodotsQuadrantComponent
               store={store}
               boardStore={store.state.boardStore}
               latitude="north"
@@ -66,8 +66,12 @@ function Board({ store, state }: Props) {
                 store.state.boardStore.points.slice(12, 18) as QuadrantPoints
               }
             />
-            <RollSurface store={store} state={state} color="black" />
-            <Quadrant
+            <NodotsRollSurfaceComponent
+              store={store}
+              state={state}
+              color="black"
+            />
+            <NodotsQuadrantComponent
               store={store}
               boardStore={store.state.boardStore}
               latitude="south"
@@ -78,9 +82,9 @@ function Board({ store, state }: Props) {
               }
             />
           </Paper>
-          <Bar store={store} />
+          <NodotsBarComponent store={store} />
           <Paper id="East" className="board-half" elevation={1}>
-            <Quadrant
+            <NodotsQuadrantComponent
               store={store}
               boardStore={store.state.boardStore}
               latitude="north"
@@ -90,8 +94,12 @@ function Board({ store, state }: Props) {
                 store.state.boardStore.points.slice(18, 24) as QuadrantPoints
               }
             />
-            <RollSurface store={store} state={state} color="white" />
-            <Quadrant
+            <NodotsRollSurfaceComponent
+              store={store}
+              state={state}
+              color="white"
+            />
+            <NodotsQuadrantComponent
               store={store}
               boardStore={store.state.boardStore}
               latitude="south"

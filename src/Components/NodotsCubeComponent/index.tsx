@@ -11,7 +11,7 @@ interface Props {
 export const double = (value: CubeValue) =>
   value !== 64 ? ((value * 2) as CubeValue) : value
 
-function Cube({ store }: Props) {
+function NodotsCubeComponent({ store }: Props) {
   const { cube } = store.state
   const theme = useTheme()
 
@@ -31,4 +31,4 @@ function Cube({ store }: Props) {
   )
 }
 
-export default observer(Cube)
+export default observer(NodotsCubeComponent)

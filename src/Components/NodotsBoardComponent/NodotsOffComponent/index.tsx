@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
-import Cube from '../Cube'
-import { getCheckerComponents } from '../Point'
+import NodotsCubeComponent from '../NodotsCubeComponent'
+import { getCheckerComponents } from '../NodotsPointComponent'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
@@ -27,7 +27,7 @@ function Off({ store }: Props) {
       <Paper className="checkercontainer counterclockwise">
         {getCheckerComponents(store, counterclockwiseCheckers, 'off')}
       </Paper>
-      <Cube store={store} />
+      <NodotsCubeComponent store={store} />
       <Paper className="checkercontainer clockwise">
         {getCheckerComponents(store, clockwiseCheckers, 'off')}
       </Paper>

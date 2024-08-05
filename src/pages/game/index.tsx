@@ -1,10 +1,10 @@
-import { Button, Paper } from '@mui/material'
+import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import { Component } from 'react'
 import NodotsGameStore from '../../GameStore'
 import { generateId, rollingForStart } from '../../GameStore/types'
 import { InitializingPlayer, Player } from '../../GameStore/types/Player'
-import BoardComponent from '../../components/Board'
+import BoardComponent from '../../Components/NodotsBoardComponent'
 import GameNotifications from '../../Components/Notifications/Game'
 
 const whitePlayer: InitializingPlayer = {

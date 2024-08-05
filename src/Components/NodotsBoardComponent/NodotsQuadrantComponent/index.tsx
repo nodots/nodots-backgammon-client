@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
-import { generateId } from '../../GameStore/types'
+import NodotsGameStore from '../../../GameStore'
+import { generateId } from '../../../GameStore/types'
 import {
   Latitude,
   Longitude,
   NodotsBoardStore,
-} from '../../GameStore/types/Board'
-import { Point } from '../../GameStore/types/Checkercontainer'
-import PointComponent from '../Point'
-import PointLabels from '../PointLabels'
+} from '../../../GameStore/types/Board'
+import { Point } from '../../../GameStore/types/Checkercontainer'
+import PointComponent from '../NodotsPointComponent'
+import PointLabels from '../NodotsPointLabelComponent'
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
 export interface Props {
@@ -20,7 +20,13 @@ export interface Props {
   points: QuadrantPoints
 }
 
-function Quadrant({ store, latitude, longitude, start, points }: Props) {
+function NodotsQuadrantComponent({
+  store,
+  latitude,
+  longitude,
+  start,
+  points,
+}: Props) {
   return (
     <div className={`quadrant-container ${latitude} ${longitude}`}>
       <PointLabels latitude={latitude} longitude={longitude} start={start} />
@@ -40,4 +46,4 @@ function Quadrant({ store, latitude, longitude, start, points }: Props) {
   )
 }
 
-export default observer(Quadrant)
+export default observer(NodotsQuadrantComponent)

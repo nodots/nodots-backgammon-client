@@ -3,15 +3,15 @@ import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
 } from '../../GameStore/types/Player'
-import PipCount from '../PipCount'
+import PipCount from '../NodotsPipCountComponent'
 import NodotsGameStore from '../../GameStore'
-import { getCheckerComponents } from '../Point'
+import { getCheckerComponents } from '../NodotsPointComponent'
 
 export interface Props {
   store: NodotsGameStore
 }
 
-function Bar({ store }: Props) {
+function NodotsBarComponent({ store }: Props) {
   const { state } = store
   const { players, boardStore } = state
   const clockwisePlayer = getClockwisePlayer(players)
@@ -35,4 +35,4 @@ function Bar({ store }: Props) {
   )
 }
 
-export default observer(Bar)
+export default observer(NodotsBarComponent)

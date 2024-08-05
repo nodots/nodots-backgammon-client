@@ -22,7 +22,8 @@ interface Props {
 }
 
 // TODO: Show move state with dice
-function Die({ order, color, store }: Props) {
+// FIXME: Believe model/api all use "dice" not "die". Doesn't have to be changed (not the API's problem) but should be consistent.
+function NodotsDieComponent({ order, color, store }: Props) {
   const { state } = store
 
   const rollHandler = async (e: React.MouseEvent) => {
@@ -90,4 +91,4 @@ function Die({ order, color, store }: Props) {
   }
 }
 
-export default observer(Die)
+export default observer(NodotsDieComponent)
