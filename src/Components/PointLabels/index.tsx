@@ -7,7 +7,7 @@ interface Props {
   start: number
 }
 
-const getLabels = (start: number, latitude: Latitude) => {
+const getLabels = (start: number) => {
   const labels: React.ReactElement[] = []
   for (let i = start; i < start + 6; i++) {
     labels.push(
@@ -29,7 +29,7 @@ const PointLabels: React.FC<Props> = ({ latitude, longitude, start }) => {
         borderColor: theme.palette.info.light,
       }}
     >
-      {getLabels(start, latitude)}
+      {getLabels(start)}
     </div>
   )
 }

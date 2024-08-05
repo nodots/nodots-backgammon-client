@@ -2,11 +2,21 @@ import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import { NodotsGameState } from '../../GameStore/types'
-import Bar, { Props as BarProps } from '../Bar'
-import Off, { Props as OffProps } from '../Off'
-import Quadrant, { QuadrantPoints, Props as QuadrantProps } from '../Quadrant'
-import Rollsurface from '../Rollsurface'
 import './scss/index.scss'
+import { Checkercontainer, Point } from '../../GameStore/types/Checkercontainer'
+import Quadrant from '../Quadrant'
+import RollSurface from '../RollSurface'
+import Bar from '../Bar'
+import Off from '../Off'
+
+export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
+
+export interface QuadrantProps {
+  latitude: 'north' | 'south'
+  longitude: 'east' | 'west'
+  start: number
+  points: QuadrantPoints
+}
 
 export type Quadrants = [
   QuadrantProps,
@@ -17,8 +27,14 @@ export type Quadrants = [
 
 export interface BoardDisplay {
   quadrants: Quadrants
-  bar: BarProps
-  off: OffProps
+  bar: {
+    white: Checkercontainer
+    black: Checkercontainer
+  }
+  off: {
+    white: Checkercontainer
+    black: Checkercontainer
+  }
 }
 
 interface Props {
@@ -50,7 +66,7 @@ function Board({ store, state }: Props) {
                 store.state.boardStore.points.slice(12, 18) as QuadrantPoints
               }
             />
-            <Rollsurface store={store} state={state} color="black" />
+            <RollSurface store={store} state={state} color="black" />
             <Quadrant
               store={store}
               boardStore={store.state.boardStore}
@@ -74,7 +90,7 @@ function Board({ store, state }: Props) {
                 store.state.boardStore.points.slice(18, 24) as QuadrantPoints
               }
             />
-            <Rollsurface store={store} state={state} color="white" />
+            <RollSurface store={store} state={state} color="white" />
             <Quadrant
               store={store}
               boardStore={store.state.boardStore}
