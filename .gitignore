@@ -1,3 +1,8 @@
 node_modules
 .DS_STORE
 client_secret*
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
