@@ -56,7 +56,6 @@ function NodotsCheckerComponent({ checker, store, count }: Props) {
       onContextMenu={handleDebugClick}
     >
       <span className="count">{count ? count : ''}</span>
-      <span className="hidden">{checker.id}</span>
     </Button>
   )
 }

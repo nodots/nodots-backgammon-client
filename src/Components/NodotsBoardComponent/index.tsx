@@ -2,7 +2,7 @@ import { Paper } from '@mui/material'
 import { observer } from 'mobx-react'
 import NodotsGameStore from '../../GameStore'
 import { NodotsGameState } from '../../GameStore/types'
-import './scss/index.scss'
+import '../../scss/index.scss'
 import { Checkercontainer, Point } from '../../GameStore/types/Checkercontainer'
 import NodotsQuadrantComponent from './NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
@@ -42,7 +42,7 @@ interface Props {
   state: NodotsGameState
 }
 
-function Board({ store, state }: Props) {
+function NodotsBoardComponent({ store, state }: Props) {
   switch (state.kind) {
     case 'game-initializing':
       return <></>
@@ -116,4 +116,4 @@ function Board({ store, state }: Props) {
   }
 }
 
-export default observer(Board)
+export default observer(NodotsBoardComponent)

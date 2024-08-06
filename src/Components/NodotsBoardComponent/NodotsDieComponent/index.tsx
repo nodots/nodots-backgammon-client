@@ -59,7 +59,7 @@ function NodotsDieComponent({ order, color, store }: Props) {
     case 'game-rolling':
       return (
         store.state.activeColor === color && (
-          <Button className="die" onClick={rollHandler}>
+          <div className="die" onClick={rollHandler}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
               <g id="Layer_2" data-name="Layer 2">
                 <g id="Layer_1-2" data-name="Layer 1">
@@ -67,7 +67,7 @@ function NodotsDieComponent({ order, color, store }: Props) {
                 </g>
               </g>
             </svg>
-          </Button>
+          </div>
         )
       )
     case 'game-moving':
@@ -77,7 +77,7 @@ function NodotsDieComponent({ order, color, store }: Props) {
       const { moves, roll } = state as Moving // FIXME
       return (
         store.state.activeColor === color && (
-          <Button className="die" onClick={rollHandler}>
+          <div className="die" onClick={rollHandler}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
               <g id="Layer_2" data-name="Layer 2">
                 <g id="Layer_1-2" data-name="Layer 1">
@@ -85,7 +85,7 @@ function NodotsDieComponent({ order, color, store }: Props) {
                 </g>
               </g>
             </svg>
-          </Button>
+          </div>
         )
       )
   }

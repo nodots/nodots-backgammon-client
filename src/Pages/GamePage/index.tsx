@@ -4,8 +4,8 @@ import { Component } from 'react'
 import NodotsGameStore from '../../GameStore'
 import { generateId, rollingForStart } from '../../GameStore/types'
 import { InitializingPlayer, Player } from '../../GameStore/types/Player'
-import BoardComponent from '../../Components/NodotsBoardComponent'
-import GameNotifications from '../../Components/Notifications/Game'
+import NodotsBoardComponent from '../../Components/NodotsBoardComponent'
+import GameNotifications from '../../Components/NodotsNotificationsComponent/Game'
 
 const whitePlayer: InitializingPlayer = {
   kind: 'initializing',
@@ -71,15 +71,10 @@ class GamePage extends Component {
 
   render() {
     return (
-      <>
-        {/* <div id="GameControls">
-          <Button onClick={this.saveGame}>Save Game</Button>
-        </div> */}
-        <Paper id="GameContainer">
-          <GameNotifications store={this.store} />
-          <BoardComponent store={this.store} state={this.store.state} />
-        </Paper>
-      </>
+      <Paper id="GameContainer">
+        <GameNotifications store={this.store} />
+        <NodotsBoardComponent store={this.store} state={this.store.state} />
+      </Paper>
     )
   }
 }

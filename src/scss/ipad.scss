@@ -28,14 +28,7 @@
         width: 100%;
         min-width: $checker-height;
         background-image: none !important;
-        // mask-image: url('../../Point/images/ipad/point-mask-north.png');
       }
-
-      // &.south {
-      //   .point {
-      //     mask-image: url('../../Point/images/ipad/point-mask-south.png');
-      //   }
-      // }
     }
 
     .rollsurface {
@@ -49,13 +42,9 @@
     }
   }
 
-  .die {
-    height: $checker-height * 0.5;
-    width: $checker-height * 0.5;
-  }
   .cube {
-    height: $checker-height;
-    width: $checker-height;
+    height: $checker-height * 2;
+    width: $checker-height * 2;
     font-size: 2rem;
   }
 }

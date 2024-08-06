@@ -88,10 +88,6 @@ function NodotsPointComponent({
         data-position-clockwise={position.clockwise}
         data-position-counterclockwise={position.counterclockwise}
       >
-        <ul className="hidden debug-list">
-          <li>{position.clockwise}</li>
-          <li>{position.counterclockwise}</li>
-        </ul>
         {getCheckerComponents(store, checkers, 'point')}
       </div>
     </div>

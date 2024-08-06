@@ -1,7 +1,7 @@
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import appTheme from './theme/theme'
-import GamePage from './Pages/Game'
+import GamePage from './Pages/GamePage'
 const App = () => {
   return (
     <ThemeProvider theme={appTheme}>
@@ -16,7 +16,5 @@ const App = () => {
     </ThemeProvider>
   )
 }
-
-// reportWebVitals(reportHandler)
 
 export default App

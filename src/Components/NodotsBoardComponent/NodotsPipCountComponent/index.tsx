@@ -9,16 +9,15 @@ interface Props {
 
 function NodotsPipCountComponent({ player }: Props) {
   const theme = useTheme()
-  const getStyles = (color: Color): SxProps =>
+  const getBackgroundColor = (color: Color): SxProps =>
     color === 'black'
       ? { backgroundColor: theme.palette.secondary.dark }
       : { backgroundColor: theme.palette.secondary.light }
 
   return (
     <Chip
-      className={`pip-count`}
+      className={`pip-count ${getBackgroundColor(player.color)}`}
       label={player.pipCount}
-      sx={getStyles(player.color)}
     />
   )
 }
