@@ -16,8 +16,9 @@ function NodotsPipCountComponent({ player }: Props) {
 
   return (
     <Chip
-      className={`pip-count ${getBackgroundColor(player.color)}`}
+      className={`pip-count`}
       label={player.pipCount}
+      sx={getBackgroundColor(player.color)}
     />
   )
 }
