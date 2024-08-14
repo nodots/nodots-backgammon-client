@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import {
   getClockwisePlayer,
   getCounterclockwisePlayer,
-} from '../../../GameStore/types/Player'
+} from '../../../GameStore'
 import NodotsPipCountComponent from '../NodotsPipCountComponent'
 import NodotsGameStore from '../../../GameStore'
 import { getCheckerComponents } from '../NodotsPointComponent'
@@ -12,8 +12,8 @@ export interface Props {
 }
 
 function NodotsBarComponent({ store }: Props) {
-  const { state } = store
-  const { players, boardStore } = state
+  const { game } = store
+  const { players } = game
   const clockwisePlayer = getClockwisePlayer(players)
   const clockwiseColor = clockwisePlayer.color
   const clockwiseCheckers = boardStore.bar[clockwiseColor].checkers

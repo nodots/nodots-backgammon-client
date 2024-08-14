@@ -1,13 +1,12 @@
 import { Button, useTheme } from '@mui/material'
 import { observer } from 'mobx-react'
 import React from 'react'
+import { NodotsChecker } from '../../../../nodots_modules/backgammon-types'
 import NodotsGameStore from '../../../GameStore'
-import { Color } from '../../../GameStore/types'
-import { Checker as CheckerType } from '../../../GameStore/types/Checker'
 
 export interface Props {
   store: NodotsGameStore
-  checker: CheckerType
+  checker: NodotsChecker
   count?: number
 }
 

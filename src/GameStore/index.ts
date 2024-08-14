@@ -1,51 +1,90 @@
 import { action, makeAutoObservable } from 'mobx'
 import {
-  Confirming,
-  Initializing,
-  Moving,
-  NodotsGameState,
-  Rolled,
-  Rolling,
-  confirming,
-  initializing,
-  moving,
-  rolling,
-  rollingForStart,
-  switchDice,
-} from './types'
-import { NodotsPlayers } from './types/Player'
+  GameInitializing,
+  GamePlayingMoving,
+  GamePlayingRolling,
+  GameRollingForStart,
+  NodotsGame,
+  NodotsPlayerPlaying,
+  NodotsPlayerReady,
+  NodotsPlayers,
+  NodotsPlayersPlaying,
+} from '../../nodots_modules/backgammon-types'
+import { URL } from 'url'
+
+const _initializeGame = (
+  players: NodotsPlayers,
+  apiUrl: string
+): NodotsGame => {
+  return {
+    id: undefined,
+  }
+}
+
+const _rollForStart = (state: GameInitializing, apiUrl: string): NodotsGame => {
+  return state
+}
+
+const _roll = (state: GameRollingForStart, apiUrl: string): NodotsGame => {
+  return state
+}
+
+const _switchDice = (state: GamePlayingRolling, apiUrl: string): NodotsGame => {
+  return state
+}
+
+const _move = (
+  state: GamePlayingRolling | GamePlayingMoving,
+  checkerId: string,
+  apiUrl: string
+): NodotsGame => {
+  console.log(checkerId)
+  return state
+}
 
 class NodotsGameStore {
-  state: NodotsGameState
+  game: NodotsGame
+  apiBaseUrl: string
 
-  constructor(players: NodotsPlayers) {
-    makeAutoObservable(this)
-    this.state = initializing(players)
+  constructor(players: NodotsPlayers, apiUrl: string) {
+    this.apiBaseUrl = apiUrl
+    this.game = _initializeGame(players, apiUrl)
   }
 
   @action
-  rollForStart(state: Initializing) {
-    this.state = rollingForStart(state)
+  rollForStart(state: GameInitializing) {
+    this.game = _rollForStart(state, this.apiBaseUrl)
   }
 
   @action
-  rolling(state: Rolling) {
-    this.state = rolling(state)
+  roll(state: GameRollingForStart) {
+    this.game = _roll(state, this.apiBaseUrl)
   }
 
   @action
-  switchDice(state: Rolled) {
-    this.state = switchDice(state)
+  switchDice(state: GamePlayingRolling) {
+    this.game = _switchDice(state, this.apiBaseUrl)
   }
 
   @action
-  moving(state: Moving | Rolled, checkerId: string) {
-    this.state = moving(state, checkerId)
+  move(state: GamePlayingRolling | GamePlayingMoving, checkerId: string) {
+    this.game = _move(state, checkerId, this.apiBaseUrl)
   }
 
-  @action
-  confirming(state: Confirming) {
-    this.state = confirming(state)
+  getClockwisePlayer(
+    players: NodotsPlayersPlaying
+  ): NodotsPlayerPlaying | NodotsPlayerReady {
+    return players.black.direction === 'clockwise'
+      ? players.black
+      : players.white
+  }
+
+  getCounterClockwisePlayer(
+    players: NodotsPlayersPlaying
+  ): NodotsPlayerPlaying | NodotsPlayerReady {
+    return players.black.direction === 'counterclockwise'
+      ? players.black
+      : players.white
   }
 }
 
