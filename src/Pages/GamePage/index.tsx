@@ -6,6 +6,7 @@ import { generateId, rollingForStart } from '../../GameStore/types'
 import { InitializingPlayer, Player } from '../../GameStore/types/Player'
 import NodotsBoardComponent from '../../Components/NodotsBoardComponent'
 import GameNotifications from '../../Components/NodotsNotificationsComponent/Game'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const whitePlayer: InitializingPlayer = {
   kind: 'initializing',
@@ -43,16 +44,6 @@ const blackPlayer: InitializingPlayer = {
 
 class GamePage extends Component {
   private store: NodotsGameStore
-
-  saveGame = () => {
-    const gameData = JSON.stringify(this.store)
-    const blob = new Blob([gameData], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.download = 'nodots-backgammon-game.json'
-    link.href = url
-    link.click()
-  }
 
   constructor(props: {} | Readonly<{}>) {
     super(props)
