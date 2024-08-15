@@ -9,6 +9,21 @@ $primary-main-20: rgb(87, 95, 144, 0.5);
 $border-radius: 5px;
 $border: 1px solid;
 
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 4vh;
+  background-color: $primary-main;
+  color: white;
+  font-size: 0.6rem;
+  a,
+  a:visited {
+    color: white;
+  }
+}
+
 .checker {
   min-width: 0px !important;
   min-height: 0px !important;
@@ -27,7 +42,7 @@ $border: 1px solid;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: 96vh;
   width: 100vw;
 
   #GameNotificationsContainer {
