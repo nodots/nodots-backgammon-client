@@ -1,27 +1,26 @@
 import { Alert, AlertColor } from '@mui/material'
-import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
+import useNodotsGame from '../../Hooks/GameHook'
 
 interface Props {
-  store: NodotsGameStore
   severity?: AlertColor
 }
 
-function GameNotifications({ store, severity }: Props) {
-  const { state } = store
+function GameNotifications({ severity }: Props) {
+  const { game } = useNodotsGame()
   return (
     <div id="GameNotificationsContainer">
-      {state.message?.game && (
+      GameNotifications
+      {/* {game.message?.game && (
         <Alert
           id="GameNotifications"
           variant="outlined"
           severity={severity ? severity : 'info'}
         >
-          {state.message?.game}
+          {game.message?.game}
         </Alert>
-      )}
+      )} */}
     </div>
   )
 }
 
-export default observer(GameNotifications)
+export default GameNotifications

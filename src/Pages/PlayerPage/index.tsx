@@ -8,10 +8,14 @@ const Profile = () => {
     return <div>Loading ...</div>
   }
 
-  if (isAuthenticated && user) {
-    return (
-      isAuthenticated &&
-      user && (
+  switch (user) {
+    case null:
+      return <div>Not authenticated</div>
+    case undefined:
+      return <div>Not authenticated</div>
+    default:
+      console.log(user)
+      return (
         <div>
           <div>
             <img src={user.picture} alt={user.name} />
@@ -21,7 +25,6 @@ const Profile = () => {
           <SignOutButton />
         </div>
       )
-    )
   }
 }
 

@@ -1,38 +1,18 @@
-import { observer } from 'mobx-react'
-import {
-  getClockwisePlayer,
-  getCounterclockwisePlayer,
-} from '../../../GameStore'
-import NodotsPipCountComponent from '../NodotsPipCountComponent'
-import NodotsGameStore from '../../../GameStore'
-import { getCheckerComponents } from '../NodotsPointComponent'
+import useNodotsGame from '../../../Hooks/GameHook'
+import { NodotsBarComponent } from './NodotsBarComponent'
 
-export interface Props {
-  store: NodotsGameStore
+function NodotsBar() {
+  const { game } = useNodotsGame()
+
+  switch (game?.kind) {
+    case 'game-initializing':
+      return <></>
+    case 'game-initialized':
+    case 'game-rolling-for-start':
+    case 'game-playing-rolling':
+    case 'game-playing-moving':
+      return <NodotsBarComponent />
+  }
 }
 
-function NodotsBarComponent({ store }: Props) {
-  const { game } = store
-  const { players } = game
-  const clockwisePlayer = getClockwisePlayer(players)
-  const clockwiseColor = clockwisePlayer.color
-  const clockwiseCheckers = boardStore.bar[clockwiseColor].checkers
-  const counterclockwisePlayer = getCounterclockwisePlayer(players)
-  const counterclockwiseColor = counterclockwisePlayer.color
-  const counterclockwiseCheckers =
-    boardStore.bar[counterclockwiseColor].checkers
-  return (
-    <div id="Bar">
-      <NodotsPipCountComponent player={counterclockwisePlayer} />
-      <div className="checkerbox counterclockwise">
-        {getCheckerComponents(store, clockwiseCheckers, 'bar')}
-      </div>
-      <div className="checkerbox clockwise">
-        {getCheckerComponents(store, counterclockwiseCheckers, 'bar')}
-      </div>
-      <NodotsPipCountComponent player={clockwisePlayer} />
-    </div>
-  )
-}
-
-export default observer(NodotsBarComponent)
+export default NodotsBar

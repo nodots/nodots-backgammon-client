@@ -1,12 +1,8 @@
 import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
-import { generateId } from '../../GameStore/types'
-import {
-  Latitude,
-  Longitude,
-  NodotsBoardStore,
-} from '../../GameStore/types/Board'
-import { Point } from '../../GameStore/types/Checkercontainer'
+import NodotsGameStore from '../../Hooks/GameStore'
+import { generateId } from '../../Hooks/types'
+import { Latitude, Longitude, NodotsBoardStore } from '../../Hooks/types/Board'
+import { Point } from '../../Hooks/types/Checkercontainer'
 import NodotsPointComponent from '../NodotsBoardComponent/NodotsPointComponent'
 import NodotsPointLabelComponent from '../NodotsBoardComponent/NodotsPointLabelComponent'
 
