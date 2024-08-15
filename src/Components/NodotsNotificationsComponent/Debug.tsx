@@ -1,26 +1,26 @@
 import { AlertColor, Card } from '@mui/material'
-import { observer } from 'mobx-react'
-import NodotsGameStore from '../../GameStore'
+import useNodotsGame from '../../Hooks/GameHook'
 
 interface Props {
-  store: NodotsGameStore
   severity?: AlertColor
 }
 
-function DebugNotifications({ store, severity }: Props) {
+function DebugNotifications({ severity }: Props) {
+  const { game } = useNodotsGame()
   const d = new Date()
   const ts = `${d.getHours()}:${
     d.getMinutes() < 10 ? '0' : ''
   }${d.getMinutes()}:${d.getSeconds() < 10 ? '0' : ''}${d.getSeconds()}`
   return (
     <Card raised={true} id="DebugNotifications">
-      <div className="debug-state">{store.state.kind}</div>
+      DebugNotifications
+      {/* <div className="debug-state">{store.state.kind}</div>
 
       <div className="debug-message">
         {store.state.message?.debug ? store.state.message.debug : ''}
-      </div>
+      </div> */}
     </Card>
   )
 }
 
-export default observer(DebugNotifications)
+export default DebugNotifications

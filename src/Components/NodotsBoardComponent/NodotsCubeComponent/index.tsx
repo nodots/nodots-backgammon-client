@@ -1,34 +1,33 @@
-import { Button, useTheme } from '@mui/material'
-import { observer } from 'mobx-react'
-import React from 'react'
-import NodotsGameStore from '../../../GameStore'
-import { CubeValue } from '../../../GameStore/types/Cube'
+import { GamePlayingRolling } from '../../../../nodots_modules/backgammon-types'
+import useNodotsGame from '../../../Hooks/GameHook'
+import NodotsCubeComponent from './NodotsCubeComponent'
 
-interface Props {
-  store: NodotsGameStore
-}
+function NodotsCube() {
+  const { game } = useNodotsGame()
 
-export const double = (value: CubeValue) =>
-  value !== 64 ? ((value * 2) as CubeValue) : value
-
-function NodotsCubeComponent({ store }: Props) {
-  const { cube } = store.state
-  const theme = useTheme()
-
-  const clickHandler = (e: React.MouseEvent) => {
-    e.preventDefault()
-    console.warn('Double not implemented')
+  const clickHandler = () => {
+    switch (game?.kind) {
+      case 'game-playing-rolling':
+        const _game = game as GamePlayingRolling
+        console.log('double', _game)
+        break
+      case 'game-initializing':
+      case 'game-initialized':
+      case 'game-rolling-for-start':
+      case 'game-playing-moving':
+        break
+    }
   }
 
-  return (
-    <Button
-      className="cube"
-      onClick={clickHandler}
-      sx={{ color: theme.palette.info.main }}
-    >
-      {cube.value}
-    </Button>
-  )
+  switch (game?.kind) {
+    case 'game-initializing':
+    case 'game-initialized':
+    case 'game-rolling-for-start':
+    case 'game-playing-moving':
+      return <></>
+    case 'game-playing-rolling':
+      return <NodotsCubeComponent clickHandler={clickHandler} />
+  }
 }
 
-export default observer(NodotsCubeComponent)
+export default NodotsCube

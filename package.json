@@ -2,7 +2,9 @@
   "name": "nodots-backgammon",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@cutting/svg": "^4.54.9",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",

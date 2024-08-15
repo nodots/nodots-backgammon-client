@@ -1,17 +1,18 @@
 import { Button, useTheme } from '@mui/material'
-import { observer } from 'mobx-react'
 import React from 'react'
-import NodotsGameStore from '../../../GameStore'
-import { Color } from '../../../GameStore/types'
-import { Checker as CheckerType } from '../../../GameStore/types/Checker'
+import {
+  NodotsChecker,
+  NodotsColor,
+  NodotsGameState,
+} from '../../../../nodots_modules/backgammon-types'
 
 export interface Props {
-  store: NodotsGameStore
-  checker: CheckerType
+  game: NodotsGameState
+  checker: NodotsChecker
   count?: number
 }
 
-function NodotsCheckerComponent({ checker, store, count }: Props) {
+function NodotsCheckerComponent({ game, checker, count }: Props) {
   const theme = useTheme()
 
   const handleDebugClick = (e: React.MouseEvent) => {
@@ -23,20 +24,20 @@ function NodotsCheckerComponent({ checker, store, count }: Props) {
   const handleCheckerClick = (e: React.MouseEvent) => {
     const checker = e.currentTarget
 
-    switch (store.state.kind) {
-      case 'game-rolled':
-      case 'game-moving':
-        store.moving(store.state, checker.id)
+    switch (game.kind) {
+      case 'game-playing-moving':
+        //game.move(checker.id)
+        console.log('checkerClicked', checker.id)
         break
-      case 'game-rolling':
-      case 'game-confirming':
+      case 'game-playing-rolling':
       case 'game-rolling-for-start':
-      default:
+      case 'game-initialized':
+      case 'game-initializing':
         break
     }
   }
 
-  const getBackgroundColor = (color: Color) => {
+  const getBackgroundColor = (color: NodotsColor) => {
     return color === 'white'
       ? theme.palette.secondary.light
       : theme.palette.secondary.dark
@@ -60,4 +61,4 @@ function NodotsCheckerComponent({ checker, store, count }: Props) {
   )
 }
 
-export default observer(NodotsCheckerComponent)
+export default NodotsCheckerComponent

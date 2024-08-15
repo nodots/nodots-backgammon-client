@@ -1,32 +1,14 @@
 import { Container } from '@mui/material'
-import NodotsGameStore from '../../../GameStore'
-import {
-  Color,
-  Completed,
-  Confirmed,
-  Confirming,
-  Moving,
-  Rolled,
-  Rolling,
-  RollingForStart,
-} from '../../../GameStore/types'
+
 import NodotsDieComponent from '../NodotsDieComponent'
-import DiceSwitcher from './DiceSwitcher'
+import DiceSwitcher from './NodotsDiceSwitcherComponent'
+import { NodotsColor } from '../../../../nodots_modules/backgammon-types'
 
 interface Props {
-  store: NodotsGameStore
-  state:
-    | RollingForStart
-    | Rolling
-    | Rolled
-    | Confirming
-    | Confirmed
-    | Moving
-    | Completed
-  color: Color
+  color: NodotsColor
 }
 
-function NodotsRollSurfaceComponent({ store, state, color }: Props) {
+function NodotsRollSurfaceComponent({ color }: Props) {
   return (
     <Container
       className="roll-surface"
@@ -37,19 +19,9 @@ function NodotsRollSurfaceComponent({ store, state, color }: Props) {
       }}
     >
       <div className="dice-container">
-        <NodotsDieComponent
-          order={0}
-          color={color}
-          state={state}
-          store={store}
-        />
-        <DiceSwitcher store={store} color={color} />
-        <NodotsDieComponent
-          order={1}
-          color={color}
-          state={state}
-          store={store}
-        />
+        <NodotsDieComponent order={0} color={color} />
+        <DiceSwitcher color={color} />
+        <NodotsDieComponent order={1} color={color} />
       </div>
     </Container>
   )

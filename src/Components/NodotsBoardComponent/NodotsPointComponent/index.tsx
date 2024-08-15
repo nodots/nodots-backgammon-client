@@ -1,13 +1,18 @@
 import { useTheme } from '@mui/material'
 import { ReactElement } from 'react'
-import NodotsGameStore from '../../../GameStore'
-import { Latitude } from '../../../GameStore/types/Board'
 import NodotsCheckerComponent from '../NodotsCheckerComponent'
-import { Checker as CheckerType } from '../../../GameStore/types/Checker'
+import {
+  NodotsGameState,
+  NodotsChecker,
+  Latitude,
+  NodotsBoard,
+  NodotsGameStateReady,
+} from '../../../../nodots_modules/backgammon-types'
+import useNodotsGame from '../../../Hooks/GameHook'
 
 export const getCheckerComponents = (
-  store: NodotsGameStore,
-  checkers: CheckerType[],
+  game: NodotsGameState,
+  checkers: NodotsChecker[],
   kind: 'point' | 'bar' | 'off'
 ) => {
   const checkerComponents: ReactElement[] = []
@@ -15,7 +20,7 @@ export const getCheckerComponents = (
     if (kind === 'point') {
       if (i <= 4) {
         checkerComponents.push(
-          <NodotsCheckerComponent key={c.id} checker={c} store={store} />
+          <NodotsCheckerComponent key={c.id} checker={c} game={game} />
         )
       }
       if (i === 5) {
@@ -23,14 +28,14 @@ export const getCheckerComponents = (
           <NodotsCheckerComponent
             key={c.id}
             checker={c}
-            store={store}
+            game={game}
             count={checkers.length}
           />
         )
       }
     } else {
       checkerComponents.push(
-        <NodotsCheckerComponent key={c.id} checker={c} store={store} />
+        <NodotsCheckerComponent key={c.id} checker={c} game={game} />
       )
     }
   })
@@ -39,22 +44,18 @@ export const getCheckerComponents = (
 
 export interface Props {
   id: string
-  store: NodotsGameStore
+  board: NodotsBoard
   position: {
     clockwise: number
     counterclockwise: number
   }
   latitude: Latitude
-  checkers: CheckerType[]
+  checkers: NodotsChecker[]
 }
 
-function NodotsPointComponent({
-  id,
-  position,
-  checkers,
-  latitude,
-  store,
-}: Props) {
+function NodotsPointComponent({ id, position, checkers, latitude }: Props) {
+  const { game } = useNodotsGame()
+  const _game = game as NodotsGameStateReady
   const theme = useTheme()
   let className = 'point'
 
@@ -88,7 +89,7 @@ function NodotsPointComponent({
         data-position-clockwise={position.clockwise}
         data-position-counterclockwise={position.counterclockwise}
       >
-        {getCheckerComponents(store, checkers, 'point')}
+        {getCheckerComponents(_game, checkers, 'point')}
       </div>
     </div>
   )

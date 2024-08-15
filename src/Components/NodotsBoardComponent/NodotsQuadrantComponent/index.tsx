@@ -1,20 +1,19 @@
-import { observer } from 'mobx-react'
-import NodotsGameStore from '../../../GameStore'
-import { generateId } from '../../../GameStore/types'
+import NodotsPointLabelComponent from '../NodotsPointLabelComponent'
+import NodotsPointComponent from '../NodotsPointComponent'
 import {
   Latitude,
   Longitude,
-  NodotsBoardStore,
-} from '../../../GameStore/types/Board'
-import { Point } from '../../../GameStore/types/Checkercontainer'
-import NodotsPointLabelComponent from '../NodotsPointLabelComponent'
-import NodotsPointComponent from '../NodotsPointComponent'
+  NodotsBoard,
+  NodotsGameState,
+  Point,
+} from '../../../../nodots_modules/backgammon-types'
+import { generateId } from '../../helpers'
 
+// Why is this here? I think that Quadrant is purely a UI concept.
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
 export interface Props {
-  store: NodotsGameStore
-  boardStore: NodotsBoardStore
+  board: NodotsBoard
   latitude: Latitude
   longitude: Longitude
   start: number
@@ -22,7 +21,7 @@ export interface Props {
 }
 
 function NodotsQuadrantComponent({
-  store,
+  board,
   latitude,
   longitude,
   start,
@@ -39,7 +38,7 @@ function NodotsQuadrantComponent({
         {points.map((p) => (
           <NodotsPointComponent
             id={generateId()}
-            store={store}
+            board={board}
             checkers={p.checkers}
             position={p.position}
             latitude={latitude}
@@ -51,4 +50,4 @@ function NodotsQuadrantComponent({
   )
 }
 
-export default observer(NodotsQuadrantComponent)
+export default NodotsQuadrantComponent
