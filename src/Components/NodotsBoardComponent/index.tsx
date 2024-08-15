@@ -54,7 +54,7 @@ function NodotsBoardComponent({ store, state }: Props) {
     case 'game-rolling-for-start':
     case 'game-completed':
       return (
-        <div id="BoardContainer" elevation={2}>
+        <div id="BoardContainer">
           <Paper id="West" className="board-half" elevation={1}>
             <NodotsQuadrantComponent
               store={store}
