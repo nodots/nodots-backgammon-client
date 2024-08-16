@@ -1,7 +1,7 @@
-import { useAuth0, User } from '@auth0/auth0-react'
+import { useAuth0 } from '@auth0/auth0-react'
 import SignOutButton from '../../Forms/Auth0/Buttons/SignOutButton'
 
-const Profile = () => {
+const PlayerPage = () => {
   const { user, isAuthenticated, isLoading } = useAuth0()
 
   if (isLoading) {
@@ -28,4 +28,4 @@ const Profile = () => {
   }
 }
 
-export default Profile
+export default PlayerPage
