@@ -4,6 +4,7 @@ import NodotsGameStore from '../../../GameStore'
 import { Latitude } from '../../../GameStore/types/Board'
 import NodotsCheckerComponent from '../NodotsCheckerComponent'
 import { Checker as CheckerType } from '../../../GameStore/types/Checker'
+import { ReactComponent as PointBackground } from './aztec-point.svg'
 
 export const getCheckerComponents = (
   store: NodotsGameStore,
@@ -71,17 +72,7 @@ function NodotsPointComponent({
 
   return (
     <div className={className}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        version="1.1"
-        className={`point-background ${latitude}`}
-        viewBox="0 0 100 500"
-      >
-        <polygon
-          points="0,0 50,500 100,0"
-          fill={getBackgroundColor(position.clockwise)}
-        ></polygon>
-      </svg>
+      <PointBackground />
       <div
         className={`checker-container ${latitude}`}
         key={id}
