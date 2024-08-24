@@ -2,14 +2,13 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { AuthGuard } from './Auth/AuthGuard'
-
+import AuthComponent from './Auth/AuthComponent'
 import GamePage from './Pages/GamePage'
 import HomePage from './Pages/HomePage'
 import LobbyPage from './Pages/LobbyPage'
 import PlayerPage from './Pages/PlayerPage'
 import SignInPage from './Pages/SignInPage'
 import appTheme from './theme/theme'
-import AuthComponent from './Auth/AuthComponent'
 
 const App = () => {
   const { user, isAuthenticated, isLoading } = useAuth0()

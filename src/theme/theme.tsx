@@ -1,5 +1,11 @@
 import { createTheme } from '@mui/material'
 
+export default createTheme({
+  palette: {
+    mode: 'dark',
+  },
+})
+
 // Manchester United
 // export default createTheme({
 //   palette: {
@@ -8,7 +14,7 @@ import { createTheme } from '@mui/material'
 //       default: 'rgba(51, 63, 72)',
 //     },
 //     primary: {
-//       main: 'rgba(218, 41, 28, 0.5)',
+//       main: 'rgba(218, 41, 28)',
 //       light: 'rgba(218, 41, 28, 0.25)',
 //       dark: 'rgba(218, 41, 28, 1)',
 //     },
@@ -21,21 +27,21 @@ import { createTheme } from '@mui/material'
 // })
 
 // UT
-export default createTheme({
-  palette: {
-    mode: 'dark',
-    background: {
-      default: 'rgba(12, 12, 12)',
-    },
-    primary: {
-      main: 'rgba(191, 87, 0, 0.5)',
-      light: 'rgba(191, 87, 0, 0.25)',
-      dark: 'rgba(191, 87, 0, 1)',
-    },
-    secondary: {
-      main: 'rgba(0, 95, 134)',
-      light: 'rgba(0, 169, 183)',
-      dark: 'rgba(0, 95, 134)',
-    },
-  },
-})
+// export default createTheme({
+//   palette: {
+//     mode: 'dark',
+//     background: {
+//       default: 'rgba(12, 12, 12)',
+//     },
+//     primary: {
+//       main: 'rgba(191, 87, 0, 0.5)',
+//       light: 'rgba(191, 87, 0, 0.25)',
+//       dark: 'rgba(191, 87, 0, 1)',
+//     },
+//     secondary: {
+//       main: 'rgba(0, 95, 134)',
+//       light: 'rgba(0, 169, 183)',
+//       dark: 'rgba(0, 95, 134)',
+//     },
+//   },
+// })

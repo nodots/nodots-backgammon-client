@@ -8,6 +8,8 @@ import {
   NodotsGame,
   NodotsGameState,
   NodotsMoveDirection,
+  NodotsOfferPlay,
+  NodotsPlayer,
   NodotsPlayerPlaying,
   NodotsPlayerSeekingGame,
   NodotsPlayersInitialized,
@@ -97,6 +99,18 @@ const _getPlayersSeekingGame = async (
   return result.json()
 }
 
+const _getPlayerForEmail = async (
+  endpoint: string
+): Promise<NodotsPlayer | null> => {
+  const result = await fetch(endpoint)
+  return result.json()
+}
+
+const _getPlayOffers = async (endpoint: string): Promise<NodotsOfferPlay[]> => {
+  const result = await fetch(endpoint)
+  return result.json()
+}
+
 const _move = (
   state: GamePlayingRolling | GamePlayingMoving,
   checkerId: string,
@@ -132,6 +146,14 @@ const useNodotsGame = () => {
 
   const getPlayersSeekingGame = async () => {
     return await _getPlayersSeekingGame(`${apiUrl}/player/seeking-game`)
+  }
+
+  const getPlayerForEmail = async (email: string) => {
+    return await _getPlayerForEmail(`${apiUrl}/player/${email}`)
+  }
+
+  const getPlayOffers = async (playerId: string) => {
+    return await _getPlayOffers(`${apiUrl}/offer/play/${playerId}`)
   }
 
   // const rollForStart = (state: GameInitializing) => {
@@ -219,6 +241,8 @@ const useNodotsGame = () => {
     getPlayerForDirection,
     getPlayerGames,
     getPlayersSeekingGame,
+    getPlayerForEmail,
+    getPlayOffers,
   }
 }
 
