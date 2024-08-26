@@ -1,7 +1,7 @@
-import { Container, List, ListItem, Paper, Typography } from '@mui/material'
-import { Component } from 'react'
+import { AppBar, Container } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import SignInButton from '../../Forms/Auth0/Buttons/SignInButton'
-// import SignInForm from './SignInForm' // Import the SignInForm component
+import LanguageSwitcher from '../../Components/LanguageSwitcher'
 
 type ExternalUser = {
   token: string
@@ -9,25 +9,23 @@ type ExternalUser = {
   email: string
 }
 
-class SignInPage extends Component {
-  constructor(props: {} | Readonly<{}>) {
-    super(props)
-  }
-
-  render() {
-    return (
+function HomePage() {
+  const { t } = useTranslation()
+  return (
+    <>
+      <AppBar
+        position="static"
+        sx={{ display: 'flex', alignItems: 'flex-end' }}
+      >
+        <LanguageSwitcher />
+      </AppBar>
       <Container>
-        <h1>Welcome to Nodots Backgammon (beta)</h1>
-        <p>
-          We offer the best backgammon playing experience on every device from
-          your phone to your TV with no apps to install. Play and interact with
-          others seamlessly in English, French, Arabic, and Turkish. Any device.
-          Any time.
-        </p>
-        <SignInButton text="Get Started!" />
+        <h1>{t('NDBG_HOMEPAGE_TITLE')}</h1>
+        <p>{t('NDBG_HOMEPAGE_DESCRIPTION')}</p>
+        <SignInButton text={t('NDBG_GET_STARTED')} />
       </Container>
-    )
-  }
+    </>
+  )
 }
 
-export default SignInPage
+export default HomePage

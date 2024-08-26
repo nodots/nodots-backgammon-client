@@ -2,6 +2,8 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
 import { NodotsPlayer } from '../../nodots_modules/backgammon-types'
 import { useNavigate } from 'react-router-dom'
+import { withTranslation, WithTranslation } from 'react-i18next'
+import { NodotsPlayerInitialized } from '../../../nodots-backgammon-api/nodots_modules/@nodots/backgammon-types'
 
 function AuthComponent() {
   const { user, isAuthenticated, isLoading } = useAuth0()
@@ -12,10 +14,11 @@ function AuthComponent() {
     if (!user) {
       return
     }
+
     fetch(`http://localhost:3000/player/${user.email}`).then((response) => {
       switch (response.status) {
         case 200:
-          response.json().then((player) => {
+          response.json().then((player: NodotsPlayer) => {
             setPlayer(player)
           })
           navigate('/lobby')

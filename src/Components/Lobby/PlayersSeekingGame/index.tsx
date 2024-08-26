@@ -47,8 +47,8 @@ function PlayersSeekingGame() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          offeringPlayer: player,
-          offeredPlayer: opponent,
+          offeringPlayerId: player.id,
+          offeredPlayerId: opponent.id,
         }),
       }).then((response) => {
         if (response.ok) {
@@ -78,7 +78,11 @@ function PlayersSeekingGame() {
     )
   }
 
-  return <Container>{user && <List>{getPlayerList()}</List>}</Container>
+  return (
+    <Container>
+      <List>{getPlayerList()}</List>
+    </Container>
+  )
 }
 
 export default PlayersSeekingGame

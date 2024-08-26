@@ -106,6 +106,13 @@ const _getPlayerForEmail = async (
   return result.json()
 }
 
+const _getPlayerForId = async (
+  endpoint: string
+): Promise<NodotsPlayer | null> => {
+  const result = await fetch(endpoint)
+  return result.json()
+}
+
 const _getPlayOffers = async (endpoint: string): Promise<NodotsOfferPlay[]> => {
   const result = await fetch(endpoint)
   return result.json()
@@ -152,20 +159,13 @@ const useNodotsGame = () => {
     return await _getPlayerForEmail(`${apiUrl}/player/${email}`)
   }
 
+  const getPlayerForId = async (id: string) => {
+    return await _getPlayerForId(`${apiUrl}/player/${id}`)
+  }
+
   const getPlayOffers = async (playerId: string) => {
     return await _getPlayOffers(`${apiUrl}/offer/play/${playerId}`)
   }
-
-  // const rollForStart = (state: GameInitializing) => {
-  //   setGame(_rollForStart(state, apiUrl + '/game'))
-  // }
-
-  // const move = (
-  //   state: GamePlayingRolling | GamePlayingMoving,
-  //   checkerId: string
-  // ) => {
-  //   setGame(_move(state, checkerId, apiUrl))
-  // }
 
   const getCheckers = (board: NodotsBoard) => {
     const checkers: NodotsChecker[] = []
@@ -242,6 +242,7 @@ const useNodotsGame = () => {
     getPlayerGames,
     getPlayersSeekingGame,
     getPlayerForEmail,
+    getPlayerForId,
     getPlayOffers,
   }
 }

@@ -1,8 +1,11 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import SignOutButton from '../../Forms/Auth0/Buttons/SignOutButton'
+import { Container } from '@mui/material'
+import NodotsAppBar from '../../Components/NodotsAppBar'
+import { useTranslation } from 'react-i18next'
 
 const PlayerPage = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0()
+  const { user, isLoading } = useAuth0()
+  const { t, i18n } = useTranslation()
 
   if (isLoading) {
     return <div>Loading ...</div>
@@ -14,16 +17,17 @@ const PlayerPage = () => {
     case undefined:
       return <div>Not authenticated</div>
     default:
-      console.log(user)
       return (
-        <div>
-          <div>
-            <img src={user.picture} alt={user.name} />
-            <h2>{user.name}</h2>
-            <p>{user.email}</p>
-          </div>
-          <SignOutButton />
-        </div>
+        <>
+          <NodotsAppBar title={t('NDBG_PLAYER_PROFILE')} />
+          <Container>
+            <h1>
+              {t('NDBG_WELCOME')}
+              {user?.given_name ? `, ${user.given_name}!` : '!'}
+            </h1>
+            {i18n.language}
+          </Container>
+        </>
       )
   }
 }

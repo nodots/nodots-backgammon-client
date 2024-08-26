@@ -40,6 +40,7 @@ function SetSeekingGame() {
     }
   }, [])
 
+  console.log(player)
   switch (player?.kind) {
     case 'player-seeking-game':
     case 'player-playing':

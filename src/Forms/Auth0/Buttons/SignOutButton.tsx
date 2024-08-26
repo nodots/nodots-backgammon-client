@@ -6,12 +6,12 @@ const SignOutButton = () => {
 
   return (
     <Button
-      variant="contained"
+      variant="text"
       onClick={() =>
         logout({ logoutParams: { returnTo: window.location.origin } })
       }
     >
-      Log Out
+      Sign Out
     </Button>
   )
 }

@@ -7,43 +7,24 @@ import { NodotsOfferPlay } from '../../../../../nodots-backgammon-api/nodots_mod
 
 function AvailableOffers() {
   const { user } = useAuth0()
-  const { game, getPlayersSeekingGame, getPlayerForEmail, getPlayOffers } =
-    useNodotsGame()
+  const {
+    game,
+    getPlayersSeekingGame,
+    getPlayerForEmail,
+    getPlayerForId,
+    getPlayOffers,
+  } = useNodotsGame()
   const [player, setPlayer] = useState<NodotsPlayerSeekingGame>()
   const [offers, setOffers] = useState<NodotsOfferPlay[]>([])
 
-  useEffect(() => {
-    if (!player && user && user.email) {
-      getPlayerForEmail(user.email).then((player) => {
-        switch (player?.kind) {
-          case 'player-initialized':
-          case 'player-playing':
-          case 'player-seeking-game':
-            getPlayOffers(player.id).then((offers) => {
-              setOffers(offers)
-            })
-        }
-      })
-    }
-  }, [user, player])
-
-  if (offers && offers.length > 0) {
-    console.log(offers)
-    return (
-      <Container>
-        <h2>Available Offers</h2>
-        <List>
-          {offers.map((offer) => (
-            <ListItem key={offer.offeringPlayer.id}>
-              Some asshole is offering to play
-            </ListItem>
-          ))}
-        </List>
-      </Container>
-    )
-  } else {
-    return <></>
+  const decodeOffers = async (offers: NodotsOfferPlay[]) => {
+    return offers.map(async (offer) => {
+      const offeringPlayer = await getPlayerForId(offer.offeringPlayerId)
+      console.log(offer.offeredPlayerId)
+    })
   }
+
+  return <>AvailableOffers</>
 }
 
 export default AvailableOffers

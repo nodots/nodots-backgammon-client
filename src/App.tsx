@@ -9,9 +9,11 @@ import LobbyPage from './Pages/LobbyPage'
 import PlayerPage from './Pages/PlayerPage'
 import SignInPage from './Pages/SignInPage'
 import appTheme from './theme/theme'
+import { useTranslation, withTranslation } from 'react-i18next'
 
 const App = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0()
+  const { i18n } = useTranslation()
+  document.body.dir = i18n.dir()
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />
@@ -37,4 +39,4 @@ const App = () => {
   )
 }
 
-export default App
+export default withTranslation()(App)
