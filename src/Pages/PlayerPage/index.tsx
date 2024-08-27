@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { Container } from '@mui/material'
 import NodotsAppBar from '../../Components/NodotsAppBar'
 import { useTranslation } from 'react-i18next'
+import LocaleSwitcher from '../../Components/LocaleSwitcher'
 
 const PlayerPage = () => {
   const { user, isLoading } = useAuth0()
@@ -19,13 +20,13 @@ const PlayerPage = () => {
     default:
       return (
         <>
-          <NodotsAppBar title={t('NDBG_PLAYER_PROFILE')} />
+          <NodotsAppBar />
           <Container>
             <h1>
               {t('NDBG_WELCOME')}
               {user?.given_name ? `, ${user.given_name}!` : '!'}
             </h1>
-            {i18n.language}
+            {t('NDBG_PREFERRED_LANGUAGE')}: <LocaleSwitcher />
           </Container>
         </>
       )

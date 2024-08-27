@@ -18,7 +18,7 @@ const LobbyPage: React.FC<Props> = () => {
   const { getPlayersSeekingGame } = useNodotsGame()
   return (
     <>
-      <NodotsAppBar title={t('NDBG_LOBBY')} />
+      <NodotsAppBar />
       <Container>
         <h1>
           {t('NDBG_WELCOME')}

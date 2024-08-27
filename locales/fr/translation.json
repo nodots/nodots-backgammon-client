@@ -9,9 +9,13 @@
   "NDBG_SIGN_OUT": "Se déconnecter",
   "NDBG_LOBBY": "Hall",
   "NDBG_PLAYER_PAGE": "Page du joueur",
+  "NDBG_PREFERRED_LANGUAGE": "Langue préférée",
   "NDBG_ENGLISH": "Anglais",
   "NDBG_SPANISH": "Espagnol",
   "NDBG_FRENCH": "Français",
   "NDBG_ARABIC": "Arabe",
-  "NDBG_TURKISH": "Turc"
+  "NDBG_TURKISH": "Turc",
+  "NDBG_DIRECTION_COUNTERCLOCKWISE": "Sens antihoraire",
+  "NDBG_DIRECTION_CLOCKWISE": "Sens horaire",
+  "NDBG_DEFAULT_MENU_ITEM": "Choisissez-en un"
 }

@@ -5,7 +5,6 @@ export default createTheme({
     mode: 'dark',
   },
 })
-
 // Manchester United
 // export default createTheme({
 //   palette: {

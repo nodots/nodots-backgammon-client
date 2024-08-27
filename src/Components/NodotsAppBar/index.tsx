@@ -11,14 +11,10 @@ import Menu from '@mui/material/Menu'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Select } from '@mui/material'
 import { Language } from '@mui/icons-material'
-import LanguageSwitcher from '../LanguageSwitcher'
+import LocaleSwitcher from '../LocaleSwitcher'
 import { useTranslation } from 'react-i18next'
 
-interface Props {
-  title: string
-}
-
-export default function MenuAppBar({ title }: Props) {
+export default function MenuAppBar() {
   const { i18n, t } = useTranslation()
   const { logout, isAuthenticated, user } = useAuth0()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -40,11 +36,6 @@ export default function MenuAppBar({ title }: Props) {
     logout({ logoutParams: { returnTo: window.location.origin } })
   }
 
-  const handleChangeLanguage = (lang: 'en' | 'es' | 'fr' | 'ar' | 'tr') => {
-    return () => {
-      console.log(lang)
-    }
-  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -53,9 +44,7 @@ export default function MenuAppBar({ title }: Props) {
             variant="h6"
             component="div"
             sx={{ flexGrow: 1, fontVariant: 'all-petite-caps' }}
-          >
-            {t(title)}
-          </Typography>
+          ></Typography>
 
           {isAuthenticated && (
             <div>

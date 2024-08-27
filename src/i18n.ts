@@ -3,21 +3,21 @@ import { initReactI18next } from 'react-i18next'
 import HttpApi from 'i18next-http-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-export type NodotsLanguageCode = 'en' | 'es' | 'fr' | 'ar' | 'tr'
+export type NodotsLocaleCode = 'en' | 'es' | 'fr' | 'ar' | 'tr'
 
-export interface NodotsLanguage {
-  languageCode: NodotsLanguageCode
-  languageName: string
+export interface NodotsLocale {
+  code: NodotsLocaleCode
+  name: string
 }
 
-export type NodotsLanguageList = NodotsLanguage[]
+export type NodotsLocaleList = NodotsLocale[]
 
-export const NodotsLanguages: NodotsLanguageList = [
-  { languageCode: 'en', languageName: 'English' },
-  { languageCode: 'es', languageName: 'Español' },
-  { languageCode: 'fr', languageName: 'Français' },
-  { languageCode: 'ar', languageName: 'عربى' },
-  { languageCode: 'tr', languageName: 'Türkçe' },
+export const NodotsLocales: NodotsLocaleList = [
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Español' },
+  { code: 'fr', name: 'Français' },
+  { code: 'ar', name: 'عربى' },
+  { code: 'tr', name: 'Türkçe' },
 ]
 
 i18n
@@ -25,7 +25,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'tr',
+    fallbackLng: 'en',
     debug: true,
     interpolation: {
       escapeValue: false,

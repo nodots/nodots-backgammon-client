@@ -3,6 +3,7 @@ import {
   GameInitialized,
   GamePlayingMoving,
   GamePlayingRolling,
+  IPlayerPreferences,
   NodotsBoard,
   NodotsChecker,
   NodotsGame,
@@ -14,7 +15,6 @@ import {
   NodotsPlayerSeekingGame,
   NodotsPlayersInitialized,
   NodotsPlayersPlaying,
-  NodotsRoll,
 } from '../../nodots_modules/backgammon-types'
 
 const _initializeGame = async (
@@ -29,6 +29,15 @@ const _initializeGame = async (
     body: JSON.stringify(players),
   })
   return result.json()
+}
+
+const _updatePlayerPreferences = async (
+  preferences: IPlayerPreferences,
+  endpoint: string
+) => {
+  fetch(endpoint, {
+    method: 'PATCH',
+  })
 }
 
 const _rollForStart = async (
@@ -163,9 +172,14 @@ const useNodotsGame = () => {
     return await _getPlayerForId(`${apiUrl}/player/${id}`)
   }
 
-  const getPlayOffers = async (playerId: string) => {
-    return await _getPlayOffers(`${apiUrl}/offer/play/${playerId}`)
+  const getPlayOffers = async (id: string) => {
+    return await _getPlayOffers(`${apiUrl}/offer/play/${id}`)
   }
+
+  const updatePlayerPreferences = async (
+    id: string,
+    preferences: IPlayerPreferences
+  ) => await _updatePlayerPreferences(preferences, `${apiUrl}/player/${id}`)
 
   const getCheckers = (board: NodotsBoard) => {
     const checkers: NodotsChecker[] = []
@@ -244,6 +258,7 @@ const useNodotsGame = () => {
     getPlayerForEmail,
     getPlayerForId,
     getPlayOffers,
+    updatePlayerPreferences,
   }
 }
 

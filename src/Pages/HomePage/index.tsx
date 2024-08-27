@@ -1,7 +1,7 @@
-import { AppBar, Container } from '@mui/material'
+import { AppBar, Container, Toolbar } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import SignInButton from '../../Forms/Auth0/Buttons/SignInButton'
-import LanguageSwitcher from '../../Components/LanguageSwitcher'
+import LocaleSwitcher from '../../Components/LocaleSwitcher'
 
 type ExternalUser = {
   token: string
@@ -13,11 +13,8 @@ function HomePage() {
   const { t } = useTranslation()
   return (
     <>
-      <AppBar
-        position="static"
-        sx={{ display: 'flex', alignItems: 'flex-end' }}
-      >
-        <LanguageSwitcher />
+      <AppBar position="static" id="AppBarHomePage">
+        <LocaleSwitcher />
       </AppBar>
       <Container>
         <h1>{t('NDBG_HOMEPAGE_TITLE')}</h1>

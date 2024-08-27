@@ -7,11 +7,15 @@
   "NDBG_PROFILE": "Profile",
   "NDBG_SIGN_IN": "Sign in",
   "NDBG_SIGN_OUT": "Sign out",
-  "NDBG_LOBBY:": "Lobby",
+  "NDBG_LOBBY": "Lobby",
   "NDBG_PLAYER_PROFILE": "Player page",
+  "NDBG_PREFERRED_LANGUAGE": "Preferred language",
   "NDBG_ENGLISH": "English",
   "NDBG_SPANISH": "Spanish",
   "NDBG_FRENCH": "French",
   "NDBG_ARABIC": "Arabic",
-  "NDBG_TURKISH": "Turkish"
+  "NDBG_TURKISH": "Turkish",
+  "NDBG_DIRECTION_COUNTERCLOCKWISE": "Counterclockwise",
+  "NDBG_DIRECTION_CLOCKWISE": "Clockwise",
+  "NDBG_DEFAULT_MENU_ITEM": "Choose one"
 }

@@ -9,9 +9,13 @@
   "NDBG_SIGN_OUT": "تسجيل الخروج",
   "NDBG_LOBBY": "الصالة",
   "NDBG_PLAYER_PROFILE": "صفحة اللاعب",
+  "NDBG_PREFERRED_LANGUAGE": "اللغة المفضلة",
   "NDBG_ENGLISH": "الإنجليزية",
   "NDBG_SPANISH": "الإسبانية",
   "NDBG_FRENCH": "الفرنسية",
   "NDBG_ARABIC": "العربية",
-  "NDGB_TURKISH": "التركية"
+  "NDBG_TURKISH": "التركية",
+  "NDBG_DIRECTION_COUNTERCLOCKWISE": "عكس عقارب الساعة",
+  "NDBG_DIRECTION_CLOCKWISE": "عقارب الساعة",
+  "NDBG_DEFAULT_MENU_ITEM": "اختر واحدة"
 }

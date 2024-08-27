@@ -10,9 +10,13 @@
   "NDBG_SIGN_UP": "Kaydol",
   "NDBG_LOBBY": "Lobi",
   "NDBG_PLAYER_PROFILE": "Oyuncu sayfası",
+  "NDBG_PREFERRED_LANGUAGE": "Tercih edilen dil",
   "NDBG_ENGLISH": "İngilizce",
   "NDBG_SPANISH": "İspanyolca",
   "NDBG_FRENCH": "Fransızca",
   "NDBG_ARABIC": "Arapça",
-  "NDBG_TURKISH": "Türkçe"
+  "NDBG_TURKISH": "Türkçe",
+  "NDBG_DIRECTION_COUNTERCLOCKWISE": "Saat yönünün tersine",
+  "NDBG_DIRECTION_CLOCKWISE": "Saat yönünde",
+  "NDBG_DEFAULT_MENU_ITEM": "Birini seçin"
 }
