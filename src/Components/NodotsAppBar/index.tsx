@@ -9,7 +9,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle'
 import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
 import { useAuth0 } from '@auth0/auth0-react'
-import { Select } from '@mui/material'
+import { Avatar, Select } from '@mui/material'
 import { Language } from '@mui/icons-material'
 import LocaleSwitcher from '../LocaleSwitcher'
 import { useTranslation } from 'react-i18next'
@@ -46,7 +46,7 @@ export default function MenuAppBar() {
             sx={{ flexGrow: 1, fontVariant: 'all-petite-caps' }}
           ></Typography>
 
-          {isAuthenticated && (
+          {user && isAuthenticated && (
             <div>
               <IconButton
                 size="large"
@@ -56,7 +56,7 @@ export default function MenuAppBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <Avatar alt={user.given_name} src={user.picture} />
               </IconButton>
               <Menu
                 id="menu-appbar"

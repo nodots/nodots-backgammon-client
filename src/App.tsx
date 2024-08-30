@@ -10,9 +10,19 @@ import PlayerPage from './Pages/PlayerPage'
 import SignInPage from './Pages/SignInPage'
 import appTheme from './theme/theme'
 import { useTranslation, withTranslation } from 'react-i18next'
+import { useEffect, useState } from 'react'
+import useNodotsGame from './Hooks/GameHook'
+import { get } from 'http'
+import { NodotsPlayer } from '../nodots_modules/backgammon-types'
 
 const App = () => {
+  const { getPlayerById } = useNodotsGame()
   const { i18n } = useTranslation()
+  const playerId = sessionStorage.getItem('playerId')
+  const [player, setPlayer] = useState<NodotsPlayer>()
+  useEffect(() => {
+    playerId && getPlayerById(playerId).then((p) => p && setPlayer(p))
+  }, [])
   document.body.dir = i18n.dir()
   return (
     <ThemeProvider theme={appTheme}>

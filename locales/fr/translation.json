@@ -17,5 +17,7 @@
   "NDBG_TURKISH": "Turc",
   "NDBG_DIRECTION_COUNTERCLOCKWISE": "Sens antihoraire",
   "NDBG_DIRECTION_CLOCKWISE": "Sens horaire",
-  "NDBG_DEFAULT_MENU_ITEM": "Choisissez-en un"
+  "NDBG_DEFAULT_MENU_ITEM": "Choisissez-en un",
+  "NDBG_PLAYER_PAGE_TITLE": "Page du joueur",
+  "NDBG_FRIENDS": "Amis"
 }

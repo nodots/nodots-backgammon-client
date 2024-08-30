@@ -16,6 +16,12 @@ import {
   NodotsPlayersInitialized,
   NodotsPlayersPlaying,
 } from '../../nodots_modules/backgammon-types'
+import { NodotsLocaleCode } from '../i18n'
+
+const _getPlayers = async (endpoint: string): Promise<NodotsPlayer[]> => {
+  const result = await fetch(endpoint)
+  return result.json()
+}
 
 const _initializeGame = async (
   players: NodotsPlayersInitialized,
@@ -31,13 +37,12 @@ const _initializeGame = async (
   return result.json()
 }
 
-const _updatePlayerPreferences = async (
-  preferences: IPlayerPreferences,
-  endpoint: string
-) => {
-  fetch(endpoint, {
-    method: 'PATCH',
-  })
+const _updatePlayerLocale = async (id: string, locale: NodotsLocaleCode) => {
+  console.log(id, locale)
+
+  // fetch(endpoint, {
+  //   method: 'PATCH',
+  // })
 }
 
 const _rollForStart = async (
@@ -115,7 +120,15 @@ const _getPlayerForEmail = async (
   return result.json()
 }
 
-const _getPlayerForId = async (
+const _getPlayerById = async (
+  endpoint: string
+): Promise<NodotsPlayer | null> => {
+  const result = await fetch(endpoint)
+  console.log(result)
+  return result.json()
+}
+
+const _getPlayerForAuth0Sub = async (
   endpoint: string
 ): Promise<NodotsPlayer | null> => {
   const result = await fetch(endpoint)
@@ -160,26 +173,34 @@ const useNodotsGame = () => {
     return await _getPlayerGames(`${apiUrl}/game/player/${email}`)
   }
 
+  const getPlayers = async () => await _getPlayers(`${apiUrl}/player/`)
+
   const getPlayersSeekingGame = async () => {
     return await _getPlayersSeekingGame(`${apiUrl}/player/seeking-game`)
   }
 
-  const getPlayerForEmail = async (email: string) => {
+  const getPlayerByEmail = async (email: string) => {
     return await _getPlayerForEmail(`${apiUrl}/player/${email}`)
   }
 
-  const getPlayerForId = async (id: string) => {
-    return await _getPlayerForId(`${apiUrl}/player/${id}`)
+  const getPlayerById = async (id: string) => {
+    return await _getPlayerById(`${apiUrl}/player/${id}`)
   }
 
   const getPlayOffers = async (id: string) => {
     return await _getPlayOffers(`${apiUrl}/offer/play/${id}`)
   }
 
-  const updatePlayerPreferences = async (
-    id: string,
-    preferences: IPlayerPreferences
-  ) => await _updatePlayerPreferences(preferences, `${apiUrl}/player/${id}`)
+  const getPlayerForAuth0Sub = async (sub: string) => {
+    const [source, externalId] = sub.split('|')
+    //127.0.0.1:3000/player/sub/google-oauth2/116011787152052181569
+    return await _getPlayerForAuth0Sub(
+      `${apiUrl}/player/sub/${source}/${externalId}`
+    )
+  }
+
+  const updatePlayerLocale = async (id: string, locale: NodotsLocaleCode) =>
+    await _updatePlayerLocale(id, locale)
 
   const getCheckers = (board: NodotsBoard) => {
     const checkers: NodotsChecker[] = []
@@ -251,14 +272,15 @@ const useNodotsGame = () => {
     roll,
     double,
     switchDice,
+    getPlayers,
     getCheckersForDirection,
     getPlayerForDirection,
     getPlayerGames,
     getPlayersSeekingGame,
-    getPlayerForEmail,
-    getPlayerForId,
+    getPlayerById,
     getPlayOffers,
-    updatePlayerPreferences,
+    getPlayerForAuth0Sub,
+    updatePlayerLocale,
   }
 }
 

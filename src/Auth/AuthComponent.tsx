@@ -6,48 +6,37 @@ import { withTranslation, WithTranslation } from 'react-i18next'
 import { NodotsPlayerInitialized } from '../../../nodots-backgammon-api/nodots_modules/@nodots/backgammon-types'
 
 function AuthComponent() {
-  const { user, isAuthenticated, isLoading } = useAuth0()
+  const { user, isLoading } = useAuth0()
   const [player, setPlayer] = useState<NodotsPlayer>()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (!user) {
-      return
+  const initializePlayer = async (p: NodotsPlayer) => {
+    try {
+      setPlayer(p)
+      sessionStorage.setItem('playerId', p.id)
+      navigate('/lobby')
+    } catch (error) {
+      console.error('Error initializing player:', error)
     }
+  }
 
-    fetch(`http://localhost:3000/player/${user.email}`).then((response) => {
-      switch (response.status) {
-        case 200:
-          response.json().then((player: NodotsPlayer) => {
-            setPlayer(player)
-          })
-          navigate('/lobby')
-          break
-        case 404:
-          fetch('http://localhost:3000/player/add-auth0-user', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user),
-          }).then((response) => {
-            response.json().then((player) => {
-              setPlayer(player)
-            })
-            navigate('/lobby')
-          })
-          break
-        default:
-          console.error('Failed to get player')
-          break
-      }
-    })
+  useEffect(() => {
+    if (user) {
+      fetch('http://127.0.0.1:3000/auth', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      }).then(async (response) => {
+        const player = await response.json()
+        response.ok && initializePlayer(player)
+      })
+    }
   }, [user])
 
   if (isLoading) {
     return <div>Loading...</div>
-  } else {
-    return <></>
   }
 }
 

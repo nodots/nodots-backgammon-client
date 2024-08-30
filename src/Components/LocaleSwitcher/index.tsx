@@ -1,22 +1,46 @@
-import { SelectChangeEvent } from '@mui/material'
+import { Select, MenuItem, Menu } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
 import { NodotsLocale, NodotsLocaleCode, NodotsLocales } from '../../i18n'
-import { useAuth0 } from '@auth0/auth0-react'
-import useNodotsGame from '../../Hooks/GameHook'
-import LocaleMenu from './LocaleMenu'
+import React from 'react'
 
 interface Props {
-  actionFunction?: (event: SelectChangeEvent<NodotsLocale>) => void
+  handlePostLocaleChange?: (locale: NodotsLocaleCode) => void
 }
 
-const LocaleSwitcher = ({ actionFunction }: Props) => {
-  const { updatePlayerPreferences } = useNodotsGame()
-  const { user, isAuthenticated } = useAuth0()
+const LocaleSwitcher = ({ handlePostLocaleChange }: Props) => {
   const { t, i18n } = useTranslation()
-  const [locale, setLocale] = useState(i18n.language)
+  const [locale, setLocale] = React.useState<NodotsLocale>({
+    code: i18n.language as NodotsLocaleCode,
+    name: '',
+  })
 
-  return <LocaleMenu />
+  const handleChange = (
+    event: React.ChangeEvent<{ value: NodotsLocaleCode }>
+  ) => {
+    const newLocale = event.target.value as NodotsLocaleCode
+    setLocale(NodotsLocales.find((l) => l.code === newLocale) as NodotsLocale)
+    i18n.changeLanguage(newLocale)
+    if (handlePostLocaleChange) {
+      handlePostLocaleChange(newLocale)
+    }
+  }
+
+  return (
+    <Select
+      sx={{ minWidth: '240px' }}
+      value={i18n.language}
+      onChange={(e) =>
+        handleChange(e as React.ChangeEvent<{ value: NodotsLocaleCode }>)
+      }
+    >
+      <MenuItem value="">{t('NDBG_DEFAULT_MENU_ITEM')}</MenuItem>
+      <MenuItem value="en">{t('NDBG_ENGLISH')}</MenuItem>
+      <MenuItem value="es">{t('NDBG_SPANISH')}</MenuItem>
+      <MenuItem value="fr">{t('NDBG_FRENCH')}</MenuItem>
+      <MenuItem value="ar">{t('NDBG_ARABIC')}</MenuItem>
+      <MenuItem value="tr">{t('NDBG_TURKISH')}</MenuItem>
+    </Select>
+  )
 }
 
 export default LocaleSwitcher

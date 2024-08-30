@@ -17,5 +17,7 @@
   "NDBG_TURKISH": "Turkish",
   "NDBG_DIRECTION_COUNTERCLOCKWISE": "Counterclockwise",
   "NDBG_DIRECTION_CLOCKWISE": "Clockwise",
-  "NDBG_DEFAULT_MENU_ITEM": "Choose one"
+  "NDBG_DEFAULT_MENU_ITEM": "Choose one",
+  "NDBG_PLAYER_PAGE_TITLE": "Player page",
+  "NDBG_FRIENDS": "Friends"
 }

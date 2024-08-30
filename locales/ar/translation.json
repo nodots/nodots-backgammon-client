@@ -17,5 +17,7 @@
   "NDBG_TURKISH": "التركية",
   "NDBG_DIRECTION_COUNTERCLOCKWISE": "عكس عقارب الساعة",
   "NDBG_DIRECTION_CLOCKWISE": "عقارب الساعة",
-  "NDBG_DEFAULT_MENU_ITEM": "اختر واحدة"
+  "NDBG_DEFAULT_MENU_ITEM": "اختر واحدة",
+  "NDBG_PLAYER_PAGE_TITLE": "صفحة اللاعب",
+  "NDBG_FRIENDS": "الأصدقاء"
 }
