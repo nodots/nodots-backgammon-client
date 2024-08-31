@@ -14,18 +14,10 @@ import { useTranslation } from 'react-i18next'
 import { NodotsPlayer } from '../../../../nodots_modules/backgammon-types'
 import useNodotsGame from '../../../Hooks/GameHook'
 import PlayerRow from './PlayerRow'
+import PlayerTable from './PlayerTable'
 
 const Friends = () => {
-  const { getPlayers } = useNodotsGame()
-  const [players, setPlayers] = useState<NodotsPlayer[]>([])
   const { t } = useTranslation()
-
-  useEffect(() => {
-    getPlayers().then((players: NodotsPlayer[]) => {
-      setPlayers(players)
-    })
-  }, [])
-
   return (
     <Card
       sx={{ width: '20vw', minWidth: '320px', padding: '.5vh .5vw' }}
@@ -33,11 +25,7 @@ const Friends = () => {
     >
       <CardHeader title={t('NDBG_FRIENDS')} />
       <CardContent>
-        <Table>
-          <TableBody>
-            <PlayerRow player={players[0]} />
-          </TableBody>
-        </Table>
+        <PlayerTable />
       </CardContent>
     </Card>
   )

@@ -120,11 +120,8 @@ const _getPlayerForEmail = async (
   return result.json()
 }
 
-const _getPlayerById = async (
-  endpoint: string
-): Promise<NodotsPlayer | null> => {
+const _getPlayerById = async (endpoint: string): Promise<NodotsPlayer> => {
   const result = await fetch(endpoint)
-  console.log(result)
   return result.json()
 }
 
@@ -155,6 +152,13 @@ const useNodotsGame = () => {
 
   const initialize = async (players: NodotsPlayersInitialized) => {
     setGame(await _initializeGame(players, apiUrl + '/game'))
+  }
+
+  const appLogout = async (playerId: string) => {
+    console.log('appLogout playerId:', playerId)
+    await fetch(`${apiUrl}/player/logout/${playerId}`, {
+      method: 'PATCH',
+    })
   }
 
   const switchDice = async (game: GamePlayingRolling) => {
@@ -193,10 +197,29 @@ const useNodotsGame = () => {
 
   const getPlayerForAuth0Sub = async (sub: string) => {
     const [source, externalId] = sub.split('|')
-    //127.0.0.1:3000/player/sub/google-oauth2/116011787152052181569
     return await _getPlayerForAuth0Sub(
       `${apiUrl}/player/sub/${source}/${externalId}`
     )
+  }
+
+  const togglePlayerSeekingGame = async (
+    id: string,
+    kind: 'player-initialized' | 'player-seeking-game'
+  ) => {
+    const player = await getPlayerById(id)
+    const newKind =
+      kind === 'player-initialized'
+        ? 'player-seeking-game'
+        : 'player-initialized'
+    if (player) {
+      await fetch(`${apiUrl}/player/set-seeking-game/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ kind: newKind }),
+      })
+    }
   }
 
   const updatePlayerLocale = async (id: string, locale: NodotsLocaleCode) =>
@@ -281,6 +304,8 @@ const useNodotsGame = () => {
     getPlayOffers,
     getPlayerForAuth0Sub,
     updatePlayerLocale,
+    togglePlayerSeekingGame,
+    appLogout,
   }
 }
 

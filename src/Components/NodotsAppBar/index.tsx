@@ -1,24 +1,23 @@
-import * as React from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
+import { Avatar } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
-import AccountCircle from '@mui/icons-material/AccountCircle'
-import MenuItem from '@mui/material/MenuItem'
-import Menu from '@mui/material/Menu'
-import { useAuth0 } from '@auth0/auth0-react'
-import { Avatar, Select } from '@mui/material'
-import { Language } from '@mui/icons-material'
-import LocaleSwitcher from '../LocaleSwitcher'
+import * as React from 'react'
 import { useTranslation } from 'react-i18next'
+import useNodotsGame from '../../Hooks/GameHook'
 
 export default function MenuAppBar() {
+  const { appLogout } = useNodotsGame()
   const { i18n, t } = useTranslation()
   const { logout, isAuthenticated, user } = useAuth0()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [language, setLanguage] = React.useState(i18n.language)
+  const playerId = sessionStorage.getItem('playerId')
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -33,6 +32,10 @@ export default function MenuAppBar() {
   }
 
   const handleSignOut = () => {
+    const playerId = sessionStorage.getItem('playerId')
+
+    playerId && appLogout(playerId)
+    sessionStorage.removeItem('playerId')
     logout({ logoutParams: { returnTo: window.location.origin } })
   }
 

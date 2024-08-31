@@ -6,6 +6,7 @@ import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
 import Friends from '../../Components/Lobby/Friends'
 import NodotsAppBar from '../../Components/NodotsAppBar'
 import useNodotsGame from '../../Hooks/GameHook'
+import SeekingGameToggle from '../../Components/Lobby/SeekingGameToggle'
 
 const LobbyPage = () => {
   const { updatePlayerLocale, getPlayerForAuth0Sub } = useNodotsGame()
@@ -28,9 +29,8 @@ const LobbyPage = () => {
         <h1>
           {t('NDBG_WELCOME')} {player?.preferences?.username}
         </h1>
-        <Container>
-          <Friends />
-        </Container>
+        <SeekingGameToggle />
+        <Friends />
       </Container>
     </>
   ) : (
