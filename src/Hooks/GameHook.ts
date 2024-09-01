@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   GameInitialized,
   GamePlayingMoving,
@@ -11,6 +11,7 @@ import {
   NodotsMoveDirection,
   NodotsOfferPlay,
   NodotsPlayer,
+  NodotsPlayerInitialized,
   NodotsPlayerPlaying,
   NodotsPlayerSeekingGame,
   NodotsPlayersInitialized,
@@ -203,16 +204,15 @@ const useNodotsGame = () => {
   }
 
   const togglePlayerSeekingGame = async (
-    id: string,
+    playerId: string,
     kind: 'player-initialized' | 'player-seeking-game'
   ) => {
-    const player = await getPlayerById(id)
     const newKind =
       kind === 'player-initialized'
         ? 'player-seeking-game'
         : 'player-initialized'
-    if (player) {
-      await fetch(`${apiUrl}/player/set-seeking-game/${id}`, {
+    if (playerId) {
+      await fetch(`${apiUrl}/player/set-seeking-game/${playerId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

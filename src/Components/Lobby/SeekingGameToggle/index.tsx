@@ -1,60 +1,45 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NodotsPlayer } from '../../../../nodots_modules/backgammon-types'
 import useNodotsGame from '../../../Hooks/GameHook'
-import { Button, ToggleButton, ToggleButtonGroup } from '@mui/material'
-import { get } from 'http'
-import { Label } from '@mui/icons-material'
+import { FormControlLabel, FormGroup, Switch, useTheme } from '@mui/material'
 
-interface Props {}
+interface Props {
+  handleSeekingGameChange: (e: React.MouseEvent, seekingGame: boolean) => void
+}
 
-function SeekingGameToggle({}: Props) {
-  const { getPlayerById, togglePlayerSeekingGame } = useNodotsGame()
-  const [player, setPlayer] = useState<NodotsPlayer>()
+function SeekingGameToggle({ handleSeekingGameChange }: Props) {
+  const theme = useTheme()
+  const { togglePlayerSeekingGame } = useNodotsGame()
+  const [seekingGame, setSeekingGame] = useState<boolean>(false)
   const playerId = sessionStorage.getItem('playerId')
-  useEffect(() => {
+
+  const handleChange = (e: React.ChangeEvent) => {
+    setSeekingGame((prev) => !prev)
     playerId &&
-      getPlayerById(playerId).then((player: NodotsPlayer) => {
-        setPlayer(player)
-      })
-  }, [])
-
-  useEffect(() => {
-    playerId &&
-      getPlayerById(playerId).then((player: NodotsPlayer) => {
-        setPlayer(player)
-      })
-  }, [player])
-
-  const handleChange = (e: any) => {
-    player &&
-      player.kind !== 'player-playing' &&
-      togglePlayerSeekingGame(player.id, player.kind)
-  }
-
-  const handleClick = (e: any) => {
-    player &&
-      player.kind !== 'player-playing' &&
-      togglePlayerSeekingGame(player.id, player.kind)
-  }
-
-  switch (player?.kind) {
-    case 'player-initialized':
-    case 'player-seeking-game':
-      return (
-        <ToggleButtonGroup value={player.kind} onChange={handleChange}>
-          <label>Ready to Play?</label>
-          <ToggleButton value={'player-initialized'} onClick={handleClick}>
-            Yes
-          </ToggleButton>
-          <ToggleButton value="player-seeking-game" onClick={handleClick}>
-            No
-          </ToggleButton>
-        </ToggleButtonGroup>
+      togglePlayerSeekingGame(
+        playerId,
+        seekingGame ? 'player-seeking-game' : 'player-initialized'
       )
-    // return <Button onClick={handleClick}>{player.kind}</Button>
-    case 'player-playing':
-      return <></>
   }
+
+  const switchLabelStyle = () => {
+    if (seekingGame) {
+      return { color: theme.palette.secondary.dark, float: 'left' }
+    } else {
+      return { color: theme.palette.secondary.light, float: 'left' }
+    }
+  }
+
+  return (
+    <FormGroup>
+      <FormControlLabel
+        control={<Switch checked={seekingGame} onChange={handleChange} />}
+        label={`Ready to play?`}
+        labelPlacement="end"
+        sx={switchLabelStyle}
+      />
+    </FormGroup>
+  )
 }
 
 export default SeekingGameToggle

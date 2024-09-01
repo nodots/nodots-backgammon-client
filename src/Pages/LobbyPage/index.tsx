@@ -22,6 +22,13 @@ const LobbyPage = () => {
     }
   }, [user])
 
+  const handleSeekingGameChange = (
+    e: React.MouseEvent,
+    seekingGame: boolean
+  ) => {
+    console.log(e, seekingGame)
+  }
+
   return player ? (
     <>
       <NodotsAppBar />
@@ -29,7 +36,7 @@ const LobbyPage = () => {
         <h1>
           {t('NDBG_WELCOME')} {player?.preferences?.username}
         </h1>
-        <SeekingGameToggle />
+        <SeekingGameToggle handleSeekingGameChange={handleSeekingGameChange} />
         <Friends />
       </Container>
     </>

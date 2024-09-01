@@ -6,7 +6,6 @@ import {
   NodotsChecker,
   Latitude,
   NodotsBoard,
-  NodotsGameStateReady,
 } from '../../../../nodots_modules/backgammon-types'
 import useNodotsGame from '../../../Hooks/GameHook'
 
