@@ -9,7 +9,7 @@ import PlayerPage from './Pages/PlayerPage'
 import SignInPage from './Pages/SignInPage'
 import appTheme from './theme/theme'
 import { useTranslation, withTranslation } from 'react-i18next'
-import useNodotsGame from './Contexts/Game/GameHook'
+export const apiUrl = 'http://localhost:3000'
 
 const App = () => {
   const { i18n } = useTranslation()

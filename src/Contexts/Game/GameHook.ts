@@ -1,169 +1,35 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import {
-  GameInitialized,
-  GamePlayingMoving,
-  GamePlayingRolling,
   NodotsBoard,
   NodotsChecker,
   NodotsColor,
-  NodotsGame,
   NodotsGameActive,
   NodotsMoveDirection,
-  NodotsOfferPlay,
-  NodotsPlayer,
   NodotsPlayersPlaying,
   PlayerPlaying,
-  PlayerSeekingGame,
 } from '../../../nodots_modules/backgammon-types'
 import { NodotsLocaleCode } from '../../i18n'
-const apiUrl = 'http://localhost:3000'
-
-const _getPlayers = async (endpoint: string): Promise<NodotsPlayer[]> => {
-  const result = await fetch(endpoint)
-  return result.json()
-}
-
-const _getGameById = async (endpoint: string): Promise<NodotsGame> => {
-  const result = await fetch(endpoint)
-  return result.json()
-}
-
-const _getActiveGameById = async (
-  endpoint: string
-): Promise<NodotsGameActive> => {
-  const result = await fetch(endpoint)
-  return result.json()
-}
-
-const _startGame = async (player1Id: string, player2Id: string) => {
-  const result = await fetch(`${apiUrl}/game`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ player1Id, player2Id }),
-  })
-  const game = await result.json()
-
-  console.log('[useNodotsGame] _startGame game:', game)
-
-  return game
-}
-
-const _updatePlayerLocale = async (id: string, locale: NodotsLocaleCode) => {
-  console.log(id, locale)
-
-  // fetch(endpoint, {
-  //   method: 'PATCH',
-  // })
-}
-
-const _rollForStart = async (
-  game: GameInitialized,
-  endpoint: string
-): Promise<GamePlayingRolling> => {
-  const result = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(game),
-  })
-  return result.json()
-}
-
-const _roll = async (
-  game: GamePlayingRolling,
-  endpoint: string
-): Promise<GamePlayingMoving> => {
-  const result = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(game),
-  })
-  return result.json()
-}
-
-const _switchDice = async (
-  game: GamePlayingRolling,
-  endpoint: string
-): Promise<GamePlayingRolling> => {
-  const result = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(game),
-  })
-  return result.json()
-}
-
-const _double = async (
-  game: GamePlayingRolling,
-  endpoint: string
-): Promise<GamePlayingMoving> => {
-  const result = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(game),
-  })
-  return result.json()
-}
-
-const _getPlayerGames = async (endpoint: string): Promise<NodotsGame> => {
-  console.log('[useNodotsGame] _getPlayerGames endpoint:', endpoint)
-  const result = await fetch(endpoint)
-
-  console.log('[useNodotsGame] _getPlayerGames result:', result)
-  return result.json()
-}
-
-const _getPlayersSeekingGame = async (
-  endpoint: string
-): Promise<PlayerSeekingGame[]> => {
-  const result = await fetch(endpoint)
-  return result.json()
-}
-
-const _getPlayerForEmail = async (
-  endpoint: string
-): Promise<NodotsPlayer | null> => {
-  const result = await fetch(endpoint)
-  return result.json()
-}
-
-const _getPlayerById = async (endpoint: string): Promise<NodotsPlayer> => {
-  const result = await fetch(endpoint)
-  return result.json()
-}
-
-const _getPlayerForAuth0Sub = async (
-  endpoint: string
-): Promise<NodotsPlayer | null> => {
-  const result = await fetch(endpoint)
-  return result.json()
-}
-
-const _getPlayOffers = async (endpoint: string): Promise<NodotsOfferPlay[]> => {
-  const result = await fetch(endpoint)
-  return result.json()
-}
-
-const _move = (
-  state: GamePlayingRolling | GamePlayingMoving,
-  checkerId: string,
-  endpoint: string
-): NodotsGame => {
-  console.log(checkerId)
-  return state
-}
+import { GameContext } from './GameContext'
+import {
+  _getActiveGameById,
+  _getGameById,
+  _getPlayerById,
+  _getPlayerForAuth0Sub,
+  _getPlayerForEmail,
+  _getPlayerGames,
+  _getPlayers,
+  _getPlayersSeekingGame,
+  _getPlayOffers,
+  _startGame,
+  _updatePlayerLocale,
+} from './GameContextHelpers'
+import { apiUrl } from '../../App'
 
 const useNodotsGame = () => {
-  const [game, setGame] = useState<NodotsGame>()
+  const gameContext = useContext(GameContext)
+  const _game = gameContext?.game as NodotsGameActive
+
+  console.log('[Game Hook] useNodotsGame _game:', _game)
 
   const startGame = async (player1Id: string, player2Id: string) => {
     const result = await _startGame(player1Id, player2Id)
@@ -186,9 +52,8 @@ const useNodotsGame = () => {
 
   const getActiveGameById = async (gameId: string) => {
     console.log('[Game Hook] getActiveGameById gameId:', gameId)
-    // const result = await _getActiveGameById(`${apiUrl}/game/active/${gameId}`)
-    // return result
-    return gameId
+    const result = await _getActiveGameById(`${apiUrl}/game/active/${gameId}`)
+    return result
   }
 
   const appLogout = async (playerId: string) => {
@@ -198,17 +63,17 @@ const useNodotsGame = () => {
     })
   }
 
-  const switchDice = async (game: GamePlayingRolling) => {
-    setGame(await _switchDice(game, `${apiUrl}/game/${game.id}/switch-dice`))
-  }
+  // const switchDice = async (game: GamePlayingRolling) => {
+  //   setGame(await _switchDice(game, `${apiUrl}/game/${game.id}/switch-dice`))
+  // }
 
-  const roll = async (game: GamePlayingRolling) => {
-    setGame(await _roll(game, `${apiUrl}/game/${game.id}/roll`))
-  }
+  // const roll = async (game: GamePlayingRolling) => {
+  //   setGame(await _roll(game, `${apiUrl}/game/${game.id}/roll`))
+  // }
 
-  const double = async (game: GamePlayingRolling) => {
-    setGame(await _double(game, `${apiUrl}/game/${game.id}/double`))
-  }
+  // const double = async (game: GamePlayingRolling) => {
+  //   setGame(await _double(game, `${apiUrl}/game/${game.id}/double`))
+  // }
 
   const getPlayers = async () => await _getPlayers(`${apiUrl}/player/`)
 
@@ -320,7 +185,7 @@ const useNodotsGame = () => {
       : getCounterClockwisePlayer(players)
   }
 
-  const getDirectionColors = (
+  const getColorsByDirection = (
     players: NodotsPlayersPlaying
   ): { clockwiseColor: NodotsColor; counterclockwiseColor: NodotsColor } => {
     console.log('[Game Hook] getDirectionColors players', players)
@@ -332,27 +197,38 @@ const useNodotsGame = () => {
     }
   }
 
-  return {
-    game,
-    startGame,
-    roll,
-    double,
-    switchDice,
-    getPlayers,
-    getPlayerGames,
-    getGameById,
-    getActiveGameById,
-    getCheckersForDirection,
-    getPlayerForDirection,
-    getPlayersSeekingGame,
-    getDirectionColors,
-    getPlayerById,
-    getPlayOffers,
-    getPlayerForAuth0Sub,
-    updatePlayerLocale,
-    togglePlayerSeekingGame,
-    appLogout,
-  }
+  console.log('[Game Hook] gameContext:', gameContext)
+
+  return gameContext
+    ? {
+        game: gameContext,
+        startGame,
+        getPlayers,
+        getPlayerGames,
+        getGameById,
+        getActiveGameById,
+        getCheckersForDirection,
+        getPlayerForDirection,
+        getPlayersSeekingGame,
+        getColorsByDirection,
+        getPlayerById,
+        getPlayOffers,
+        getPlayerForAuth0Sub,
+        updatePlayerLocale,
+        togglePlayerSeekingGame,
+        appLogout,
+      }
+    : { game: undefined, setGame: () => {} }
 }
 
 export default useNodotsGame
+
+/*
+export const useNodotsPlayer = () => {
+  const playerContext = useContext(PlayerContext)
+  return playerContext
+    ? playerContext
+    : { player: undefined, setPlayer: () => {} }
+}
+
+*/

@@ -20,11 +20,6 @@ export const PlayerAction = ({ opponent }: Props) => {
 
     startGame(player.id, opponent.id).then((game) => {
       console.log('[PlayerAction] handleClick game:', game)
-      if (!game.id) {
-        console.error('[PlayerAction] handleClick game noId:', game)
-        return
-      }
-      sessionStorage.setItem('gameId', game.id)
       navigate(`/game/`)
     })
   }
