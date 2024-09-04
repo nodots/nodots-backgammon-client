@@ -9,15 +9,16 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import useNodotsGame from '../../Hooks/GameHook'
+import useNodotsGame from '../../Contexts/Game/GameHook'
+import { useNodotsPlayer } from '../../Contexts/Player/PlayerHook'
 
 export default function MenuAppBar() {
   const { appLogout } = useNodotsGame()
+  const { player } = useNodotsPlayer()
   const { i18n, t } = useTranslation()
   const { logout, isAuthenticated, user } = useAuth0()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [language, setLanguage] = React.useState(i18n.language)
-  const playerId = sessionStorage.getItem('playerId')
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -32,14 +33,11 @@ export default function MenuAppBar() {
   }
 
   const handleSignOut = () => {
-    const playerId = sessionStorage.getItem('playerId')
-
-    playerId && appLogout(playerId)
+    player && appLogout(player.id)
     sessionStorage.removeItem('playerId')
     logout({ logoutParams: { returnTo: window.location.origin } })
   }
-
-  return (
+  return player ? (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -59,7 +57,10 @@ export default function MenuAppBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <Avatar alt={user.given_name} src={user.picture} />
+                <Avatar
+                  alt={player.preferences?.username}
+                  src={player.preferences?.avatar}
+                />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -86,5 +87,7 @@ export default function MenuAppBar() {
         </Toolbar>
       </AppBar>
     </Box>
+  ) : (
+    <></>
   )
 }

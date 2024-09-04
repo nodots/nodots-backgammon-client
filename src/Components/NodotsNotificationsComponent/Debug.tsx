@@ -1,5 +1,5 @@
 import { AlertColor, Card } from '@mui/material'
-import useNodotsGame from '../../Hooks/GameHook'
+import useNodotsGame from '../../Contexts/Game/GameHook'
 
 interface Props {
   severity?: AlertColor

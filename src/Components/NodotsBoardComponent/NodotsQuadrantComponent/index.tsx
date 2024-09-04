@@ -4,7 +4,7 @@ import {
   Latitude,
   Longitude,
   NodotsBoard,
-  NodotsGameState,
+  NodotsGame,
   Point,
 } from '../../../../nodots_modules/backgammon-types'
 import { generateId } from '../../helpers'

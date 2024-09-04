@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NodotsPlayer } from '../../../../nodots_modules/backgammon-types'
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 import { FormControlLabel, FormGroup, Switch, useTheme } from '@mui/material'
 
 interface Props {
@@ -14,12 +14,12 @@ function SeekingGameToggle({ handleSeekingGameChange }: Props) {
   const playerId = sessionStorage.getItem('playerId')
 
   const handleChange = (e: React.ChangeEvent) => {
-    setSeekingGame((prev) => !prev)
     playerId &&
       togglePlayerSeekingGame(
         playerId,
         seekingGame ? 'player-seeking-game' : 'player-initialized'
       )
+    setSeekingGame((prev) => !prev)
   }
 
   const switchLabelStyle = () => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 import {
   DieOrder,
   NodotsColor,

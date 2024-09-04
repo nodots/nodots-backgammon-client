@@ -2,7 +2,7 @@ import { Table, TableBody } from '@mui/material'
 import PlayerRow from './PlayerRow'
 import { NodotsPlayer } from '../../../../nodots_modules/backgammon-types'
 import { useState, useEffect } from 'react'
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 
 const PlayerTable = () => {
   const { getPlayers } = useNodotsGame()

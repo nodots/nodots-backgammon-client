@@ -1,4 +1,4 @@
-import { AppBar, Container, Toolbar } from '@mui/material'
+import { AppBar, Container } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import SignInButton from '../../Forms/Auth0/Buttons/SignInButton'
 import LocaleSwitcher from '../../Components/LocaleSwitcher'

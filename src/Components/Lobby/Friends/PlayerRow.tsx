@@ -1,6 +1,7 @@
 import { TableRow, TableCell, Avatar, Button } from '@mui/material'
 import { NodotsPlayer } from '../../../../nodots_modules/backgammon-types'
 import PlayerStatus from './PlayerStatus'
+import { PlayerAction } from './PlayerAction'
 
 interface Props {
   player: NodotsPlayer
@@ -23,11 +24,7 @@ const PlayerRow = ({ player }: Props) => {
         <PlayerStatus player={player} />
       </TableCell>
       <TableCell>
-        <Button>
-          {player.isLoggedIn && player.kind === 'player-seeking-game'
-            ? 'Play'
-            : ''}
-        </Button>
+        <PlayerAction opponent={player} />
       </TableCell>
     </TableRow>
   )

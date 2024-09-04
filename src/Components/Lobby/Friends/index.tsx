@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NodotsPlayer } from '../../../../nodots_modules/backgammon-types'
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 import PlayerRow from './PlayerRow'
 import PlayerTable from './PlayerTable'
 

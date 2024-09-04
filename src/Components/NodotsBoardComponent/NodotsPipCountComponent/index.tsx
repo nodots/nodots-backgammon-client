@@ -1,5 +1,5 @@
 import { Chip, SxProps, useTheme } from '@mui/material'
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 import { NodotsColor } from '../../../../nodots_modules/backgammon-types'
 
 function NodotsPipCountComponent() {

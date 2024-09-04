@@ -1,5 +1,5 @@
 import { NodotsGameStateReady } from '../../../../nodots_modules/backgammon-types'
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 import NodotsPipCountComponent from '../NodotsPipCountComponent'
 import { getCheckerComponents } from '../NodotsPointComponent'
 

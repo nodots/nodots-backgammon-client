@@ -2,15 +2,15 @@ import { useTheme } from '@mui/material'
 import { ReactElement } from 'react'
 import NodotsCheckerComponent from '../NodotsCheckerComponent'
 import {
-  NodotsGameState,
+  NodotsGame,
   NodotsChecker,
   Latitude,
   NodotsBoard,
 } from '../../../../nodots_modules/backgammon-types'
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 
 export const getCheckerComponents = (
-  game: NodotsGameState,
+  game: NodotsGame,
   checkers: NodotsChecker[],
   kind: 'point' | 'bar' | 'off'
 ) => {

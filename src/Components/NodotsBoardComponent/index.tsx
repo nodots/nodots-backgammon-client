@@ -1,6 +1,6 @@
 import '../../scss/index.scss'
 import {
-  NodotsGameState,
+  NodotsGame,
   Point,
   NodotsCheckercontainer,
 } from '../../../nodots_modules/backgammon-types/index'
@@ -8,7 +8,7 @@ import NodotsQuadrantComponent from './NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
 import NodotsBarComponent from './NodotsBarComponent'
 import Off from './NodotsOffComponent/NodotsOffComponent'
-import useNodotsGame from '../../Hooks/GameHook'
+import useNodotsGame from '../../Contexts/Game/GameHook'
 import { NodotsBoardComponent } from './NodotsBoardComponent'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
@@ -40,7 +40,7 @@ export interface BoardDisplay {
 }
 
 interface Props {
-  game: NodotsGameState
+  game: NodotsGame
 }
 
 function NodotsBoard({ game }: Props) {

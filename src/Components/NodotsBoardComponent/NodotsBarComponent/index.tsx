@@ -1,4 +1,4 @@
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 import { NodotsBarComponent } from './NodotsBarComponent'
 
 function NodotsBar() {

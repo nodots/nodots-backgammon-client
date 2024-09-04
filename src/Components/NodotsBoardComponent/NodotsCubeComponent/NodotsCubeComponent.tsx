@@ -1,5 +1,5 @@
 import { Button, useTheme } from '@mui/material'
-import useNodotsGame from '../../../Hooks/GameHook'
+import useNodotsGame from '../../../Contexts/Game/GameHook'
 import { NodotsGameStateReady } from '../../../../nodots_modules/backgammon-types'
 
 interface Props {

@@ -3,11 +3,11 @@ import React from 'react'
 import {
   NodotsChecker,
   NodotsColor,
-  NodotsGameState,
+  NodotsGame,
 } from '../../../../nodots_modules/backgammon-types'
 
 export interface Props {
-  game: NodotsGameState
+  game: NodotsGame
   checker: NodotsChecker
   count?: number
 }

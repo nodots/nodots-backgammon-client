@@ -1,5 +1,5 @@
 import { useTheme } from '@mui/material'
-import { Latitude, Longitude } from '../../../Hooks/types/Board'
+import { Latitude, Longitude } from '../../../Contexts/types/Board'
 
 interface Props {
   latitude: Latitude
