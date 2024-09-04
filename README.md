@@ -27,3 +27,4 @@ Serious hobbyists anywhere in the world who want to up their game.
 
 ## Game Model
 
+![Game Model](./backgammon-types_diagram.png)
