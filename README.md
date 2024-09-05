@@ -9,6 +9,8 @@ Serious hobbyists anywhere in the world who want to up their game.
 ### Languages
 
 - English
+- Spanish
+- French
 - Arabic
 - Turkish
 - Greek
