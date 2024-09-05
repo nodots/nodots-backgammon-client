@@ -8,9 +8,7 @@ export interface NodotsDirectionColors {
 }
 
 export const NodotsBoardComponent = () => {
-  const directionColors: NodotsDirectionColors = {
-    clockwiseColor: 'black',
-    counterclockwiseColor: 'white',
-  }
+  const { game, getColorsByDirection } = useNodotsGame()
+  console.log('[NodotsBoardComponent] game:', game)
   return <NodotsBoard />
 }

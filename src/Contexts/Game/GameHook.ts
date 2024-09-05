@@ -27,9 +27,8 @@ import { apiUrl } from '../../App'
 
 const useNodotsGame = () => {
   const gameContext = useContext(GameContext)
-  const _game = gameContext?.game as NodotsGameActive
 
-  console.log('[Game Hook] useNodotsGame _game:', _game)
+  console.log('[Game Hook] useNodotsGame gameContext:', gameContext)
 
   const startGame = async (player1Id: string, player2Id: string) => {
     const result = await _startGame(player1Id, player2Id)

@@ -10,8 +10,8 @@ interface Props {
 export const GameProvider = ({ children }: Props) => {
   const gameId = sessionStorage.getItem('gameId')
   const [game, setGame] = useState<NodotsGame>({
-    id: 'fake',
     kind: 'game-initializing',
+    id: 'fake',
   })
   useEffect(() => {
     if (gameId) {

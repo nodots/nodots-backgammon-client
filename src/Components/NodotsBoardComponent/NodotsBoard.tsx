@@ -1,16 +1,4 @@
-import { Paper } from '@mui/material'
-import { QuadrantPoints } from '.'
-import NodotsBarComponent from './NodotsBarComponent'
-import NodotsOffComponent from './NodotsOffComponent'
-import NodotsQuadrantComponent from './NodotsQuadrantComponent'
-import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
 import useNodotsGame from '../../Contexts/Game/GameHook'
-import {
-  GamePlayingMoving,
-  GamePlayingRolling,
-  NodotsColor,
-  NodotsGameActive,
-} from '../../../nodots_modules/backgammon-types'
 
 export const NodotsBoard = () => {
   const { game, getColorsByDirection } = useNodotsGame()
