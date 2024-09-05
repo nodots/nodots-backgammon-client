@@ -44,11 +44,6 @@ Serious hobbyists anywhere in the world who want to up their game.
 - Turkish
 - Greek
 
-## Tech Requirements
-
-- Integrate with [BG Web API](https://github.com/nodots/nodots-backgammon-api)
-- Playable on an iPhone
-
 ## UX/Features
 
 - Board optimized for online play
