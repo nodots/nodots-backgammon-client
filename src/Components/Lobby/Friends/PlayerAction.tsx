@@ -3,12 +3,14 @@ import { NodotsPlayer } from '../../../../nodots_modules/backgammon-types'
 import { useNodotsPlayer } from '../../../Contexts/Player/PlayerHook'
 import useNodotsGame from '../../../Contexts/Game/GameHook'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   opponent: NodotsPlayer
 }
 
 export const PlayerAction = ({ opponent }: Props) => {
+  const { t } = useTranslation()
   const { startGame, game } = useNodotsGame()
   const { player } = useNodotsPlayer()
   const navigate = useNavigate()
@@ -28,6 +30,6 @@ export const PlayerAction = ({ opponent }: Props) => {
     case 'player-playing':
       return <></>
     case 'player-seeking-game':
-      return <Button onClick={handleClick}>Start Game</Button>
+      return <Button onClick={handleClick}>{t('NDBG_START_GAME')}</Button>
   }
 }

@@ -2,6 +2,7 @@ import { ReactElement, useState, useEffect } from 'react'
 import { getGameById } from './GameContextHelpers'
 import { GameContext } from './GameContext'
 import { NodotsGame } from '../../../nodots_modules/backgammon-types'
+import { Loading } from '../../Components/Loading'
 
 interface Props {
   children: ReactElement | ReactElement[]
@@ -23,6 +24,6 @@ export const GameProvider = ({ children }: Props) => {
       {children}
     </GameContext.Provider>
   ) : (
-    <div>Loading Player Context...</div>
+    <Loading />
   )
 }

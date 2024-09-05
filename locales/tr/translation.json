@@ -16,9 +16,14 @@
   "NDBG_FRENCH": "Fransızca",
   "NDBG_ARABIC": "Arapça",
   "NDBG_TURKISH": "Türkçe",
+  "NDBG_GREEK": "Yunanca",
   "NDBG_DIRECTION_COUNTERCLOCKWISE": "Saat yönünün tersine",
   "NDBG_DIRECTION_CLOCKWISE": "Saat yönünde",
   "NDBG_DEFAULT_MENU_ITEM": "Birini seçin",
   "NDBG_PLAYER_PAGE_TITLE": "Oyuncu sayfası",
-  "NDBG_FRIENDS": "Arkadaşlar"
+  "NDBG_FRIENDS": "Arkadaşlar",
+  "NDBG_LOADING": "Yükleniyor...",
+  "NDBG_START_GAME": "Oyunu başlat",
+  "NDBG_ONLINE": "Çevrimiçi",
+  "NDBG_OFFLINE": "Çevrimdışı"
 }

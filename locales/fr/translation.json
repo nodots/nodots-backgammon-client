@@ -15,9 +15,14 @@
   "NDBG_FRENCH": "Français",
   "NDBG_ARABIC": "Arabe",
   "NDBG_TURKISH": "Turc",
+  "NDBG_GREEK": "Grec",
   "NDBG_DIRECTION_COUNTERCLOCKWISE": "Sens antihoraire",
   "NDBG_DIRECTION_CLOCKWISE": "Sens horaire",
   "NDBG_DEFAULT_MENU_ITEM": "Choisissez-en un",
   "NDBG_PLAYER_PAGE_TITLE": "Page du joueur",
-  "NDBG_FRIENDS": "Amis"
+  "NDBG_FRIENDS": "Amis",
+  "NDBG_LOADING": "Chargement...",
+  "NDBG_START_GAME": "Démarrer le jeu",
+  "NDBG_ONLINE": "En ligne",
+  "NDBG_OFFLINE": "Hors ligne"
 }

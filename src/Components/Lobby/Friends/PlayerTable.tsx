@@ -3,6 +3,7 @@ import PlayerRow from './PlayerRow'
 import { NodotsPlayer } from '../../../../nodots_modules/backgammon-types'
 import { useState, useEffect } from 'react'
 import useNodotsGame from '../../../Contexts/Game/GameHook'
+import { Loading } from '../../Loading'
 
 const PlayerTable = () => {
   const { getPlayers } = useNodotsGame()
@@ -11,7 +12,7 @@ const PlayerTable = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       getPlayers().then((players: NodotsPlayer[]) => {
-        setPlayers(players)
+        players && players.length > 0 ? setPlayers(players) : null
       })
     }, 5000)
 
@@ -29,7 +30,7 @@ const PlayerTable = () => {
       </TableBody>
     </Table>
   ) : (
-    <div>Loading...</div>
+    <Loading />
   )
 }
 

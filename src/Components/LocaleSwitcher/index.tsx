@@ -38,6 +38,7 @@ const LocaleSwitcher = ({ handlePostLocaleChange }: Props) => {
       <MenuItem value="es">{t('NDBG_SPANISH')}</MenuItem>
       <MenuItem value="fr">{t('NDBG_FRENCH')}</MenuItem>
       <MenuItem value="ar">{t('NDBG_ARABIC')}</MenuItem>
+      <MenuItem value="gr">{t('NDBG_GREEK')}</MenuItem>
       <MenuItem value="tr">{t('NDBG_TURKISH')}</MenuItem>
     </Select>
   )

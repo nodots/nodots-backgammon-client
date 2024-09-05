@@ -2,6 +2,7 @@ import { Container } from '@mui/material'
 import Friends from '../../Components/Lobby/Friends'
 import NodotsAppBar from '../../Components/NodotsAppBar'
 import { useNodotsPlayer } from '../../Contexts/Player/PlayerHook'
+import { Loading } from '../../Components/Loading'
 
 const LobbyPage = () => {
   const { player } = useNodotsPlayer()
@@ -20,7 +21,7 @@ const LobbyPage = () => {
       {/* <PollForGame /> */}
     </Container>
   ) : (
-    <div>Loading...</div>
+    <Loading />
   )
 }
 

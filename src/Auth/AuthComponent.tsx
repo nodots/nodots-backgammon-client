@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
 import { NodotsPlayer } from '../../nodots_modules/backgammon-types'
 import { useNavigate } from 'react-router-dom'
+import { Loading } from '../Components/Loading'
 // import { withTranslation, WithTranslation } from 'react-i18next'
 // import { NodotsPlayerInitialized } from '../../../nodots-backgammon-api/nodots_modules/@nodots/backgammon-types'
 
@@ -36,7 +37,7 @@ function AuthComponent() {
   }, [user])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 }
 

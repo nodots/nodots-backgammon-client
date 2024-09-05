@@ -7,6 +7,7 @@ import useNodotsGame from '../../Contexts/Game/GameHook'
 import { NodotsLocaleCode } from '../../i18n'
 import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
 import { useEffect, useState } from 'react'
+import { Loading } from '../../Components/Loading'
 
 const PlayerPage = () => {
   const { updatePlayerLocale, getPlayerForAuth0Sub } = useNodotsGame()
@@ -15,7 +16,7 @@ const PlayerPage = () => {
   const { t, i18n } = useTranslation()
 
   if (isLoading) {
-    return <div>Loading ...</div>
+    return <Loading />
   }
 
   // useEffect(() => {
