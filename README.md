@@ -25,6 +25,10 @@ Serious hobbyists anywhere in the world who want to up their game.
   - Default colors are low eye-strain
 - Choice of pausable drills/robot games while waiting for opponent
 
+## Screen Shot
+
+![Game Board](./nodots-backgammon-board.png)
+
 ## Game Model
 
 ![Game Model](./backgammon-types_diagram.png)
