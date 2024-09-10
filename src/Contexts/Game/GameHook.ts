@@ -3,7 +3,6 @@ import {
   NodotsBoard,
   NodotsChecker,
   NodotsColor,
-  NodotsGameActive,
   NodotsMoveDirection,
   NodotsPlayersPlaying,
   PlayerPlaying,
@@ -28,15 +27,12 @@ import { apiUrl } from '../../App'
 const useNodotsGame = () => {
   const gameContext = useContext(GameContext)
 
-  console.log('[Game Hook] useNodotsGame gameContext:', gameContext)
-
   const startGame = async (player1Id: string, player2Id: string) => {
     const result = await _startGame(player1Id, player2Id)
     return result
   }
 
   const getPlayerGames = async (playerId: string) => {
-    console.log('[useNodotsGame] getPlayerGames playerId:', playerId)
     const result = await _getPlayerGames(
       `${apiUrl}/player/active-game/${playerId}`
     )
@@ -50,7 +46,6 @@ const useNodotsGame = () => {
   }
 
   const getActiveGameById = async (gameId: string) => {
-    console.log('[Game Hook] getActiveGameById gameId:', gameId)
     const result = await _getActiveGameById(`${apiUrl}/game/active/${gameId}`)
     return result
   }
@@ -101,12 +96,10 @@ const useNodotsGame = () => {
 
   const togglePlayerSeekingGame = async (
     playerId: string,
-    kind: 'player-initialized' | 'player-seeking-game'
+    kind: 'player-initialized' | 'player-ready'
   ) => {
     const newKind =
-      kind === 'player-initialized'
-        ? 'player-seeking-game'
-        : 'player-initialized'
+      kind === 'player-initialized' ? 'player-ready' : 'player-initialized'
     if (playerId) {
       await fetch(`${apiUrl}/player/set-seeking-game/${playerId}`, {
         method: 'PATCH',
@@ -196,8 +189,6 @@ const useNodotsGame = () => {
     }
   }
 
-  console.log('[Game Hook] gameContext:', gameContext)
-
   return gameContext
     ? {
         game: gameContext,
@@ -217,7 +208,28 @@ const useNodotsGame = () => {
         togglePlayerSeekingGame,
         appLogout,
       }
-    : { game: undefined, setGame: () => {} }
+    : {
+        game: undefined,
+        setGame: () => {},
+        startGame: () => {},
+        appLogout: () => {},
+        getPlayers: () => {},
+        getPlayerGames: () => {},
+        getGameById: () => {},
+        getActiveGameById: () => {},
+        getCheckersForDirection: () => [],
+        getPlayerForDirection: () => ({} as PlayerPlaying),
+        getPlayersSeekingGame: () => [],
+        getColorsByDirection: () => ({
+          clockwiseColor: 'black',
+          counterclockwiseColor: 'white',
+        }),
+        getPlayerById: () => ({} as PlayerPlaying),
+        getPlayOffers: () => [],
+        getPlayerForAuth0Sub: () => ({} as PlayerPlaying),
+        updatePlayerLocale: () => {},
+        togglePlayerSeekingGame: () => {},
+      }
 }
 
 export default useNodotsGame

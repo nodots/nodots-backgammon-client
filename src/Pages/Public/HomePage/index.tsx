@@ -1,7 +1,7 @@
 import { AppBar, Container } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import SignInButton from '../../Forms/Auth0/Buttons/SignInButton'
-import LocaleSwitcher from '../../Components/LocaleSwitcher'
+import SignInButton from '../../../Forms/Auth0/Buttons/SignInButton'
+import LocaleSwitcher from '../../../Components/LocaleSwitcher'
 
 type ExternalUser = {
   token: string

@@ -10,15 +10,19 @@ import Typography from '@mui/material/Typography'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import useNodotsGame from '../../Contexts/Game/GameHook'
-import { useNodotsPlayer } from '../../Contexts/Player/PlayerHook'
+import { useNodotsPlayer } from '../../Contexts/Player/useNodotsPlayer'
+import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
 
-export default function MenuAppBar() {
+interface Props {
+  player: NodotsPlayer
+}
+
+export const NodotsAppBar = ({ player }: Props) => {
   const { appLogout } = useNodotsGame()
-  const { player } = useNodotsPlayer()
+  const { dispatch } = useNodotsPlayer()
   const { i18n, t } = useTranslation()
   const { logout, isAuthenticated, user } = useAuth0()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const [language, setLanguage] = React.useState(i18n.language)
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -37,6 +41,7 @@ export default function MenuAppBar() {
     sessionStorage.removeItem('playerId')
     logout({ logoutParams: { returnTo: window.location.origin } })
   }
+
   return player ? (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -47,7 +52,7 @@ export default function MenuAppBar() {
             sx={{ flexGrow: 1, fontVariant: 'all-petite-caps' }}
           ></Typography>
 
-          {user && isAuthenticated && (
+          {player && isAuthenticated && (
             <div>
               <IconButton
                 size="large"
