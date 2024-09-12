@@ -1,5 +1,5 @@
 import { NodotsColor } from '../../../nodots_modules/backgammon-types/index'
-import useNodotsGame from '../../Contexts/Game/GameHook'
+// import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 import { NodotsBoard } from './NodotsBoard'
 
 export interface NodotsDirectionColors {
@@ -8,7 +8,7 @@ export interface NodotsDirectionColors {
 }
 
 export const NodotsBoardComponent = () => {
-  const { game, getColorsByDirection } = useNodotsGame()
-  console.log('[NodotsBoardComponent] game:', game)
+  // const { game, getColorsByDirection } = useNodotsGame()
+  // console.log('[NodotsBoardComponent] game:', game)
   return <NodotsBoard />
 }

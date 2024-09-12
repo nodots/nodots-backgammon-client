@@ -5,7 +5,7 @@ import {
   PlayerReady,
 } from '../../../../../../nodots_modules/backgammon-types'
 import { useState, useEffect } from 'react'
-import useNodotsGame from '../../../../../Contexts/Game/GameHook'
+// import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
 import { Loading } from '../../../../../Components/Loading'
 import { useNodotsPlayer } from '../../../../../Contexts/Player/useNodotsPlayer'
 import { getPlayers } from '../../../../../Contexts/Player/PlayerContextHelpers'
@@ -16,6 +16,7 @@ interface Props {
 
 const PlayerTable = ({ player }: Props) => {
   const [opponents, setOpponents] = useState<NodotsPlayer[]>([])
+  // const { startGame } = useNodotsGame()
 
   useEffect(() => {
     const interval = setInterval(() => {

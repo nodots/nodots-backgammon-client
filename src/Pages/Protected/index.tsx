@@ -8,7 +8,7 @@ import { Loading } from '../../Components/Loading'
 import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
 
 export const ProtectedPages = () => {
-  const { state, dispatch } = useNodotsPlayer()
+  const { playerState: state, player: dispatch } = useNodotsPlayer()
   const [player, setPlayer] = useState<NodotsPlayer | null>(null)
   const navigate = useNavigate()
   const playerId = sessionStorage.getItem('playerId')

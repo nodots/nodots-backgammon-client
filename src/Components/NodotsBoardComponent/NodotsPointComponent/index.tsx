@@ -7,7 +7,7 @@ import {
   Latitude,
   NodotsBoard,
 } from '../../../../nodots_modules/backgammon-types'
-import useNodotsGame from '../../../Contexts/Game/GameHook'
+// import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 
 export const getCheckerComponents = (
   game: NodotsGame,

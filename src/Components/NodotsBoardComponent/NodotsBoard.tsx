@@ -1,8 +1,8 @@
-import useNodotsGame from '../../Contexts/Game/GameHook'
+// import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 
 export const NodotsBoard = () => {
-  const { game, getColorsByDirection } = useNodotsGame()
-  console.log('[NodotsBoard] game:', game)
+  // const { game, getColorsByDirection } = useNodotsGame()
+  // console.log('[NodotsBoard] game:', game)
   return <>NodotsBoard</>
   // switch (game?.kind) {
   //   case 'game-initializing':

@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material'
 import { getCheckerComponents } from '../NodotsPointComponent'
 import { NodotsGameStateReady } from '../../../../nodots_modules/backgammon-types'
-import useNodotsGame from '../../../Contexts/Game/GameHook'
+// import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 import NodotsCubeComponent from '../NodotsCubeComponent'
 
 function NodotsOffComponent() {

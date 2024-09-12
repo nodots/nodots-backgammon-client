@@ -1,7 +1,6 @@
 import { Box, Button, Paper, TextField } from '@mui/material'
 import { Component } from 'react'
-import { SignInForm } from '../../Forms/SignInForm'
-import SignInButton from '../../Forms/Auth0/Buttons/SignInButton'
+import SignInButton from '../../../Forms/Auth0/Buttons/SignInButton'
 // import SignInForm from './SignInForm' // Import the SignInForm component
 
 type ExternalUser = {

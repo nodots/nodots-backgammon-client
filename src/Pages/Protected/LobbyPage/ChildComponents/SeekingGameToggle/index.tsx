@@ -13,7 +13,7 @@ interface Props {
 
 export const SeekingGameToggle = ({ player }: Props) => {
   const theme = useTheme()
-  const { dispatch } = useNodotsPlayer()
+  const { player: dispatch } = useNodotsPlayer()
   const [seekingGame, setSeekingGame] = useState<boolean>(player.isSeekingGame)
 
   const handleChange = async (e: React.ChangeEvent) => {

@@ -8,7 +8,7 @@ import NodotsQuadrantComponent from './NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
 import NodotsBarComponent from './NodotsBarComponent'
 import Off from './NodotsOffComponent/NodotsOffComponent'
-import useNodotsGame from '../../Contexts/Game/GameHook'
+// import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 import { NodotsBoardComponent } from './NodotsBoardComponent'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]

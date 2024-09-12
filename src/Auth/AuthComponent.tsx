@@ -11,7 +11,7 @@ import { apiUrl } from '../App'
 
 function AuthComponent() {
   const { user, isLoading } = useAuth0()
-  const { state, dispatch } = useNodotsPlayer()
+  const { playerState: state, playerDispatch: dispatch } = useNodotsPlayer()
   const [player, setPlayer] = useState<NodotsPlayer | null>(null)
   const navigate = useNavigate()
 

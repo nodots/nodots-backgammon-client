@@ -9,7 +9,6 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import useNodotsGame from '../../Contexts/Game/GameHook'
 import { useNodotsPlayer } from '../../Contexts/Player/useNodotsPlayer'
 import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
 
@@ -18,8 +17,7 @@ interface Props {
 }
 
 export const NodotsAppBar = ({ player }: Props) => {
-  const { appLogout } = useNodotsGame()
-  const { dispatch } = useNodotsPlayer()
+  const { playerDispatch, appLogout } = useNodotsPlayer()
   const { i18n, t } = useTranslation()
   const { logout, isAuthenticated, user } = useAuth0()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -37,7 +35,7 @@ export const NodotsAppBar = ({ player }: Props) => {
   }
 
   const handleSignOut = () => {
-    player && appLogout(player.id)
+    player && appLogout()
     sessionStorage.removeItem('playerId')
     logout({ logoutParams: { returnTo: window.location.origin } })
   }
