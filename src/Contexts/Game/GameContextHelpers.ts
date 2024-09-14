@@ -5,25 +5,55 @@ import {
 import { apiUrl } from '../../App'
 
 export const getGameById = async (id: string): Promise<NodotsGame> => {
-  const result = await fetch(`${apiUrl}/game/${id}`)
-  return result.json()
+  console.log('[GameContextHelper] getGameById: ', id)
+  const result = await fetch(`${apiUrl}/game/${id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const game: NodotsGame = await result.json()
+  console.log('[GameContextHelper] game: ', game)
+  return game
 }
 
-export interface StartGamePayload {
-  playerIds: [player1Id: string, player2Id: string]
-}
+export type StartGamePayload = [string, string]
 
-export const startGame = (
+export const startGame = async (
   payload: StartGamePayload
 ): Promise<GameRollingForStart> => {
-  return fetch(`${apiUrl}/game`, {
+  const player1Playing = await fetch(`${apiUrl}/player/playing/${payload[0]}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  const player2Playing = await fetch(`${apiUrl}/player/playing/${payload[1]}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  const gameResult = await fetch(`${apiUrl}/game`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
-  }).then((res) => {
-    console.log('[GameContextHelper] startGame res: ', res)
-    return res.json()
   })
+
+  const gameRollingForStart = await gameResult.json()
+  console.log(
+    '[GameContextHelpers] startGame results player1Playing: ',
+    player1Playing
+  )
+  console.log(
+    '[GameContextHelpers] startGame results player2Playing: ',
+    player2Playing
+  )
+  console.log(
+    '[GameContextHelpers] startGame results player1Playing: ',
+    gameRollingForStart
+  )
+  return gameRollingForStart
 }

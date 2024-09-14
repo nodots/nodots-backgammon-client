@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next'
 import App from './App'
 import { Auth0Provider } from '@auth0/auth0-react'
 import i18n from './i18n'
-import { GameProvider } from './Contexts/Game/GameContextProvider'
+import GameContextProvider from './Contexts/Game/GameContextProvider'
 import PlayerContextProvider from './Contexts/Player/PlayerContextProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
@@ -17,9 +17,11 @@ root.render(
         redirect_uri: window.location.origin + '/authorize',
       }}
     >
-      <PlayerContextProvider>
-        <App />
-      </PlayerContextProvider>
+      <GameContextProvider>
+        <PlayerContextProvider>
+          <App />
+        </PlayerContextProvider>
+      </GameContextProvider>
     </Auth0Provider>
   </I18nextProvider>
 )

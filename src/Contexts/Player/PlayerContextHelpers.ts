@@ -18,33 +18,27 @@ export const getPlayerBySub = async (sub: string): Promise<NodotsPlayer> => {
   return result.json()
 }
 
-export const setPlayerSeekingGame = async (
-  id: string,
-  seekingGame: boolean
-): Promise<NodotsPlayer> => {
-  console.log('[PlayerContextHelper] setPlayerSeekingGame id:', id)
-  console.log(
-    '[PlayerContextHelper] setPlayerSeekingGame seekingGame:',
-    seekingGame
-  )
-
-  // fetch(`${apiUrl}/auth`, {
-  //   method: 'PATCH',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(user),
-  // }).then(async (response) => {
-  //   const player = await response.json()
-  //   response.ok && initializePlayer(player)
-  // })
-  const result = await fetch(`${apiUrl}/player/seeking-game/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ seekingGame }),
-  })
-  console.log('[PlayerContextHelper] setPlayerSeekingGame result:', result)
-  return result.json()
-}
+// export const setPlayerSeekingGame = async (
+//   id: string,
+//   seekingGame: boolean
+// ): Promise<NodotsPlayer> => {
+//   fetch(`${apiUrl}/auth`, {
+//     method: 'PATCH',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(user),
+//   }).then(async (response) => {
+//     const player = await response.json()
+//     response.ok && initializePlayer(player)
+//   })
+//   const result = await fetch(`${apiUrl}/player/seeking-game/${id}`, {
+//     method: 'PATCH',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({ seekingGame }),
+//   })
+//   console.log('[PlayerContextHelper] setPlayerSeekingGame result:', result)
+//   return result.json()
+// }

@@ -1,4 +1,5 @@
 import { Alert, AlertColor } from '@mui/material'
+import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 // import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 
 interface Props {
@@ -6,9 +7,14 @@ interface Props {
 }
 
 function GameNotifications({ severity }: Props) {
-  const { gameContext } = useNodotsGame()
-  console.log('[GameNotifications] game:', gameContext?.game)
-  return gameContext ? <>GameNotifications</> : <>Loading Game ...</>
+  const { gameState } = useNodotsGame()
+  const { game } = gameState
+  console.log(game)
+  return game ? (
+    <Alert severity={severity}>{game.id}</Alert>
+  ) : (
+    <div>Loading...</div>
+  )
 }
 
 export default GameNotifications

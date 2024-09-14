@@ -2,13 +2,23 @@ import { Container } from '@mui/material'
 
 import NodotsDieComponent from '../NodotsDieComponent'
 import DiceSwitcher from './NodotsDiceSwitcherComponent'
-import { NodotsColor } from '../../../../nodots_modules/backgammon-types'
+import {
+  Longitude,
+  NodotsColor,
+  NodotsGame,
+} from '../../../../nodots_modules/backgammon-types'
 
 interface Props {
-  color: NodotsColor
+  game: NodotsGame
+  longitude: Longitude
 }
 
-function NodotsRollSurfaceComponent({ color }: Props) {
+function NodotsRollSurfaceComponent({ game, longitude }: Props) {
+  const color =
+    longitude === 'east' && game.players.white.direction === 'clockwise'
+      ? 'white'
+      : 'black'
+
   return (
     <Container
       className="roll-surface"
@@ -19,9 +29,9 @@ function NodotsRollSurfaceComponent({ color }: Props) {
       }}
     >
       <div className="dice-container">
-        <NodotsDieComponent order={0} color={color} />
+        <NodotsDieComponent game={game} order={0} color={color} />
         <DiceSwitcher color={color} />
-        <NodotsDieComponent order={1} color={color} />
+        <NodotsDieComponent game={game} order={1} color={color} />
       </div>
     </Container>
   )

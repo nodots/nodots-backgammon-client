@@ -3,6 +3,8 @@ import {
   NodotsGame,
   Point,
   NodotsCheckercontainer,
+  Latitude,
+  Longitude,
 } from '../../../nodots_modules/backgammon-types/index'
 import NodotsQuadrantComponent from './NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
@@ -14,8 +16,8 @@ import { NodotsBoardComponent } from './NodotsBoardComponent'
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
 export interface QuadrantProps {
-  latitude: 'north' | 'south'
-  longitude: 'east' | 'west'
+  latitude: Latitude
+  longitude: Longitude
   start: number
   points: QuadrantPoints
 }
@@ -44,15 +46,7 @@ interface Props {
 }
 
 function NodotsBoard({ game }: Props) {
-  switch (game.kind) {
-    case 'game-initializing':
-      return <></>
-    case 'game-initialized':
-    case 'game-rolling-for-start':
-    case 'game-playing-moving':
-    case 'game-playing-rolling':
-      return <NodotsBoardComponent />
-  }
+  return <NodotsBoardComponent game={game} />
 }
 
 export default NodotsBoardComponent

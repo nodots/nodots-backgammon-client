@@ -13,7 +13,7 @@ import { generateId } from '../../helpers'
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
 export interface Props {
-  board: NodotsBoard
+  game: NodotsGame
   latitude: Latitude
   longitude: Longitude
   start: number
@@ -21,12 +21,13 @@ export interface Props {
 }
 
 function NodotsQuadrantComponent({
-  board,
+  game,
   latitude,
   longitude,
   start,
   points,
 }: Props) {
+  const { board } = game
   return (
     <div className={`quadrant-container ${latitude} ${longitude}`}>
       <NodotsPointLabelComponent
@@ -38,7 +39,7 @@ function NodotsQuadrantComponent({
         {points.map((p) => (
           <NodotsPointComponent
             id={generateId()}
-            board={board}
+            game={game}
             checkers={p.checkers}
             position={p.position}
             latitude={latitude}

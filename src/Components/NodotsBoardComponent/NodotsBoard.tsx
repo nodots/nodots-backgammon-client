@@ -1,72 +1,37 @@
-// import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
+import { Paper } from '@mui/material'
+import { QuadrantPoints } from '.'
+import {
+  NodotsColor,
+  NodotsGame,
+  NodotsPlayer,
+} from '../../../nodots_modules/backgammon-types'
+import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
+import { Loading } from '../Loading'
+import NodotsBarComponent from './NodotsBarComponent'
+import NodotsOffComponent from './NodotsOffComponent'
+import NodotsQuadrantComponent from './NodotsQuadrantComponent'
+import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
+import NodotsBoardHalf from './NodotsBoardHalf'
 
-export const NodotsBoard = () => {
-  // const { game, getColorsByDirection } = useNodotsGame()
-  // console.log('[NodotsBoard] game:', game)
-  return <>NodotsBoard</>
-  // switch (game?.kind) {
-  //   case 'game-initializing':
-  //   case 'game-initialized':
-  //   case 'game-rolling-for-start':
-  //     return <>Loading Game . . .</>
-  //   case 'game-playing-rolling':
-  //   case 'game-playing-moving':
-  //     const _game = game as unknown as GamePlayingRolling | GamePlayingMoving // FIXME: This is a hack
-  //     const directionColors = {
-  //       clockwiseColor: 'black' as NodotsColor,
-  //       counterclockwiseColor: 'white' as NodotsColor,
-  //     }
-  //     console.log('[NodotsBoard] game:', _game)
+interface Props {
+  game: NodotsGame
+  player: NodotsPlayer
+}
+export const NodotsBoard = ({ game, player }: Props) => {
+  const { gameDispatch } = useNodotsGame()
 
-  //     return _game ? (
-  //       <Paper id="BoardContainer" elevation={2}>
-  //         <Paper
-  //           id="West"
-  //           className="board-half counterclockwise"
-  //           elevation={1}
-  //         >
-  //           <NodotsQuadrantComponent
-  //             board={_game.board}
-  //             latitude="north"
-  //             longitude="west"
-  //             start={13}
-  //             points={_game.board.points.slice(12, 18) as QuadrantPoints}
-  //           />
-  //           <NodotsRollSurfaceComponent
-  //             color={directionColors.counterclockwiseColor}
-  //           />
-  //           <NodotsQuadrantComponent
-  //             board={_game.board}
-  //             latitude="south"
-  //             longitude="west"
-  //             start={7}
-  //             points={_game.board.points.slice(6, 12) as QuadrantPoints}
-  //           />
-  //         </Paper>
-  //         <NodotsBarComponent />
-  //         <Paper id="East" className="board-half" elevation={1}>
-  //           <NodotsQuadrantComponent
-  //             board={_game.board}
-  //             latitude="north"
-  //             longitude="east"
-  //             start={19}
-  //             points={_game.board.points.slice(18, 24) as QuadrantPoints}
-  //           />
-  //           <NodotsRollSurfaceComponent
-  //             color={directionColors.clockwiseColor}
-  //           />
-  //           <NodotsQuadrantComponent
-  //             board={_game.board}
-  //             latitude="south"
-  //             longitude="east"
-  //             start={1}
-  //             points={_game.board.points.slice(0, 6) as QuadrantPoints}
-  //           />
-  //         </Paper>
-  //         <NodotsOffComponent />
-  //       </Paper>
-  //     ) : (
-  //       <>No Game</>
-  //     )
-  // }
+  console.log('[NodotsBoard] game:', game)
+  return (
+    <Paper
+      elevation={3}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <NodotsBoardHalf game={game} longitude="west" />
+    </Paper>
+  )
 }

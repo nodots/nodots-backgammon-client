@@ -11,8 +11,8 @@ import { apiUrl } from '../App'
 
 function AuthComponent() {
   const { user, isLoading } = useAuth0()
-  const { playerState: state, playerDispatch: dispatch } = useNodotsPlayer()
-  const [player, setPlayer] = useState<NodotsPlayer | null>(null)
+  const { playerState, playerDispatch } = useNodotsPlayer()
+  const [, setPlayer] = useState<NodotsPlayer | null>(null)
   const navigate = useNavigate()
 
   const initializePlayer = async (p: NodotsPlayer) => {
@@ -20,8 +20,8 @@ function AuthComponent() {
       setPlayer(p)
       p.isLoggedIn = true
       sessionStorage.setItem('playerId', p.id)
-      dispatch({ type: PlayerActionTypes.SET_PLAYER, payload: p })
-      navigate('/protected/lobby', { state: { player: p } })
+      playerDispatch({ type: PlayerActionTypes.SET_PLAYER, payload: p })
+      navigate('/bg', { state: { player: p } })
     } catch (error) {
       console.error('Error initializing player:', error)
     }
@@ -43,7 +43,7 @@ function AuthComponent() {
   }, [user])
 
   if (isLoading) {
-    return <Loading />
+    return <Loading message="AuthComponent Loading ..." />
   }
 }
 

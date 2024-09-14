@@ -2,39 +2,113 @@ import { useNodotsPlayer } from '../../Contexts/Player/useNodotsPlayer'
 import { useEffect, useState } from 'react'
 import { getPlayerById } from '../../Contexts/Player/PlayerContextHelpers'
 import { PlayerActionTypes } from '../../Contexts/Player/PlayerContextActions'
-import { Navigate, Outlet, Route, useNavigate } from 'react-router-dom'
 import { LobbyPage } from './LobbyPage'
 import { Loading } from '../../Components/Loading'
-import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
+import {
+  NodotsGame,
+  NodotsPlayer,
+} from '../../../nodots_modules/backgammon-types'
+import {
+  getGameById,
+  startGame as gameContextStartGame,
+} from '../../Contexts/Game/GameContextHelpers'
+import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
+import { GameActionTypes } from '../../Contexts/Game/GameContextActions'
+import GamePage from './GamePage'
+import { Button } from '@mui/material'
+import { setPlayerPlaying } from '../../Contexts/Player/PlayerContext'
+import { useNavigate } from 'react-router-dom'
 
 export const ProtectedPages = () => {
-  const { playerState: state, player: dispatch } = useNodotsPlayer()
-  const [player, setPlayer] = useState<NodotsPlayer | null>(null)
+  const { playerDispatch } = useNodotsPlayer()
+  const { gameDispatch } = useNodotsGame()
   const navigate = useNavigate()
+  const [player, setPlayer] = useState<NodotsPlayer | null>(null)
+  const [game, setGame] = useState<NodotsGame | null>(null)
   const playerId = sessionStorage.getItem('playerId')
+  const gameId = sessionStorage.getItem('gameId')
 
-  // if (!playerId) {
-  //   return <Navigate to="/sign-in" />
+  // const initializeGame = async (g: NodotsGame) => {
+  //   alert('initializeGame')
+  //   if (!player) throw Error('No player to initialize game')
+  //   console.log('[ProtectedPages] initializeGame g:', g)
+  //   console.log('[ProtectedPages] initializeGame player:', player)
+  //   alert(`Preparing to setGame for gameId ${g.id}`)
+  //   setGame(g)
+  //   try {
+  //     gameDispatch({ type: GameActionTypes.SET_GAME, payload: g })
+  //   } catch (e) {
+  //     throw Error('Error setting game in initializeGame')
+  //   }
   // }
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (playerId && !player) {
+      !player &&
+        playerId &&
         getPlayerById(playerId).then((p) => {
-          if (p) {
-            setPlayer(p)
-            dispatch({ type: PlayerActionTypes.SET_PLAYER, payload: p })
+          console.log('[ProtectedPages] getPlayerById p:', p)
+          setPlayer(p)
+        })
+
+      !game &&
+        gameId &&
+        getGameById(gameId).then((g) => {
+          if (g) {
+            setGame(g)
+            gameDispatch({ type: GameActionTypes.SET_GAME, payload: g })
           }
         })
-      } else {
-        console.log('Player already set:', player)
-      }
-    }, 2000)
+    }, 1000)
 
     return () => {
       clearInterval(interval)
     }
   }, [])
 
-  return player ? <Outlet context={{ player }} /> : <Loading />
+  game
+    ? console.log('[ProtectedPages] game:', game)
+    : console.log('[ProtectedPages] game is null')
+
+  const startGame = (opponentId: string) => {
+    alert('startGame')
+    if (game) {
+      alert('Game already exists')
+      return
+    }
+    if (!player) {
+      alert('No player')
+      return
+    }
+    gameContextStartGame([player.id, opponentId]).then((game) => {
+      console.log('[ProtectedPages] startGame game:', game)
+      sessionStorage.setItem('gameId', game.id)
+      navigate(`/bg/game/${game.id}`)
+      // initializeGame(game)
+    })
+    // game
+    //   ? console.log('[ProtectedPages] game exists:', game)
+    //   : player &&
+    //     gameContextStartGame([player.id, opponentId]).then((game) => {
+    //       console.log('[ProtectedPages] startGame game:', game)
+    //       sessionStorage.setItem('gameId', game.id)
+    //       initializeGame(game)
+    //     })
+  }
+
+  return game && player ? (
+    <GamePage game={game} player={player} />
+  ) : (
+    <>
+      <h1>ProtectedPage</h1>{' '}
+      <div>
+        playerId: {playerId}
+        <Button
+          onClick={() => startGame('7e112abe-0c4d-4a47-a9c5-670e5803ed3d')}
+        >
+          Start Game
+        </Button>
+      </div>
+    </>
+  )
 }

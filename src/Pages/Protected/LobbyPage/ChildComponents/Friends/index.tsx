@@ -1,10 +1,13 @@
 import { Card, CardContent, CardHeader } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import PlayerTable from './PlayerTable'
-import { PlayerReady } from '../../../../../../nodots_modules/backgammon-types'
+import {
+  NodotsPlayer,
+  PlayerReady,
+} from '../../../../../../nodots_modules/backgammon-types'
 
 interface Props {
-  player: PlayerReady
+  player: NodotsPlayer
 }
 
 const Friends = ({ player }: Props) => {

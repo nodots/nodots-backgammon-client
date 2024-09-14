@@ -1,24 +1,20 @@
-import { Paper } from '@mui/material'
+import { Container } from '@mui/material'
+import { NodotsAppBar } from '../../../Components/NodotsAppBar'
+import {
+  NodotsGame,
+  NodotsPlayer,
+} from '../../../../nodots_modules/backgammon-types'
 import NodotsBoardComponent from '../../../Components/NodotsBoardComponent'
-import GameNotifications from '../../../Components/NodotsNotificationsComponent/GameNotifications'
-import { useNodotsPlayer } from '../../../Contexts/Player/useNodotsPlayer'
-// import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
-import { NodotsGame } from '../../../../nodots_modules/backgammon-types'
 
 interface Props {
   game: NodotsGame
+  player: NodotsPlayer
 }
 
-function GamePage({ game }: Props) {
-  const { playerState, playerDispatch } = useNodotsPlayer()
-  // const { gameState, gameDispatch } = useNodotsGame()
-  // console.log(gameContext)
-  return (
-    <Paper id="GameContainer">
-      <GameNotifications />
-      <NodotsBoardComponent />
-    </Paper>
-  )
+const GamePage = ({ game, player }: Props) => {
+  console.log('[GamePage] game:', game)
+  console.log('[GamePage] player:', player)
+  return <NodotsBoardComponent game={game} player={player} />
 }
 
 export default GamePage

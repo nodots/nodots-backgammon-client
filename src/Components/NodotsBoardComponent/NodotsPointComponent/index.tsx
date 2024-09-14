@@ -5,8 +5,8 @@ import {
   NodotsGame,
   NodotsChecker,
   Latitude,
-  NodotsBoard,
 } from '../../../../nodots_modules/backgammon-types'
+import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 // import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 
 export const getCheckerComponents = (
@@ -43,7 +43,7 @@ export const getCheckerComponents = (
 
 export interface Props {
   id: string
-  board: NodotsBoard
+  game: NodotsGame
   position: {
     clockwise: number
     counterclockwise: number
@@ -52,9 +52,14 @@ export interface Props {
   checkers: NodotsChecker[]
 }
 
-function NodotsPointComponent({ id, position, checkers, latitude }: Props) {
-  const { game } = useNodotsGame()
-  const _game = game as NodotsGameStateReady
+function NodotsPointComponent({
+  id,
+  game,
+  position,
+  checkers,
+  latitude,
+}: Props) {
+  const { gameDispatch } = useNodotsGame()
   const theme = useTheme()
   let className = 'point'
 
@@ -88,7 +93,7 @@ function NodotsPointComponent({ id, position, checkers, latitude }: Props) {
         data-position-clockwise={position.clockwise}
         data-position-counterclockwise={position.counterclockwise}
       >
-        {getCheckerComponents(_game, checkers, 'point')}
+        {getCheckerComponents(game, checkers, 'point')}
       </div>
     </div>
   )

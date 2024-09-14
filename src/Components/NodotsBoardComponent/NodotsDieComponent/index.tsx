@@ -3,23 +3,23 @@ import React from 'react'
 import {
   DieOrder,
   NodotsColor,
+  NodotsGame,
 } from '../../../../nodots_modules/backgammon-types'
+import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 
 interface Props {
+  game: NodotsGame
   order: DieOrder
   color: NodotsColor
 }
 
 // TODO: Show move state with dice
-function NodotsDieComponent({ order, color }: Props) {
-  const { game } = useNodotsGame()
-
+function NodotsDieComponent({ game, order, color }: Props) {
   const rollHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
 
-    switch (game?.kind) {
-      case 'game-initializing':
-      case 'game-initialized':
+    switch (game.kind) {
+      case 'game-ready':
       case 'game-rolling-for-start':
       case 'game-playing-moving':
         break
@@ -29,15 +29,7 @@ function NodotsDieComponent({ order, color }: Props) {
     }
   }
 
-  switch (game?.kind) {
-    case 'game-initializing':
-    case 'game-initialized':
-    case 'game-rolling-for-start':
-    case 'game-playing-moving':
-      return <></>
-    case 'game-playing-rolling':
-      return <NodotsDieComponent order={order} color={color} />
-  }
+  return <NodotsDieComponent game={game} order={order} color={color} />
 }
 
 export default NodotsDieComponent

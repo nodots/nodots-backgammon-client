@@ -2,9 +2,10 @@ import { useTheme } from '@mui/material'
 import {
   DieOrder,
   NodotsColor,
-  NodotsGameStateReady,
+  NodotsGame,
   NodotsRoll,
 } from '../../../../nodots_modules/backgammon-types'
+import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 // import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 
 const paths = [
@@ -17,6 +18,7 @@ const paths = [
 ]
 
 interface Props {
+  game: NodotsGame
   order: DieOrder
   color: NodotsColor
   rollHandler: (e: React.MouseEvent) => void
@@ -25,9 +27,8 @@ interface Props {
 const getPath = (order: DieOrder, roll: NodotsRoll | undefined) =>
   roll ? paths[roll[order] - 1] : paths[0]
 
-function NodotsDieComponent({ order, color, rollHandler }: Props) {
-  const { game } = useNodotsGame()
-  const _game = game as NodotsGameStateReady
+function NodotsDieComponent({ game, order, color, rollHandler }: Props) {
+  const { gameDispatch } = useNodotsGame()
   const theme = useTheme()
   const fill = (color: NodotsColor) => {
     return color === 'white'
@@ -44,8 +45,8 @@ function NodotsDieComponent({ order, color, rollHandler }: Props) {
             <path
               d={getPath(
                 order,
-                _game.kind === 'game-playing-moving'
-                  ? _game.activeRoll
+                game.kind === 'game-playing-moving'
+                  ? game.activeRoll
                   : undefined
               )}
               fill={fill(color)}

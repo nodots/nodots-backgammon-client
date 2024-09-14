@@ -10,15 +10,15 @@ import { useEffect, useState } from 'react'
 import { Loading } from '../../../Components/Loading'
 import { useNodotsPlayer } from '../../../Contexts/Player/useNodotsPlayer'
 
-const PlayerPage = () => {
-  const { playerState: state, player: dispatch } = useNodotsPlayer()
+interface Props {
+  player: NodotsPlayer
+}
 
-  return state?.player ? (
+const PlayerPage = ({ player }: Props) => {
+  return (
     <>
-      <NodotsAppBar player={state.player} />
+      <NodotsAppBar player={player} />
     </>
-  ) : (
-    <Loading />
   )
 }
 

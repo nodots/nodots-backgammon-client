@@ -9,13 +9,15 @@ import appTheme from './theme/theme'
 import { useTranslation, withTranslation } from 'react-i18next'
 import { useNodotsPlayer } from './Contexts/Player/useNodotsPlayer'
 import { ProtectedPages } from './Pages/Protected'
+import { useNodotsGame } from './Contexts/Game/useNodotsGame'
 // import { useNodotsGame } from './Contexts/Game/useNodotsGame'
 export const apiUrl = 'http://localhost:3000'
 
 const App = () => {
   const { i18n } = useTranslation()
   const { playerState } = useNodotsPlayer()
-  // const { gameState } = useNodotsGame()
+  const { player } = playerState
+  const { gameState } = useNodotsGame()
   document.body.dir = i18n.dir()
   return (
     <ThemeProvider theme={appTheme}>
@@ -26,16 +28,13 @@ const App = () => {
             <Route path="/authorize" element={<AuthComponent />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/protected" element={<ProtectedPages />}>
-              <Route
-                path="/protected/lobby"
-                element={<LobbyPage player={playerState.player} />}
-              />
-              {/* <Route
-                path="/protected/game"
-                element={<GamePage game={gameState.game} />}
-              /> */}
-            </Route>
+            <Route path="/bg" element={<ProtectedPages />} />
+            <Route
+              path="/bg/game/:gameId"
+              element={
+                <GamePage game={gameState.game} player={playerState.player} />
+              }
+            />
           </Routes>
         </div>
       </Router>

@@ -11,24 +11,24 @@ import { useNodotsPlayer } from '../../../../../Contexts/Player/useNodotsPlayer'
 import { getPlayers } from '../../../../../Contexts/Player/PlayerContextHelpers'
 
 interface Props {
-  player: PlayerReady
+  player: NodotsPlayer
 }
 
 const PlayerTable = ({ player }: Props) => {
   const [opponents, setOpponents] = useState<NodotsPlayer[]>([])
-  // const { startGame } = useNodotsGame()
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getPlayers()?.then((opponents: NodotsPlayer[]) => {
-        opponents && opponents.length > 0 ? setOpponents(opponents) : null
-      })
+      opponents.length === 0 &&
+        getPlayers()?.then((opponents: NodotsPlayer[]) => {
+          opponents && opponents.length > 0 ? setOpponents(opponents) : null
+        })
     }, 1000)
 
     return () => {
       clearInterval(interval)
     }
-  }, [opponents])
+  }, [])
 
   return opponents?.length > 0 ? (
     <Table>
@@ -48,7 +48,7 @@ const PlayerTable = ({ player }: Props) => {
       </TableBody>
     </Table>
   ) : (
-    <Loading />
+    <Loading message="PlayerTable Loading" />
   )
 }
 
