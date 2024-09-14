@@ -19,5 +19,14 @@ export const NodotsBoardComponent = ({ game, player }: Props) => {
   // const { game, getColorsByDirection } = useNodotsGame()
   console.log('[NodotsBoardComponent] game:', game)
   console.log('[NodotsBoardComponent] player:', player)
-  return <NodotsBoard game={game} player={player} />
+  switch (game.kind) {
+    case 'game-ready':
+      return <NodotsBoard game={game} player={player} />
+    case 'game-rolling-for-start':
+      return <div>Rolling for start</div>
+    case 'game-playing-rolling':
+      return <div>Rolling</div>
+    case 'game-playing-moving':
+      return <div>Moving</div>
+  }
 }

@@ -18,9 +18,6 @@ interface Props {
   player: NodotsPlayer
 }
 export const NodotsBoard = ({ game, player }: Props) => {
-  const { gameDispatch } = useNodotsGame()
-
-  console.log('[NodotsBoard] game:', game)
   return (
     <Paper
       elevation={3}
@@ -32,6 +29,8 @@ export const NodotsBoard = ({ game, player }: Props) => {
       }}
     >
       <NodotsBoardHalf game={game} longitude="west" />
+      <>Bar</>
+      <NodotsBoardHalf game={game} longitude="east" />
     </Paper>
   )
 }

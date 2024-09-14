@@ -39,8 +39,8 @@ export const LobbyPage = ({ player }: Props) => {
     }
   }, [])
 
-  return game ? (
-    <GamePage game={game} player={player} />
+  return game && game.id ? (
+    <GamePage />
   ) : (
     player && (
       <>

@@ -83,7 +83,9 @@ export const ProtectedPages = () => {
     gameContextStartGame([player.id, opponentId]).then((game) => {
       console.log('[ProtectedPages] startGame game:', game)
       sessionStorage.setItem('gameId', game.id)
-      navigate(`/bg/game/${game.id}`)
+      navigate(`/bg/game/${game.id}`, {
+        state: { game, player },
+      })
       // initializeGame(game)
     })
     // game
@@ -97,7 +99,7 @@ export const ProtectedPages = () => {
   }
 
   return game && player ? (
-    <GamePage game={game} player={player} />
+    <GamePage />
   ) : (
     <>
       <h1>ProtectedPage</h1>{' '}

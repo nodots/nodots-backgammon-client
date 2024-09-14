@@ -52,13 +52,13 @@ export interface Props {
   checkers: NodotsChecker[]
 }
 
-function NodotsPointComponent({
+export const NodotsPointComponent = ({
   id,
   game,
   position,
   checkers,
   latitude,
-}: Props) {
+}: Props) => {
   const { gameDispatch } = useNodotsGame()
   const theme = useTheme()
   let className = 'point'

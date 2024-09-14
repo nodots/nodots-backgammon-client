@@ -29,12 +29,7 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/bg" element={<ProtectedPages />} />
-            <Route
-              path="/bg/game/:gameId"
-              element={
-                <GamePage game={gameState.game} player={playerState.player} />
-              }
-            />
+            <Route path="/bg/game/:gameId" element={<GamePage />} />
           </Routes>
         </div>
       </Router>

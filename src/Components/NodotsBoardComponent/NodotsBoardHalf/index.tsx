@@ -15,6 +15,8 @@ interface Props {
 const NodotsBoardHalf = ({ game, longitude }: Props) => {
   console.log('[NodotsBoardHalf] game:', game)
   console.log('[NodotsBoardHalf] longitude:', longitude)
+  const northStart = longitude === 'west' ? 19 : 13
+  const southStart = longitude === 'west' ? 1 : 7
 
   return (
     <>
@@ -22,16 +24,14 @@ const NodotsBoardHalf = ({ game, longitude }: Props) => {
         game={game}
         latitude="north"
         longitude={longitude}
-        start={19}
-        points={game.board.points.slice(18, 24) as QuadrantPoints}
+        start={northStart}
       />
-      <NodotsRollSurfaceComponent game={game} longitude={longitude} />
+      {/* <NodotsRollSurfaceComponent game={game} longitude={longitude} /> */}
       <NodotsQuadrantComponent
         game={game}
         latitude="south"
         longitude={longitude}
-        start={1}
-        points={game.board.points.slice(0, 6) as QuadrantPoints}
+        start={southStart}
       />
     </>
   )

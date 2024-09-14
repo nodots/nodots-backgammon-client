@@ -1,9 +1,11 @@
 import { useTheme } from '@mui/material'
-import { Latitude, Longitude } from '../../../Contexts/types/Board'
+import {
+  Latitude,
+  Longitude,
+} from '../../../../nodots_modules/backgammon-types'
 
 interface Props {
   latitude: Latitude
-  longitude: Longitude
   start: number
 }
 
@@ -19,11 +21,7 @@ const getLabels = (start: number) => {
   return <>{labels}</>
 }
 
-const NodotsPointLabelComponent: React.FC<Props> = ({
-  latitude,
-  longitude,
-  start,
-}) => {
+const NodotsPointLabelComponent: React.FC<Props> = ({ latitude, start }) => {
   const theme = useTheme()
   return (
     <div
@@ -37,7 +35,5 @@ const NodotsPointLabelComponent: React.FC<Props> = ({
     </div>
   )
 }
-// REMINDER: If we ever want to make these do something, needs
-// to be an observer or use whatever other state mgmt we are using
-// at that time
+
 export default NodotsPointLabelComponent
