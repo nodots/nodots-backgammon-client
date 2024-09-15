@@ -1,3 +1,4 @@
+import { Paper } from '@mui/material'
 import {
   GamePlayingMoving,
   GamePlayingRolling,
@@ -5,10 +6,15 @@ import {
   GameRollingForStart,
   NodotsColor,
   NodotsGame,
+  NodotsGameActive,
   NodotsPlayer,
+  PlayerPlaying,
 } from '../../../nodots_modules/backgammon-types/index'
 import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 import { NodotsBoard } from './NodotsBoard'
+import NodotsBoardHalf from './NodotsBoardHalf'
+import { NodotsBarComponent } from './NodotsBarComponent/NodotsBarComponent'
+import NodotsOffComponent from './NodotsOffComponent/NodotsOffComponent'
 
 interface Props {
   game: NodotsGame
@@ -16,17 +22,14 @@ interface Props {
 }
 
 export const NodotsBoardComponent = ({ game, player }: Props) => {
-  // const { game, getColorsByDirection } = useNodotsGame()
-  console.log('[NodotsBoardComponent] game:', game)
-  console.log('[NodotsBoardComponent] player:', player)
-  switch (game.kind) {
-    case 'game-ready':
-      return <NodotsBoard game={game} player={player} />
-    case 'game-rolling-for-start':
-      return <div>Rolling for start</div>
-    case 'game-playing-rolling':
-      return <div>Rolling</div>
-    case 'game-playing-moving':
-      return <div>Moving</div>
-  }
+  const Board = (
+    <Paper elevation={1} id="BoardContainer">
+      <NodotsBoardHalf game={game} player={player} longitude="west" />
+      <NodotsBarComponent game={game} player={player} />
+      <NodotsBoardHalf game={game} player={player} longitude="east" />
+      <NodotsOffComponent game={game} player={player} />
+    </Paper>
+  )
+
+  return Board
 }

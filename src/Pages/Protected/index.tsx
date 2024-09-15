@@ -71,13 +71,10 @@ export const ProtectedPages = () => {
     : console.log('[ProtectedPages] game is null')
 
   const startGame = (opponentId: string) => {
-    alert('startGame')
     if (game) {
-      alert('Game already exists')
       return
     }
     if (!player) {
-      alert('No player')
       return
     }
     gameContextStartGame([player.id, opponentId]).then((game) => {

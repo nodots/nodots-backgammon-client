@@ -1,51 +1,43 @@
-import { Paper } from '@mui/material'
-import { getCheckerComponents } from '../NodotsPointComponent'
-import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
-import NodotsCubeComponent from '../NodotsCubeComponent'
 import {
   NodotsColor,
   NodotsGame,
   NodotsMoveDirection,
+  PlayerPlaying,
+  PlayerReady,
 } from '../../../../nodots_modules/backgammon-types'
-import NodotsCheckerComponent from '../NodotsCheckerComponent'
 
 interface Props {
   game: NodotsGame
-  color: NodotsColor
+  player: PlayerPlaying | PlayerReady
 }
 
-function NodotsOffComponent({ game, color }: Props) {
-  const counterClockwiseColor: NodotsColor =
-    game.players.white.direction === 'counterclockwise' ? 'white' : 'black'
-  const clockwiseColor: NodotsColor =
-    counterClockwiseColor === 'white' ? 'black' : 'white'
+export const NodotsOffComponent = ({ game, player }: Props) => {
+  const { board } = game
+  const { off } = board
 
-  const clockwiseCheckers = game.board.off[clockwiseColor].checkers.map((c) => {
-    return <NodotsCheckerComponent key={c.id} checker={c} game={game} />
-  })
-  const counterclockwiseCheckers = game.board.off[clockwiseColor].checkers.map(
-    (c) => {
-      return <NodotsCheckerComponent key={c.id} checker={c} game={game} />
-    }
-  )
+  let direction: NodotsMoveDirection | undefined
+  let color: NodotsColor | undefined
 
-  const getCheckerComponents = (direction: NodotsMoveDirection) => {
-    return direction === 'clockwise'
-      ? clockwiseCheckers
-      : counterclockwiseCheckers
+  switch (player.kind) {
+    case 'player-playing':
+    case 'player-ready':
+      direction = player.direction
+      color = player.color
+      const clockwiseCheckers =
+        direction === 'clockwise' ? off.black.checkers : off.white.checkers
+      const counterclockwiseCheckers =
+        direction === 'counterclockwise'
+          ? off.black.checkers
+          : off.white.checkers
+      return (
+        <div id="Off">
+          <div className="checkerbox counterclockwise">
+            {counterclockwiseCheckers.length}
+          </div>
+          <div className="checkerbox clockwise">{clockwiseCheckers.length}</div>
+        </div>
+      )
   }
-
-  return (
-    <div id="Off">
-      <Paper className="checkercontainer counterclockwise">
-        {getCheckerComponents('counterclockwise')}
-      </Paper>
-      <NodotsCubeComponent />
-      <Paper className="checkercontainer clockwise">
-        {getCheckerComponents('clockwise')}
-      </Paper>
-    </div>
-  )
 }
 
 export default NodotsOffComponent

@@ -1,39 +1,47 @@
 import { QuadrantPoints } from '..'
 import {
   Longitude,
-  NodotsColor,
   NodotsGame,
+  NodotsPlayer,
 } from '../../../../nodots_modules/backgammon-types'
 import NodotsQuadrantComponent from '../NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from '../NodotsRollSurfaceComponent'
 
 interface Props {
   game: NodotsGame
+  player: NodotsPlayer
   longitude: Longitude
 }
 
-const NodotsBoardHalf = ({ game, longitude }: Props) => {
+const NodotsBoardHalf = ({ game, player, longitude }: Props) => {
   console.log('[NodotsBoardHalf] game:', game)
+  console.log('[NodotsBoardHalf] player:', player)
   console.log('[NodotsBoardHalf] longitude:', longitude)
   const northStart = longitude === 'west' ? 19 : 13
-  const southStart = longitude === 'west' ? 1 : 7
+  const southStart = longitude === 'east' ? 1 : 7
 
   return (
-    <>
+    <div className="board-half">
       <NodotsQuadrantComponent
         game={game}
+        player={player}
         latitude="north"
         longitude={longitude}
         start={northStart}
       />
-      {/* <NodotsRollSurfaceComponent game={game} longitude={longitude} /> */}
+      <NodotsRollSurfaceComponent
+        game={game}
+        player={player}
+        longitude={longitude}
+      />
       <NodotsQuadrantComponent
         game={game}
+        player={player}
         latitude="south"
         longitude={longitude}
         start={southStart}
       />
-    </>
+    </div>
   )
 }
 

@@ -5,11 +5,13 @@ import {
   Longitude,
   NodotsBoard,
   NodotsGame,
+  NodotsPlayer,
   Point,
 } from '../../../../nodots_modules/backgammon-types'
 import { generateId } from '../../helpers'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { start } from 'repl'
+import { Loading } from '../../Loading'
 
 // Why is this here? I think that Quadrant is purely a UI concept.
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
@@ -19,16 +21,16 @@ const getStartingPositionForLatitudeLongitude = (
   longitude: Longitude
 ) => {
   if (latitude === 'north' && longitude === 'west') {
-    return 19
-  }
-  if (latitude === 'north' && longitude === 'east') {
     return 13
   }
+  if (latitude === 'north' && longitude === 'east') {
+    return 19
+  }
   if (latitude === 'south' && longitude === 'west') {
-    return 1
+    return 7
   }
   if (latitude === 'south' && longitude === 'east') {
-    return 7
+    return 1
   }
 }
 
@@ -60,6 +62,7 @@ export const getPointsForLatitudeLongitude = (
 }
 export interface Props {
   game: NodotsGame
+  player: NodotsPlayer
   latitude: Latitude
   longitude: Longitude
   start: number
@@ -68,36 +71,45 @@ export interface Props {
 
 const NodotsQuadrantComponent = ({
   game,
+  player,
   latitude,
   longitude,
   start,
 }: // points,
 Props) => {
+  const { board } = game
+  const [points, setPoints] = useState<QuadrantPoints | undefined>(undefined)
   console.log('[NodotsQuadrantComponent] game:', game)
+  console.log('[NodotsQuadrantComponent] player:', player)
   console.log('[NodotsQuadrantComponent] latitude:', latitude)
   console.log('[NodotsQuadrantComponent] longitude:', longitude)
 
   useEffect(() => {
-    game.board && getPointsForLatitudeLongitude(game.board, latitude, longitude)
+    console.log('[NodotsQuadrantComponent] useEffect')
+    const ps = getPointsForLatitudeLongitude(board, latitude, longitude)
+    setPoints(ps)
+    // board &&
+    //   getPointsForLatitudeLongitude(board, latitude, longitude) &&
+    //   setPoints(points)
   }, [])
-  return (
+
+  return points ? (
     <div className={`quadrant-container ${latitude} ${longitude}`}>
       <NodotsPointLabelComponent latitude={latitude} start={start} />
       <div className={`quadrant ${latitude} ${longitude}`}>
-        {getPointsForLatitudeLongitude(game.board, latitude, longitude).map(
-          (p) => (
-            <NodotsPointComponent
-              id={generateId()}
-              game={game}
-              checkers={p.checkers}
-              position={p.position}
-              latitude={latitude}
-              key={generateId()}
-            />
-          )
-        )}
+        {points.map((point) => (
+          <NodotsPointComponent
+            id={generateId()}
+            game={game}
+            position={point.position}
+            latitude={latitude}
+            checkers={point.checkers}
+          />
+        ))}
       </div>
     </div>
+  ) : (
+    <Loading message="Loading quadrant" />
   )
 }
 

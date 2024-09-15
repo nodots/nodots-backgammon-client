@@ -19,18 +19,10 @@ interface Props {
 }
 export const NodotsBoard = ({ game, player }: Props) => {
   return (
-    <Paper
-      elevation={3}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <NodotsBoardHalf game={game} longitude="west" />
-      <>Bar</>
-      <NodotsBoardHalf game={game} longitude="east" />
-    </Paper>
+    <div id="BoardContainer">
+      <NodotsBoardHalf game={game} player={player} longitude="west" />
+      <NodotsBarComponent game={game} player={player} />
+      <NodotsBoardHalf game={game} player={player} longitude="east" />
+    </div>
   )
 }

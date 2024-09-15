@@ -6,18 +6,17 @@ import {
   Longitude,
   NodotsColor,
   NodotsGame,
+  NodotsPlayer,
 } from '../../../../nodots_modules/backgammon-types'
 
 interface Props {
   game: NodotsGame
+  player: NodotsPlayer
   longitude: Longitude
 }
 
-function NodotsRollSurfaceComponent({ game, longitude }: Props) {
-  const color =
-    longitude === 'east' && game.players.white.direction === 'clockwise'
-      ? 'white'
-      : 'black'
+function NodotsRollSurfaceComponent({ game, player, longitude }: Props) {
+  console.log('[NodotsRollSurfaceComponent] game:', game)
 
   return (
     <Container
@@ -29,9 +28,9 @@ function NodotsRollSurfaceComponent({ game, longitude }: Props) {
       }}
     >
       <div className="dice-container">
-        <NodotsDieComponent game={game} order={0} color={color} />
-        <DiceSwitcher color={color} />
-        <NodotsDieComponent game={game} order={1} color={color} />
+        <NodotsDieComponent game={game} order={0} color={player.color} />
+        {/* <DiceSwitcher color="white" /> */}
+        <NodotsDieComponent game={game} order={1} color={player.color} />
       </div>
     </Container>
   )

@@ -5,6 +5,9 @@ import {
   NodotsCheckercontainer,
   Latitude,
   Longitude,
+  NodotsPlayer,
+  NodotsGameActive,
+  PlayerPlaying,
 } from '../../../nodots_modules/backgammon-types/index'
 import NodotsQuadrantComponent from './NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
@@ -43,10 +46,15 @@ export interface BoardDisplay {
 
 interface Props {
   game: NodotsGame
+  player: NodotsPlayer
 }
 
-function NodotsBoard({ game }: Props) {
-  return <NodotsBoardComponent game={game} />
+function BoardComponent({ game, player }: Props) {
+  return (
+    <div id="GameContainer">
+      <NodotsBoardComponent player={player} game={game} />
+    </div>
+  )
 }
 
-export default NodotsBoardComponent
+export default BoardComponent

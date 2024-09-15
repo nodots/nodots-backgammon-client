@@ -20,7 +20,6 @@ export const PlayerContext = createContext<PlayerContextType | undefined>(
 export const setPlayerPlaying = async (
   playerId: string
 ): Promise<PlayerPlaying> => {
-  alert('Making API call to setPlayerPlaying')
   return fetch(`${apiUrl}/player/playing/${playerId}`, {
     method: 'PATCH',
     headers: {

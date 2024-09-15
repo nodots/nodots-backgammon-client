@@ -18,6 +18,7 @@ const getLabels = (start: number) => {
       </div>
     )
   }
+  console.log(labels)
   return <>{labels}</>
 }
 
