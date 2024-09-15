@@ -85,12 +85,8 @@ Props) => {
   console.log('[NodotsQuadrantComponent] longitude:', longitude)
 
   useEffect(() => {
-    console.log('[NodotsQuadrantComponent] useEffect')
     const ps = getPointsForLatitudeLongitude(board, latitude, longitude)
     setPoints(ps)
-    // board &&
-    //   getPointsForLatitudeLongitude(board, latitude, longitude) &&
-    //   setPoints(points)
   }, [])
 
   return points ? (
@@ -100,6 +96,7 @@ Props) => {
         {points.map((point) => (
           <NodotsPointComponent
             id={generateId()}
+            key={point.id}
             game={game}
             position={point.position}
             latitude={latitude}

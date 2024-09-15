@@ -17,6 +17,7 @@ import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 import { useNodotsPlayer } from '../../../Contexts/Player/useNodotsPlayer'
 import { Loading } from '../../../Components/Loading'
 import { getPlayerById } from '../../../Contexts/Player/PlayerContextHelpers'
+import NodotsGameNotifications from '../../../Components/NodotsNotificationsComponent/GameNotifications'
 
 const GamePage = () => {
   const { gameState, gameDispatch } = useNodotsGame()
@@ -25,40 +26,71 @@ const GamePage = () => {
   const [player, setPlayer] = useState<PlayerPlaying | null>(null)
   const { gameId } = useParams<{ gameId: string }>()
   const playerId = sessionStorage.getItem('playerId')
+
   useEffect(() => {
     const interval = setInterval(() => {
-      !player &&
-        playerId &&
-        getPlayerById(playerId).then((p) => {
-          if (p) {
-            if (p.kind === 'player-playing') {
-              setPlayer(p)
+      if (!player && playerId) {
+        console.log('Fetching player with ID:', playerId)
+        getPlayerById(playerId)
+          .then((p) => {
+            if (p) {
+              console.log('Player fetched:', p)
+              if (p.kind === 'player-playing') {
+                setPlayer(p)
+              } else {
+                console.error('Invalid player kind:', p.kind)
+              }
             } else {
-              console.error('Invalid player kind:', p.kind)
+              console.error('Player not found')
             }
-          }
-        })
+          })
+          .catch((error) => {
+            console.error('Error fetching player:', error)
+          })
+      }
 
-      !game &&
-        gameId &&
-        getGameById(gameId).then((g) => {
-          if (g) {
-            sessionStorage.setItem('gameId', g.id)
-            setGame(g)
-          }
-        })
+      if (!game && gameId) {
+        console.log('Fetching game with ID:', gameId)
+        getGameById(gameId)
+          .then((g) => {
+            if (g) {
+              console.log('Game fetched:', g)
+              sessionStorage.setItem('gameId', g.id)
+              setGame(g)
+            } else {
+              console.error('Game not found')
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching game:', error)
+          })
+      }
     }, 1000)
 
     return () => {
       clearInterval(interval)
     }
-  }, [])
+  }, [player, game, playerId, gameId])
 
-  return game && player ? (
-    <NodotsBoardComponent game={game} player={player} />
-  ) : (
-    <Loading message={game?.kind} />
-  )
+  switch (game?.kind) {
+    case 'game-ready':
+      return (
+        player && (
+          <div id="GamePage">
+            <NodotsGameNotifications game={game} player={player} />
+            <NodotsBoardComponent game={game} player={player} />
+          </div>
+        )
+      )
+    case 'game-rolling-for-start':
+      return <>GameRollingForStart</>
+    case 'game-playing-rolling':
+      return <>GamePlayingRolling</>
+    case 'game-playing-moving':
+      return <>GamePlayingMoving</>
+    default:
+      return <>NoGame</>
+  }
 }
 
 export default GamePage
