@@ -6,15 +6,15 @@ import {
   Latitude,
   Longitude,
   NodotsPlayer,
-  NodotsGameActive,
-  PlayerPlaying,
 } from '../../../nodots_modules/backgammon-types/index'
+import { UTBoardTheme } from '../../theme/AppTheme'
 import NodotsQuadrantComponent from './NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
 import NodotsBarComponent from './NodotsBarComponent'
 import Off from './NodotsOffComponent/NodotsOffComponent'
 // import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 import { NodotsBoardComponent } from './NodotsBoardComponent'
+import { useTheme } from '@mui/material'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
@@ -50,6 +50,7 @@ interface Props {
 }
 
 function BoardComponent({ game, player }: Props) {
+  const boardTheme = useTheme()
   return (
     <div id="GameContainer">
       <NodotsBoardComponent player={player} game={game} />

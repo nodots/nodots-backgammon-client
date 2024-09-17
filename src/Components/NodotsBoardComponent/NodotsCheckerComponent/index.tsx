@@ -31,8 +31,6 @@ function NodotsCheckerComponent({ game, checker, count }: Props) {
         break
       case 'game-playing-rolling':
       case 'game-rolling-for-start':
-      case 'game-initialized':
-      case 'game-initializing':
         break
     }
   }

@@ -30,7 +30,6 @@ const PlayerRow = ({ player }: Props) => {
       : response.ok
       ? response.json().then((game) => {
           gameDispatch({ type: GameActionTypes.SET_GAME, payload: game })
-          sessionStorage.setItem('gameId', game.id)
         })
       : console.error('Failed to start game')
   }

@@ -1,9 +1,5 @@
-import { useNodotsPlayer } from '../../Contexts/Player/useNodotsPlayer'
 import { useEffect, useState } from 'react'
-import { getPlayerById } from '../../Contexts/Player/PlayerContextHelpers'
-import { PlayerActionTypes } from '../../Contexts/Player/PlayerContextActions'
-import { LobbyPage } from './LobbyPage'
-import { Loading } from '../../Components/Loading'
+import { getPlayerById } from '../../Contexts/Player/playerHelpers'
 import {
   NodotsGame,
   NodotsPlayer,
@@ -12,16 +8,12 @@ import {
   getGameById,
   startGame as gameContextStartGame,
 } from '../../Contexts/Game/GameContextHelpers'
-import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 import { GameActionTypes } from '../../Contexts/Game/GameContextActions'
 import GamePage from './GamePage'
 import { Button } from '@mui/material'
-import { setPlayerPlaying } from '../../Contexts/Player/PlayerContext'
 import { useNavigate } from 'react-router-dom'
 
 export const ProtectedPages = () => {
-  const { playerDispatch } = useNodotsPlayer()
-  const { gameDispatch } = useNodotsGame()
   const navigate = useNavigate()
   const [player, setPlayer] = useState<NodotsPlayer | null>(null)
   const [game, setGame] = useState<NodotsGame | null>(null)
@@ -42,29 +34,29 @@ export const ProtectedPages = () => {
   //   }
   // }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      !player &&
-        playerId &&
-        getPlayerById(playerId).then((p) => {
-          console.log('[ProtectedPages] getPlayerById p:', p)
-          setPlayer(p)
-        })
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     !player &&
+  //       playerId &&
+  //       getPlayerById(playerId).then((p) => {
+  //         console.log('[ProtectedPages] getPlayerById p:', p)
+  //         setPlayer(p)
+  //       })
 
-      !game &&
-        gameId &&
-        getGameById(gameId).then((g) => {
-          if (g) {
-            setGame(g)
-            gameDispatch({ type: GameActionTypes.SET_GAME, payload: g })
-          }
-        })
-    }, 1000)
+  //     !game &&
+  //       gameId &&
+  //       getGameById(gameId).then((g) => {
+  //         if (g) {
+  //           setGame(g)
+  //           gameDispatch({ type: GameActionTypes.SET_GAME, payload: g })
+  //         }
+  //       })
+  //   }, 1000)
 
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
+  //   return () => {
+  //     clearInterval(interval)
+  //   }
+  // }, [])
 
   game
     ? console.log('[ProtectedPages] game:', game)
@@ -79,7 +71,7 @@ export const ProtectedPages = () => {
     }
     gameContextStartGame([player.id, opponentId]).then((game) => {
       console.log('[ProtectedPages] startGame game:', game)
-      sessionStorage.setItem('gameId', game.id)
+
       navigate(`/bg/game/${game.id}`, {
         state: { game, player },
       })
@@ -90,7 +82,7 @@ export const ProtectedPages = () => {
     //   : player &&
     //     gameContextStartGame([player.id, opponentId]).then((game) => {
     //       console.log('[ProtectedPages] startGame game:', game)
-    //       sessionStorage.setItem('gameId', game.id)
+    //
     //       initializeGame(game)
     //     })
   }

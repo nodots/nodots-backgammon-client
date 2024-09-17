@@ -9,17 +9,11 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNodotsPlayer } from '../../Contexts/Player/useNodotsPlayer'
-import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
+import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 
-interface Props {
-  player: NodotsPlayer
-}
-
-export const NodotsAppBar = ({ player }: Props) => {
-  const { playerDispatch, appLogout } = useNodotsPlayer()
+export const NodotsAppBar = () => {
+  const { isAuthenticated, logout } = useAuth0()
   const { i18n, t } = useTranslation()
-  const { logout, isAuthenticated, user } = useAuth0()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -34,63 +28,62 @@ export const NodotsAppBar = ({ player }: Props) => {
     window.location.href = '/player'
   }
 
-  const handleSignOut = () => {
-    player && appLogout()
-    sessionStorage.removeItem('playerId')
-    logout({ logoutParams: { returnTo: window.location.origin } })
-  }
+  const handleSignOut = () =>
+    console.warn('handleSignOut not implemented', logout())
 
-  return player ? (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, fontVariant: 'all-petite-caps' }}
-          ></Typography>
+  return <>NodotsAppBarStub</>
 
-          {player && isAuthenticated && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <Avatar
-                  alt={player.preferences?.username}
-                  src={player.preferences?.avatar}
-                />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleProfile}>{t('NDBG_PROFILE')}</MenuItem>
-                <MenuItem onClick={handleSignOut}>
-                  {t('NDBG_SIGN_OUT')}
-                </MenuItem>
-              </Menu>
-            </div>
-          )}
-        </Toolbar>
-      </AppBar>
-    </Box>
-  ) : (
-    <></>
-  )
+  // return player ? (
+  //   <Box sx={{ flexGrow: 1 }}>
+  //     <AppBar position="static">
+  //       <Toolbar>
+  //         <Typography
+  //           variant="h6"
+  //           component="div"
+  //           sx={{ flexGrow: 1, fontVariant: 'all-petite-caps' }}
+  //         ></Typography>
+
+  //         {player && isAuthenticated && (
+  //           <div>
+  //             <IconButton
+  //               size="large"
+  //               aria-label="account of current user"
+  //               aria-controls="menu-appbar"
+  //               aria-haspopup="true"
+  //               onClick={handleMenu}
+  //               color="inherit"
+  //             >
+  //               <Avatar
+  //                 alt={player.preferences?.username}
+  //                 src={player.preferences?.avatar}
+  //               />
+  //             </IconButton>
+  //             <Menu
+  //               id="menu-appbar"
+  //               anchorEl={anchorEl}
+  //               anchorOrigin={{
+  //                 vertical: 'top',
+  //                 horizontal: 'right',
+  //               }}
+  //               keepMounted
+  //               transformOrigin={{
+  //                 vertical: 'top',
+  //                 horizontal: 'right',
+  //               }}
+  //               open={Boolean(anchorEl)}
+  //               onClose={handleClose}
+  //             >
+  //               <MenuItem onClick={handleProfile}>{t('NDBG_PROFILE')}</MenuItem>
+  //               <MenuItem onClick={handleSignOut}>
+  //                 {t('NDBG_SIGN_OUT')}
+  //               </MenuItem>
+  //             </Menu>
+  //           </div>
+  //         )}
+  //       </Toolbar>
+  //     </AppBar>
+  //   </Box>
+  // ) : (
+  //   <></>
+  // )
 }

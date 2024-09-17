@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'
 // import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
 import { Loading } from '../../../../../Components/Loading'
 import { useNodotsPlayer } from '../../../../../Contexts/Player/useNodotsPlayer'
-import { getPlayers } from '../../../../../Contexts/Player/PlayerContextHelpers'
+import { getPlayers } from '../../../../../Contexts/Player/playerHelpers'
 
 interface Props {
   player: NodotsPlayer

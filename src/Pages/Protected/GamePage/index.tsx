@@ -13,15 +13,11 @@ import NodotsBoardComponent from '../../../Components/NodotsBoardComponent'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getGameById } from '../../../Contexts/Game/GameContextHelpers'
-import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
-import { useNodotsPlayer } from '../../../Contexts/Player/useNodotsPlayer'
 import { Loading } from '../../../Components/Loading'
-import { getPlayerById } from '../../../Contexts/Player/PlayerContextHelpers'
+import { getPlayerById } from '../../../Contexts/Player/playerHelpers'
 import NodotsGameNotifications from '../../../Components/NodotsNotificationsComponent/GameNotifications'
 
 const GamePage = () => {
-  const { gameState, gameDispatch } = useNodotsGame()
-  const { playerState, playerDispatch } = useNodotsPlayer()
   const [game, setGame] = useState<NodotsGame | null>(null)
   const [player, setPlayer] = useState<PlayerPlaying | null>(null)
   const { gameId } = useParams<{ gameId: string }>()
@@ -55,7 +51,7 @@ const GamePage = () => {
           .then((g) => {
             if (g) {
               console.log('Game fetched:', g)
-              sessionStorage.setItem('gameId', g.id)
+
               setGame(g)
             } else {
               console.error('Game not found')
@@ -77,7 +73,7 @@ const GamePage = () => {
       return (
         player && (
           <div id="GamePage">
-            <NodotsGameNotifications game={game} player={player} />
+            <NodotsGameNotifications />
             <NodotsBoardComponent game={game} player={player} />
           </div>
         )

@@ -1,4 +1,8 @@
-import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
+import {
+  NodotsPlayer,
+  PlayerInitializing,
+  PlayerReady,
+} from '../../../nodots_modules/backgammon-types'
 import { apiUrl } from '../../App'
 
 export const getPlayers = async (): Promise<NodotsPlayer[]> => {
@@ -15,6 +19,20 @@ export const getPlayerBySub = async (sub: string): Promise<NodotsPlayer> => {
   const [source, externalId] = sub.split('|')
   const endpoint = `${apiUrl}/player/sub/${source}/${externalId}`
   const result = await fetch(endpoint)
+  const player = await result.json()
+  return player
+}
+
+export const addPlayer = async (
+  player: PlayerInitializing
+): Promise<PlayerReady> => {
+  const result = await fetch(`${apiUrl}/player`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(player),
+  })
   return result.json()
 }
 

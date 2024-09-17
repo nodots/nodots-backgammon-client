@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material'
+import { Paper, ThemeProvider } from '@mui/material'
 import { QuadrantPoints } from '.'
 import {
   NodotsColor,
@@ -12,6 +12,7 @@ import NodotsOffComponent from './NodotsOffComponent'
 import NodotsQuadrantComponent from './NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from './NodotsRollSurfaceComponent'
 import NodotsBoardHalf from './NodotsBoardHalf'
+import { UTBoardTheme } from '../../theme/AppTheme' // Adjust the import path as necessary
 
 interface Props {
   game: NodotsGame
@@ -19,10 +20,12 @@ interface Props {
 }
 export const NodotsBoard = ({ game, player }: Props) => {
   return (
-    <div id="BoardContainer">
-      <NodotsBoardHalf game={game} player={player} longitude="west" />
-      <NodotsBarComponent game={game} player={player} />
-      <NodotsBoardHalf game={game} player={player} longitude="east" />
-    </div>
+    <ThemeProvider theme={UTBoardTheme}>
+      <div id="BoardContainer">
+        <NodotsBoardHalf game={game} player={player} longitude="west" />
+        <NodotsBarComponent game={game} player={player} />
+        <NodotsBoardHalf game={game} player={player} longitude="east" />
+      </div>
+    </ThemeProvider>
   )
 }
