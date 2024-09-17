@@ -1,0 +1,112 @@
+@import './constants.scss';
+
+#BoardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .board-half {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    .point-labels {
+      display: none;
+      flex-direction: row;
+      justify-content: space-around;
+      &.south {
+        flex-direction: row-reverse;
+      }
+    }
+    .quadrant-container {
+      display: flex;
+      flex-direction: column;
+      &.south {
+        flex-direction: column-reverse;
+      }
+      .quadrant {
+        display: flex;
+        min-height: $checker-height * 5;
+        .point {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          min-height: $checker-height * 5;
+          min-width: $checker-height;
+          margin: 0 0.5vh;
+          .point-background {
+            &.south {
+              transform: rotate(180deg) !important;
+            }
+          }
+        }
+        &.south {
+          flex-direction: row-reverse;
+          .point {
+            flex-direction: column-reverse;
+            align-items: flex-start;
+            margin: 0 0.5vh 0 0.5vh;
+          }
+        }
+      }
+    }
+    .roll-surface {
+      min-height: $checker-height * 1;
+    }
+  }
+
+  #Bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: $checker-height;
+    height: 100%;
+    padding: 0 0.5vh;
+    .pip-count {
+      font-size: 1rem;
+      padding: 0px;
+      margin: 0px;
+      height: 1rem;
+      max-width: 3vw;
+    }
+  }
+
+  #Off {
+    padding: 0 0.5vh;
+  }
+  .cube {
+    width: $checker-height * 0.8 !important;
+    height: $checker-height * 0.8 !important;
+    border: $border !important;
+    border-radius: $border-radius;
+    font-size: 1.5rem !important;
+    font-weight: 800 !important;
+  }
+
+  .checker-container {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    &.south {
+      flex-direction: column-reverse;
+    }
+  }
+
+  .dice-container {
+    min-height: $checker-height * 0.5;
+    min-width: $checker-height + 0.5vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .die {
+      height: $checker-height * 0.5;
+      width: $checker-height * 0.5;
+      margin: 0 0.5vh;
+      cursor: pointer;
+    }
+    .dice-switcher {
+      cursor: pointer;
+    }
+  }
+}

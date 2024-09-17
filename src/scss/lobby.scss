@@ -1,0 +1,51 @@
+@import './constants.scss';
+#LobbyPageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  #LobbyContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50vw;
+    height: 50vh;
+    #LobbyList {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      .lobby {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 5vh;
+        margin: 0.5vh;
+        padding: 0.5vh;
+        border: $border;
+        border-radius: $border-radius;
+        .lobby-name {
+          width: 50%;
+          text-align: center;
+        }
+        .lobby-players {
+          width: 20%;
+          text-align: center;
+        }
+        .lobby-join {
+          width: 20%;
+          text-align: center;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

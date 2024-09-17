@@ -1,0 +1,13 @@
+.checker {
+  min-width: 0px !important;
+  min-height: 0px !important;
+  height: $checker-height !important;
+  width: $checker-height !important;
+  border-radius: 50% !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
