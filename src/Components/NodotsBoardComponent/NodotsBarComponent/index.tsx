@@ -14,8 +14,8 @@ const NodotsBar = ({ game, player }: Props) => {
   switch (game?.NodotsGameRollingForStart) {
     case 'ready':
     case 'rolling-for-start':
-    case 'playing-rolling':
-    case 'playing-moving':
+    case 'rolling':
+    case 'moving':
       return <NodotsBarComponent game={game} player={player} />
   }
 }

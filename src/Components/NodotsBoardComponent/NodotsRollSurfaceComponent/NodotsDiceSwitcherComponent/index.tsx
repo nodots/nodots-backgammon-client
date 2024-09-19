@@ -17,9 +17,9 @@ function NodotsDiceSwitcher({ color }: Props) {
       case 'initializing':
       case 'game-initialized':
       case 'rolling-for-start':
-      case 'playing-moving':
+      case 'moving':
         break
-      case 'playing-rolling':
+      case 'rolling':
         const _game = game as NodotsGamePlayingRolling
         switchDice(_game)
     }
@@ -29,9 +29,9 @@ function NodotsDiceSwitcher({ color }: Props) {
     case 'initializing':
     case 'game-initialized':
     case 'rolling-for-start':
-    case 'playing-moving':
+    case 'moving':
       return <></>
-    case 'playing-rolling':
+    case 'rolling':
       return <NodotsDiceSwitcherComponent color={color} />
   }
 }

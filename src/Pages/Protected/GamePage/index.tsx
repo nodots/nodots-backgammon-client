@@ -80,9 +80,9 @@ const GamePage = () => {
       )
     case 'rolling-for-start':
       return <>GameRollingForStart</>
-    case 'playing-rolling':
+    case 'rolling':
       return <>GamePlayingRolling</>
-    case 'playing-moving':
+    case 'moving':
       return <>GamePlayingMoving</>
     default:
       return <>NoGame</>

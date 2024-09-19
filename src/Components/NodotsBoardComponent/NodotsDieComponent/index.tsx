@@ -45,7 +45,7 @@ function NodotsDieComponent({ game, order, color, rollHandler }: Props) {
             <path
               d={getPath(
                 order,
-                game.NodotsGameRollingForStart === 'playing-moving'
+                game.NodotsGameRollingForStart === 'moving'
                   ? game.activeRoll
                   : undefined
               )}

@@ -25,11 +25,11 @@ function NodotsCheckerComponent({ game, checker, count }: Props) {
     const checker = e.currentTarget
 
     switch (game.NodotsGameRollingForStart) {
-      case 'playing-moving':
+      case 'moving':
         //game.move(checker.id)
         console.log('checkerClicked', checker.id)
         break
-      case 'playing-rolling':
+      case 'rolling':
       case 'rolling-for-start':
         break
     }

@@ -7,14 +7,14 @@ function NodotsCube() {
 
   const clickHandler = () => {
     switch (game?.kind) {
-      case 'playing-rolling':
+      case 'rolling':
         const _game = game as NodotsGamePlayingRolling
         console.log('double', _game)
         break
       case 'initializing':
       case 'game-initialized':
       case 'rolling-for-start':
-      case 'playing-moving':
+      case 'moving':
         break
     }
   }
@@ -23,9 +23,9 @@ function NodotsCube() {
     case 'initializing':
     case 'game-initialized':
     case 'rolling-for-start':
-    case 'playing-moving':
+    case 'moving':
       return <></>
-    case 'playing-rolling':
+    case 'rolling':
       return <NodotsCubeComponent clickHandler={clickHandler} />
   }
 }
