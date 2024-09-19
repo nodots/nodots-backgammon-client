@@ -1,12 +1,15 @@
 import { Alert, AlertColor } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { NodotsGame, Player } from '../../../nodots_modules/backgammon-types'
+import {
+  NodotsGame,
+  NodotsPlayer,
+} from '../../../nodots_modules/backgammon-types'
 
-const getOpponent = (game: NodotsGame, player: Player): Player => {
-  if (game && game.players) {
-    return game.players.black.id === player.id
-      ? game.players.white
-      : game.players.black
+const getOpponent = (game: NodotsGame, player: NodotsPlayer): NodotsPlayer => {
+  if (game && game.NodotsGameInitializing) {
+    return game.NodotsGameInitializing.black.id === player.id
+      ? game.NodotsGameInitializing.white
+      : game.NodotsGameInitializing.black
   }
   throw Error('No opponent found')
 }

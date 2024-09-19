@@ -2,14 +2,14 @@ import { QuadrantPoints } from '..'
 import {
   Longitude,
   NodotsGame,
-  Player,
+  NodotsPlayer,
 } from '../../../../nodots_modules/backgammon-types'
 import NodotsQuadrantComponent from '../NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from '../NodotsRollSurfaceComponent'
 
 interface Props {
   game: NodotsGame
-  player: Player
+  player: NodotsPlayer
   longitude: Longitude
 }
 

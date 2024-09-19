@@ -2,13 +2,13 @@ import {
   NodotsColor,
   NodotsGame,
   NodotsMoveDirection,
-  PlayerPlaying,
-  PlayerReady,
+  NodotsPlayerPlaying,
+  NodotsPlayerReady,
 } from '../../../../nodots_modules/backgammon-types'
 
 interface Props {
   game: NodotsGame
-  player: PlayerPlaying | PlayerReady
+  player: NodotsPlayerPlaying | NodotsPlayerReady
 }
 
 export const NodotsOffComponent = ({ game, player }: Props) => {
@@ -19,8 +19,8 @@ export const NodotsOffComponent = ({ game, player }: Props) => {
   let color: NodotsColor | undefined
 
   switch (player.kind) {
-    case 'player-playing':
-    case 'player-ready':
+    case 'playing':
+    case 'ready':
       direction = player.direction
       color = player.color
       const clockwiseCheckers =

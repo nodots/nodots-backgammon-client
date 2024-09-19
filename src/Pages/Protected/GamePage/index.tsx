@@ -1,13 +1,13 @@
 import { Container, Paper } from '@mui/material'
 import { NodotsAppBar } from '../../../Components/NodotsAppBar'
 import {
-  GamePlayingMoving,
-  GamePlayingRolling,
-  GameReady,
-  GameRollingForStart,
+  NodotsGamePlayingMoving,
+  NodotsGamePlayingRolling,
+  NodotsGameReady,
+  NodotsGameRollingForStart,
   NodotsGame,
-  Player,
-  PlayerPlaying,
+  NodotsPlayer,
+  NodotsPlayerPlaying,
 } from '../../../../nodots_modules/backgammon-types'
 import NodotsBoardComponent from '../../../Components/NodotsBoardComponent'
 import { useEffect, useState } from 'react'
@@ -19,7 +19,7 @@ import NodotsGameNotifications from '../../../Components/NodotsNotificationsComp
 
 const GamePage = () => {
   const [game, setGame] = useState<NodotsGame | null>(null)
-  const [player, setPlayer] = useState<PlayerPlaying | null>(null)
+  const [player, setPlayer] = useState<NodotsPlayerPlaying | null>(null)
   const { gameId } = useParams<{ gameId: string }>()
   const playerId = sessionStorage.getItem('playerId')
 
@@ -31,7 +31,7 @@ const GamePage = () => {
           .then((p) => {
             if (p) {
               console.log('Player fetched:', p)
-              if (p.kind === 'player-playing') {
+              if (p.kind === 'playing') {
                 setPlayer(p)
               } else {
                 console.error('Invalid player kind:', p.kind)
@@ -68,8 +68,8 @@ const GamePage = () => {
     }
   }, [player, game, playerId, gameId])
 
-  switch (game?.kind) {
-    case 'game-ready':
+  switch (game?.NodotsGameRollingForStart) {
+    case 'ready':
       return (
         player && (
           <div id="GamePage">
@@ -78,11 +78,11 @@ const GamePage = () => {
           </div>
         )
       )
-    case 'game-rolling-for-start':
+    case 'rolling-for-start':
       return <>GameRollingForStart</>
-    case 'game-playing-rolling':
+    case 'playing-rolling':
       return <>GamePlayingRolling</>
-    case 'game-playing-moving':
+    case 'playing-moving':
       return <>GamePlayingMoving</>
     default:
       return <>NoGame</>

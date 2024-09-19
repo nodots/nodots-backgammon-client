@@ -5,7 +5,7 @@ import {
   Longitude,
   NodotsBoard,
   NodotsGame,
-  Player,
+  NodotsPlayer,
   Point,
 } from '../../../../nodots_modules/backgammon-types'
 import { generateId } from '../../helpers'
@@ -62,7 +62,7 @@ export const getPointsForLatitudeLongitude = (
 }
 export interface Props {
   game: NodotsGame
-  player: Player
+  player: NodotsPlayer
   latitude: Latitude
   longitude: Longitude
   start: number

@@ -24,13 +24,13 @@ function NodotsCheckerComponent({ game, checker, count }: Props) {
   const handleCheckerClick = (e: React.MouseEvent) => {
     const checker = e.currentTarget
 
-    switch (game.kind) {
-      case 'game-playing-moving':
+    switch (game.NodotsGameRollingForStart) {
+      case 'playing-moving':
         //game.move(checker.id)
         console.log('checkerClicked', checker.id)
         break
-      case 'game-playing-rolling':
-      case 'game-rolling-for-start':
+      case 'playing-rolling':
+      case 'rolling-for-start':
         break
     }
   }

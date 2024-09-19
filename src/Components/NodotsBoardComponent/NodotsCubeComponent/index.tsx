@@ -1,4 +1,4 @@
-import { GamePlayingRolling } from '../../../../nodots_modules/backgammon-types'
+import { NodotsGamePlayingRolling } from '../../../../nodots_modules/backgammon-types'
 // import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 import NodotsCubeComponent from './NodotsCubeComponent'
 
@@ -7,25 +7,25 @@ function NodotsCube() {
 
   const clickHandler = () => {
     switch (game?.kind) {
-      case 'game-playing-rolling':
-        const _game = game as GamePlayingRolling
+      case 'playing-rolling':
+        const _game = game as NodotsGamePlayingRolling
         console.log('double', _game)
         break
-      case 'game-initializing':
+      case 'initializing':
       case 'game-initialized':
-      case 'game-rolling-for-start':
-      case 'game-playing-moving':
+      case 'rolling-for-start':
+      case 'playing-moving':
         break
     }
   }
 
   switch (game?.kind) {
-    case 'game-initializing':
+    case 'initializing':
     case 'game-initialized':
-    case 'game-rolling-for-start':
-    case 'game-playing-moving':
+    case 'rolling-for-start':
+    case 'playing-moving':
       return <></>
-    case 'game-playing-rolling':
+    case 'playing-rolling':
       return <NodotsCubeComponent clickHandler={clickHandler} />
   }
 }

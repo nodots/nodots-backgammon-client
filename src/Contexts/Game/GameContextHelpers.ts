@@ -1,5 +1,5 @@
 import {
-  GameRollingForStart,
+  NodotsGameRollingForStart,
   NodotsGame,
 } from '../../../nodots_modules/backgammon-types'
 import { apiUrl } from '../../App'
@@ -21,7 +21,7 @@ export type StartGamePayload = [string, string]
 
 export const startGame = async (
   payload: StartGamePayload
-): Promise<GameRollingForStart> => {
+): Promise<NodotsGameRollingForStart> => {
   const player1Playing = await fetch(`${apiUrl}/player/playing/${payload[0]}`, {
     method: 'PATCH',
     headers: {

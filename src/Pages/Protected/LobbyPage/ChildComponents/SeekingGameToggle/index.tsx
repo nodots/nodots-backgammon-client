@@ -1,47 +1,42 @@
 import { FormControlLabel, FormGroup, Switch, useTheme } from '@mui/material'
+import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
+import { togglePlayerSeekingGameAction } from '../../../../../Contexts/Player/playerActions'
+import { Loading } from '../../../../../Components/Loading'
+import {
+  NodotsPlayerActive,
+  NodotsPlayerReady,
+} from '../../../../../../nodots_modules/backgammon-types'
+import { useEffect } from 'react'
 
 export const SeekingGameToggle = () => {
-  const theme = useTheme()
-  // const [seekingGame, setSeekingGame] = useState<boolean>(player.isSeekingGame)
-
+  const { state, dispatch } = usePlayerContext()
+  const { player } = state
   // const handleChange = async (e: React.ChangeEvent) => {
-  //   console.log('[SeekingGameToggle] handleChange:', player)
-  //   switch (player.kind) {
-  //     case 'player-ready':
-  //       console.log('[SeekingGameToggle] handleChange player-ready:', player)
-  //       setSeekingGame(!player.isSeekingGame)
-  //       // await playerActionSetSeekingGame(player, !player.isSeekingGame).then(
-  //       //   (player) => {
-  //       //     console.log(
-  //       //       '[SeekingGameToggle] handleChange back from playerActionSetSeekingGame:',
-  //       //       player
-  //       //     )
-  //       //   }
-  //       // )
-  //       break
-  //     default:
-  //       console.log('Player not seeking game')
-  //   }
+  //   dispatch(togglePlayerSeekingGameAction(player, dispatch))
   // }
 
-  return (
-    <FormGroup
-      sx={{
-        width: '24vw',
-      }}
-    >
-      <FormControlLabel
-        control={
-          <Switch
-            checked={false}
-            onChange={() =>
-              console.warn('handleChange not implemented for SeekingGameToggle')
-            }
-          />
-        }
-        label={`Ready to play?`}
-        labelPlacement="end"
-      />
-    </FormGroup>
-  )
+  useEffect(() => {
+    console.log(player)
+  }, [])
+
+  return <>SeekingGameToggle Stub</>
 }
+
+// return (
+//   <FormGroup
+//     sx={{
+//       width: '24vw',
+//     }}
+//   >
+//     <FormControlLabel
+//       control={
+//         <Switch
+//           checked={true}
+//           onChange={() => console.log('not implemented')}
+//         />
+//       }
+//       label={`PLACEHOLDER`}
+//       labelPlacement="end"
+//     />
+//   </FormGroup>
+// )

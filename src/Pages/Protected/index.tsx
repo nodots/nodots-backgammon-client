@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { getPlayerById } from '../../Contexts/Player/playerHelpers'
-import { NodotsGame, Player } from '../../../nodots_modules/backgammon-types'
+import {
+  NodotsGame,
+  NodotsPlayer,
+} from '../../../nodots_modules/backgammon-types'
 import {
   getGameById,
   startGame as gameContextStartGame,
@@ -12,7 +15,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const ProtectedPages = () => {
   const navigate = useNavigate()
-  const [player, setPlayer] = useState<Player | null>(null)
+  const [player, setPlayer] = useState<NodotsPlayer | null>(null)
   const [game, setGame] = useState<NodotsGame | null>(null)
   const playerId = sessionStorage.getItem('playerId')
   const gameId = sessionStorage.getItem('gameId')

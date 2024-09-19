@@ -1,14 +1,37 @@
-import { Player } from '../../../nodots_modules/backgammon-types'
+import {
+  NodotsPlayerActive,
+  NodotsPlayerReady,
+} from '../../../nodots_modules/backgammon-types'
+import { togglePlayerSeekingGame } from './playerHelpers'
 
 // Define action types as an enum to ensure consistency and prevent typos
 export enum PlayerActionTypes {
   SET_PLAYER = 'SET_PLAYER',
+  TOGGLE_PLAYER_SEEKING_GAME = 'TOGGLE_PLAYER_SEEKING_GAME',
 }
 
 // Define type for each action type to enforce type safety
 interface SetPlayerAction {
   type: PlayerActionTypes.SET_PLAYER
-  payload: Player
+  payload: NodotsPlayerActive
 }
 
-export type PlayerActions = SetPlayerAction
+interface TogglePlayerSeekingGameAction {
+  type: PlayerActionTypes.TOGGLE_PLAYER_SEEKING_GAME
+  payload: { seekingGame: boolean }
+}
+
+export type PlayerActions = SetPlayerAction | TogglePlayerSeekingGameAction
+
+export const togglePlayerSeekingGameAction = async (
+  player: NodotsPlayerReady,
+  dispatch: React.Dispatch<PlayerActions>
+): Promise<TogglePlayerSeekingGameAction> => {
+  console.log(player.isSeekingGame)
+  const action: TogglePlayerSeekingGameAction = {
+    type: PlayerActionTypes.TOGGLE_PLAYER_SEEKING_GAME,
+    payload: { seekingGame: player.isSeekingGame },
+  }
+  dispatch(action)
+  return action
+}

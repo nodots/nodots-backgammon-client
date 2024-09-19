@@ -5,7 +5,7 @@ import {
   NodotsCheckercontainer,
   Latitude,
   Longitude,
-  Player,
+  NodotsPlayer,
 } from '../../../nodots_modules/backgammon-types/index'
 import { UTBoardTheme } from '../../theme/AppTheme'
 import NodotsQuadrantComponent from './NodotsQuadrantComponent'
@@ -46,7 +46,7 @@ export interface BoardDisplay {
 
 interface Props {
   game: NodotsGame
-  player: Player
+  player: NodotsPlayer
 }
 
 function BoardComponent({ game, player }: Props) {

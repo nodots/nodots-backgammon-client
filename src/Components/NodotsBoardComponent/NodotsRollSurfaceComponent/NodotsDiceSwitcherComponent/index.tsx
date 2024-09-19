@@ -1,6 +1,6 @@
 // import { useNodotsGame } from '../../../../Contexts/Game/useNodotsGame'
 import {
-  GamePlayingRolling,
+  NodotsGamePlayingRolling,
   NodotsColor,
 } from '../../../../../nodots_modules/backgammon-types'
 import NodotsDiceSwitcherComponent from './NodotsDiceSwitcherComponent'
@@ -14,24 +14,24 @@ function NodotsDiceSwitcher({ color }: Props) {
 
   const switchDiceHandler = () => {
     switch (game?.kind) {
-      case 'game-initializing':
+      case 'initializing':
       case 'game-initialized':
-      case 'game-rolling-for-start':
-      case 'game-playing-moving':
+      case 'rolling-for-start':
+      case 'playing-moving':
         break
-      case 'game-playing-rolling':
-        const _game = game as GamePlayingRolling
+      case 'playing-rolling':
+        const _game = game as NodotsGamePlayingRolling
         switchDice(_game)
     }
   }
 
   switch (game?.kind) {
-    case 'game-initializing':
+    case 'initializing':
     case 'game-initialized':
-    case 'game-rolling-for-start':
-    case 'game-playing-moving':
+    case 'rolling-for-start':
+    case 'playing-moving':
       return <></>
-    case 'game-playing-rolling':
+    case 'playing-rolling':
       return <NodotsDiceSwitcherComponent color={color} />
   }
 }

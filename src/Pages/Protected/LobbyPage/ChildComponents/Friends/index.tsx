@@ -1,9 +1,13 @@
 import { Card, CardContent, CardHeader } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import PlayerTable from './PlayerTable'
+import { NodotsPlayerActive } from '../../../../../../nodots_modules/backgammon-types'
 
-const Friends = () => {
-  const { t } = useTranslation()
+interface Props {
+  player: NodotsPlayerActive
+}
+
+const Friends = ({ player }: Props) => {
   return <>FriendsStub</>
   // return (
   //   <Card

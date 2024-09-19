@@ -1,17 +1,32 @@
-import { Player, PlayerReady } from '../../../nodots_modules/backgammon-types'
+import {
+  NodotsPlayerInitializing,
+  NodotsPlayerReady,
+  NodotsPlayersActive,
+  NodotsPlayersInitializing,
+} from '../../../nodots_modules/backgammon-types'
 import { apiUrl } from '../../App'
 
-export const getPlayers = async (): Promise<Player[]> => {
+export const getPlayers = async (): Promise<
+  NodotsPlayersInitializing | NodotsPlayerReady | NodotsPlayersActive
+> => {
   const result = await fetch(`${apiUrl}/player`)
   return result.json()
 }
 
-export const getPlayerById = async (id: string): Promise<Player> => {
+export const getPlayerById = async (
+  id: string
+): Promise<
+  NodotsPlayersInitializing | NodotsPlayerReady | NodotsPlayersActive
+> => {
   const result = await fetch(`${apiUrl}/player/${id}`)
   return result.json()
 }
 
-export const getPlayerBySub = async (sub: string): Promise<Player> => {
+export const getPlayerBySub = async (
+  sub: string
+): Promise<
+  NodotsPlayersInitializing | NodotsPlayerReady | NodotsPlayersActive
+> => {
   console.log('[playerHelpers] getPlayerBySub sub:', sub)
   const [source, externalId] = sub.split('|')
   const endpoint = `${apiUrl}/player/sub/${source}/${externalId}`
@@ -21,7 +36,23 @@ export const getPlayerBySub = async (sub: string): Promise<Player> => {
   return player
 }
 
-export const addPlayer = async (player: Player): Promise<Player> => {
+export const togglePlayerSeekingGame = async (
+  player: NodotsPlayerReady
+): Promise<NodotsPlayerReady> => {
+  console.log('[playerHelpers] togglePlayerSeekingGame player:', player)
+  const result = await fetch(`${apiUrl}/player/seeking-game/${player.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ seekingGame: player.isSeekingGame }),
+  })
+  return result.json()
+}
+
+export const addPlayer = async (
+  player: NodotsPlayerInitializing
+): Promise<NodotsPlayerReady> => {
   const result = await fetch(`${apiUrl}/player`, {
     method: 'POST',
     headers: {

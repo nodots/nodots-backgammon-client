@@ -1,18 +1,22 @@
 import { GameActionTypes, GameActions } from './GameContextActions'
 import {
-  GamePlayingMoving,
-  GamePlayingRolling,
-  GameReady,
-  GameRollingForStart,
+  NodotsGamePlayingMoving,
+  NodotsGamePlayingRolling,
+  NodotsGameReady,
+  NodotsGameRollingForStart,
 } from '../../../nodots_modules/backgammon-types'
 import { startGame, StartGamePayload } from './GameContextHelpers'
 
 export type State = {
-  game: GameReady | GameRollingForStart | GamePlayingMoving | GamePlayingRolling
+  game:
+    | NodotsGameReady
+    | NodotsGameRollingForStart
+    | NodotsGamePlayingMoving
+    | NodotsGamePlayingRolling
 }
 
 export const initialState: State = {
-  game: {} as GameRollingForStart,
+  game: {} as NodotsGameRollingForStart,
 }
 
 export function reducer(state: State, action: GameActions) {

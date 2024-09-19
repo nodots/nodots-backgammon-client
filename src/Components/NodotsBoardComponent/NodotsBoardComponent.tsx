@@ -1,14 +1,14 @@
 import { Paper } from '@mui/material'
 import {
-  GamePlayingMoving,
-  GamePlayingRolling,
-  GameReady,
-  GameRollingForStart,
+  NodotsGamePlayingMoving,
+  NodotsGamePlayingRolling,
+  NodotsGameReady,
+  NodotsGameRollingForStart,
   NodotsColor,
   NodotsGame,
   NodotsGameActive,
-  Player,
-  PlayerPlaying,
+  NodotsPlayer,
+  NodotsPlayerPlaying,
 } from '../../../nodots_modules/backgammon-types/index'
 import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 import { NodotsBoard } from './NodotsBoard'
@@ -18,7 +18,7 @@ import NodotsOffComponent from './NodotsOffComponent/NodotsOffComponent'
 
 interface Props {
   game: NodotsGame
-  player: Player
+  player: NodotsPlayer
 }
 
 export const NodotsBoardComponent = ({ game, player }: Props) => {

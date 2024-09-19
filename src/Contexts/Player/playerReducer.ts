@@ -1,13 +1,13 @@
-import { Player } from '../../../nodots_modules/backgammon-types'
+import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
 
 export type PlayerState = {
-  player: Player
+  player: NodotsPlayer
 }
 
 export const initialPlayerState: PlayerState = {
   player: {
     id: '',
-    kind: 'player-initializing',
+    kind: 'initializing',
     email: '',
     source: '',
     externalId: '',

@@ -3,14 +3,14 @@ import { Chip, SxProps, useTheme } from '@mui/material'
 import {
   NodotsColor,
   NodotsGame,
-  Player,
-  PlayerPlaying,
-  PlayerReady,
+  NodotsPlayer,
+  NodotsPlayerPlaying,
+  NodotsPlayerReady,
 } from '../../../../nodots_modules/backgammon-types'
 
 interface Props {
   game: NodotsGame
-  player: PlayerPlaying | PlayerReady
+  player: NodotsPlayerPlaying | NodotsPlayerReady
 }
 
 function NodotsPipCountComponent({ game, player }: Props) {

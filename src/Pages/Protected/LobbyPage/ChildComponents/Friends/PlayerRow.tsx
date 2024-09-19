@@ -1,7 +1,7 @@
 import { TableRow, TableCell, Avatar, Button } from '@mui/material'
 import {
-  Player,
-  PlayerReady,
+  NodotsPlayer,
+  NodotsPlayerReady,
 } from '../../../../../../nodots_modules/backgammon-types'
 import PlayerStatus from './PlayerStatus'
 import { PlayerAction } from './PlayerAction'
@@ -10,9 +10,9 @@ import { GameActionTypes } from '../../../../../Contexts/Game/GameContextActions
 import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
 
 interface Props {
-  player: PlayerReady
-  onInvite?: (player: Player) => void
-  onChallenge?: (player: Player) => void
+  player: NodotsPlayerReady
+  onInvite?: (player: NodotsPlayer) => void
+  onChallenge?: (player: NodotsPlayer) => void
 }
 
 const PlayerRow = ({ player }: Props) => {
