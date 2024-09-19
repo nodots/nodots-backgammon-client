@@ -6,12 +6,12 @@ import {
   Longitude,
   NodotsColor,
   NodotsGame,
-  NodotsPlayer,
+  Player,
 } from '../../../../nodots_modules/backgammon-types'
 
 interface Props {
   game: NodotsGame
-  player: NodotsPlayer
+  player: Player
   longitude: Longitude
 }
 

@@ -1,7 +1,7 @@
 import { Table, TableBody } from '@mui/material'
 import PlayerRow from './PlayerRow'
 import {
-  NodotsPlayer,
+  Player,
   PlayerReady,
 } from '../../../../../../nodots_modules/backgammon-types'
 import { useState, useEffect } from 'react'
@@ -11,16 +11,16 @@ import { useNodotsPlayer } from '../../../../../Contexts/Player/useNodotsPlayer'
 import { getPlayers } from '../../../../../Contexts/Player/playerHelpers'
 
 interface Props {
-  player: NodotsPlayer
+  player: Player
 }
 
 const PlayerTable = ({ player }: Props) => {
-  const [opponents, setOpponents] = useState<NodotsPlayer[]>([])
+  const [opponents, setOpponents] = useState<Player[]>([])
 
   useEffect(() => {
     const interval = setInterval(() => {
       opponents.length === 0 &&
-        getPlayers()?.then((opponents: NodotsPlayer[]) => {
+        getPlayers()?.then((opponents: Player[]) => {
           opponents && opponents.length > 0 ? setOpponents(opponents) : null
         })
     }, 1000)

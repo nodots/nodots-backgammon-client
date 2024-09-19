@@ -1,11 +1,8 @@
 import { Alert, AlertColor } from '@mui/material'
 import { useEffect, useState } from 'react'
-import {
-  NodotsGame,
-  NodotsPlayer,
-} from '../../../nodots_modules/backgammon-types'
+import { NodotsGame, Player } from '../../../nodots_modules/backgammon-types'
 
-const getOpponent = (game: NodotsGame, player: NodotsPlayer): NodotsPlayer => {
+const getOpponent = (game: NodotsGame, player: Player): Player => {
   if (game && game.players) {
     return game.players.black.id === player.id
       ? game.players.white

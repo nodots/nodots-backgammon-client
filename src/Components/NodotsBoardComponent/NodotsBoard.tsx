@@ -3,7 +3,7 @@ import { QuadrantPoints } from '.'
 import {
   NodotsColor,
   NodotsGame,
-  NodotsPlayer,
+  Player,
 } from '../../../nodots_modules/backgammon-types'
 import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
 import { Loading } from '../Loading'
@@ -16,7 +16,7 @@ import { UTBoardTheme } from '../../theme/AppTheme' // Adjust the import path as
 
 interface Props {
   game: NodotsGame
-  player: NodotsPlayer
+  player: Player
 }
 export const NodotsBoard = ({ game, player }: Props) => {
   return (

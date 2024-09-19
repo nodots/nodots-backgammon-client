@@ -1,6 +1,6 @@
 import { TableRow, TableCell, Avatar, Button } from '@mui/material'
 import {
-  NodotsPlayer,
+  Player,
   PlayerReady,
 } from '../../../../../../nodots_modules/backgammon-types'
 import PlayerStatus from './PlayerStatus'
@@ -11,8 +11,8 @@ import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
 
 interface Props {
   player: PlayerReady
-  onInvite?: (player: NodotsPlayer) => void
-  onChallenge?: (player: NodotsPlayer) => void
+  onInvite?: (player: Player) => void
+  onChallenge?: (player: Player) => void
 }
 
 const PlayerRow = ({ player }: Props) => {

@@ -1,28 +1,14 @@
-import {
-  NodotsPlayer,
-  PlayerInitializing,
-} from '../../../nodots_modules/backgammon-types'
+import { Player } from '../../../nodots_modules/backgammon-types'
 
 // Define action types as an enum to ensure consistency and prevent typos
-export enum PlayerActionType {
+export enum PlayerActionTypes {
   SET_PLAYER = 'SET_PLAYER',
 }
 
 // Define type for each action type to enforce type safety
 interface SetPlayerAction {
-  type: PlayerActionType.SET_PLAYER
-  player: NodotsPlayer | PlayerInitializing
+  type: PlayerActionTypes.SET_PLAYER
+  payload: Player
 }
 
-export interface PlayerState {
-  player: NodotsPlayer | PlayerInitializing
-}
-
-export type PlayerAction = SetPlayerAction
-
-export const setPlayer = (player: NodotsPlayer): SetPlayerAction => {
-  return {
-    type: PlayerActionType.SET_PLAYER,
-    player,
-  }
-}
+export type PlayerActions = SetPlayerAction

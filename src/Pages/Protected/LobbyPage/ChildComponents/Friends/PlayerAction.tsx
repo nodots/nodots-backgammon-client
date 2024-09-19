@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNodotsPlayer } from '../../../../../Contexts/Player/useNodotsPlayer'
 import {
   GameRollingForStart,
-  NodotsPlayer,
+  Player,
 } from '../../../../../../nodots_modules/backgammon-types'
 // import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
 import { apiUrl } from '../../../../../App'
@@ -12,8 +12,8 @@ import { GameActionTypes } from '../../../../../Contexts/Game/GameContextActions
 import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
 
 interface Props {
-  player: NodotsPlayer
-  opponent: NodotsPlayer
+  player: Player
+  opponent: Player
   startGame: (playerId: string, opponentId: string) => void
 }
 

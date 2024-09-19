@@ -6,7 +6,7 @@ import {
   GameReady,
   GameRollingForStart,
   NodotsGame,
-  NodotsPlayer,
+  Player,
   PlayerPlaying,
 } from '../../../../nodots_modules/backgammon-types'
 import NodotsBoardComponent from '../../../Components/NodotsBoardComponent'

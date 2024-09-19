@@ -7,7 +7,7 @@ import {
   NodotsColor,
   NodotsGame,
   NodotsGameActive,
-  NodotsPlayer,
+  Player,
   PlayerPlaying,
 } from '../../../nodots_modules/backgammon-types/index'
 import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
@@ -18,7 +18,7 @@ import NodotsOffComponent from './NodotsOffComponent/NodotsOffComponent'
 
 interface Props {
   game: NodotsGame
-  player: NodotsPlayer
+  player: Player
 }
 
 export const NodotsBoardComponent = ({ game, player }: Props) => {

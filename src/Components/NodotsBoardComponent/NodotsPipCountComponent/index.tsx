@@ -3,7 +3,7 @@ import { Chip, SxProps, useTheme } from '@mui/material'
 import {
   NodotsColor,
   NodotsGame,
-  NodotsPlayer,
+  Player,
   PlayerPlaying,
   PlayerReady,
 } from '../../../../nodots_modules/backgammon-types'

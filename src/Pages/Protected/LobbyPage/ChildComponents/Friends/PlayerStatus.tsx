@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { NodotsPlayer } from '../../../../../../nodots_modules/backgammon-types'
+import { Player } from '../../../../../../nodots_modules/backgammon-types'
 
 interface Props {
-  player: NodotsPlayer
+  player: Player
 }
 const PlayerStatus = ({ player }: Props) => {
   const { t } = useTranslation()

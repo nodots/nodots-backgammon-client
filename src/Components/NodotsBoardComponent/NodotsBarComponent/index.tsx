@@ -1,13 +1,10 @@
-import {
-  NodotsGame,
-  NodotsPlayer,
-} from '../../../../nodots_modules/backgammon-types'
+import { NodotsGame, Player } from '../../../../nodots_modules/backgammon-types'
 import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
 import { NodotsBarComponent } from './NodotsBarComponent'
 
 interface Props {
   game: NodotsGame
-  player: NodotsPlayer
+  player: Player
 }
 
 const NodotsBar = ({ game, player }: Props) => {

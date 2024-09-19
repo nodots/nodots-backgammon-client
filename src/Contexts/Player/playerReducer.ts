@@ -1,17 +1,24 @@
-import { PlayerAction, PlayerActionType, PlayerState } from './playerActions'
+import { Player } from '../../../nodots_modules/backgammon-types'
 
-export const playerReducer = (
-  state: PlayerState,
-  action: PlayerAction
-): PlayerState => {
-  const { player, type } = action
+export type PlayerState = {
+  player: Player
+}
+
+export const initialPlayerState: PlayerState = {
+  player: {
+    id: '',
+    kind: 'player-initializing',
+    email: '',
+    source: '',
+    externalId: '',
+    isLoggedIn: false,
+  },
+}
+
+export function playerReducer(state: PlayerState, action: any): PlayerState {
   switch (action.type) {
-    case PlayerActionType.SET_PLAYER:
-      console.log('[playerReducer] SET_PLAYER player:', player)
-      return {
-        ...state,
-        player,
-      }
+    case 'SET_PLAYER':
+      return { ...state, player: action.payload }
     default:
       return state
   }
