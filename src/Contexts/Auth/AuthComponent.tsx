@@ -1,20 +1,24 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Loading } from '../../Components/Loading'
-import { PlayerActionTypes } from '../../Contexts/Player/playerActions'
 import { useNavigate } from 'react-router-dom'
-import { NodotsPlayer } from '../../../nodots_modules/backgammon-types'
-import { LobbyPage } from '../../Pages/Protected/LobbyPage'
-import { addPlayer, getPlayerBySub } from '../Player/playerHelpers'
-import { useEffect, useState } from 'react'
-import { usePlayerContext } from '../Player/usePlayerContext'
+import { useEffect } from 'react'
 
 function AuthComponent() {
   const { user, isLoading } = useAuth0()
   const navigate = useNavigate()
 
   useEffect(() => {
-    user && navigate('/bg/lobby')
+    const interval = setInterval(() => {
+      const ts = new Date().toISOString()
+      console.log(`${ts} [AuthComponent] user:`, user)
+      user && navigate('/bg/lobby')
+    }, 1000)
+
+    return () => clearInterval(interval)
   }, [user])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 }
 
 export default AuthComponent

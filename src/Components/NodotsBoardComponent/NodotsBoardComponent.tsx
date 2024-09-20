@@ -1,6 +1,6 @@
 import { Paper } from '@mui/material'
 import {
-  NodotsGamePlayingMoving,
+  NodotsGameMoving,
   NodotsGamePlayingRolling,
   NodotsGameReady,
   NodotsGameRollingForStart,

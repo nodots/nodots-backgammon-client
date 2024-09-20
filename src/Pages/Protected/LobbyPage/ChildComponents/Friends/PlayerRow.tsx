@@ -1,51 +1,44 @@
 import { TableRow, TableCell, Avatar, Button } from '@mui/material'
-import {
-  NodotsPlayer,
-  NodotsPlayerReady,
-} from '../../../../../../nodots_modules/backgammon-types'
+import { NodotsPlayerActive } from '../../../../../../nodots_modules/backgammon-types'
 import PlayerStatus from './PlayerStatus'
 import { PlayerAction } from './PlayerAction'
-import { apiUrl } from '../../../../../App'
-import { GameActionTypes } from '../../../../../Contexts/Game/GameContextActions'
-import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
+import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
 
 interface Props {
-  player: NodotsPlayerReady
-  onInvite?: (player: NodotsPlayer) => void
-  onChallenge?: (player: NodotsPlayer) => void
+  opponent: NodotsPlayerActive
 }
 
-const PlayerRow = ({ player }: Props) => {
-  const { gameDispatch } = useNodotsGame()
-  const startGame = async (playerId: string, opponentId: string) => {
-    const response = await fetch(`${apiUrl}/game`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([playerId, opponentId]),
-    }).catch((e) => console.error(e))
-    !response
-      ? console.error('Failed to start game')
-      : response.ok
-      ? response.json().then((game) => {
-          gameDispatch({ type: GameActionTypes.SET_GAME, payload: game })
-        })
-      : console.error('Failed to start game')
-  }
+const PlayerRow = ({ opponent }: Props) => {
+  const { state, dispatch } = usePlayerContext()
+  // const startGame = async (playerId: string, opponentId: string) => {
+  //   const response = await fetch(`${apiUrl}/game`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify([playerId, opponentId]),
+  //   }).catch((e) => console.error(e))
+  //   !response
+  //     ? console.error('Failed to start game')
+  //     : response.ok
+  //     ? response.json().then((game) => {
+  //         gameDispatch({ type: GameActionTypes.SET_GAME, payload: game })
+  //       })
+  //     : console.error('Failed to start game')
+  // }
   return (
     <TableRow>
       <TableCell>
         <Avatar
-          src={player.preferences?.avatar}
-          alt={player.preferences?.username}
+          src={opponent.preferences?.avatar}
+          alt={opponent.preferences?.username}
         />
       </TableCell>
       <TableCell>
-        <PlayerStatus player={player} />
+        <PlayerStatus player={opponent} />
       </TableCell>
       <TableCell>
-        <PlayerAction startGame={startGame} opponent={player} player={player} />
+        <PlayerAction opponent={opponent} />
       </TableCell>
     </TableRow>
   )

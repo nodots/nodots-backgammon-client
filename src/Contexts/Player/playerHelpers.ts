@@ -1,14 +1,15 @@
+import { UserInfoResponse as Auth0User } from 'auth0'
 import {
+  NodotsPlayerActive,
   NodotsPlayerInitializing,
   NodotsPlayerReady,
   NodotsPlayersActive,
   NodotsPlayersInitializing,
 } from '../../../nodots_modules/backgammon-types'
 import { apiUrl } from '../../App'
+import { PlayerActions, PlayerActionTypes } from './playerActions'
 
-export const getPlayers = async (): Promise<
-  NodotsPlayersInitializing | NodotsPlayerReady | NodotsPlayersActive
-> => {
+export const getPlayers = async (): Promise<NodotsPlayerActive[]> => {
   const result = await fetch(`${apiUrl}/player`)
   return result.json()
 }
@@ -22,18 +23,15 @@ export const getPlayerById = async (
   return result.json()
 }
 
-export const getPlayerBySub = async (
-  sub: string
-): Promise<
-  NodotsPlayersInitializing | NodotsPlayerReady | NodotsPlayersActive
-> => {
+export const getPlayerBySub = async (sub: string) => {
   console.log('[playerHelpers] getPlayerBySub sub:', sub)
   const [source, externalId] = sub.split('|')
   const endpoint = `${apiUrl}/player/sub/${source}/${externalId}`
   const result = await fetch(endpoint)
-  const player = await result.json()
-  console.log('[playerHelpers] getPlayerBySub player:', player)
-  return player
+  if (result.status === 404) {
+    return null
+  }
+  return result.json()
 }
 
 export const togglePlayerSeekingGame = async (
@@ -48,6 +46,25 @@ export const togglePlayerSeekingGame = async (
     body: JSON.stringify({ seekingGame: player.isSeekingGame }),
   })
   return result.json()
+}
+
+export const createPlayerFromAuth0User = async (
+  user: Auth0User
+): Promise<NodotsPlayerActive> => {
+  console.log('[playerHelpers] createPlayerFromAuth0User user:', user)
+  const result = await fetch(`${apiUrl}/player`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+  const playerReady = (await result.json()) as NodotsPlayerReady
+  console.log(
+    '[playerHelpers] createPlayerFromAuth0User playerReady:',
+    playerReady
+  )
+  return playerReady
 }
 
 export const addPlayer = async (

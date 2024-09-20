@@ -1,29 +1,16 @@
 import { Button } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useNodotsPlayer } from '../../../../../Contexts/Player/useNodotsPlayer'
-import {
-  NodotsGameRollingForStart,
-  NodotsPlayer,
-} from '../../../../../../nodots_modules/backgammon-types'
-// import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
-import { apiUrl } from '../../../../../App'
-import { GameActionTypes } from '../../../../../Contexts/Game/GameContextActions'
-import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
-
+import { NodotsPlayerActive } from '../../../../../../nodots_modules/backgammon-types'
+import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
 interface Props {
-  player: NodotsPlayer
-  opponent: NodotsPlayer
-  startGame: (playerId: string, opponentId: string) => void
+  opponent: NodotsPlayerActive
 }
 
-export const PlayerAction = ({ player, opponent, startGame }: Props) => {
+export const PlayerAction = ({ opponent }: Props) => {
   const { t } = useTranslation()
-  const { gameState, gameDispatch } = useNodotsGame()
-  const { playerState, playerDispatch } = useNodotsPlayer()
-
+  const { state, dispatch } = usePlayerContext()
   const handleClick = async (e: React.MouseEvent) => {
-    startGame(player.id, opponent.id)
+    console.log('START GAME')
   }
   return <Button onClick={handleClick}>{t('NDBG_START_GAME')}</Button>
 }

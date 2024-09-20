@@ -1,35 +1,23 @@
 import { Table, TableBody } from '@mui/material'
 import PlayerRow from './PlayerRow'
-import {
-  NodotsPlayer,
-  NodotsPlayerReady,
-} from '../../../../../../nodots_modules/backgammon-types'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 // import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
 import { Loading } from '../../../../../Components/Loading'
-import { useNodotsPlayer } from '../../../../../Contexts/Player/useNodotsPlayer'
 import { getPlayers } from '../../../../../Contexts/Player/playerHelpers'
+import {
+  NodotsPlayerActive,
+  NodotsPlayerInitializing,
+} from '../../../../../../nodots_modules/backgammon-types'
+import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
 
-interface Props {
-  player: NodotsPlayer
-}
-
-const PlayerTable = ({ player }: Props) => {
-  const [opponents, setOpponents] = useState<NodotsPlayer[]>([])
-
+const PlayerTable = () => {
+  const { state, dispatch } = usePlayerContext()
+  const [opponents, setOpponents] = useState<NodotsPlayerActive[]>([])
   useEffect(() => {
-    const interval = setInterval(() => {
-      opponents.length === 0 &&
-        getPlayers()?.then((opponents: NodotsPlayer[]) => {
-          opponents && opponents.length > 0 ? setOpponents(opponents) : null
-        })
-    }, 1000)
-
-    return () => {
-      clearInterval(interval)
-    }
+    getPlayers().then((players) => {
+      setOpponents(players)
+    })
   }, [])
-
   return opponents?.length > 0 ? (
     <Table>
       <TableBody>
@@ -37,8 +25,8 @@ const PlayerTable = ({ player }: Props) => {
           switch (opponent.kind) {
             case 'ready':
               return (
-                player.id != opponent.id && (
-                  <PlayerRow key={opponent.id} player={opponent} />
+                state.player.id != opponent.id && (
+                  <PlayerRow key={opponent.id} opponent={opponent} />
                 )
               )
             case 'playing':

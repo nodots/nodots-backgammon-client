@@ -1,7 +1,7 @@
 import { Container, Paper } from '@mui/material'
 import { NodotsAppBar } from '../../../Components/NodotsAppBar'
 import {
-  NodotsGamePlayingMoving,
+  NodotsGameMoving,
   NodotsGamePlayingRolling,
   NodotsGameReady,
   NodotsGameRollingForStart,

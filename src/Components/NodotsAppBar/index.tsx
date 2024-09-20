@@ -12,12 +12,9 @@ import { useTranslation } from 'react-i18next'
 import { NodotsPlayerActive } from '../../../nodots_modules/backgammon-types'
 import { usePlayerContext } from '../../Contexts/Player/usePlayerContext'
 
-interface Props {
-  player: NodotsPlayerActive
-}
-
-export const NodotsAppBar = ({ player }: Props) => {
+export const NodotsAppBar = () => {
   const { state, dispatch } = usePlayerContext()
+  const player = state.player as NodotsPlayerActive
   const { logout } = useAuth0()
   const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)

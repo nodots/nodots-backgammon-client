@@ -1,6 +1,6 @@
 import { GameActionTypes, GameActions } from './GameContextActions'
 import {
-  NodotsGamePlayingMoving,
+  NodotsGameMoving,
   NodotsGamePlayingRolling,
   NodotsGameReady,
   NodotsGameRollingForStart,
@@ -11,7 +11,7 @@ export type State = {
   game:
     | NodotsGameReady
     | NodotsGameRollingForStart
-    | NodotsGamePlayingMoving
+    | NodotsGameMoving
     | NodotsGamePlayingRolling
 }
 

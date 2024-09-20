@@ -11,15 +11,12 @@ import { useEffect } from 'react'
 export const SeekingGameToggle = () => {
   const { state, dispatch } = usePlayerContext()
   const { player } = state
-  // const handleChange = async (e: React.ChangeEvent) => {
-  //   dispatch(togglePlayerSeekingGameAction(player, dispatch))
-  // }
 
   useEffect(() => {
     console.log(player)
   }, [])
 
-  return <>SeekingGameToggle Stub</>
+  return <>SeekingGameToggle Stub {state.player.id}</>
 }
 
 // return (

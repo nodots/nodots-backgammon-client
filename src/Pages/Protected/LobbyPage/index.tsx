@@ -5,22 +5,19 @@ import { SeekingGameToggle } from './ChildComponents/SeekingGameToggle'
 import { usePlayerContext } from '../../../Contexts/Player/usePlayerContext'
 import { useEffect, useState } from 'react'
 import { NodotsPlayerActive } from '../../../../nodots_modules/backgammon-types'
+import { Loading } from '../../../Components/Loading'
 
 export const LobbyPage = () => {
   const { state, dispatch } = usePlayerContext()
-  const [activePlayer, setActivePlayer] = useState<NodotsPlayerActive>(
-    state.player
-  )
-  useEffect(() => {
-    !activePlayer && setActivePlayer(state.player)
-  }, [dispatch])
-
-  return (
+  console.log('[LobbyPage] state.player:', state.player)
+  return !state.player ? (
+    <Loading message="Lobby Page Waiting for Player" />
+  ) : (
     <>
-      <NodotsAppBar player={activePlayer} />
+      <NodotsAppBar />
       <Container>
         <SeekingGameToggle />
-        <Friends player={state.player} />
+        <Friends />
       </Container>
     </>
   )

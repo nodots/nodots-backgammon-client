@@ -4,7 +4,7 @@ import { PlayerState } from './playerReducer'
 
 export type PlayerContextType = {
   state: PlayerState
-  dispatch: React.Dispatch<any>
+  dispatch: React.Dispatch<PlayerActions>
 }
 
 export const PlayerContext = createContext<PlayerContextType | undefined>(

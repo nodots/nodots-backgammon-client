@@ -1,3 +1,4 @@
+import { UserInfoResponse as Auth0User } from 'auth0'
 import {
   NodotsPlayerActive,
   NodotsPlayerReady,
@@ -6,11 +7,16 @@ import { togglePlayerSeekingGame } from './playerHelpers'
 
 // Define action types as an enum to ensure consistency and prevent typos
 export enum PlayerActionTypes {
+  CREATE_PLAYER = 'CREATE_PLAYER',
   SET_PLAYER = 'SET_PLAYER',
   TOGGLE_PLAYER_SEEKING_GAME = 'TOGGLE_PLAYER_SEEKING_GAME',
 }
 
-// Define type for each action type to enforce type safety
+interface CreatePlayerAction {
+  type: PlayerActionTypes.CREATE_PLAYER
+  payload: { user: Auth0User }
+}
+
 interface SetPlayerAction {
   type: PlayerActionTypes.SET_PLAYER
   payload: NodotsPlayerActive
@@ -21,7 +27,10 @@ interface TogglePlayerSeekingGameAction {
   payload: { seekingGame: boolean }
 }
 
-export type PlayerActions = SetPlayerAction | TogglePlayerSeekingGameAction
+export type PlayerActions =
+  | CreatePlayerAction
+  | SetPlayerAction
+  | TogglePlayerSeekingGameAction
 
 export const togglePlayerSeekingGameAction = async (
   player: NodotsPlayerReady,
