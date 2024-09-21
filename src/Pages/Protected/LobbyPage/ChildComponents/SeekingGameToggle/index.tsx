@@ -1,39 +1,69 @@
 import { FormControlLabel, FormGroup, Switch, useTheme } from '@mui/material'
 import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
-import { togglePlayerSeekingGameAction } from '../../../../../Contexts/Player/playerActions'
-import { Loading } from '../../../../../Components/Loading'
 import {
-  NodotsPlayerActive,
-  NodotsPlayerReady,
-} from '../../../../../../nodots_modules/backgammon-types'
-import { useEffect } from 'react'
+  PlayerActions,
+  PlayerActionTypes,
+} from '../../../../../Contexts/Player/playerActions'
+import { Loading } from '../../../../../Components/Loading'
+import { togglePlayerSeekingGame } from '../../../../../Contexts/Player/playerHelpers'
+import { NodotsPlayerReady } from '../../../../../../nodots_modules/backgammon-types'
+import { useState } from 'react'
+
+const setSeekingGameAction = async (
+  player: NodotsPlayerReady,
+  dispatch: React.Dispatch<PlayerActions>
+): Promise<NodotsPlayerReady> => {
+  console.log('[SeekingGameToggle] setSeekingGame player:', player)
+  const updatedPlayer = await togglePlayerSeekingGame(player)
+  console.log(
+    '[SeekingGameToggle] setSeekingGame updatedPlayer:',
+    updatedPlayer
+  )
+  dispatch({
+    type: PlayerActionTypes.TOGGLE_PLAYER_SEEKING_GAME,
+    payload: { seekingGame: updatedPlayer.isSeekingGame },
+  })
+  return updatedPlayer
+}
 
 export const SeekingGameToggle = () => {
   const { state, dispatch } = usePlayerContext()
   const { player } = state
+  const [isSeekingGame, setIsSeekingGame] = useState<boolean>(
+    player.isSeekingGame || false
+  )
 
-  useEffect(() => {
-    console.log(player)
-  }, [])
+  const handleChange = async () => {
+    switch (player.kind) {
+      case 'initializing':
+      case 'playing':
+        break
+      case 'ready':
+        console.log('[SeekingGameToggle] handleChange player:', player)
+        const updatedPlayer = await setSeekingGameAction(player, dispatch)
+        setIsSeekingGame(updatedPlayer.isSeekingGame)
+        break
+    }
+  }
 
-  return <>SeekingGameToggle Stub {state.player.id}</>
+  switch (player.kind) {
+    case 'initializing':
+      return <Loading message="Seeking Game Toggle Loading" />
+    case 'playing':
+      return <div>Error: {player.email}</div>
+    case 'ready':
+      return (
+        <FormGroup
+          sx={{
+            width: '24vw',
+          }}
+        >
+          <FormControlLabel
+            control={<Switch checked={isSeekingGame} onChange={handleChange} />}
+            label={'Seeking Game'}
+            labelPlacement="end"
+          />
+        </FormGroup>
+      )
+  }
 }
-
-// return (
-//   <FormGroup
-//     sx={{
-//       width: '24vw',
-//     }}
-//   >
-//     <FormControlLabel
-//       control={
-//         <Switch
-//           checked={true}
-//           onChange={() => console.log('not implemented')}
-//         />
-//       }
-//       label={`PLACEHOLDER`}
-//       labelPlacement="end"
-//     />
-//   </FormGroup>
-// )

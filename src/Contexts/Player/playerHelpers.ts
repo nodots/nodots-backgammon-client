@@ -37,15 +37,18 @@ export const getPlayerBySub = async (sub: string) => {
 export const togglePlayerSeekingGame = async (
   player: NodotsPlayerReady
 ): Promise<NodotsPlayerReady> => {
-  console.log('[playerHelpers] togglePlayerSeekingGame player:', player)
+  console.log(
+    '[playerHelpers] togglePlayerSeekingGame player:',
+    player.isSeekingGame
+  )
   const result = await fetch(`${apiUrl}/player/seeking-game/${player.id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ seekingGame: player.isSeekingGame }),
   })
-  return result.json()
+  const updatedPlayer = (await result.json()) as NodotsPlayerReady
+  return updatedPlayer
 }
 
 export const createPlayerFromAuth0User = async (
