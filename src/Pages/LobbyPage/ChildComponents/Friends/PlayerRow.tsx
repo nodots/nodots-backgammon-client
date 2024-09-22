@@ -1,8 +1,8 @@
 import { TableRow, TableCell, Avatar, Button } from '@mui/material'
-import { NodotsPlayerActive } from '../../../../../../nodots_modules/backgammon-types'
+import { NodotsPlayerActive } from '../../../../../nodots_modules/backgammon-types'
 import PlayerStatus from './PlayerStatus'
 import { PlayerAction } from './PlayerAction'
-import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
+import { usePlayerContext } from '../../../../Contexts/Player/usePlayerContext'
 
 interface Props {
   opponent: NodotsPlayerActive

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { NodotsPlayer } from '../../../../../../nodots_modules/backgammon-types'
+import { NodotsPlayer } from '../../../../../nodots_modules/backgammon-types'
 
 interface Props {
   player: NodotsPlayer

@@ -11,7 +11,7 @@ import {
 import { generateId } from '../../helpers'
 import { useEffect, useState } from 'react'
 import { start } from 'repl'
-import { Loading } from '../../Loading'
+import { Loading } from '../../utils/Loading'
 
 // Why is this here? I think that Quadrant is purely a UI concept.
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]

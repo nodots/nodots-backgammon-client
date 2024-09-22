@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { NodotsPlayerActive } from '../../../../../../nodots_modules/backgammon-types'
-import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
+import { NodotsPlayerActive } from '../../../../../nodots_modules/backgammon-types'
+import { usePlayerContext } from '../../../../Contexts/Player/usePlayerContext'
 interface Props {
   opponent: NodotsPlayerActive
 }

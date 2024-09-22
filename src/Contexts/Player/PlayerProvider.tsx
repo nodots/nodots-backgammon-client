@@ -1,7 +1,7 @@
 // PlayerProvider.tsx
 import { ReactNode, useContext, useEffect, useReducer } from 'react'
 import { playerReducer, PlayerState } from './playerReducer'
-import { Loading } from '../../Components/Loading'
+import { Loading } from '../../Components/utils/Loading'
 import { PlayerContext } from './PlayerContext'
 import { useAuth0 } from '@auth0/auth0-react'
 import { createPlayerFromAuth0User, getPlayerBySub } from './playerHelpers'

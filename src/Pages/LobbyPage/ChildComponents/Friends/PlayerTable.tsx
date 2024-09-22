@@ -2,13 +2,13 @@ import { Table, TableBody } from '@mui/material'
 import PlayerRow from './PlayerRow'
 import { useEffect, useState } from 'react'
 // import { useNodotsGame } from '../../../../../Contexts/Game/useNodotsGame'
-import { Loading } from '../../../../../Components/Loading'
-import { getPlayers } from '../../../../../Contexts/Player/playerHelpers'
+import { Loading } from '../../../../Components/utils/Loading'
+import { getPlayers } from '../../../../Contexts/Player/playerHelpers'
 import {
   NodotsPlayerActive,
   NodotsPlayerInitializing,
-} from '../../../../../../nodots_modules/backgammon-types'
-import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
+} from '../../../../../nodots_modules/backgammon-types'
+import { usePlayerContext } from '../../../../Contexts/Player/usePlayerContext'
 
 const PlayerTable = () => {
   const { state, dispatch } = usePlayerContext()

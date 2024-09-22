@@ -1,13 +1,11 @@
 import { Container } from '@mui/material'
-import { NodotsAppBar } from '../../../Components/NodotsAppBar'
+import { NodotsAppBar } from '../../Components/NodotsAppBar'
 import Friends from './ChildComponents/Friends'
 import { SeekingGameToggle } from './ChildComponents/SeekingGameToggle'
-import { usePlayerContext } from '../../../Contexts/Player/usePlayerContext'
-import { useEffect, useState } from 'react'
-import { NodotsPlayerActive } from '../../../../nodots_modules/backgammon-types'
-import { Loading } from '../../../Components/Loading'
+import { usePlayerContext } from '../../Contexts/Player/usePlayerContext'
+import { Loading } from '../../Components/utils/Loading'
 
-export const LobbyPage = () => {
+const LobbyPage = () => {
   const { state, dispatch } = usePlayerContext()
   console.log('[LobbyPage] state.player:', state.player)
   return !state.player ? (
@@ -22,3 +20,5 @@ export const LobbyPage = () => {
     </>
   )
 }
+
+export default LobbyPage

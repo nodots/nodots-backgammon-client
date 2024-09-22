@@ -1,12 +1,12 @@
 import { FormControlLabel, FormGroup, Switch, useTheme } from '@mui/material'
-import { usePlayerContext } from '../../../../../Contexts/Player/usePlayerContext'
+import { usePlayerContext } from '../../../../Contexts/Player/usePlayerContext'
 import {
   PlayerActions,
   PlayerActionTypes,
-} from '../../../../../Contexts/Player/playerActions'
-import { Loading } from '../../../../../Components/Loading'
-import { togglePlayerSeekingGame } from '../../../../../Contexts/Player/playerHelpers'
-import { NodotsPlayerReady } from '../../../../../../nodots_modules/backgammon-types'
+} from '../../../../Contexts/Player/playerActions'
+import { Loading } from '../../../../Components/utils/Loading'
+import { togglePlayerSeekingGame } from '../../../../Contexts/Player/playerHelpers'
+import { NodotsPlayerReady } from '../../../../../nodots_modules/backgammon-types'
 import { useState } from 'react'
 
 const setSeekingGameAction = async (

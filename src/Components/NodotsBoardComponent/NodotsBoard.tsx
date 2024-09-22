@@ -6,7 +6,7 @@ import {
   NodotsPlayer,
 } from '../../../nodots_modules/backgammon-types'
 import { useNodotsGame } from '../../Contexts/Game/useNodotsGame'
-import { Loading } from '../Loading'
+import { Loading } from '../utils/Loading'
 import NodotsBarComponent from './NodotsBarComponent'
 import NodotsOffComponent from './NodotsOffComponent'
 import NodotsQuadrantComponent from './NodotsQuadrantComponent'

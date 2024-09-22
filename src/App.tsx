@@ -1,38 +1,37 @@
 import { CssBaseline, ThemeProvider } from '@mui/material'
+import { useTranslation, withTranslation } from 'react-i18next'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import AuthComponent from './Contexts/Auth/AuthComponent'
-import GamePage from './Pages/Protected/GamePage'
-import { LobbyPage } from './Pages/Protected/LobbyPage'
-import HomePage from './Pages/Public/HomePage'
-import SignInPage from './Pages/Public/SignInPage'
-import appTheme from './theme/AppTheme'
-import { useTranslation, withTranslation } from 'react-i18next'
-import { ProtectedPages } from './Pages/Protected'
 import PlayerProvider from './Contexts/Player/PlayerProvider'
+import GamePage from './Pages/GamePage'
+import HomePage from './Pages/HomePage'
+import LobbyPage from './Pages/LobbyPage'
+import SignInPage from './Pages/SignInPage'
+import appTheme from './theme/AppTheme'
+import { ProtectedRoutes } from './Components/utils/ProtectedRoutes'
 export const apiUrl = 'http://localhost:3000'
+export const playerHome = '/lobby'
 
 const App = () => {
   const { i18n } = useTranslation()
-  document.body.dir = i18n.dir()
+  document.body.dir = i18n.dir() // Set the direction of the body based on the language
+
   return (
     <ThemeProvider theme={appTheme}>
       <CssBaseline />
       <Router>
         <div className="App">
           <Routes>
+            {/* Auth0 API endpoint */}
             <Route path="/authorize" element={<AuthComponent />} />
+            {/* Public routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/bg" element={<ProtectedPages />} />
-            <Route path="/bg/game/:gameId" element={<GamePage />} />
-            <Route
-              path="/bg/lobby"
-              element={
-                <PlayerProvider>
-                  <LobbyPage />
-                </PlayerProvider>
-              }
-            />
+            {/* Protected routes */}
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/game" element={<GamePage />} />
+              <Route path="/lobby" element={<LobbyPage />} />
+            </Route>
           </Routes>
         </div>
       </Router>
@@ -41,3 +40,16 @@ const App = () => {
 }
 
 export default withTranslation()(App)
+
+{
+  /* <Route path="/bg" element={<ProtectedPages />} />
+            <Route path="/bg/game/:gameId" element={<GamePage />} />
+            <Route
+              path="/bg/lobby"
+              element={
+                <PlayerProvider>
+                  <LobbyPage />
+                </PlayerProvider>
+              }
+            /> */
+}
