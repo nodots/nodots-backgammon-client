@@ -8,6 +8,8 @@ import { Loading } from '../../../../Components/utils/Loading'
 import { togglePlayerSeekingGame } from '../../../../Contexts/Player/playerHelpers'
 import { NodotsPlayerReady } from '../../../../../nodots_modules/backgammon-types'
 import { useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
+import { t } from 'i18next'
 
 const setSeekingGameAction = async (
   player: NodotsPlayerReady,
@@ -27,6 +29,7 @@ const setSeekingGameAction = async (
 }
 
 export const SeekingGameToggle = () => {
+  const { logout, user } = useAuth0()
   const { state, dispatch } = usePlayerContext()
   const { player } = state
   const [isSeekingGame, setIsSeekingGame] = useState<boolean>(
@@ -60,7 +63,7 @@ export const SeekingGameToggle = () => {
         >
           <FormControlLabel
             control={<Switch checked={isSeekingGame} onChange={handleChange} />}
-            label={'Seeking Game'}
+            label={t('NDBG_READY_TO_PLAY')}
             labelPlacement="end"
           />
         </FormGroup>

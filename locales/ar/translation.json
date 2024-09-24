@@ -23,5 +23,8 @@
   "NDBG_FRIENDS": "الأصدقاء",
   "NDBG_LOADING": "جار التحميل...",
   "NDBG_START_GAME": "بدء اللعبة",
-  "NDBG_ONLINE": "على الإنترنت"
+  "NDBG_ONLINE": "على الإنترنت",
+  "NDBG_OFFLINE": "غير متصل",
+  "NDBG_REGISTER_OR_SIGN_IN_TO_PLAY": "سجل أو سجل الدخول للعب",
+  "NDBG_READY_TO_PLAY": "هل أنت جاهز للعب؟"
 }

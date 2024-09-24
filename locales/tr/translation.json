@@ -25,5 +25,8 @@
   "NDBG_LOADING": "Yükleniyor...",
   "NDBG_START_GAME": "Oyunu başlat",
   "NDBG_ONLINE": "Çevrimiçi",
-  "NDBG_OFFLINE": "Çevrimdışı"
+  "NDBG_OFFLINE": "Çevrimdışı",
+  "NDBG_REGISTER_OR_SIGN_IN_TO_PLAY": "Oynamak için kaydolun veya giriş yapın",
+  "NDBG_READY_TO_PLAY": "Oynamaya hazır",
+  "NDBG_GAME": "Oyun"
 }

@@ -1,5 +1,6 @@
 import { UserInfoResponse as Auth0User } from 'auth0'
 import {
+  NodotsPlayer,
   NodotsPlayerActive,
   NodotsPlayerReady,
 } from '../../../nodots_modules/backgammon-types'
@@ -19,7 +20,7 @@ interface CreatePlayerAction {
 
 interface SetPlayerAction {
   type: PlayerActionTypes.SET_PLAYER
-  payload: NodotsPlayerActive
+  payload: NodotsPlayer
 }
 
 interface TogglePlayerSeekingGameAction {

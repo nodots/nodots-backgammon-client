@@ -24,5 +24,7 @@
   "NDBG_LOADING": "Cargando...",
   "NDBG_START_GAME": "Iniciar juego",
   "NDBG_ONLINE": "En línea",
-  "NDBG_OFFLINE": "Desconectado"
+  "NDBG_OFFLINE": "Desconectado",
+  "NDBG_REGISTER_OR_SIGN_IN_TO_PLAY": "Regístrate o inicia sesión para jugar",
+  "NDBG_READY_TO_PLAY": "¿Listo para jugar?"
 }

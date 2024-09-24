@@ -14,8 +14,6 @@ export const Loading = ({ message }: Props) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
-        border: '1px dotted yellow !important',
       }}
     >
       {content}

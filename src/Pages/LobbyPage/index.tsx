@@ -7,18 +7,22 @@ import { Loading } from '../../Components/utils/Loading'
 
 const LobbyPage = () => {
   const { state, dispatch } = usePlayerContext()
-  console.log('[LobbyPage] state.player:', state.player)
-  return !state.player ? (
-    <Loading message="Lobby Page Waiting for Player" />
-  ) : (
-    <>
-      <NodotsAppBar />
-      <Container>
-        <SeekingGameToggle />
-        <Friends />
-      </Container>
-    </>
-  )
+  const { player } = state
+  switch (player?.kind) {
+    case 'initializing':
+      return <Loading message="Lobby Page Initializing Player" />
+    case 'playing':
+    case 'ready':
+      return (
+        <>
+          <NodotsAppBar />
+          <Container>
+            <SeekingGameToggle />
+            <Friends />
+          </Container>
+        </>
+      )
+  }
 }
 
 export default LobbyPage

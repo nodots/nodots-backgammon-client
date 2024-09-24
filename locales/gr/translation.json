@@ -24,5 +24,8 @@
   "NDBG_LOADING": "Φόρτωση...",
   "NDBG_START_GAME": "Έναρξη παιχνιδιού",
   "NDBG_ONLINE": "Σε απευθείας σύνδεση",
-  "NDBG_OFFLINE": "Εκτός σύνδεσης"
+  "NDBG_OFFLINE": "Εκτός σύνδεσης",
+  "NDBG_REGISTER_OR_SIGN_IN_TO_PLAY": "Εγγραφείτε ή συνδεθείτε για να παίξετε",
+  "NDBG_READY_TO_PLAY": "Έτοιμοι για παιχνίδι",
+  "NDBG_GAME": "Παιχνίδι"
 }

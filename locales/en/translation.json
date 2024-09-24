@@ -24,5 +24,7 @@
   "NDBG_LOADING": "Loading...",
   "NDBG_START_GAME": "Start Game",
   "NDBG_ONLINE": "Online",
-  "NDBG_OFFLINE": "Offline"
+  "NDBG_OFFLINE": "Offline",
+  "NDBG_REGISTER_OR_SIGN_IN_TO_PLAY": "Register or sign in to play",
+  "NDBG_READY_TO_PLAY": "Ready to play?"
 }

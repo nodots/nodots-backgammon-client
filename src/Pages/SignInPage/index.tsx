@@ -1,30 +1,16 @@
-import { Box, Button, Paper, TextField } from '@mui/material'
-import { Component } from 'react'
+import { Container } from '@mui/material'
 import SignInButton from '../../Components/Forms/Auth0/Buttons/SignInButton'
+import { useTranslation } from 'react-i18next'
 
-// import SignInForm from './SignInForm' // Import the SignInForm component
-
-type ExternalUser = {
-  token: string
-  externalId: string
-  email: string
-}
-
-class SignInPage extends Component {
-  constructor(props: {} | Readonly<{}>) {
-    super(props)
-  }
-
-  render() {
-    return (
-      <Paper id="SignInContainer">
-        {/* <SignInForm /> */}
-        <h2>Welcome!</h2>
-        <p>Please register or sign in to play!</p>
-        <SignInButton />
-      </Paper>
-    )
-  }
+const SignInPage = () => {
+  const { t } = useTranslation()
+  return (
+    <Container>
+      <h2>{t('NDBG_WELCOME')}</h2>
+      <p>{t('NDBG_REGISTER_OR_SIGN_IN_TO_PLAY')}</p>
+      <SignInButton />
+    </Container>
+  )
 }
 
 export default SignInPage

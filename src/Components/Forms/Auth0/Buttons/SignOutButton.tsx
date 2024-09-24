@@ -7,8 +7,7 @@ const SignOutButton = () => {
 
   const handleClick = () => {
     console.log('Signing out...')
-    sessionStorage.removeItem('playerId')
-    // logout({ logoutParams: { returnTo: window.location.origin } })
+    logout({ logoutParams: { returnTo: window.location.origin } })
   }
 
   return (

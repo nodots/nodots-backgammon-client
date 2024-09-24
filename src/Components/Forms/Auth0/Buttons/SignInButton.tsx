@@ -10,14 +10,10 @@ const getButtonText = (text: string | undefined) => (text ? text : 'Sign In')
 const Auth0SignInButton = ({ text }: Props) => {
   const { loginWithRedirect } = useAuth0()
 
-  const handleLogin = () => {
-    const loginResult = loginWithRedirect()
-    console.log(loginResult)
-    return loginResult
-  }
+  const handleLogin = () => loginWithRedirect()
 
   return (
-    <Button variant="contained" onClick={() => handleLogin()}>
+    <Button variant="contained" onClick={handleLogin}>
       {getButtonText(text)}
     </Button>
   )

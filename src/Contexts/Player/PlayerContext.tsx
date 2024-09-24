@@ -10,3 +10,13 @@ export type PlayerContextType = {
 export const PlayerContext = createContext<PlayerContextType | undefined>(
   undefined
 )
+export const ips: PlayerState = {
+  player: {
+    id: '',
+    kind: 'initializing',
+    email: '',
+    source: '',
+    externalId: '',
+    isLoggedIn: false,
+  },
+}
