@@ -1,7 +1,6 @@
 import { UserInfoResponse as Auth0User } from 'auth0'
 import {
   NodotsPlayer,
-  NodotsPlayerActive,
   NodotsPlayerReady,
 } from '../../../nodots_modules/backgammon-types'
 import { togglePlayerSeekingGame } from './playerHelpers'

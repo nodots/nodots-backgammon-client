@@ -30,7 +30,7 @@ const setSeekingGameAction = async (
 
 export const SeekingGameToggle = () => {
   const { logout, user } = useAuth0()
-  const { state, dispatch } = usePlayerContext()
+  const { playerState: state, playerDispatch: dispatch } = usePlayerContext()
   const { player } = state
   const [isSeekingGame, setIsSeekingGame] = useState<boolean>(
     player.isSeekingGame || false

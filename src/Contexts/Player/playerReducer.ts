@@ -9,13 +9,16 @@ export type PlayerState = {
   player: NodotsPlayerInitializing | NodotsPlayerReady | NodotsPlayerPlaying
 }
 
-export const initialPlayerState: NodotsPlayerInitializing = {
-  id: '',
-  kind: 'initializing',
-  email: '',
-  source: '',
-  externalId: '',
-  isLoggedIn: false,
+export const initialPlayerState: PlayerState = {
+  player: {
+    id: '',
+    kind: 'initializing',
+    email: '',
+    source: '',
+    externalId: '',
+    isLoggedIn: false,
+    preferences: {},
+  },
 }
 
 export function playerReducer(state: PlayerState, action: any): PlayerState {

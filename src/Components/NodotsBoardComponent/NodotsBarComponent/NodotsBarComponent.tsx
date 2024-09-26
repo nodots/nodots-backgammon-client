@@ -8,15 +8,9 @@ import {
 import NodotsPipCountComponent from '../NodotsPipCountComponent'
 import { getCheckerComponents } from '../NodotsPointComponent'
 
-interface Props {
-  game: NodotsGame
-  player: NodotsPlayerPlaying | NodotsPlayerReady
-}
+interface Props {}
 
-export const NodotsBarComponent = ({ game, player }: Props) => {
-  const { board } = game
-  const { bar } = board
-
+export const NodotsBarComponent = () => {
   console.log('[NodotsBarComponent] bar:', bar)
   console.log('[NodotsBarComponent] game:', game)
   console.log('[NodotsBarComponent] player:', player)

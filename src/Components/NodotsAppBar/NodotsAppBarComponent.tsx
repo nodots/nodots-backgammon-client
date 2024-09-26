@@ -18,7 +18,7 @@ import { signInPage } from '../../App'
 const NodotsAppBarComponent = () => {
   const { user, logout } = useAuth0()
   const { t } = useTranslation()
-  const { state, dispatch } = usePlayerContext()
+  const { playerState: state, playerDispatch: dispatch } = usePlayerContext()
   const { player } = state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 

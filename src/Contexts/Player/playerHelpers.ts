@@ -2,10 +2,9 @@ import { UserInfoResponse as Auth0User } from 'auth0'
 import {
   NodotsLocale,
   NodotsPlayer,
-  NodotsPlayerActive,
   NodotsPlayerInitializing,
+  NodotsPlayerPlaying,
   NodotsPlayerReady,
-  NodotsPlayersActive,
   NodotsPlayersInitializing,
 } from '../../../nodots_modules/backgammon-types'
 import { apiUrl } from '../../App'
@@ -44,29 +43,51 @@ export const createPlayer = async (
   return playerReady
 }
 
-export const getPlayers = async (): Promise<NodotsPlayerActive[]> => {
+export const getPlayers = async (): Promise<NodotsPlayer[]> => {
   const result = await fetch(`${apiUrl}/player`)
+  return result.json()
+}
+
+export const getReadyPlayers = async (): Promise<NodotsPlayerReady[]> => {
+  const result = await fetch(`${apiUrl}/player/ready`)
   return result.json()
 }
 
 export const getPlayerById = async (
   id: string
 ): Promise<
-  NodotsPlayersInitializing | NodotsPlayerReady | NodotsPlayersActive
+  NodotsPlayersInitializing | NodotsPlayerReady | NodotsPlayerPlaying
 > => {
   const result = await fetch(`${apiUrl}/player/${id}`)
   return result.json()
 }
 
-export const getActivePlayerById = async (
+export const getReadyPlayerById = async (
   id: string
-): Promise<NodotsPlayerActive | null> => {
+): Promise<NodotsPlayerReady | null> => {
   const result = await fetch(`${apiUrl}/player/${id}`)
   const player = await result.json()
   switch (player.kind) {
     case 'initializing':
       return null
     case 'ready':
+      return player
+    case 'playing':
+      return null
+  }
+  return null
+}
+
+export const getPlayingPlayerById = async (
+  id: string
+): Promise<NodotsPlayerPlaying | null> => {
+  const result = await fetch(`${apiUrl}/player/${id}`)
+  const player = await result.json()
+  switch (player.kind) {
+    case 'initializing':
+      return null
+    case 'ready':
+      return null
     case 'playing':
       return player
   }
@@ -112,7 +133,7 @@ export const togglePlayerSeekingGame = async (
   return updatedPlayer
 }
 
-export const logoutPlayer = async (player: NodotsPlayerActive) => {
+export const logoutPlayer = async (player: NodotsPlayer) => {
   console.log('[playerHelpers] logoutPlayer player:', player)
   const result = await fetch(`${apiUrl}/player/logout/${player.id}`, {
     method: 'PATCH',
@@ -124,7 +145,7 @@ export const logoutPlayer = async (player: NodotsPlayerActive) => {
   return result.json()
 }
 
-export const loginPlayer = async (player: NodotsPlayerActive) => {
+export const loginPlayer = async (player: NodotsPlayer) => {
   console.log('[playerHelpers] logoutPlayer player:', player)
   const result = await fetch(`${apiUrl}/player/login/${player.id}`, {
     method: 'PATCH',

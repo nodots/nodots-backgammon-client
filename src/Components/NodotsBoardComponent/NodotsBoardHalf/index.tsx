@@ -8,12 +8,10 @@ import NodotsQuadrantComponent from '../NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from '../NodotsRollSurfaceComponent'
 
 interface Props {
-  game: NodotsGame
-  player: NodotsPlayer
   longitude: Longitude
 }
 
-const NodotsBoardHalf = ({ game, player, longitude }: Props) => {
+const NodotsBoardHalf = ({ longitude }: Props) => {
   console.log('[NodotsBoardHalf] game:', game)
   console.log('[NodotsBoardHalf] player:', player)
   console.log('[NodotsBoardHalf] longitude:', longitude)

@@ -1,9 +1,9 @@
 // PlayerProvider.tsx
 import { UserInfoResponse as Auth0User } from 'auth0'
 import { ReactNode, useContext, useEffect, useReducer } from 'react'
-import { playerReducer } from './playerReducer'
+import { initialPlayerState, playerReducer } from './playerReducer'
 import { Loading } from '../../Components/utils/Loading'
-import { ips, PlayerContext } from './PlayerContext'
+import { PlayerContext } from './PlayerContext'
 import { useAuth0 } from '@auth0/auth0-react'
 import {
   createPlayer,
@@ -19,7 +19,7 @@ interface Props {
 
 const PlayerProvider = ({ children }: Props) => {
   const { user, isLoading } = useAuth0()
-  const [state, dispatch] = useReducer(playerReducer, ips)
+  const [state, dispatch] = useReducer(playerReducer, initialPlayerState)
 
   useEffect(() => {
     console.log('[PlayerProvider] useEffect user:', user)
@@ -42,7 +42,9 @@ const PlayerProvider = ({ children }: Props) => {
     return <Loading />
   }
   return (
-    <PlayerContext.Provider value={{ state, dispatch }}>
+    <PlayerContext.Provider
+      value={{ playerState: state, playerDispatch: dispatch }}
+    >
       {children}
     </PlayerContext.Provider>
   )

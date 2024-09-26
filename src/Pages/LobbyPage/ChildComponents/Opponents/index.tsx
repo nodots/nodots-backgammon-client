@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import PlayerTable from './PlayerTable'
-import { NodotsPlayerActive } from '../../../../../nodots_modules/backgammon-types'
+import OpponentTable from './OpponentTable'
 
 const Friends = () => {
   const { t } = useTranslation()
@@ -12,7 +11,7 @@ const Friends = () => {
     >
       <CardHeader title={t('NDBG_FRIENDS')} />
       <CardContent>
-        <PlayerTable />
+        <OpponentTable />
       </CardContent>
     </Card>
   )

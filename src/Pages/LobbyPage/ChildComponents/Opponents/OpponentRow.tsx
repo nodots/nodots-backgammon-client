@@ -1,15 +1,14 @@
 import { TableRow, TableCell, Avatar, Button } from '@mui/material'
-import { NodotsPlayerActive } from '../../../../../nodots_modules/backgammon-types'
-import PlayerStatus from './PlayerStatus'
-import { PlayerAction } from './PlayerAction'
+import { NodotsPlayerReady } from '../../../../../nodots_modules/backgammon-types'
+import OpponentStatus from './OpponentStatus'
+import { OpponentAction } from './OpponentAction'
 import { usePlayerContext } from '../../../../Contexts/Player/usePlayerContext'
 
 interface Props {
-  opponent: NodotsPlayerActive
+  opponent: NodotsPlayerReady
 }
 
-const PlayerRow = ({ opponent }: Props) => {
-  const { state, dispatch } = usePlayerContext()
+const OpponentRow = ({ opponent }: Props) => {
   return (
     <TableRow>
       <TableCell>
@@ -19,13 +18,13 @@ const PlayerRow = ({ opponent }: Props) => {
         />
       </TableCell>
       <TableCell>
-        <PlayerStatus opponent={opponent} />
+        <OpponentStatus opponent={opponent} />
       </TableCell>
       <TableCell>
-        <PlayerAction opponent={opponent} />
+        <OpponentAction opponent={opponent} />
       </TableCell>
     </TableRow>
   )
 }
 
-export default PlayerRow
+export default OpponentRow
