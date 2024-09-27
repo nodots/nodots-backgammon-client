@@ -11,7 +11,7 @@ import { ProtectedRoutes } from './Components/utils/ProtectedRoutes'
 import PlayerPage from './Pages/PlayerPage'
 
 // FIXME: This should be an environment variable
-export const apiUrl = 'http://localhost:3000'
+export const apiUrl = 'https://api.localhost'
 export const baseUrl = 'https://bgc.localhost'
 export const playerHome = `/lobby`
 export const signInPage = `${baseUrl}/sign-in`

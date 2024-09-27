@@ -17,11 +17,11 @@ root.render(
         redirect_uri: window.location.origin + '/authorize',
       }}
     >
-      <GameProvider>
-        <PlayerProvider>
+      <PlayerProvider>
+        <GameProvider>
           <App />
-        </PlayerProvider>
-      </GameProvider>
+        </GameProvider>
+      </PlayerProvider>
     </Auth0Provider>
   </I18nextProvider>
 )

@@ -2,9 +2,7 @@ import { UserInfoResponse as Auth0User } from 'auth0'
 import {
   NodotsGame,
   NodotsGameActive,
-  NodotsGameInitializing,
   NodotsGameReady,
-  NodotsPlayerReady,
   NodotsPlayersReady,
 } from '../../../nodots_modules/backgammon-types'
 import { apiUrl } from '../../App'
@@ -73,4 +71,14 @@ export const getActiveGameById = async (
       return game
   }
   return null
+}
+
+export const getActiveGameByPlayerId = async (
+  id: string
+): Promise<NodotsGameActive | null> => {
+  console.log('[gameHelpers] getActiveGameByPlayerId id:', id)
+  const result = await fetch(`${apiUrl}/game/player/${id}`)
+  const game = await result.json()
+  console.log('[gameHelpers] getActiveGameByPlayerId game:', game)
+  return game
 }

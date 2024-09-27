@@ -4,20 +4,19 @@ import Friends from './ChildComponents/Opponents'
 import { SeekingGameToggle } from './ChildComponents/SeekingGameToggle'
 import { usePlayerContext } from '../../Contexts/Player/usePlayerContext'
 import { Loading } from '../../Components/utils/Loading'
+import PollForGame from './ChildComponents/PollForGame'
 
 const LobbyPage = () => {
   const { playerState: state, playerDispatch: dispatch } = usePlayerContext()
   const { player } = state
   switch (player?.kind) {
     case 'initializing':
-      return <Loading message="Lobby Page Initializing Player" />
+      return <Loading message="LobbyPage initializing" />
     case 'playing':
-      return (
-        <Loading message="You have a game and should be on the game page" />
-      )
     case 'ready':
       return (
         <>
+          <PollForGame />
           <NodotsAppBar />
           <Container>
             <SeekingGameToggle />
