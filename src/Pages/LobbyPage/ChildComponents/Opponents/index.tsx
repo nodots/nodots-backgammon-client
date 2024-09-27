@@ -9,7 +9,7 @@ const Friends = () => {
       sx={{ width: '25vw', minWidth: '340px', padding: '.5vh .5vw' }}
       variant="outlined"
     >
-      <CardHeader title={t('NDBG_FRIENDS')} />
+      <CardHeader title={t('NDBG_OPPONENTS')} />
       <CardContent>
         <OpponentTable />
       </CardContent>
