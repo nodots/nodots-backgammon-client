@@ -1,42 +1,32 @@
 import {
   NodotsColor,
-  NodotsGame,
   NodotsMoveDirection,
-  NodotsPlayerPlaying,
-  NodotsPlayerReady,
 } from '../../../../nodots_modules/backgammon-types'
+import { useGameContext } from '../../../Contexts/Game/useGameContext'
+import { usePlayerContext } from '../../../Contexts/Player/usePlayerContext'
 
-interface Props {
-  game: NodotsGame
-  player: NodotsPlayerPlaying | NodotsPlayerReady
-}
-
-export const NodotsOffComponent = ({ game, player }: Props) => {
-  const { board } = game
-  const { off } = board
+export const NodotsOffComponent = () => {
+  const { gameState, gameDispatch } = useGameContext()
+  const { game } = gameState
+  const { playerState, playerDispatch } = usePlayerContext()
+  const { player } = playerState
 
   let direction: NodotsMoveDirection | undefined
   let color: NodotsColor | undefined
 
-  switch (player.kind) {
-    case 'playing':
-    case 'ready':
-      direction = player.direction
-      color = player.color
-      const clockwiseCheckers =
-        direction === 'clockwise' ? off.black.checkers : off.white.checkers
-      const counterclockwiseCheckers =
-        direction === 'counterclockwise'
-          ? off.black.checkers
-          : off.white.checkers
+  switch (game.kind) {
+    case 'initializing':
+      return <></>
+    default: {
+      direction = game.players.white.attributes.direction
+      color = game.players.white.attributes.color
       return (
         <div id="Off">
-          <div className="checkerbox counterclockwise">
-            {counterclockwiseCheckers.length}
-          </div>
-          <div className="checkerbox clockwise">{clockwiseCheckers.length}</div>
+          <div className="checkerbox counterclockwise"></div>
+          <div className="checkerbox clockwise"></div>
         </div>
       )
+    }
   }
 }
 

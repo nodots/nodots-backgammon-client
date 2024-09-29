@@ -7,8 +7,8 @@ import { Loading } from '../../Components/utils/Loading'
 import PollForGame from './ChildComponents/PollForGame'
 
 const LobbyPage = () => {
-  const { playerState: state, playerDispatch: dispatch } = usePlayerContext()
-  const { player } = state
+  const { playerState, playerDispatch } = usePlayerContext()
+  const { player } = playerState
   switch (player?.kind) {
     case 'initializing':
       return <Loading message="LobbyPage initializing" />

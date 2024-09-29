@@ -8,17 +8,35 @@ import {
   NodotsGame,
   NodotsPlayer,
 } from '../../../../nodots_modules/backgammon-types'
+import { useGameContext } from '../../../Contexts/Game/useGameContext'
+import { usePlayerContext } from '../../../Contexts/Player/usePlayerContext'
+import { Loading } from '../../utils/Loading'
 
 interface Props {
-  game: NodotsGame
-  player: NodotsPlayer
   longitude: Longitude
 }
 
-function NodotsRollSurfaceComponent({ game, player, longitude }: Props) {
-  console.log('[NodotsRollSurfaceComponent] game:', game)
+function NodotsRollSurfaceComponent({ longitude }: Props) {
+  const { gameState, gameDispatch } = useGameContext()
+  const { game } = gameState
+  const { playerState, playerDispatch } = usePlayerContext()
+  const { player } = playerState
 
-  return (
+  const getColor = () => {
+    if (longitude === 'west') {
+      return game.players.white.attributes.direction === 'counterclockwise'
+        ? 'white'
+        : 'black'
+    } else {
+      return game.players.white.attributes.direction === 'clockwise'
+        ? 'white'
+        : 'black'
+    }
+  }
+
+  const color = getColor()
+
+  return game.kind !== 'initializing' && player.kind !== 'initializing' ? (
     <Container
       className="roll-surface"
       sx={{
@@ -28,11 +46,13 @@ function NodotsRollSurfaceComponent({ game, player, longitude }: Props) {
       }}
     >
       <div className="dice-container">
-        <NodotsDieComponent game={game} order={0} color={player.color} />
+        <NodotsDieComponent order={0} color={color} />
         {/* <DiceSwitcher color="white" /> */}
-        <NodotsDieComponent game={game} order={1} color={player.color} />
+        <NodotsDieComponent order={1} color={color} />
       </div>
     </Container>
+  ) : (
+    <Loading message="Waiting for Game and Player" />
   )
 }
 

@@ -6,8 +6,8 @@ import {
   NodotsChecker,
   Latitude,
 } from '../../../../nodots_modules/backgammon-types'
-import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
-// import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
+import { useGameContext } from '../../../Contexts/Game/useGameContext'
+import { Loading } from '../../utils/Loading'
 
 export const getCheckerComponents = (
   game: NodotsGame,
@@ -43,7 +43,6 @@ export const getCheckerComponents = (
 
 export interface Props {
   id: string
-  game: NodotsGame
   position: {
     clockwise: number
     counterclockwise: number
@@ -54,12 +53,12 @@ export interface Props {
 
 export const NodotsPointComponent = ({
   id,
-  game,
   position,
   checkers,
   latitude,
 }: Props) => {
-  const { gameDispatch } = useNodotsGame()
+  const { gameState, gameDispatch } = useGameContext()
+  const { game } = gameState
   const theme = useTheme()
   let className = 'point'
 
@@ -74,7 +73,9 @@ export const NodotsPointComponent = ({
       : theme.palette.primary.light
   }
 
-  return (
+  return game.kind === 'initializing' ? (
+    <Loading message="Loading point" />
+  ) : (
     <div className={className}>
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -17,6 +17,7 @@ export const setGame = async (
     type: GameActionTypes.SET_GAME,
     payload: game,
   })
+  sessionStorage.setItem('gameId', game.id)
   return game
 }
 
@@ -45,6 +46,7 @@ export const startGame = async (
     payload: { ...players.white, kind: 'playing' },
   })
   gameDispatch({ type: GameActionTypes.SET_GAME, payload: gameReady })
+  sessionStorage.setItem('gameId', gameReady.id)
   return gameReady
 }
 

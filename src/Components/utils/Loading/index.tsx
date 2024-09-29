@@ -7,7 +7,9 @@ interface Props {
 
 export const Loading = ({ message }: Props) => {
   const { t } = useTranslation()
-  const content: string = message ? message : t('NDBG_LOADING')
+  const content: string = message
+    ? `${t('NDBG_LOADING')} ${message}`
+    : t('NDBG_LOADING')
   return (
     <Container
       sx={{

@@ -16,6 +16,12 @@ export const baseUrl = 'https://bgc.localhost'
 export const playerHome = `/lobby`
 export const signInPage = `${baseUrl}/sign-in`
 
+export const isValidUuid = (uuid: any) => {
+  if (typeof uuid !== 'string') return false
+  if (uuid.length !== 36) return false
+  return true
+}
+
 const App = () => {
   const { i18n } = useTranslation()
   document.body.dir = i18n.dir() // Set the direction of the body based on the language
@@ -34,6 +40,7 @@ const App = () => {
             {/* Protected routes */}
             <Route element={<ProtectedRoutes />}>
               <Route path="/game" element={<GamePage />} />
+              <Route path="/game/:gameId" element={<GamePage />} />
               <Route path="/lobby" element={<LobbyPage />} />
               <Route path="/player" element={<PlayerPage />} />
             </Route>

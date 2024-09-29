@@ -3,19 +3,25 @@ import { Chip, SxProps, useTheme } from '@mui/material'
 import {
   NodotsColor,
   NodotsGame,
+  NodotsMoveDirection,
   NodotsPlayer,
   NodotsPlayerPlaying,
   NodotsPlayerReady,
 } from '../../../../nodots_modules/backgammon-types'
+import { useGameContext } from '../../../Contexts/Game/useGameContext'
 
 interface Props {
-  game: NodotsGame
-  player: NodotsPlayerPlaying | NodotsPlayerReady
+  direction: NodotsMoveDirection
 }
 
-function NodotsPipCountComponent({ game, player }: Props) {
-  const color = player.color
+function NodotsPipCountComponent({ direction }: Props) {
+  const { gameState, gameDispatch } = useGameContext()
+  const { game } = gameState
   const theme = useTheme()
+  const color =
+    game.players.white.attributes.direction === 'counterclockwise'
+      ? 'white'
+      : 'black'
   const getBackgroundColor = (color: NodotsColor): SxProps =>
     color === 'black'
       ? { backgroundColor: theme.palette.secondary.dark }

@@ -21,6 +21,8 @@ const GameProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(gameReducer, { game: initialGameState })
 
   useEffect(() => {
+    console.log('[GameProvider] useEffect:')
+
     const interval = setInterval(() => {
       if (isAuthenticated && user && player && player.kind !== 'initializing') {
         getActiveGameByPlayerId(player.id).then((g) => {
@@ -28,6 +30,7 @@ const GameProvider = ({ children }: Props) => {
         })
       }
     }, 1000)
+
     return clearInterval(interval)
   }, [])
 

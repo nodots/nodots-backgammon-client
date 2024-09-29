@@ -113,6 +113,7 @@ export const setPlayer = async (
     type: PlayerActionTypes.SET_PLAYER,
     payload: player,
   })
+  sessionStorage.setItem('playerId', player.id as string)
   return player
 }
 
@@ -142,6 +143,8 @@ export const logoutPlayer = async (player: NodotsPlayer) => {
     },
   })
   console.log('[playerHelpers] signoutPlayer result:', result)
+  sessionStorage.removeItem('playerId')
+  sessionStorage.removeItem('gameId')
   return result.json()
 }
 
@@ -154,5 +157,6 @@ export const loginPlayer = async (player: NodotsPlayer) => {
     },
   })
   console.log('[playerHelpers] signoutPlayer result:', result)
+  sessionStorage.setItem('playerId', player.id as string)
   return result.json()
 }

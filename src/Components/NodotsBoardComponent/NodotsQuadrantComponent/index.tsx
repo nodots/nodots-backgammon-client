@@ -12,6 +12,7 @@ import { generateId } from '../../helpers'
 import { useEffect, useState } from 'react'
 import { start } from 'repl'
 import { Loading } from '../../utils/Loading'
+import { useGameContext } from '../../../Contexts/Game/useGameContext'
 
 export type QuadrantPoints = [Point, Point, Point, Point, Point, Point]
 
@@ -60,8 +61,6 @@ export const getPointsForLatitudeLongitude = (
   return quadrantPoints
 }
 export interface Props {
-  game: NodotsGame
-  player: NodotsPlayer
   latitude: Latitude
   longitude: Longitude
   start: number
@@ -69,24 +68,24 @@ export interface Props {
 }
 
 const NodotsQuadrantComponent = ({
-  game,
-  player,
   latitude,
   longitude,
   start,
 }: // points,
 Props) => {
-  const { board } = game
+  const { gameState, gameDispatch } = useGameContext()
+  const { game } = gameState
   const [points, setPoints] = useState<QuadrantPoints | undefined>(undefined)
   console.log('[NodotsQuadrantComponent] game:', game)
-  console.log('[NodotsQuadrantComponent] player:', player)
   console.log('[NodotsQuadrantComponent] latitude:', latitude)
   console.log('[NodotsQuadrantComponent] longitude:', longitude)
 
   useEffect(() => {
-    const ps = getPointsForLatitudeLongitude(board, latitude, longitude)
-    setPoints(ps)
-  }, [])
+    if (game && game.kind !== 'initializing' && game.board) {
+      const ps = getPointsForLatitudeLongitude(game.board, latitude, longitude)
+      setPoints(ps)
+    }
+  }, [game])
 
   return points ? (
     <div className={`quadrant-container ${latitude} ${longitude}`}>
@@ -96,7 +95,6 @@ Props) => {
           <NodotsPointComponent
             id={generateId()}
             key={point.id}
-            game={game}
             position={point.position}
             latitude={latitude}
             checkers={point.checkers}

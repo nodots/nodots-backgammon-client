@@ -1,12 +1,12 @@
 import { useTheme } from '@mui/material'
 import {
   DieOrder,
+  DieValue,
   NodotsColor,
   NodotsGame,
   NodotsRoll,
 } from '../../../../nodots_modules/backgammon-types'
-import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
-// import { useNodotsGame } from '../../../Contexts/Game/useNodotsGame'
+import { useGameContext } from '../../../Contexts/Game/useGameContext'
 
 const paths = [
   'M92.57,0H7.42A7.42,7.42,0,0,0,0,7.42V92.58A7.42,7.42,0,0,0,7.42,100H92.57A7.43,7.43,0,0,0,100,92.58V7.42A7.43,7.43,0,0,0,92.57,0ZM50,59.87A9.87,9.87,0,1,1,59.86,50,9.87,9.87,0,0,1,50,59.87Z',
@@ -18,7 +18,6 @@ const paths = [
 ]
 
 interface Props {
-  game: NodotsGame
   order: DieOrder
   color: NodotsColor
   rollHandler?: (e: React.MouseEvent) => void
@@ -27,8 +26,9 @@ interface Props {
 const getPath = (order: DieOrder, roll: NodotsRoll | undefined) =>
   roll ? paths[roll[order] - 1] : paths[0]
 
-function NodotsDieComponent({ game, order, color, rollHandler }: Props) {
-  const { gameDispatch } = useNodotsGame()
+function NodotsDieComponent({ order, color, rollHandler }: Props) {
+  const { gameState, gameDispatch } = useGameContext()
+  const { game } = gameState
   const theme = useTheme()
   const fill = (color: NodotsColor) => {
     return color === 'white'
@@ -37,25 +37,27 @@ function NodotsDieComponent({ game, order, color, rollHandler }: Props) {
   }
   // const path = game?.dice[color].kind === 'dice-rolled' ? paths[game.dice[color].value - 1] : paths[0]
 
-  return (
-    <div className="die" onClick={rollHandler}>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-        <g id="Layer_2" data-name="Layer 2">
-          <g id="Layer_1-2" data-name="Layer 1">
-            <path
-              d={getPath(
-                order,
-                game.NodotsGameRollingForStart === 'moving'
-                  ? game.activeRoll
-                  : undefined
-              )}
-              fill={fill(color)}
-            />
-          </g>
-        </g>
-      </svg>
-    </div>
-  )
+  switch (game.kind) {
+    case 'initializing':
+      return <></>
+    case 'ready':
+      return game.dice[color].roll[0] === 0 ? (
+        <></>
+      ) : (
+        <div className="die" onClick={rollHandler}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <g id="Layer_2" data-name="Layer 2">
+              <g id="Layer_1-2" data-name="Layer 1">
+                <path
+                  d={getPath(order, game.dice[color].roll)}
+                  fill={fill(color)}
+                />
+              </g>
+            </g>
+          </svg>
+        </div>
+      )
+  }
 }
 
 export default NodotsDieComponent

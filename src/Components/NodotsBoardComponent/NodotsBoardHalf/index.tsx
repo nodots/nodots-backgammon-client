@@ -4,6 +4,9 @@ import {
   NodotsGame,
   NodotsPlayer,
 } from '../../../../nodots_modules/backgammon-types'
+import { useGameContext } from '../../../Contexts/Game/useGameContext'
+import { usePlayerContext } from '../../../Contexts/Player/usePlayerContext'
+import { Loading } from '../../utils/Loading'
 import NodotsQuadrantComponent from '../NodotsQuadrantComponent'
 import NodotsRollSurfaceComponent from '../NodotsRollSurfaceComponent'
 
@@ -12,35 +15,31 @@ interface Props {
 }
 
 const NodotsBoardHalf = ({ longitude }: Props) => {
-  console.log('[NodotsBoardHalf] game:', game)
-  console.log('[NodotsBoardHalf] player:', player)
-  console.log('[NodotsBoardHalf] longitude:', longitude)
+  const { gameState, gameDispatch } = useGameContext()
+  const { game } = gameState
   const northStart = longitude === 'west' ? 19 : 13
   const southStart = longitude === 'east' ? 1 : 7
 
-  return (
-    <div className="board-half">
-      <NodotsQuadrantComponent
-        game={game}
-        player={player}
-        latitude="north"
-        longitude={longitude}
-        start={northStart}
-      />
-      <NodotsRollSurfaceComponent
-        game={game}
-        player={player}
-        longitude={longitude}
-      />
-      <NodotsQuadrantComponent
-        game={game}
-        player={player}
-        latitude="south"
-        longitude={longitude}
-        start={southStart}
-      />
-    </div>
-  )
+  switch (game.kind) {
+    case 'initializing':
+      return <Loading message="NodotsBoardHalf loading game" />
+    default:
+      return (
+        <div className="board-half">
+          <NodotsQuadrantComponent
+            latitude="north"
+            longitude={longitude}
+            start={northStart}
+          />
+          <NodotsRollSurfaceComponent longitude={longitude} />
+          <NodotsQuadrantComponent
+            latitude="south"
+            longitude={longitude}
+            start={southStart}
+          />
+        </div>
+      )
+  }
 }
 
 export default NodotsBoardHalf

@@ -1,36 +1,56 @@
 import {
   NodotsGameInitializing,
+  NodotsGameMoving,
   NodotsGameReady,
+  NodotsGameRolling,
+  NodotsGameRollingForStart,
 } from '../../../nodots_modules/backgammon-types'
 
 export type GameState = {
-  game: NodotsGameInitializing | NodotsGameReady
+  game:
+    | NodotsGameInitializing
+    | NodotsGameReady
+    | NodotsGameRollingForStart
+    | NodotsGameRolling
+    | NodotsGameMoving
 }
 
 export const initialGameState: NodotsGameInitializing = {
   kind: 'initializing',
   players: {
     white: {
-      id: '',
-      kind: 'ready',
-      activity: 'waiting',
-      email: '',
-      source: '',
-      externalId: '',
-      isLoggedIn: true,
-      isSeekingGame: true,
-      preferences: {},
+      player: {
+        id: '',
+        kind: 'ready',
+        email: '',
+        source: '',
+        externalId: '',
+        isLoggedIn: true,
+        isSeekingGame: true,
+        preferences: {},
+      },
+      attributes: {
+        color: 'white',
+        pipCount: 167,
+        direction: 'clockwise',
+      },
     },
     black: {
-      id: '',
-      kind: 'ready',
-      activity: 'waiting',
-      email: '',
-      source: '',
-      externalId: '',
-      isLoggedIn: true,
-      isSeekingGame: true,
-      preferences: {},
+      player: {
+        id: '',
+        kind: 'ready',
+        email: '',
+        source: '',
+        externalId: '',
+        isLoggedIn: true,
+        isSeekingGame: true,
+        preferences: {},
+      },
+      attributes: {
+        color: 'black',
+        pipCount: 167,
+        direction: 'counterclockwise',
+      },
     },
   },
 }
