@@ -18,8 +18,6 @@ import { signInPage } from '../../App'
 const NodotsAppBarComponent = () => {
   const { user, logout } = useAuth0()
   const { t } = useTranslation()
-  const { playerState: state, playerDispatch: dispatch } = usePlayerContext()
-  const { player } = state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleSignOut = () => {
@@ -37,66 +35,54 @@ const NodotsAppBarComponent = () => {
   const handleProfile = () => {
     window.location.href = '/game/player'
   }
+  return (
+    user && (
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, fontVariant: 'all-petite-caps' }}
+            ></Typography>
 
-  console.log('[NodotsAppBar] state.player:', state.player.id)
-
-  switch (player.kind) {
-    case 'initializing':
-      return <Loading message="NodotsAppBarComponent Waiting for Player" />
-    case 'playing':
-    case 'ready':
-      return (
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ flexGrow: 1, fontVariant: 'all-petite-caps' }}
-              ></Typography>
-
-              <div>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <Avatar
-                    alt={player.preferences?.username}
-                    src={player.preferences?.avatar}
-                  />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleProfile}>
-                    {t('NDBG_PROFILE')}
-                  </MenuItem>
-                  <MenuItem onClick={handleSignOut}>
-                    {t('NDBG_SIGN_OUT')}
-                  </MenuItem>
-                </Menu>
-              </div>
-            </Toolbar>
-          </AppBar>
-        </Box>
-      )
-  }
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <Avatar alt={user?.username} src={user?.avatar} />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleProfile}>{t('NDBG_PROFILE')}</MenuItem>
+                <MenuItem onClick={handleSignOut}>
+                  {t('NDBG_SIGN_OUT')}
+                </MenuItem>
+              </Menu>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    )
+  )
 }
 
 export default NodotsAppBarComponent

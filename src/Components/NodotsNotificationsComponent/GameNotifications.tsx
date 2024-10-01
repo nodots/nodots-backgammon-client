@@ -1,25 +1,27 @@
+import { observer } from 'mobx-react-lite'
 import { Alert, AlertColor } from '@mui/material'
 import { useEffect, useState } from 'react'
 import {
   NodotsGame,
   NodotsPlayer,
 } from '../../../nodots_modules/backgammon-types'
-
-const getOpponent = (game: NodotsGame, player: NodotsPlayer): NodotsPlayer => {
-  if (game && game.NodotsGameInitializing) {
-    return game.NodotsGameInitializing.black.id === player.id
-      ? game.NodotsGameInitializing.white
-      : game.NodotsGameInitializing.black
-  }
-  throw Error('No opponent found')
-}
+import { useGameContext } from '../../Contexts/Game/GameContext'
+import { Loading } from '../utils/Loading'
 
 interface Props {
   severity?: AlertColor
 }
 
-function NodotsGameNotifications() {
-  return <>NodotsGameNotificationsStub</>
+const NodotsGameNotifications = () => {
+  const { game } = useGameContext()
+  const [notifications, setNotifications] = useState<string[]>([])
+  return game && game.kind !== 'initializing' ? (
+    <>
+      <div>{game.id}</div>
+    </>
+  ) : (
+    <Loading message="NodotsGameNotifications loading game" />
+  )
 }
 
-export default NodotsGameNotifications
+export default observer(NodotsGameNotifications)

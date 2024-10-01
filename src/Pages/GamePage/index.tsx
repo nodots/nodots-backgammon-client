@@ -1,15 +1,8 @@
-import { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import { NodotsBoardComponent } from '../../Components/NodotsBoardComponent/NodotsBoardComponent'
 import { Loading } from '../../Components/utils/Loading'
 import { useGameContext } from '../../Contexts/Game/useGameContext'
-import { isValidUuid } from '../../App'
-import { clear } from 'console'
-import { getGameById, setGame } from '../../Contexts/Game/gameHelpers'
-import { GameActionTypes } from '../../Contexts/Game/gameActions'
-import {
-  NodotsGame,
-  NodotsGameInitializing,
-} from '../../../nodots_modules/backgammon-types'
+import NodotsGameNotifications from '../../Components/NodotsNotificationsComponent/GameNotifications'
 
 export const uuidFromUrl = (url: string): string => {
   const urlPieces = url.split('/')
@@ -17,15 +10,19 @@ export const uuidFromUrl = (url: string): string => {
 }
 
 const GamePage = () => {
-  const { gameState, gameDispatch } = useGameContext()
-  const { game } = gameState
+  const { game, player } = useGameContext()
 
-  switch (game.kind) {
+  switch (game?.kind) {
     case 'initializing':
-      return <Loading message={`GamePage game.kind: ${game.kind}`} />
+      return <Loading message="GamePage loading game" />
     default:
-      return <NodotsBoardComponent />
+      return (
+        <div id="GameContainer">
+          <NodotsGameNotifications />
+          <NodotsBoardComponent />
+        </div>
+      )
   }
 }
 
-export default GamePage
+export default observer(GamePage)

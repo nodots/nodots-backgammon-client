@@ -2,8 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import HttpApi from 'i18next-http-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
-
-export type NodotsLocaleCode = 'en' | 'es' | 'fr' | 'ar' | 'tr' | 'gr'
+import { NodotsLocaleCode } from '../nodots_modules/backgammon-types'
 
 export interface NodotsLocale {
   code: NodotsLocaleCode

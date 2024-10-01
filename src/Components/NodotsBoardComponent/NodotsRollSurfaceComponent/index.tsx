@@ -17,43 +17,42 @@ interface Props {
 }
 
 function NodotsRollSurfaceComponent({ longitude }: Props) {
-  const { gameState, gameDispatch } = useGameContext()
-  const { game } = gameState
-  const { playerState, playerDispatch } = usePlayerContext()
-  const { player } = playerState
+  const { game } = useGameContext()
 
   const getColor = () => {
+    console.log('[RollSurfaceComponent] getColor game.players:', game?.kind)
     if (longitude === 'west') {
-      return game.players.white.attributes.direction === 'counterclockwise'
+      return game?.players[0].direction === 'counterclockwise'
         ? 'white'
         : 'black'
     } else {
-      return game.players.white.attributes.direction === 'clockwise'
-        ? 'white'
-        : 'black'
+      return game?.players[1].direction === 'clockwise' ? 'white' : 'black'
     }
   }
 
-  const color = getColor()
-
-  return game.kind !== 'initializing' && player.kind !== 'initializing' ? (
-    <Container
-      className="roll-surface"
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div className="dice-container">
-        <NodotsDieComponent order={0} color={color} />
-        {/* <DiceSwitcher color="white" /> */}
-        <NodotsDieComponent order={1} color={color} />
-      </div>
-    </Container>
-  ) : (
-    <Loading message="Waiting for Game and Player" />
-  )
+  switch (game?.kind) {
+    case 'initializing':
+      return <Loading message="RollSurfaceComponent loading game" />
+    case 'rolling-for-start':
+      return (
+        <Container
+          className="roll-surface"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <div className="dice-container">
+            <NodotsDieComponent order={0} color="white" />
+          </div>
+        </Container>
+      )
+    case 'rolling':
+    case 'moving':
+    case 'ready':
+      return <div style={{ color: 'red' }}>{game.kind}</div>
+  }
 }
 
 export default NodotsRollSurfaceComponent

@@ -73,8 +73,7 @@ const NodotsQuadrantComponent = ({
   start,
 }: // points,
 Props) => {
-  const { gameState, gameDispatch } = useGameContext()
-  const { game } = gameState
+  const { game } = useGameContext()
   const [points, setPoints] = useState<QuadrantPoints | undefined>(undefined)
   console.log('[NodotsQuadrantComponent] game:', game)
   console.log('[NodotsQuadrantComponent] latitude:', latitude)

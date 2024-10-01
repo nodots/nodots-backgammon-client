@@ -1,4 +1,3 @@
-import { UserInfoResponse as Auth0User } from 'auth0'
 import {
   NodotsGame,
   NodotsGameActive,
@@ -6,26 +5,8 @@ import {
   NodotsPlayersReady,
 } from '../../../nodots_modules/backgammon-types'
 import { apiUrl } from '../../App'
-import { GameActions, GameActionTypes } from './gameActions'
-import { PlayerActions, PlayerActionTypes } from '../Player/playerActions'
 
-export const setGame = async (
-  game: NodotsGame,
-  gameDispatch: React.Dispatch<GameActions>
-) => {
-  gameDispatch({
-    type: GameActionTypes.SET_GAME,
-    payload: game,
-  })
-  sessionStorage.setItem('gameId', game.id)
-  return game
-}
-
-export const startGame = async (
-  players: NodotsPlayersReady,
-  playerDispatch: React.Dispatch<PlayerActions>,
-  gameDispatch: React.Dispatch<GameActions>
-) => {
+export const startGame = async (players: NodotsPlayersReady) => {
   const startGamePayload: [string, string] = [
     players.white.id,
     players.black.id,
@@ -37,15 +18,6 @@ export const startGame = async (
     },
     body: JSON.stringify(startGamePayload),
   })) as unknown as NodotsGameReady
-  playerDispatch({
-    type: PlayerActionTypes.SET_PLAYER,
-    payload: { ...players.black, kind: 'playing' },
-  })
-  playerDispatch({
-    type: PlayerActionTypes.SET_PLAYER,
-    payload: { ...players.white, kind: 'playing' },
-  })
-  gameDispatch({ type: GameActionTypes.SET_GAME, payload: gameReady })
   sessionStorage.setItem('gameId', gameReady.id)
   return gameReady
 }

@@ -44,16 +44,10 @@ export interface BoardDisplay {
   }
 }
 
-interface Props {
-  game: NodotsGame
-  player: NodotsPlayer
-}
-
-function BoardComponent({ game, player }: Props) {
-  const boardTheme = useTheme()
+const BoardComponent = () => {
   return (
     <div id="GameContainer">
-      <NodotsBoardComponent player={player} game={game} />
+      <NodotsBoardComponent />
     </div>
   )
 }

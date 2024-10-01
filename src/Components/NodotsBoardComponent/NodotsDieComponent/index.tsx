@@ -27,8 +27,7 @@ const getPath = (order: DieOrder, roll: NodotsRoll | undefined) =>
   roll ? paths[roll[order] - 1] : paths[0]
 
 function NodotsDieComponent({ order, color, rollHandler }: Props) {
-  const { gameState, gameDispatch } = useGameContext()
-  const { game } = gameState
+  const { game } = useGameContext()
   const theme = useTheme()
   const fill = (color: NodotsColor) => {
     return color === 'white'
@@ -37,10 +36,10 @@ function NodotsDieComponent({ order, color, rollHandler }: Props) {
   }
   // const path = game?.dice[color].kind === 'dice-rolled' ? paths[game.dice[color].value - 1] : paths[0]
 
-  switch (game.kind) {
+  switch (game?.kind) {
     case 'initializing':
       return <></>
-    case 'ready':
+    case 'rolling-for-start':
       return game.dice[color].roll[0] === 0 ? (
         <></>
       ) : (

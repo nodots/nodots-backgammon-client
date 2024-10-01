@@ -57,8 +57,7 @@ export const NodotsPointComponent = ({
   checkers,
   latitude,
 }: Props) => {
-  const { gameState, gameDispatch } = useGameContext()
-  const { game } = gameState
+  const { game } = useGameContext()
   const theme = useTheme()
   let className = 'point'
 
@@ -73,7 +72,7 @@ export const NodotsPointComponent = ({
       : theme.palette.primary.light
   }
 
-  return game.kind === 'initializing' ? (
+  return game?.kind === 'initializing' ? (
     <Loading message="Loading point" />
   ) : (
     <div className={className}>
@@ -94,7 +93,7 @@ export const NodotsPointComponent = ({
         data-position-clockwise={position.clockwise}
         data-position-counterclockwise={position.counterclockwise}
       >
-        {getCheckerComponents(game, checkers, 'point')}
+        {getCheckerComponents(game as NodotsGame, checkers, 'point')}
       </div>
     </div>
   )

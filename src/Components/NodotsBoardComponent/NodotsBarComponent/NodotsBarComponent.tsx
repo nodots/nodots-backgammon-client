@@ -10,8 +10,7 @@ import NodotsPipCountComponent from '../NodotsPipCountComponent'
 import { getCheckerComponents } from '../NodotsPointComponent'
 
 export const NodotsBarComponent = () => {
-  const { gameState, gameDispatch } = useGameContext()
-  const { game } = gameState
+  const { game } = useGameContext()
 
   return (
     <div id="Bar">

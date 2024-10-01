@@ -27,7 +27,7 @@
     "vite-plugin-checker": "^0.6.2"
   },
   "scripts": {
-    "start": "vite --host --open",
+    "start": "vite --open https://bgc.localhost",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "typesafe-i18n": "typesafe-i18n"

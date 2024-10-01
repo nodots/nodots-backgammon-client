@@ -1,18 +1,22 @@
 import { NodotsAppBar } from '../../Components/NodotsAppBar'
 import { Loading } from '../../Components/utils/Loading'
-import { usePlayerContext } from '../../Contexts/Player/usePlayerContext'
+import { useGameContext } from '../../Contexts/Game/GameContext'
 
 const PlayerPage = () => {
-  const { playerState: state, playerDispatch: dispatch } = usePlayerContext()
-  const { player } = state
-  return !player || player.kind === 'initializing' ? (
-    <Loading message="PlayerPage Waiting for Player" />
-  ) : (
-    <>
-      <NodotsAppBar />
-      <>{player.id}</>
-    </>
-  )
+  const { game } = useGameContext()
+  switch (game?.kind) {
+    case 'initializing':
+    case 'ready':
+      return <>PlayerPage Stub Loading</>
+    case 'rolling-for-start':
+    case 'rolling':
+    case 'moving':
+      return (
+        <>
+          PlayerPage Stub gameId: ${game.id} ${game.kind}
+        </>
+      )
+  }
 }
 
 export default PlayerPage

@@ -7,24 +7,16 @@ import { Loading } from '../../Components/utils/Loading'
 import PollForGame from './ChildComponents/PollForGame'
 
 const LobbyPage = () => {
-  const { playerState, playerDispatch } = usePlayerContext()
-  const { player } = playerState
-  switch (player?.kind) {
-    case 'initializing':
-      return <Loading message="LobbyPage initializing" />
-    case 'playing':
-    case 'ready':
-      return (
-        <>
-          <PollForGame />
-          <NodotsAppBar />
-          <Container>
-            <SeekingGameToggle />
-            <Friends />
-          </Container>
-        </>
-      )
-  }
+  return (
+    <>
+      {/* <PollForGame /> */}
+      <NodotsAppBar />
+      <Container>
+        {/* <SeekingGameToggle /> */}
+        {/* <Friends /> */}
+      </Container>
+    </>
+  )
 }
 
 export default LobbyPage

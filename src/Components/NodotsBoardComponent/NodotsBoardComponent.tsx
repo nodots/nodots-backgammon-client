@@ -6,19 +6,15 @@ import { useGameContext } from '../../Contexts/Game/useGameContext'
 import { Loading } from '../utils/Loading'
 
 export const NodotsBoardComponent = () => {
-  const { gameState, gameDispatch } = useGameContext()
-  const { game } = gameState
-  switch (game.kind) {
-    case 'initializing':
-      return <Loading message="NodotsBoardComponent loading game" />
-    default:
-      return (
-        <Paper id="Board">
-          <NodotsBoardHalf longitude="west" />
-          <NodotsBarComponent />
-          <NodotsBoardHalf longitude="east" />
-          <NodotsOffComponent />
-        </Paper>
-      )
-  }
+  const { game } = useGameContext()
+  return game ? (
+    <Paper id="BoardContainer">
+      <NodotsBoardHalf longitude="west" />
+      <NodotsBarComponent />
+      <NodotsBoardHalf longitude="east" />
+      <NodotsOffComponent />
+    </Paper>
+  ) : (
+    <Loading message="NodotsBoardComponent loading game" />
+  )
 }
