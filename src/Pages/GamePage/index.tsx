@@ -4,11 +4,7 @@ import NodotsGameNotifications from '../../Components/NodotsNotificationsCompone
 import { useGameContext } from '../../Contexts/Game/GameContext'
 import { useEffect } from 'react'
 import { getGameById } from '../../Contexts/Game/gameHelpers'
-
-export const uuidFromUrl = (url: string): string => {
-  const urlPieces = url.split('/')
-  return urlPieces[urlPieces.length - 1]
-}
+import { uuidFromUrl } from '../../helpers'
 
 const GamePage = () => {
   const { game, setGame, player } = useGameContext()
@@ -16,7 +12,6 @@ const GamePage = () => {
     sessionStorage.getItem('gameId') || uuidFromUrl(window.location.href)
 
   useEffect(() => {
-    sessionStorage.setItem('gameId', gameId)
     getGameById(gameId).then((g) => {
       setGame(g)
     })

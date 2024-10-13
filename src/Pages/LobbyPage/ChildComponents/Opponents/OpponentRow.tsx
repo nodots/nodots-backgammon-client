@@ -1,7 +1,7 @@
 import { TableRow, TableCell, Avatar, Button } from '@mui/material'
 import { NodotsPlayerReady } from '../../../../../nodots_modules/backgammon-types'
 import OpponentStatus from './OpponentStatus'
-import { OpponentAction } from './OpponentAction'
+import OpponentAction from './OpponentAction'
 
 interface Props {
   opponent: NodotsPlayerReady

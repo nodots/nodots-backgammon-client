@@ -10,16 +10,15 @@ import { useEffect, useState } from 'react'
 import { startGame } from '../../../../Contexts/Game/gameHelpers'
 import { useGameContext } from '../../../../Contexts/Game/useGameContext'
 import { getReadyPlayerById } from '../../../../Contexts/Game/playerHelpers'
+import { observer } from 'mobx-react-lite'
 interface Props {
   opponent: NodotsPlayerReady
 }
 
-export const OpponentAction = ({ opponent }: Props) => {
+const OpponentAction = ({ opponent }: Props) => {
   const { t } = useTranslation()
   const { setGame, player } = useGameContext()
 
-  console.log('[OpponentAction] opponent:', opponent.id)
-  console.log('[OpponentAction] player:', player?.id)
   const startGameAction =
     async (): Promise<NodotsGameRollingForStart | void> => {
       switch (player?.kind) {
@@ -53,3 +52,5 @@ export const OpponentAction = ({ opponent }: Props) => {
     <></>
   )
 }
+
+export default observer(OpponentAction)

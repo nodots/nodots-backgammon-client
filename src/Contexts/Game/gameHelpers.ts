@@ -15,6 +15,7 @@ export const startGame = async (
     players.white.id,
     players.black.id,
   ]
+  console.log('[gameHelpers] startGame startGamePayload:', startGamePayload)
   const game = (await fetch(`${apiUrl}/game`, {
     method: 'POST',
     headers: {
