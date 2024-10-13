@@ -1,72 +1,55 @@
-import { FormControlLabel, FormGroup, Switch, useTheme } from '@mui/material'
-import { usePlayerContext } from '../../../../Contexts/Player/usePlayerContext'
-import {
-  PlayerActions,
-  PlayerActionTypes,
-} from '../../../../Contexts/Player/playerActions'
-import { Loading } from '../../../../Components/utils/Loading'
-import { togglePlayerSeekingGame } from '../../../../Contexts/Player/playerHelpers'
-import { NodotsPlayerReady } from '../../../../../nodots_modules/backgammon-types'
-import { useState } from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
+import { FormControlLabel, FormGroup, Switch } from '@mui/material'
 import { t } from 'i18next'
-
-const setSeekingGameAction = async (
-  player: NodotsPlayerReady,
-  dispatch: React.Dispatch<PlayerActions>
-): Promise<NodotsPlayerReady> => {
-  console.log('[SeekingGameToggle] setSeekingGame player:', player)
-  const updatedPlayer = await togglePlayerSeekingGame(player)
-  console.log(
-    '[SeekingGameToggle] setSeekingGame updatedPlayer:',
-    updatedPlayer
-  )
-  dispatch({
-    type: PlayerActionTypes.TOGGLE_PLAYER_SEEKING_GAME,
-    payload: { seekingGame: updatedPlayer.isSeekingGame },
-  })
-  return updatedPlayer
-}
+import { useEffect, useState } from 'react'
+import { useGameContext } from '../../../../Contexts/Game/GameContext'
+import {
+  setPlayer,
+  togglePlayerSeekingGame,
+} from '../../../../Contexts/Game/playerHelpers'
 
 export const SeekingGameToggle = () => {
-  const { logout, user } = useAuth0()
-  const { playerState: state, playerDispatch: dispatch } = usePlayerContext()
-  const { player } = state
-  const [isSeekingGame, setIsSeekingGame] = useState<boolean>(
-    player.isSeekingGame || false
+  const { game, player } = useGameContext()
+  const [isSeekingGame, setIsSeekingGame] = useState(
+    player?.isSeekingGame || false
   )
 
-  const handleChange = async () => {
-    switch (player.kind) {
-      case 'initializing':
-      case 'playing':
-        break
-      case 'ready':
-        console.log('[SeekingGameToggle] handleChange player:', player)
-        const updatedPlayer = await setSeekingGameAction(player, dispatch)
-        setIsSeekingGame(updatedPlayer.isSeekingGame)
-        break
+  useEffect(() => {
+    console.log(
+      '[SeekingGameToggle] useEffect player.isSeekingGame:',
+      player?.isSeekingGame
+    )
+  }, [player])
+
+  const toggleSeekingGame = async () => {
+    console.log(
+      '[SeekingGameToggle] toggleSeekingGame isSeekingGame:',
+      isSeekingGame
+    )
+    console.log('[SeekingGameToggle] toggleSeekingGame player:', player)
+    if (!player || player.kind !== 'ready') {
+      return
     }
+    setIsSeekingGame(!isSeekingGame)
+    const updatedPlayer = {
+      ...player,
+      isSeekingGame: !isSeekingGame,
+    }
+    return await togglePlayerSeekingGame(updatedPlayer)
   }
 
-  switch (player.kind) {
-    case 'initializing':
-      return <Loading message="Seeking Game Toggle Loading" />
-    case 'playing':
-      return <div>Error: {player.email}</div>
-    case 'ready':
-      return (
-        <FormGroup
-          sx={{
-            width: '24vw',
-          }}
-        >
-          <FormControlLabel
-            control={<Switch checked={isSeekingGame} onChange={handleChange} />}
-            label={t('NDBG_READY_TO_PLAY')}
-            labelPlacement="end"
-          />
-        </FormGroup>
-      )
-  }
+  return (
+    <FormGroup
+      sx={{
+        width: '24vw',
+      }}
+    >
+      <FormControlLabel
+        control={
+          <Switch checked={isSeekingGame} onChange={toggleSeekingGame} />
+        }
+        label={t('NDBG_READY_TO_PLAY')}
+        labelPlacement="end"
+      />
+    </FormGroup>
+  )
 }

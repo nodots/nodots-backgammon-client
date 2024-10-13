@@ -8,15 +8,15 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import { usePlayerContext } from '../../Contexts/Player/usePlayerContext'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import { Loading } from '../utils/Loading'
 import { useAuth0 } from '@auth0/auth0-react'
 import { signInPage } from '../../App'
+import { useGameContext } from '../../Contexts/Game/GameContext'
 
 const NodotsAppBarComponent = () => {
   const { user, logout } = useAuth0()
+  const { player } = useGameContext()
   const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -35,6 +35,7 @@ const NodotsAppBarComponent = () => {
   const handleProfile = () => {
     window.location.href = '/game/player'
   }
+
   return (
     user && (
       <Box sx={{ flexGrow: 1 }}>
@@ -55,7 +56,10 @@ const NodotsAppBarComponent = () => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <Avatar alt={user?.username} src={user?.avatar} />
+                <Avatar
+                  alt={player?.preferences?.username}
+                  src={player?.preferences?.avatar}
+                />
               </IconButton>
               <Menu
                 id="menu-appbar"

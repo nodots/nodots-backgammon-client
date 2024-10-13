@@ -1,20 +1,28 @@
 import { Container } from '@mui/material'
 import { NodotsAppBar } from '../../Components/NodotsAppBar'
-import Friends from './ChildComponents/Opponents'
+import Opponents from './ChildComponents/Opponents'
 import { SeekingGameToggle } from './ChildComponents/SeekingGameToggle'
-import { usePlayerContext } from '../../Contexts/Player/usePlayerContext'
 import { Loading } from '../../Components/utils/Loading'
 import PollForGame from './ChildComponents/PollForGame'
+import { useGameContext } from '../../Contexts/Game/GameContext'
+import { useEffect } from 'react'
 
 const LobbyPage = () => {
+  const { game, player } = useGameContext()
+
+  useEffect(() => {
+    console.log('[LobbyPage] game:', game)
+    console.log('[LobbyPage] player:', player)
+  }, [game])
+
   return (
     <>
-      {/* <PollForGame /> */}
       <NodotsAppBar />
       <Container>
-        {/* <SeekingGameToggle /> */}
-        {/* <Friends /> */}
+        <SeekingGameToggle />
+        <Opponents />
       </Container>
+      <PollForGame />
     </>
   )
 }

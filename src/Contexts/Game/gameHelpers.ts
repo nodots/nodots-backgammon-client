@@ -2,24 +2,28 @@ import {
   NodotsGame,
   NodotsGameActive,
   NodotsGameReady,
+  NodotsGameRollingForStart,
   NodotsPlayersReady,
 } from '../../../nodots_modules/backgammon-types'
-import { apiUrl } from '../../App'
 
-export const startGame = async (players: NodotsPlayersReady) => {
+const apiUrl = 'https://api.localhost'
+
+export const startGame = async (
+  players: NodotsPlayersReady
+): Promise<NodotsGameRollingForStart> => {
   const startGamePayload: [string, string] = [
     players.white.id,
     players.black.id,
   ]
-  const gameReady = (await fetch(`${apiUrl}/game`, {
+  const game = (await fetch(`${apiUrl}/game`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(startGamePayload),
-  })) as unknown as NodotsGameReady
-  sessionStorage.setItem('gameId', gameReady.id)
-  return gameReady
+  })) as unknown as NodotsGameRollingForStart
+  sessionStorage.setItem('gameId', game.id)
+  return game
 }
 
 export const getGames = async (): Promise<NodotsGameActive[]> => {
@@ -38,13 +42,14 @@ export const getActiveGameById = async (
   const result = await fetch(`${apiUrl}/game/${id}`)
   const game = await result.json()
   switch (game.kind) {
-    case 'initializing':
-      return null
-    case 'ready':
-    case 'playing':
+    case 'rolling-for-start':
+    case 'rolling':
+    case 'moving':
       return game
+    default:
+      console.error('[gameHelpers] getActiveGameById Invalid game kind:', game)
+      return null
   }
-  return null
 }
 
 export const getActiveGameByPlayerId = async (

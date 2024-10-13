@@ -1,33 +1,36 @@
 import { Table, TableBody } from '@mui/material'
 import OpponentRow from './OpponentRow'
 import { useEffect, useState } from 'react'
-import { Loading } from '../../../../Components/utils/Loading'
-import { getPlayers } from '../../../../Contexts/Player/playerHelpers'
 import { NodotsPlayerReady } from '../../../../../nodots_modules/backgammon-types'
-import { usePlayerContext } from '../../../../Contexts/Player/usePlayerContext'
+import { getPlayers } from '../../../../Contexts/Game/playerHelpers'
+import { useGameContext } from '../../../../Contexts/Game/GameContext'
 
 const OpponentTable = () => {
-  const { playerState, playerDispatch } = usePlayerContext()
-  const { player } = playerState
+  const { player } = useGameContext()
   const [opponents, setOpponents] = useState<NodotsPlayerReady[]>([])
+
   useEffect(() => {
-    getPlayers().then((os) => {
-      setOpponents(os.filter((p) => p.kind === 'ready'))
-    })
+    const interval = setInterval(() => {
+      getPlayers().then((os) => {
+        // console.log('[OpponentTable] getPlayers os:', os)
+        setOpponents(os.filter((p) => p.kind === 'ready'))
+      })
+    }, 1000)
+    return () => clearInterval(interval)
   }, [])
-  return opponents?.length > 0 ? (
+  // console.log('[OpponentTable] opponents:', opponents)
+  return (
     <Table>
       <TableBody>
-        {opponents.map(
-          (opponent) =>
-            opponent.id !== player.id && (
-              <OpponentRow key={opponent.id} opponent={opponent} />
-            )
-        )}
+        {player &&
+          opponents.map(
+            (opponent) =>
+              opponent.id !== player.id && (
+                <OpponentRow key={opponent.id} opponent={opponent} />
+              )
+          )}
       </TableBody>
     </Table>
-  ) : (
-    <Loading message="PlayerTable Loading" />
   )
 }
 

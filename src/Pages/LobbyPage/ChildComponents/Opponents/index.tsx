@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import OpponentTable from './OpponentTable'
 
-const Friends = () => {
+const Opponents = () => {
   const { t } = useTranslation()
   return (
     <Card
@@ -16,4 +16,4 @@ const Friends = () => {
     </Card>
   )
 }
-export default Friends
+export default Opponents

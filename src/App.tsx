@@ -1,7 +1,7 @@
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { useTranslation, withTranslation } from 'react-i18next'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import AuthComponent from './Contexts/Auth/AuthContext'
+import AuthComponent from './Components/utils/AuthComponent'
 import GamePage from './Pages/GamePage'
 import HomePage from './Pages/HomePage'
 import LobbyPage from './Pages/LobbyPage'
@@ -10,17 +10,9 @@ import appTheme from './theme/AppTheme'
 import { ProtectedRoutes } from './Components/utils/ProtectedRoutes'
 import PlayerPage from './Pages/PlayerPage'
 
-// FIXME: This should be an environment variable
-export const apiUrl = 'https://api.localhost'
 export const baseUrl = 'https://bgc.localhost'
 export const playerHome = `/lobby`
 export const signInPage = `${baseUrl}/sign-in`
-
-export const isValidUuid = (uuid: any) => {
-  if (typeof uuid !== 'string') return false
-  if (uuid.length !== 36) return false
-  return true
-}
 
 const App = () => {
   const { i18n } = useTranslation()
